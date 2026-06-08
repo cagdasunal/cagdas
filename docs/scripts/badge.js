@@ -26,10 +26,12 @@
  *   natural shaping) to match the browser's font rendering of the first version.
  *
  * Webflow usage:
- *   1. Add an element with class  webflow_badge  where the badge should sit
- *      (e.g. a fixed/absolute corner wrapper, or a Link Block if it links out).
- *      The badge renders at 68x190 and centers inside it. The link is set on
- *      the Webflow element — this script does not add one.
+ *   1. Add an element with class  webflow_badge  ANYWHERE on the page (e.g. a
+ *      Link Block if it should link out — set the URL on it; this script adds
+ *      no link). The script positions the badge itself: position:fixed, pinned
+ *      to the right edge of a centered 120rem container with a 5% gap, and
+ *      vertically centered in the viewport (stays put on scroll). Placement in
+ *      the Webflow DOM does not matter — fixed positioning overrides it.
  *   2. Load this bundle in the footer / before </body>, or with defer:
  *        <script src="https://files.cagd.as/scripts/badge.min.js" defer></script>
  *
@@ -62,7 +64,7 @@
 
   // --- scoped CSS (badge only; namespaced; nothing leaks to the page) -----
   const CSS = [
-    ".webflow_badge{--wfb-hover:#8f8f8f;min-height:100vh;display:flex;align-items:center;justify-content:center}",
+    ".webflow_badge{--wfb-hover:#8f8f8f;position:fixed;top:50%;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100}",
     ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:68px;height:190px;margin:0 auto}",
     ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:9px}",
     ".webflow_badge .wfb-vsvg{display:block;overflow:visible}",
