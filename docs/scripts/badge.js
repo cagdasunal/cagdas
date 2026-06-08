@@ -25,15 +25,17 @@
  *   Labels vectorized via fonttools + uharfbuzz (WFVisualSansVF @ wght=600,
  *   natural shaping) to match the browser's font rendering of the first version.
  *
- * Webflow usage:
- *   1. Add an element with class  webflow_badge  ANYWHERE on the page (e.g. a
- *      Link Block if it should link out — set the URL on it; this script adds
- *      no link). The script positions the badge itself: position:fixed, pinned
- *      to the right edge of a centered 120rem container with a 5% gap, and
- *      vertically centered in the viewport (stays put on scroll). Placement in
- *      the Webflow DOM does not matter — fixed positioning overrides it.
- *   2. Load this bundle in the footer / before </body>, or with defer:
- *        <script src="https://files.cagd.as/scripts/badge.min.js" defer></script>
+ * Webflow usage — zero setup: just load this bundle. If no .webflow_badge
+ *   element exists, the script creates one (a div) and positions it. Optional:
+ *   add your own  <a class="webflow_badge">  (a Link Block) to make the badge a
+ *   link — set the URL on it; this script adds no link of its own, and skips
+ *   creating the div when one already exists.
+ *   Positioning (applied to .webflow_badge whether the script creates it or
+ *   not): position:fixed, pinned to the right edge of a centered 120rem
+ *   container with a 5% gap, vertically centered in the viewport (stays on
+ *   scroll). DOM placement does not matter — fixed positioning overrides it.
+ *   Load in the footer / before </body>, or with defer:
+ *     <script src="https://files.cagd.as/scripts/badge.min.js" defer></script>
  *
  * SSOT: sites/cagdas/scripts/src/badge.js
  * Build: python3 scripts/site_deploy.py build --site cagdas --src badge
@@ -208,6 +210,16 @@
   function init() {
     injectStyles();
     const hosts = document.querySelectorAll(TARGET);
+    if (!hosts.length) {
+      // No .webflow_badge on the page — create one (a div) so the badge needs
+      // zero Webflow setup. To make it a link instead, add your own
+      // <a class="webflow_badge"> in Webflow and this branch is skipped.
+      const created = document.createElement('div');
+      created.className = 'webflow_badge';
+      (document.body || document.documentElement).appendChild(created);
+      setup(created);
+      return;
+    }
     for (let i = 0; i < hosts.length; i++) setup(hosts[i]);
   }
 
