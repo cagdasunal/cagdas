@@ -30,10 +30,10 @@
  *   add your own  <a class="webflow_badge">  (a Link Block) to make the badge a
  *   link — set the URL on it; this script adds no link of its own, and skips
  *   creating the div when one already exists.
- *   Positioning (applied to .webflow_badge whether the script creates it or
- *   not): position:fixed, pinned to the right edge of a centered 120rem
- *   container with a 5% gap, vertically centered in the viewport (stays on
- *   scroll). DOM placement does not matter — fixed positioning overrides it.
+ *   Positioning: the script moves .webflow_badge to <body> and sets
+ *   position:absolute, vertically centered in the FIRST viewport (top:50vh) on
+ *   load and scrolling away with the page (NOT sticky/fixed). Right edge pinned
+ *   to a centered 120rem container with a 5% gap (right:max(5vw,(100vw-120rem)/2)).
  *   Load in the footer / before </body>, or with defer:
  *     <script src="https://files.cagd.as/scripts/badge.min.js" defer></script>
  *
@@ -66,7 +66,7 @@
 
   // --- scoped CSS (badge only; namespaced; nothing leaks to the page) -----
   const CSS = [
-    ".webflow_badge{--wfb-hover:#8f8f8f;position:fixed;top:50%;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100}",
+    ".webflow_badge{--wfb-hover:#8f8f8f;position:absolute;top:50vh;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100}",
     ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:68px;height:190px;margin:0 auto}",
     ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:9px}",
     ".webflow_badge .wfb-vsvg{display:block;overflow:visible}",
@@ -190,6 +190,11 @@
   function setup(host) {
     if (host.getAttribute('data-wfb-init') === '1') return;
     host.setAttribute('data-wfb-init', '1');
+
+    // Anchor positioning to the document so position:absolute is relative to
+    // the page (not a Webflow ancestor). The badge is out of flow, so moving
+    // it has no layout impact; this keeps placement consistent everywhere.
+    if (host.parentNode !== document.body) document.body.appendChild(host);
 
     // No link here — the badge is just the visual. Wrap .webflow_badge in a
     // Webflow link (or add the URL to it) to make it clickable.
