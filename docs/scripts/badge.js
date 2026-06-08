@@ -67,7 +67,7 @@
   // --- scoped CSS (badge only; namespaced; nothing leaks to the page) -----
   const CSS = [
     ".webflow_badge{--wfb-hover:#8f8f8f;position:absolute;top:50vh;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100}",
-    ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:68px;height:190px;margin:0 auto}",
+    ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;height:190px;margin:0 auto}",
     ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:9px}",
     ".webflow_badge .wfb-vsvg{display:block;overflow:visible}",
     ".webflow_badge .wfb-vword{transform-box:fill-box;transition:opacity .4s ease,transform .55s cubic-bezier(.22,.9,.24,1)}",
