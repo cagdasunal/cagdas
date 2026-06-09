@@ -134,9 +134,12 @@
     }
     btn.setAttribute('aria-label', label);
 
-    // Eager audio (preload auto) so the first real click plays instantly.
-    const audio = new Audio(src);
-    audio.preload = 'auto';
+    // Lazy audio: build the element but DON'T fetch the clip until the first
+    // click. preload='none' set before src keeps page load free of an audio
+    // request for visitors who never press play (first click fetches the small clip).
+    const audio = new Audio();
+    audio.preload = 'none';
+    audio.src = src;
 
     function stop() {
       btn.classList.remove('is-playing');
