@@ -11,7 +11,8 @@
  *
  * Finalized look (per the design): liveliness 1.3, squish 14, glow edge
  * (#126ef5 = rgba(18,110,245,0.5)). Honors prefers-reduced-motion (static
- * membrane, no rAF loop).
+ * membrane, no rAF loop), and pauses the rAF loop whenever no .avatar-home is
+ * on screen (IntersectionObserver) — invisible, saves CPU when scrolled away.
  *
  * Design source: Claude Design "cagd.as Design System" -> project/Avatar Home.html
  *
@@ -63,11 +64,33 @@
     }
 
     const start = performance.now();
-    (function tick(now) {
+    let rafId = null;
+
+    function frame(now) {
       const radius = radiusAt(((now - start) / 1000) * LIVELINESS);
       for (let i = 0; i < els.length; i++) els[i].style.borderRadius = radius;
-      requestAnimationFrame(tick);
-    })(performance.now());
+      rafId = requestAnimationFrame(frame);
+    }
+    function play() { if (rafId === null) rafId = requestAnimationFrame(frame); }
+    function pause() { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } }
+
+    // Only burn frames while an avatar is actually on screen. border-radius is a
+    // continuous function of elapsed time, so pause/resume causes no visible jump
+    // — it just skips frames the user couldn't see. (Hidden tabs already pause
+    // rAF; this also covers "scrolled out of view" in a foreground tab.)
+    if ('IntersectionObserver' in window) {
+      const visible = new Set();
+      const io = new IntersectionObserver(function (entries) {
+        for (let i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting) visible.add(entries[i].target);
+          else visible.delete(entries[i].target);
+        }
+        if (visible.size) play(); else pause();
+      });
+      for (let i = 0; i < els.length; i++) io.observe(els[i]);
+    } else {
+      play(); // no IO support — run continuously, as before
+    }
   }
 
   // Loaded with `defer` or in the footer, so the DOM is already parsed.

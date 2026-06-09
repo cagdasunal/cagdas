@@ -10,9 +10,11 @@
  *   - .time_hour / .time_minutes / .time_period : filled with Çağdaş's current
  *                       local wall-clock (Europe/Istanbul), 12-hour, AM/PM. Hour
  *                       has no leading zero, minutes are 2-digit, period is
- *                       upper-cased. Re-rendered every second so the minute rolls
- *                       over on time. Every matching element is updated, so the
- *                       widget may appear more than once (e.g. desktop + mobile).
+ *                       upper-cased. Updated on each minute boundary (the timer
+ *                       re-aligns every tick + refreshes on tab re-focus) and only
+ *                       when the text actually changes; element lookups are cached.
+ *                       Every matching element is updated, so the widget may appear
+ *                       more than once (e.g. desktop + mobile).
  *
  * Self-contained — ZERO dependencies and ZERO web requests. It injects its own
  *   scoped <style> (keyframes namespaced so they can't collide with page or
@@ -38,7 +40,6 @@
 
   const TIME_ZONE = 'Europe/Istanbul';
   const STYLE_ID = 'cagdas-available-widget-styles';
-  const TICK_MS = 1000;
 
   // Scoped status animations (look is verbatim from the design; keyframe names
   // namespaced — caw* — so they never collide with page/other-bundle keyframes).
@@ -74,22 +75,47 @@
     return '';
   }
 
-  function setAll(selector, value) {
-    const els = document.querySelectorAll(selector);
-    for (let i = 0; i < els.length; i++) els[i].textContent = value;
+  // Bind a selector to its live nodes once + remember the last value written, so a
+  // tick whose text is unchanged touches the DOM zero times (no needless recalc).
+  function bindField(selector) {
+    return { nodes: document.querySelectorAll(selector), last: null };
   }
 
-  function updateTime() {
-    const parts = FMT.formatToParts(new Date());
-    setAll('.time_hour', partValue(parts, 'hour'));
-    setAll('.time_minutes', partValue(parts, 'minute'));
-    setAll('.time_period', partValue(parts, 'dayPeriod').toUpperCase());
+  function writeField(field, value) {
+    if (field.last === value) return;
+    field.last = value;
+    for (let i = 0; i < field.nodes.length; i++) field.nodes[i].textContent = value;
   }
 
   function init() {
     injectStyles();
-    updateTime();
-    setInterval(updateTime, TICK_MS);
+
+    const hour = bindField('.time_hour');
+    const minute = bindField('.time_minutes');
+    const period = bindField('.time_period');
+
+    function update() {
+      const parts = FMT.formatToParts(new Date());
+      writeField(hour, partValue(parts, 'hour'));
+      writeField(minute, partValue(parts, 'minute'));
+      writeField(period, partValue(parts, 'dayPeriod').toUpperCase());
+    }
+
+    // The clock shows only hours + minutes, so wake exactly on the minute boundary
+    // (~60 updates/day, not ~86,400). setTimeout re-aligns to the next :00 each tick
+    // (drift-free); a backgrounded tab throttles timers, so also refresh the instant
+    // the tab becomes visible again.
+    function tick() {
+      update();
+      const now = new Date();
+      const msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+      setTimeout(tick, msToNextMinute + 50); // +50ms to land safely past :00
+    }
+
+    tick();
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) update();
+    });
   }
 
   // Loaded with `defer` or in the footer, so the DOM is already parsed.
