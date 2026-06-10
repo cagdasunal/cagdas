@@ -32,7 +32,7 @@
  * Copy "+ Include web design" ⇄ "− Exclude web design"; DOUBLES both `#price_plan`
  * (hero hourly rate is never doubled — no id); `.price_week-1`→4, `.price_week-2`→6.
  * Click again to revert exactly (authored values captured at load). The doubling
- * rolls through the odometer too.
+ * AND the week badges roll through the same odometer (countTo).
  *
  * ── Rates data ────────────────────────────────────────────────────────────────
  * USD-based rates are fetched after load from files.cagd.as/data/rates.json
@@ -129,6 +129,13 @@
   const week2Orig = week2El ? week2El.textContent : null;
   const toggleOff = toggleBtn ? toggleBtn.textContent.trim() : "+ Include web design";
 
+  // Week badges count-animate on the web-design toggle (2→4 / 4→6 and back),
+  // through the SAME countTo() odometer the prices use. `off` = the authored
+  // value captured at load; `on` = the WEB_DESIGN target.
+  const weekCounters = [];
+  if (week1El) weekCounters.push({ el: week1El, on: WEB_DESIGN.week1, off: parseNum(week1Orig), shown: parseNum(week1Orig) });
+  if (week2El) weekCounters.push({ el: week2El, on: WEB_DESIGN.week2, off: parseNum(week2Orig), shown: parseNum(week2Orig) });
+
   // ───────────────────────────── STATE ───────────────────────────────────────
   const N = CURRENCIES.length;
   const FALLBACK = {};
@@ -183,8 +190,10 @@
       countTo(pr, roundUsd(pr.baseUsd * mult, code), animate);
     }
 
-    if (week1El) week1El.textContent = state.webDesign ? String(WEB_DESIGN.week1) : week1Orig;
-    if (week2El) week2El.textContent = state.webDesign ? String(WEB_DESIGN.week2) : week2Orig;
+    for (let w = 0; w < weekCounters.length; w++) {
+      const wc = weekCounters[w];
+      countTo(wc, state.webDesign ? wc.on : wc.off, animate);
+    }
     if (toggleBtn) toggleBtn.textContent = state.webDesign ? WEB_DESIGN.labelOn : toggleOff;
   }
 
