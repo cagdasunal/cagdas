@@ -57,7 +57,13 @@
     const marker = item.querySelector(".faq_marker-v");
     const answer = item.querySelector(".faq_answer");
     item.classList.toggle(OPEN, open);
-    if (marker) marker.classList.toggle(OPEN, open);
+    // Collapse the vertical bar inline (+ -> -). Webflow prunes the runtime-only
+    // `.faq_marker-v.is-open` combo from the published CSS, so the state cannot
+    // live in a class; the published `transition: transform` still animates it.
+    if (marker) {
+      marker.classList.toggle(OPEN, open);
+      marker.style.transform = open ? "scaleY(0)" : "";
+    }
     if (answer) answer.classList.toggle(OPEN, open);
     if (trigger) trigger.setAttribute("aria-expanded", open ? "true" : "false");
     if (panel) panel.setAttribute("aria-hidden", open ? "false" : "true");
