@@ -1,0 +1,47 @@
+# Daily USD-based FX snapshot for cagd.as/rates.
+#
+# Writes docs/data/rates.json (served at https://files.cagd.as/data/rates.json),
+# which the rates.js bundle reads on the /rates page. Source updates ~00:00 UTC;
+# we run at 04:17 UTC so we always grab the fresh day's rates. Commits only when
+# the numbers actually change.
+#
+# SSOT: sites/cagdas/cron/update-rates.yml in the monorepo. The live copy lives in
+# this serving repo at .github/workflows/update-rates.yml — keep them in sync.
+name: Update currency rates
+
+on:
+  schedule:
+    - cron: "17 4 * * *" # daily 04:17 UTC
+  workflow_dispatch: {} # manual run (also used for the first seed)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-rates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch latest rates
+        run: node scripts/fetch-rates.mjs
+
+      - name: Commit if changed
+        run: |
+          git add docs/data/rates.json
+          if git diff --cached --quiet; then
+            echo "No rate changes — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(rates): daily FX update [skip ci]"
+          git push
