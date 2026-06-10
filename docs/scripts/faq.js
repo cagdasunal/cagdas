@@ -139,13 +139,7 @@
   items.forEach((item) => {
     const trigger = triggerOf(item);
     if (!trigger) return;
-    // The WHOLE row is the click target (bigger, easier hit area). A click on a
-    // link inside an answer is ignored so in-answer links keep working. Keyboard
-    // activation stays on the trigger (the role="button"/tabindex element).
-    item.addEventListener("click", (e) => {
-      if (e.target && e.target.closest && e.target.closest("a")) return;
-      toggle(item);
-    });
+    trigger.addEventListener("click", () => toggle(item));
     trigger.addEventListener("keydown", (e) => {
       if (e.repeat) return; // ignore key-held auto-repeat
       if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
