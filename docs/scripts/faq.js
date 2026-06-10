@@ -51,6 +51,15 @@
   const triggerOf = (item) => item.querySelector(".faq_trigger");
   const isOpen = (item) => item.classList.contains(OPEN);
 
+  // Row-hover dims the question (brand --color--base--hover), but ONLY while the
+  // row is closed — an open row never shows the hover state. Driven here, not in
+  // CSS, because it depends on the runtime open state + targets a descendant.
+  const HOVER = "#8f8f8f";
+  function refreshHover(item) {
+    const q = item.querySelector(".faq_question");
+    if (q) q.style.color = item._faqHover && !isOpen(item) ? HOVER : "";
+  }
+
   function setState(item, open) {
     const trigger = triggerOf(item);
     const panel = panelOf(item);
@@ -67,6 +76,7 @@
     if (answer) answer.classList.toggle(OPEN, open);
     if (trigger) trigger.setAttribute("aria-expanded", open ? "true" : "false");
     if (panel) panel.setAttribute("aria-hidden", open ? "false" : "true");
+    refreshHover(item);
   }
 
   // Drop any pending settle (transitionend listener + fallback timer) so a
@@ -139,7 +149,21 @@
   items.forEach((item) => {
     const trigger = triggerOf(item);
     if (!trigger) return;
-    trigger.addEventListener("click", () => toggle(item));
+    // The whole row is the click target; a click on a link inside an answer is
+    // ignored so in-answer links keep working. Keyboard activation stays on the
+    // trigger (the role="button"/tabindex element).
+    item.addEventListener("click", (e) => {
+      if (e.target && e.target.closest && e.target.closest("a")) return;
+      toggle(item);
+    });
+    item.addEventListener("mouseenter", () => {
+      item._faqHover = true;
+      refreshHover(item);
+    });
+    item.addEventListener("mouseleave", () => {
+      item._faqHover = false;
+      refreshHover(item);
+    });
     trigger.addEventListener("keydown", (e) => {
       if (e.repeat) return; // ignore key-held auto-repeat
       if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
