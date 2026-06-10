@@ -23,9 +23,9 @@
  * ── Odometer pricing ──────────────────────────────────────────────────────────
  * Every `.price_value` (hero $40 + both plan cards) counts from its old amount to
  * the new one over ~360ms ease-out, tabular digits so nothing jitters. The symbol
- * (`.price_symbol`) is the currency glyph ($, €, £, ¥, R…) or is HIDDEN when the
- * locale only has a letter code (AED, DKK, NOK, SEK, ZAR…) — the code label beside
- * it carries the currency then. `.price_currency` (plan-card codes) + the hero
+ * (`.price_symbol`) shows only for SHARED glyphs — "$" (USD/AUD/CAD/SGD) and "kr"
+ * (DKK/NOK/SEK) — and is HIDDEN for unique/no-glyph currencies (EUR/GBP/JPY/ZAR/
+ * AED), where the code label carries the currency. Set per currency in CURRENCIES. `.price_currency` (plan-card codes) + the hero
  * trigger show the 3-letter code. Plan amounts ≥ 1000 round to the nearest 10.
  *
  * ── "Include web design" toggle (`#webdesign`) ────────────────────────────────
@@ -48,22 +48,29 @@
   window.__cagdasRates = true;
 
   // ───────────────────────────── CONFIG ──────────────────────────────────────
-  // [code, name, fallbackRate]. Wheel order = this order (matches the design).
-  // The cron saves ~160 rates, so a new currency needs no cron change — just add
-  // a row here with a recent USD rate as the offline fallback.
+  // [code, name, fallbackRate, symbol]. Wheel order = this order (matches the
+  // design). The cron saves ~160 rates, so a new currency needs no cron change —
+  // just add a row with a recent USD rate as the offline fallback.
+  //
+  // `symbol`: the glyph shown in `.price_symbol`, or "" to HIDE it (code only).
+  // Policy (cagdas): show the symbol ONLY for SHARED glyphs — "$" (USD/AUD/CAD/
+  // SGD) and "kr" (DKK/NOK/SEK) — where the glyph alone is ambiguous so the
+  // symbol+code pair is informative. HIDE it for unique-glyph or no-glyph
+  // currencies (EUR €, GBP £, JPY ¥, ZAR R, AED —) where the code already says
+  // it and the glyph would be redundant.
   const CURRENCIES = [
-    ["USD", "US Dollar", 1],
-    ["EUR", "Euro", 0.865865],
-    ["GBP", "British Pound", 0.74738],
-    ["AED", "UAE Dirham", 3.6725],
-    ["AUD", "Australian Dollar", 1.422139],
-    ["CAD", "Canadian Dollar", 1.394379],
-    ["DKK", "Danish Krone", 6.459362],
-    ["JPY", "Japanese Yen", 160.279502],
-    ["NOK", "Norwegian Krone", 9.489863],
-    ["SEK", "Swedish Krona", 9.451967],
-    ["SGD", "Singapore Dollar", 1.28672],
-    ["ZAR", "South African Rand", 16.504187]
+    ["USD", "US Dollar", 1, "$"],
+    ["EUR", "Euro", 0.865865, ""],
+    ["GBP", "British Pound", 0.74738, ""],
+    ["AED", "UAE Dirham", 3.6725, ""],
+    ["AUD", "Australian Dollar", 1.422139, "$"],
+    ["CAD", "Canadian Dollar", 1.394379, "$"],
+    ["DKK", "Danish Krone", 6.459362, "kr"],
+    ["JPY", "Japanese Yen", 160.279502, ""],
+    ["NOK", "Norwegian Krone", 9.489863, "kr"],
+    ["SEK", "Swedish Krona", 9.451967, "kr"],
+    ["SGD", "Singapore Dollar", 1.28672, "$"],
+    ["ZAR", "South African Rand", 16.504187, ""]
   ];
 
   const WEB_DESIGN = {
@@ -125,7 +132,8 @@
   // ───────────────────────────── STATE ───────────────────────────────────────
   const N = CURRENCIES.length;
   const FALLBACK = {};
-  CURRENCIES.forEach(([c, , r]) => { FALLBACK[c] = r; });
+  const SYMBOL = {};
+  CURRENCIES.forEach(([c, , r, s]) => { FALLBACK[c] = r; SYMBOL[c] = s || ""; });
 
   const state = { code: "USD", rates: cloneRates(FALLBACK), webDesign: false };
 
@@ -153,17 +161,9 @@
   const groupNum = (n) => {
     try { return Math.round(n).toLocaleString("en-US"); } catch (e) { return String(Math.round(n)); }
   };
-  // The currency glyph via Intl narrowSymbol, or "" when the locale only has the
-  // letter code (then the code label beside it carries the currency).
-  function glyphOf(code) {
-    try {
-      const nf = new Intl.NumberFormat("en-US", {
-        style: "currency", currency: code, currencyDisplay: "narrowSymbol", maximumFractionDigits: 0
-      });
-      const part = nf.formatToParts(0).find((p) => p.type === "currency");
-      return (part && part.value !== code) ? part.value : "";
-    } catch (e) { return ""; }
-  }
+  // The explicit per-currency glyph (4th CURRENCIES field), or "" to hide
+  // .price_symbol so the code label carries the currency. See CURRENCIES policy.
+  function glyphOf(code) { return SYMBOL[code] || ""; }
 
   // ── Odometer: count each .price_value from its shown amount to the target ──
   function applyCurrency(animate) {
