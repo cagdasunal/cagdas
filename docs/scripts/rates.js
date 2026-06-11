@@ -29,10 +29,11 @@
  * trigger show the 3-letter code. Plan amounts ≥ 1000 round to the nearest 10.
  *
  * ── "Include web design" toggle (`#webdesign`) ────────────────────────────────
- * Copy "+ Include web design" ⇄ "− Exclude web design"; DOUBLES both `#price_plan`
- * (hero hourly rate is never doubled — no id); `.price_week-1`→4, `.price_week-2`→6.
- * Click again to revert exactly (authored values captured at load). The doubling
- * AND the week badges roll through the same odometer (countTo).
+ * Copy "+ Include web design" ⇄ "− Exclude web design"; swaps each plan price to
+ * its web-design-included USD figure (`#price_plan-1`→2,100, `#price_plan-2`→3,750,
+ * converted like any price) — the hero hourly rate is untouched (no id) — and
+ * `.price_week-1`→3, `.price_week-2`→6. Click again to revert exactly (authored
+ * values captured at load). Prices AND week badges roll through the same odometer.
  *
  * ── Rates data ────────────────────────────────────────────────────────────────
  * USD-based rates are fetched after load from files.cagd.as/data/rates.json
@@ -74,8 +75,10 @@
   ];
 
   const WEB_DESIGN = {
-    priceMultiplier: 2,
-    week1: 4,
+    // USD figure each plan shows when web design is included, keyed by element id
+    // (converted like any price). The hero hourly rate has no id → never changes.
+    planUsd: { "price_plan-1": 2100, "price_plan-2": 3750 },
+    week1: 3,
     week2: 6,
     labelOn: "− Exclude web design"
   };
@@ -121,9 +124,10 @@
     const n = parseFloat(String(t).replace(/[^0-9.\-]/g, ""));
     return isFinite(n) ? n : 0;
   };
-  // Each price knows its USD base; #price_plan marks a plan (doubling target).
+  // Each price knows its USD base; a plan also carries the USD figure it shows
+  // when web design is included (undefined for the hero → no web-design uplift).
   const prices = valueEls.map((el) => ({
-    el: el, baseUsd: parseNum(el.textContent), isPlan: el.id === "price_plan", shown: 0
+    el: el, baseUsd: parseNum(el.textContent), webUsd: WEB_DESIGN.planUsd[el.id], shown: 0
   }));
   const week1Orig = week1El ? week1El.textContent : null;
   const week2Orig = week2El ? week2El.textContent : null;
@@ -186,8 +190,8 @@
 
     for (let p = 0; p < prices.length; p++) {
       const pr = prices[p];
-      const mult = (pr.isPlan && state.webDesign) ? WEB_DESIGN.priceMultiplier : 1;
-      countTo(pr, roundUsd(pr.baseUsd * mult, code), animate);
+      const usd = (state.webDesign && pr.webUsd != null) ? pr.webUsd : pr.baseUsd;
+      countTo(pr, roundUsd(usd, code), animate);
     }
 
     for (let w = 0; w < weekCounters.length; w++) {
