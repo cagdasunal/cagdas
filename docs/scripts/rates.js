@@ -23,9 +23,10 @@
  * ── Odometer pricing ──────────────────────────────────────────────────────────
  * Every `.price_value` (hero $40 + both plan cards) counts from its old amount to
  * the new one over ~360ms ease-out, tabular digits so nothing jitters. The symbol
- * (`.price_symbol`) shows only for SHARED glyphs — "$" (USD/AUD/CAD/SGD) and "kr"
- * (DKK/NOK/SEK) — and is HIDDEN for unique/no-glyph currencies (EUR/GBP/JPY/ZAR/
- * AED), where the code label carries the currency. Set per currency in CURRENCIES. `.price_currency` (plan-card codes) + the hero
+ * (`.price_symbol`) shows only for the shared "$" glyph (USD/AUD/CAD/SGD) and is
+ * HIDDEN for every other currency (EUR/GBP/JPY/ZAR/AED + the "kr" Scandinavians
+ * DKK/NOK/SEK), where the code label carries the currency. Set per currency in
+ * CURRENCIES. `.price_currency` (plan-card codes) + the hero
  * trigger show the 3-letter code. Plan amounts ≥ 1000 round to the nearest 10.
  *
  * ── "Include web design" toggle (`#webdesign`) ────────────────────────────────
@@ -54,11 +55,11 @@
   // just add a row with a recent USD rate as the offline fallback.
   //
   // `symbol`: the glyph shown in `.price_symbol`, or "" to HIDE it (code only).
-  // Policy (cagdas): show the symbol ONLY for SHARED glyphs — "$" (USD/AUD/CAD/
-  // SGD) and "kr" (DKK/NOK/SEK) — where the glyph alone is ambiguous so the
-  // symbol+code pair is informative. HIDE it for unique-glyph or no-glyph
-  // currencies (EUR €, GBP £, JPY ¥, ZAR R, AED —) where the code already says
-  // it and the glyph would be redundant.
+  // Policy (cagdas): show the symbol ONLY for the shared "$" glyph (USD/AUD/CAD/
+  // SGD), where the glyph alone is ambiguous so the symbol+code pair is
+  // informative. HIDE it for every other currency — unique/no-glyph ones
+  // (EUR €, GBP £, JPY ¥, ZAR R, AED —) AND the "kr" Scandinavians (DKK/NOK/SEK,
+  // hidden as clutter per user) — where the code already carries the currency.
   const CURRENCIES = [
     ["USD", "US Dollar", 1, "$"],
     ["EUR", "Euro", 0.865865, ""],
@@ -66,10 +67,10 @@
     ["AED", "UAE Dirham", 3.6725, ""],
     ["AUD", "Australian Dollar", 1.422139, "$"],
     ["CAD", "Canadian Dollar", 1.394379, "$"],
-    ["DKK", "Danish Krone", 6.459362, "kr"],
+    ["DKK", "Danish Krone", 6.459362, ""],
     ["JPY", "Japanese Yen", 160.279502, ""],
-    ["NOK", "Norwegian Krone", 9.489863, "kr"],
-    ["SEK", "Swedish Krona", 9.451967, "kr"],
+    ["NOK", "Norwegian Krone", 9.489863, ""],
+    ["SEK", "Swedish Krona", 9.451967, ""],
     ["SGD", "Singapore Dollar", 1.28672, "$"],
     ["ZAR", "South African Rand", 16.504187, ""]
   ];
