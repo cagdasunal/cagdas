@@ -60,6 +60,20 @@
   const topLine = burgerLines[0] || null;
   const botLine = burgerLines[1] || null;
 
+  // Webflow applies a (identity) transform to `.navbar_component`, which makes
+  // a position:fixed DESCENDANT resolve against the 4rem navbar box instead of
+  // the viewport — so the overlay only covered the bar, never full-screen.
+  // Re-home both the overlay and the burger onto <body> so their fixed
+  // positioning is viewport-relative, and pin the burger explicitly (in the
+  // nav it was position:absolute; on <body> it must be fixed to stay top-right
+  // and to sit above the overlay as the close affordance).
+  burger.style.position = 'fixed';
+  burger.style.top = '18px';
+  burger.style.right = '5%';
+  burger.style.transform = 'none';
+  document.body.appendChild(overlay);
+  document.body.appendChild(burger);
+
   const reduce =
     typeof window.matchMedia === 'function' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -74,6 +88,33 @@
   }
 
   let isOpen = false;
+  let scrollLocked = false;
+  let lockedScrollY = 0;
+
+  // Bulletproof scroll-lock: overflow:hidden is unreliable (iOS Safari ignores
+  // it), so pin <body> with position:fixed and restore the scroll position on
+  // unlock. Guarded so the initial setOpen(false) never fires scrollTo(0,0).
+  function setScrollLock(open) {
+    if (open && !scrollLocked) {
+      scrollLocked = true;
+      lockedScrollY = window.scrollY || window.pageYOffset || 0;
+      document.body.style.position = 'fixed';
+      document.body.style.top = -lockedScrollY + 'px';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+      document.documentElement.style.overflow = 'hidden';
+    } else if (!open && scrollLocked) {
+      scrollLocked = false;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      document.documentElement.style.overflow = '';
+      window.scrollTo(0, lockedScrollY);
+    }
+  }
 
   // Two parallel lines (translateY ±4) morph into an X (rotate ±45). Inline so
   // the open state survives Webflow's runtime-combo pruning.
@@ -103,7 +144,7 @@
     burger.setAttribute('aria-expanded', open ? 'true' : 'false');
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
-    document.body.style.overflow = open ? 'hidden' : ''; // scroll lock
+    setScrollLock(open); // disable page scroll while the menu is open
     paintLines(open);
     paintReveals(open);
     // Move focus into the dialog on open, back to the burger on close.
