@@ -37,9 +37,12 @@
  *   Responsive: at ≤767px (landscape + mobile) the lockup turns HORIZONTAL
  *   (label reads left-to-right; the seal stays upright — never rotated), scales
  *   ~15% smaller, and anchors bottom-left at bottom:50px within the first 100vh
- *   (still absolute, scrolls away). It also fades out smoothly as the page
+ *   (still absolute, scrolls away).
+ *   Scroll fade (ALL breakpoints): the badge fades out smoothly as the page
  *   scrolls past the first viewport and fades back in when the first 100vh
  *   returns to view (opacity only; JS toggles .wfb-faded on scroll).
+ *   Per-page: on the 'contact' page slug the badge is hidden at ≤991px
+ *   (tablet + landscape + mobile); it still shows on contact above 991px.
  *   Load in the footer / before </body>, or with defer:
  *     <script src="https://files.cagd.as/scripts/badge.min.js" defer></script>
  *
@@ -54,6 +57,10 @@
 
   const TARGET = '.webflow_badge';
   const STYLE_ID = 'cagdas-webflow-badge-styles';
+  // True when the current page's slug is 'contact'. On that page the badge is
+  // hidden at ≤991px (tablet + landscape + mobile) via .wfb-contact-hide; it
+  // still shows on contact above 991px, and every other page is unaffected.
+  const ON_CONTACT = location.pathname.replace(/\/+$/, '').split('/').pop().toLowerCase() === 'contact';
   const RING = 140;        // sample points per seal glyph (morph smoothness)
   const CYCLE = 9200;      // ms for one check -> W -> check loop
 
@@ -72,7 +79,11 @@
 
   // --- scoped CSS (badge only; namespaced; nothing leaks to the page) -----
   const CSS = [
-    ".webflow_badge{--wfb-hover:#8f8f8f;position:absolute;top:50vh;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100}",
+    ".webflow_badge{--wfb-hover:#8f8f8f;position:absolute;top:50vh;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100;transition:opacity .3s ease}",
+    // Scroll fade (ALL breakpoints): JS toggles .wfb-faded as the page scrolls
+    // past the first viewport; the badge fades back in when the first 100vh
+    // returns to view. Opacity only — positioning/transform are untouched.
+    ".webflow_badge.wfb-faded{opacity:0;pointer-events:none}",
     ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;height:190px;margin:0 auto}",
     ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:9px}",
     ".webflow_badge .wfb-vsvg{display:block;overflow:visible}",
@@ -90,17 +101,18 @@
     // (0.85), anchored bottom-LEFT (left:5vw) at bottom:50px within the FIRST
     // 100vh (absolute, scrolls away). The scale origin is the bottom-left
     // corner, so shrinking keeps the lockup glued to that anchor. The seal is
-    // NOT rotated. As the page scrolls past the first viewport the badge fades
-    // out (opacity, .wfb-faded toggled by JS) and fades back in when the first
-    // 100vh returns to view.
+    // NOT rotated. (The scroll fade is global — see .wfb-faded in the base CSS.)
     "@media (max-width:767px){" +
-      ".webflow_badge{top:calc(100vh - 50px);bottom:auto;left:5vw;right:auto;transform:translateY(-100%);transition:opacity .3s ease}" +
-      ".webflow_badge.wfb-faded{opacity:0;pointer-events:none}" +
+      ".webflow_badge{top:calc(100vh - 50px);bottom:auto;left:5vw;right:auto;transform:translateY(-100%)}" +
       ".webflow_badge .wfb-corner{height:auto}" +
       ".webflow_badge .wfb-vlockup{flex-direction:row-reverse;transform:scale(0.85);transform-origin:bottom left}" +
       ".webflow_badge .wfb-vsvg{display:none}" +
       ".webflow_badge .wfb-hsvg{display:block}" +
-    "}"
+    "}",
+    // Per-page override: on the 'contact' page slug, hide the badge entirely at
+    // ≤991px (tablet + landscape + mobile). JS adds .wfb-contact-hide only when
+    // ON_CONTACT; above 991px (and on every other page) the badge still shows.
+    "@media (max-width:991px){.webflow_badge.wfb-contact-hide{display:none}}"
   ].join("\n");
 
   function injectStyles() {
@@ -228,6 +240,9 @@
     if (host.getAttribute('data-wfb-init') === '1') return;
     host.setAttribute('data-wfb-init', '1');
 
+    // 'contact' page only: tag the badge so CSS hides it at ≤991px.
+    if (ON_CONTACT) host.classList.add('wfb-contact-hide');
+
     // Anchor positioning to the document so position:absolute is relative to
     // the page (not a Webflow ancestor). The badge is out of flow, so moving
     // it has no layout impact; this keeps placement consistent everywhere.
@@ -249,14 +264,13 @@
     if (seal) runSeal(seal, function () { return hover; });
   }
 
-  // ≤767px only: fade the badge out once the page scrolls past the first
+  // ALL breakpoints: fade the badge out once the page scrolls past the first
   // viewport, and fade it back in when the first 100vh returns to view. The
   // badge stays position:absolute (it still scrolls with the page) — this only
   // toggles the .wfb-faded opacity class (CSS handles the smooth transition).
   // A small hysteresis band (show <10vh, hide >20vh) prevents flicker at the
-  // boundary; on desktop the badge is always shown. rAF-throttled + passive.
+  // boundary. rAF-throttled + passive.
   function attachScrollFade(hosts) {
-    const mq = matchMedia('(max-width:767px)');
     let hidden = false, ticking = false;
     function setHidden(v) {
       if (v === hidden) return;
@@ -265,7 +279,6 @@
     }
     function apply() {
       ticking = false;
-      if (!mq.matches) { setHidden(false); return; } // desktop: never fade
       const y = window.pageYOffset || document.documentElement.scrollTop || 0;
       const vh = window.innerHeight || 1;
       if (y > vh * 0.2) setHidden(true);        // scrolled past first 100vh -> fade out
