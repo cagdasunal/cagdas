@@ -34,6 +34,9 @@
  *   position:absolute, vertically centered in the FIRST viewport (top:50vh) on
  *   load and scrolling away with the page (NOT sticky/fixed). Right edge pinned
  *   to a centered 120rem container with a 5% gap (right:max(5vw,(100vw-120rem)/2)).
+ *   Responsive: at ≤767px (landscape + mobile) the lockup turns HORIZONTAL
+ *   (label reads left-to-right; the seal stays upright — never rotated) and
+ *   anchors to bottom:50px within the first 100vh (still absolute, scrolls away).
  *   Load in the footer / before </body>, or with defer:
  *     <script src="https://files.cagd.as/scripts/badge.min.js" defer></script>
  *
@@ -70,6 +73,7 @@
     ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;height:190px;margin:0 auto}",
     ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:9px}",
     ".webflow_badge .wfb-vsvg{display:block;overflow:visible}",
+    ".webflow_badge .wfb-hsvg{display:none;overflow:visible}",
     ".webflow_badge .wfb-vword{transform-box:fill-box;transition:opacity .4s ease,transform .55s cubic-bezier(.22,.9,.24,1)}",
     ".webflow_badge .wfb-vword.wfb-from{fill:#fff;opacity:1;transform:translateX(0)}",
     ".webflow_badge .wfb-vword.wfb-to{fill:var(--wfb-hover);opacity:0;transform:translateX(-7px)}",
@@ -78,7 +82,16 @@
     ".webflow_badge .wfb-seal{position:relative;flex:none;display:inline-block;width:30px;height:30px}",
     ".webflow_badge .wfb-seal-bg{position:absolute;inset:0;width:100%;height:100%;display:block}",
     ".webflow_badge .wfb-glyphs{position:absolute;inset:0;display:grid;place-items:center}",
-    ".webflow_badge .wfb-tween{display:block}"
+    ".webflow_badge .wfb-tween{display:block}",
+    // ≤767px (landscape + mobile): horizontal lockup, anchored bottom:50px
+    // within the FIRST 100vh (absolute, scrolls away). The seal is NOT rotated.
+    "@media (max-width:767px){" +
+      ".webflow_badge{top:calc(100vh - 50px);bottom:auto;transform:translateY(-100%)}" +
+      ".webflow_badge .wfb-corner{height:auto}" +
+      ".webflow_badge .wfb-vlockup{flex-direction:row-reverse}" +
+      ".webflow_badge .wfb-vsvg{display:none}" +
+      ".webflow_badge .wfb-hsvg{display:block}" +
+    "}"
   ].join("\n");
 
   function injectStyles() {
@@ -89,15 +102,30 @@
     (document.head || document.documentElement).appendChild(style);
   }
 
-  // --- vertical label SVG: two baked outlines (from + to), crossfaded.
-  //     Group rotated -90deg here (authored vertical), not on the container.
+  // --- label SVGs: two baked outlines (from + to), crossfaded. Rendered in
+  //     BOTH orientations; CSS shows exactly one per breakpoint:
+  //       • vertical  (desktop ≥768px): the -90deg group reads bottom-to-top.
+  //       • horizontal (≤767px landscape/mobile): the SAME outlines in their
+  //         NATIVE orientation (no rotation) so the text reads left-to-right.
+  //     Two SVGs (not one CSS-rotated SVG) keep each viewBox exact — rotating
+  //     a single SVG via CSS leaves its layout box unrotated, which would
+  //     throw off the bottom:50px anchor. The seal is shared and never rotated.
   function labelSVG() {
-    return '<svg class="wfb-vsvg" width="20" height="' + LABEL_TRACK + '" viewBox="0 0 20 ' + LABEL_TRACK + '" aria-hidden="true">' +
-      '<g transform="translate(14.5,' + LABEL_TRACK + ') rotate(-90)">' +
-        '<path class="wfb-vword wfb-from" d="' + LABEL_FROM + '"></path>' +
-        '<path class="wfb-vword wfb-to" d="' + LABEL_TO + '"></path>' +
-      '</g>' +
-    '</svg>';
+    const vertical =
+      '<svg class="wfb-vsvg" width="20" height="' + LABEL_TRACK + '" viewBox="0 0 20 ' + LABEL_TRACK + '" aria-hidden="true">' +
+        '<g transform="translate(14.5,' + LABEL_TRACK + ') rotate(-90)">' +
+          '<path class="wfb-vword wfb-from" d="' + LABEL_FROM + '"></path>' +
+          '<path class="wfb-vword wfb-to" d="' + LABEL_TO + '"></path>' +
+        '</g>' +
+      '</svg>';
+    const horizontal =
+      '<svg class="wfb-hsvg" width="131" height="16" viewBox="0 0 131 16" aria-hidden="true">' +
+        '<g transform="translate(0.5,12)">' +
+          '<path class="wfb-vword wfb-from" d="' + LABEL_FROM + '"></path>' +
+          '<path class="wfb-vword wfb-to" d="' + LABEL_TO + '"></path>' +
+        '</g>' +
+      '</svg>';
+    return vertical + horizontal;
   }
 
   function sealHTML() {
