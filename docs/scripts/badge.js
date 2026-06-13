@@ -83,10 +83,11 @@
     ".webflow_badge .wfb-seal-bg{position:absolute;inset:0;width:100%;height:100%;display:block}",
     ".webflow_badge .wfb-glyphs{position:absolute;inset:0;display:grid;place-items:center}",
     ".webflow_badge .wfb-tween{display:block}",
-    // ≤767px (landscape + mobile): horizontal lockup, anchored bottom:50px
-    // within the FIRST 100vh (absolute, scrolls away). The seal is NOT rotated.
+    // ≤767px (landscape + mobile): horizontal lockup, anchored bottom-LEFT
+    // (left:5vw) at bottom:50px within the FIRST 100vh (absolute, scrolls
+    // away). The seal is NOT rotated.
     "@media (max-width:767px){" +
-      ".webflow_badge{top:calc(100vh - 50px);bottom:auto;transform:translateY(-100%)}" +
+      ".webflow_badge{top:calc(100vh - 50px);bottom:auto;left:5vw;right:auto;transform:translateY(-100%)}" +
       ".webflow_badge .wfb-corner{height:auto}" +
       ".webflow_badge .wfb-vlockup{flex-direction:row-reverse}" +
       ".webflow_badge .wfb-vsvg{display:none}" +
