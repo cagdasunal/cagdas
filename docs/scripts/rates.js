@@ -20,12 +20,6 @@
  * trigger, or click outside). The centred code reads at full hero size; the rest
  * are muted (#595959).
  *
- * The hero price sits in the same sentence as the trigger, so a live preview that
- * changes the amount's width would reflow the line and slide the trigger (and the
- * open wheel) — bad UX. While the wheel is OPEN we reserve the hero value's widest
- * footprint across all currencies (digits right-aligned, growing leftward) plus a
- * constant "$"-symbol slot (lockHero), so the trigger stays put as you scroll.
- *
  * ── Odometer pricing ──────────────────────────────────────────────────────────
  * Every `.price_value` (hero $40 + both plan cards) counts from its old amount to
  * the new one over ~360ms ease-out, tabular digits so nothing jitters. The symbol
@@ -137,19 +131,13 @@
     el: el, baseUsd: parseNum(el.textContent), webUsd: WEB_DESIGN.planUsd[el.id], shown: 0
   }));
 
-  // The hero price lives in the SAME sentence as the wheel trigger ("…$40 USD per
-  // hour"). When a preview rolls the amount to a different width the line reflows
-  // and the trigger — plus the wheel anchored to it — slides. heroValueEl /
-  // heroSymbolEl are that in-sentence price; while the wheel is open we reserve
-  // their widths (lockHero) so the trigger can't move. The hero has no web-design
-  // figure (webUsd == null), so its amount depends only on the currency.
-  const heroPrice = prices.filter((p) => p.webUsd == null)[0] || prices[0];
-  const heroValueEl = heroPrice ? heroPrice.el : null;
-  const heroSymbolEl = (heroValueEl &&
-    (symbolEls.filter((s) => s.parentNode === heroValueEl.parentNode)[0] ||
-     symbolEls.filter((s) => heroValueEl.parentNode && heroValueEl.parentNode.contains(s))[0])) || null;
-  let heroLock = false;   // true while the wheel is open (hero widths reserved)
-  let heroSaved = null;   // hero element inline cssText, restored on close
+  // The in-sentence hero price (no web-design figure → webUsd == null) and its
+  // symbol. When the wheel is open we watch these for width changes and hold the
+  // trigger steady (see repin / pinObserver) so the dropdown can't slide.
+  const heroValueEl = (prices.filter((p) => p.webUsd == null)[0] || prices[0] || {}).el || null;
+  const heroSymbolEl = heroValueEl
+    ? (symbolEls.filter((s) => s.parentNode === heroValueEl.parentNode)[0] || null)
+    : null;
 
   const week1Orig = week1El ? week1El.textContent : null;
   const week2Orig = week2El ? week2El.textContent : null;
@@ -204,17 +192,8 @@
     const glyph = glyphOf(code);
 
     for (let i = 0; i < symbolEls.length; i++) {
-      const s = symbolEls[i];
-      if (heroLock && s === heroSymbolEl) {
-        // Locked open: keep the reserved slot — toggle visibility, not display,
-        // so showing/hiding "$" can't shift the value (and thus the trigger).
-        s.textContent = glyph || "$";
-        s.style.visibility = glyph ? "visible" : "hidden";
-      } else if (glyph) {
-        s.textContent = glyph; s.style.display = "";
-      } else {
-        s.style.display = "none";
-      }
+      if (glyph) { symbolEls[i].textContent = glyph; symbolEls[i].style.display = ""; }
+      else symbolEls[i].style.display = "none";
     }
     if (heroCode) heroCode.textContent = code;
     for (let c = 0; c < cardCodeEls.length; c++) cardCodeEls[c].textContent = code;
@@ -252,11 +231,8 @@
   }
 
   // Selecting a currency: roll the prices + relabel. persist only on commit.
-  // animate defaults true (live preview rolls); commit-on-close passes false so the
-  // odometer can't keep rolling AFTER unlockHero strips the width reservation
-  // (which would reflow the line and slide the trigger during close).
-  function setCurrency(code, persist, animate) {
-    if (code !== state.code) { state.code = code; applyCurrency(animate !== false); }
+  function setCurrency(code, persist) {
+    if (code !== state.code) { state.code = code; applyCurrency(true); }
     if (persist) lsSet(LS_CURRENCY, code);
   }
 
@@ -307,6 +283,7 @@
   let dragInfo = null;
   let wheelTimer = null;
   let previewTimer = null;
+  let pinAnchor = 0;    // trigger.offsetLeft captured at open (the stable position)
 
   const mod = (v) => ((v % N) + N) % N;
   const wrapD = (d) => { d = mod(d); return d > N / 2 ? d - N : d; };
@@ -383,66 +360,33 @@
     previewTimer = setTimeout(() => setCurrency(code, false), PREVIEW_MS);
   }
 
-  // ── Open-state stability ────────────────────────────────────────────────────
-  // While the wheel is open, freeze the in-sentence hero price so previewing
-  // currencies of different widths can't reflow the line and slide the trigger
-  // (and the wheel anchored to it). We reserve the value's WIDEST footprint across
-  // all currencies — digits right-aligned, so the number grows leftward toward the
-  // trigger — and a constant slot for the "$" symbol. Released on close.
-  function lockHero() {
-    if (heroLock || !heroValueEl) return;
-    heroLock = true;
-    heroSaved = { v: heroValueEl.style.cssText, s: heroSymbolEl ? heroSymbolEl.style.cssText : null };
-
-    const live = heroValueEl.textContent;
-    heroValueEl.style.display = "inline-block";
-    heroValueEl.style.boxSizing = "border-box";
-    heroValueEl.style.fontVariantNumeric = "tabular-nums";
-    let maxW = 0;
-    for (let i = 0; i < N; i++) {
-      heroValueEl.textContent = groupNum(roundUsd(heroPrice.baseUsd, CURRENCIES[i][0]));
-      if (heroValueEl.offsetWidth > maxW) maxW = heroValueEl.offsetWidth;
-    }
-    heroValueEl.textContent = live;                 // restore the live amount
-    // FIXED width (not just min-width): an upper bound too, so the trigger can't
-    // move even if live rates land mid-open (fetchRates) or a resize changes the
-    // font and a value renders wider than measured — it overflows leftward into
-    // the gap instead of growing the box.
-    heroValueEl.style.width = maxW + "px";
-    heroValueEl.style.textAlign = "right";
-    heroValueEl.style.verticalAlign = "baseline";
-
-    if (heroSymbolEl) {
-      heroSymbolEl.style.display = "inline-block";
-      heroSymbolEl.style.boxSizing = "border-box";
-      heroSymbolEl.textContent = "$";               // the only glyph used → slot width
-      heroSymbolEl.style.width = heroSymbolEl.offsetWidth + "px";
-      heroSymbolEl.style.textAlign = "left";
-      heroSymbolEl.style.verticalAlign = "baseline";
-      const glyph = glyphOf(state.code);
-      heroSymbolEl.textContent = glyph || "$";
-      heroSymbolEl.style.visibility = glyph ? "visible" : "hidden";
-    }
+  // ── Keep the open wheel stable ──────────────────────────────────────────────
+  // The hero price sits before the trigger in the SAME sentence, so when a live
+  // preview changes the amount's width the line reflows and the trigger — plus the
+  // wheel anchored to it — slides sideways. While the wheel is open we hold the
+  // trigger at the exact screen position it had when it opened: measure how far it
+  // has reflowed (offsetLeft is layout-only, unaffected by our own transform) and
+  // translate it back. The sentence stays tight and normal (no reserved width, no
+  // gap) — only the trigger's translate changes. A MutationObserver on the hero
+  // amount fires repin on every digit change (incl. each odometer frame), before
+  // paint, so the dropdown never visibly moves — and it survives rAF throttling.
+  function repin() {
+    if (!open) return;
+    const dx = trigger.offsetLeft - pinAnchor;
+    trigger.style.transform = dx ? "translateX(" + (-dx) + "px)" : "";
   }
-
-  function unlockHero() {
-    if (!heroLock) return;
-    heroLock = false;
-    if (heroValueEl) heroValueEl.style.cssText = heroSaved ? heroSaved.v : "";
-    if (heroSymbolEl) {
-      heroSymbolEl.style.cssText = (heroSaved && heroSaved.s != null) ? heroSaved.s : "";
-      // Re-assert the committed currency's symbol in normal (display) mode.
-      const glyph = glyphOf(state.code);
-      if (glyph) { heroSymbolEl.textContent = glyph; heroSymbolEl.style.display = ""; }
-      else heroSymbolEl.style.display = "none";
-    }
-    heroSaved = null;
-  }
+  const pinObserver = (typeof MutationObserver === "function" && heroValueEl)
+    ? new MutationObserver(repin) : null;
 
   function openWheel() {
     if (open) return;
     open = true;
-    lockHero();
+    trigger.style.transform = "";          // measure the untransformed position
+    pinAnchor = trigger.offsetLeft;
+    if (pinObserver) {
+      pinObserver.observe(heroValueEl, { childList: true, characterData: true, subtree: true });
+      if (heroSymbolEl) pinObserver.observe(heroSymbolEl, { attributes: true, attributeFilter: ["style"] });
+    }
     pos = idxOf(state.code); drag = false;
     codeBtn.setAttribute("aria-expanded", "true");
     codeBtn.style.color = HOVER; codeBtn.style.textDecorationColor = HOVER;
@@ -473,10 +417,11 @@
     panel.style.visibility = "hidden";
     document.removeEventListener("mousedown", onDocDown, true);
     document.removeEventListener("keydown", onKey, true);
-    unlockHero();
+    if (pinObserver) pinObserver.disconnect();
+    trigger.style.transform = "";          // un-pin → sentence flows naturally again
   }
 
-  function commitCentered() { setCurrency(CURRENCIES[mod(Math.round(pos))][0], true, false); }
+  function commitCentered() { setCurrency(CURRENCIES[mod(Math.round(pos))][0], true); }
   function closeAndCommit() { commitCentered(); closeWheel(); }
 
   codeBtn.addEventListener("click", (e) => { e.preventDefault(); open ? closeAndCommit() : openWheel(); });
