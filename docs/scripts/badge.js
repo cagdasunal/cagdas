@@ -41,8 +41,8 @@
  *   Scroll fade (ALL breakpoints): the badge fades out smoothly as the page
  *   scrolls past the first viewport and fades back in when the first 100vh
  *   returns to view (opacity only; JS toggles .wfb-faded on scroll).
- *   Per-page: on the 'contact' page slug the badge is hidden at ≤991px
- *   (tablet + landscape + mobile); it still shows on contact above 991px.
+ *   Per-page: on the contact/call/terms/privacy/cookies page slugs the badge
+ *   is hidden at ≤991px (tablet + landscape + mobile); shown there above 991px.
  *   Load in the footer / before </body>, or with defer:
  *     <script src="https://files.cagd.as/scripts/badge.min.js" defer></script>
  *
@@ -57,10 +57,13 @@
 
   const TARGET = '.webflow_badge';
   const STYLE_ID = 'cagdas-webflow-badge-styles';
-  // True when the current page's slug is 'contact'. On that page the badge is
-  // hidden at ≤991px (tablet + landscape + mobile) via .wfb-contact-hide; it
-  // still shows on contact above 991px, and every other page is unaffected.
-  const ON_CONTACT = location.pathname.replace(/\/+$/, '').split('/').pop().toLowerCase() === 'contact';
+  // Page slugs where the badge is hidden at ≤991px (tablet + landscape +
+  // mobile) via .wfb-page-hide. These pages still show it above 991px; every
+  // other page is unaffected. Matches the LAST path segment, so it works
+  // whether a page lives at /privacy or /doc/privacy.
+  const HIDE_PAGES = ['contact', 'call', 'terms', 'privacy', 'cookies'];
+  const PAGE_SLUG = location.pathname.replace(/\/+$/, '').split('/').pop().toLowerCase();
+  const ON_HIDE_PAGE = HIDE_PAGES.indexOf(PAGE_SLUG) !== -1;
   const RING = 140;        // sample points per seal glyph (morph smoothness)
   const CYCLE = 9200;      // ms for one check -> W -> check loop
 
@@ -109,10 +112,11 @@
       ".webflow_badge .wfb-vsvg{display:none}" +
       ".webflow_badge .wfb-hsvg{display:block}" +
     "}",
-    // Per-page override: on the 'contact' page slug, hide the badge entirely at
-    // ≤991px (tablet + landscape + mobile). JS adds .wfb-contact-hide only when
-    // ON_CONTACT; above 991px (and on every other page) the badge still shows.
-    "@media (max-width:991px){.webflow_badge.wfb-contact-hide{display:none}}"
+    // Per-page override: on a hidden-page slug (contact/call/terms/privacy/
+    // cookies), hide the badge entirely at ≤991px (tablet + landscape + mobile).
+    // JS adds .wfb-page-hide only on those pages; above 991px (and on every
+    // other page) the badge still shows.
+    "@media (max-width:991px){.webflow_badge.wfb-page-hide{display:none}}"
   ].join("\n");
 
   function injectStyles() {
@@ -240,8 +244,8 @@
     if (host.getAttribute('data-wfb-init') === '1') return;
     host.setAttribute('data-wfb-init', '1');
 
-    // 'contact' page only: tag the badge so CSS hides it at ≤991px.
-    if (ON_CONTACT) host.classList.add('wfb-contact-hide');
+    // Hidden-page slugs: tag the badge so CSS hides it at ≤991px.
+    if (ON_HIDE_PAGE) host.classList.add('wfb-page-hide');
 
     // Anchor positioning to the document so position:absolute is relative to
     // the page (not a Webflow ancestor). The badge is out of flow, so moving
