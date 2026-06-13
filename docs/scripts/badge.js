@@ -35,8 +35,11 @@
  *   load and scrolling away with the page (NOT sticky/fixed). Right edge pinned
  *   to a centered 120rem container with a 5% gap (right:max(5vw,(100vw-120rem)/2)).
  *   Responsive: at ≤767px (landscape + mobile) the lockup turns HORIZONTAL
- *   (label reads left-to-right; the seal stays upright — never rotated) and
- *   anchors to bottom:50px within the first 100vh (still absolute, scrolls away).
+ *   (label reads left-to-right; the seal stays upright — never rotated), scales
+ *   ~15% smaller, and anchors bottom-left at bottom:50px within the first 100vh
+ *   (still absolute, scrolls away). It also fades out smoothly as the page
+ *   scrolls past the first viewport and fades back in when the first 100vh
+ *   returns to view (opacity only; JS toggles .wfb-faded on scroll).
  *   Load in the footer / before </body>, or with defer:
  *     <script src="https://files.cagd.as/scripts/badge.min.js" defer></script>
  *
@@ -87,9 +90,12 @@
     // (0.85), anchored bottom-LEFT (left:5vw) at bottom:50px within the FIRST
     // 100vh (absolute, scrolls away). The scale origin is the bottom-left
     // corner, so shrinking keeps the lockup glued to that anchor. The seal is
-    // NOT rotated.
+    // NOT rotated. As the page scrolls past the first viewport the badge fades
+    // out (opacity, .wfb-faded toggled by JS) and fades back in when the first
+    // 100vh returns to view.
     "@media (max-width:767px){" +
-      ".webflow_badge{top:calc(100vh - 50px);bottom:auto;left:5vw;right:auto;transform:translateY(-100%)}" +
+      ".webflow_badge{top:calc(100vh - 50px);bottom:auto;left:5vw;right:auto;transform:translateY(-100%);transition:opacity .3s ease}" +
+      ".webflow_badge.wfb-faded{opacity:0;pointer-events:none}" +
       ".webflow_badge .wfb-corner{height:auto}" +
       ".webflow_badge .wfb-vlockup{flex-direction:row-reverse;transform:scale(0.85);transform-origin:bottom left}" +
       ".webflow_badge .wfb-vsvg{display:none}" +
@@ -243,6 +249,34 @@
     if (seal) runSeal(seal, function () { return hover; });
   }
 
+  // ≤767px only: fade the badge out once the page scrolls past the first
+  // viewport, and fade it back in when the first 100vh returns to view. The
+  // badge stays position:absolute (it still scrolls with the page) — this only
+  // toggles the .wfb-faded opacity class (CSS handles the smooth transition).
+  // A small hysteresis band (show <10vh, hide >20vh) prevents flicker at the
+  // boundary; on desktop the badge is always shown. rAF-throttled + passive.
+  function attachScrollFade(hosts) {
+    const mq = matchMedia('(max-width:767px)');
+    let hidden = false, ticking = false;
+    function setHidden(v) {
+      if (v === hidden) return;
+      hidden = v;
+      for (let i = 0; i < hosts.length; i++) hosts[i].classList.toggle('wfb-faded', v);
+    }
+    function apply() {
+      ticking = false;
+      if (!mq.matches) { setHidden(false); return; } // desktop: never fade
+      const y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      const vh = window.innerHeight || 1;
+      if (y > vh * 0.2) setHidden(true);        // scrolled past first 100vh -> fade out
+      else if (y < vh * 0.1) setHidden(false);  // first 100vh back in view -> fade in
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(apply); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    apply(); // set the correct state on load
+  }
+
   function init() {
     injectStyles();
     const hosts = document.querySelectorAll(TARGET);
@@ -254,9 +288,11 @@
       created.className = 'webflow_badge';
       (document.body || document.documentElement).appendChild(created);
       setup(created);
+      attachScrollFade([created]);
       return;
     }
     for (let i = 0; i < hosts.length; i++) setup(hosts[i]);
+    attachScrollFade(Array.prototype.slice.call(hosts));
   }
 
   // Loaded with `defer` or in the footer, so the DOM is already parsed.
