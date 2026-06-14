@@ -17,11 +17,13 @@
  *         above both (z-index) — no HTML restructuring.
  *   - SCROLL choreography (smoothed lerp ≈ GSAP scrub, keyed to the first
  *     viewport — NOT pinned, so it never disturbs the Webflow IX2 section below):
- *       • portrait first gets LESS DARK (0.4 → 0.66), THEN hides (→ 0).
+ *       • portrait first gets LESS DARK (0.4 → 0.66), THEN hides (→ 0) — over a
+ *         SHORT travel (~0.45 vh) so the effect is felt as soon as you scroll.
  *       • the indigo glow blooms with the brighten, then clears with the hide.
- *       • the text column drifts up and fades out a touch later.
- *   - ENTRANCE on load: staggered slide-up of the text (transform-only, so it
- *     can never flash/blank), and the background fades in once the photo decodes.
+ *       • the text column drifts up and fades over a gentler, longer range.
+ *   - ENTRANCE on load: the background fades in quickly (~400ms) once the photo
+ *     decodes. The hero TEXT is left untouched — it shows instantly (no on-load
+ *     animation, per the brief).
  *   - Animation is RESPONSIVE to Webflow breakpoints (992 / 768 / 480): portrait
  *     scale + glow size step down on smaller screens.
  *   - Honors prefers-reduced-motion (static faint portrait, no loops, no scroll
@@ -49,8 +51,9 @@
   // the black canvas — so it needs no opaque background, just a soft vignette.
   const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ea142a77c1ee08c8fc77d_cagdasunal-transparent.avif';
   const GLOW = '18, 110, 245';   // #126ef5 — the Webflow-indigo aurora
-  const TRAVEL = 0.85;           // scroll distance (× viewport) the choreography spans
-  const LERP = 0.14;             // scrub smoothing toward the target scroll progress
+  const PHOTO_TRAVEL = 0.45;     // viewport-fractions of scroll for the portrait/glow to fully resolve — short, so it's FELT as soon as you scroll
+  const TEXT_TRAVEL = 0.9;       // the text drifts/fades over a gentler, longer range (so it doesn't vanish while still on screen)
+  const LERP = 0.18;             // scrub smoothing toward the target scroll position
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function smoothstep(v) { const x = clamp(v); return x * x * (3 - 2 * x); }
@@ -123,29 +126,33 @@
     // ---- Badge sync: own the badge's scroll fade so it's in lock-step with the
     //      hero. badge.js yields when this flag is set (see its scroll guard). ----
     let badgeHosts = null;
-    function driveBadge(p) {
+    function driveBadge(s) {
       if (badgeHosts === null) {
         const n = document.querySelectorAll('.webflow_badge');
         if (!n.length) return;
         badgeHosts = n;
       }
-      // Keep badge.js's original feel (fade past ~0.2vh, return near top), now
-      // expressed against the same progress that drives the hero.
-      let faded = p > 0.235;
-      if (p < 0.118) faded = false;
+      // badge.js's original feel (fade past 0.2vh, return under 0.1vh), now driven
+      // here so it stays in lock-step with the hero.
+      let faded = s > 0.2;
+      if (s < 0.1) faded = false;
       for (let i = 0; i < badgeHosts.length; i++) badgeHosts[i].classList.toggle('wfb-faded', faded);
     }
 
-    // ---- Scroll choreography: less-dark-then-hide + glow bloom + text drift. ----
-    function apply(p) {
-      const lessdark = smoothstep(clamp(p / 0.5));
-      const hide = smoothstep(clamp((p - 0.5) / 0.46));
+    // ---- Scroll choreography (s = viewport-fractions scrolled). The portrait +
+    //      glow resolve over a SHORT travel so the effect is felt immediately;
+    //      the text drifts/fades over a gentler, longer range. ----
+    function apply(s) {
+      const pPhoto = clamp(s / PHOTO_TRAVEL);
+      const pText = clamp(s / TEXT_TRAVEL);
+      const lessdark = smoothstep(clamp(pPhoto / 0.5));
+      const hide = smoothstep(clamp((pPhoto - 0.5) / 0.46));
       photo.style.opacity = String((0.4 + 0.26 * lessdark) * (1 - hide));
       photo.style.transform = 'translate(-50%,0) scale(' + bp.photoScale + ')';
       glow.style.opacity = String(clamp(0.34 * (0.6 + 0.7 * lessdark) * (1 - hide)));
-      textcol.style.transform = 'translateY(' + (-p * 90) + 'px)';
-      textcol.style.opacity = String(1 - smoothstep((p - 0.45) / 0.5));
-      driveBadge(p);
+      textcol.style.transform = 'translateY(' + (-pText * 80) + 'px)';
+      textcol.style.opacity = String(1 - smoothstep((pText - 0.5) / 0.5));
+      driveBadge(s);
     }
 
     if (reduce) {
@@ -178,34 +185,13 @@
        { filter: 'hue-rotate(16deg) saturate(1.16)' },
        { filter: 'hue-rotate(-10deg) saturate(1)' }], 21000);
 
-    // ---- Entrance: staggered slide-up of the text (transform-only, so a stalled
-    //      frame can never blank it), + a soft fade-in of the background. ----
-    reveal();
+    // ---- Entrance: just a quick fade-in of the injected background. The hero
+    //      TEXT is left untouched — it shows instantly (no on-load animation). ----
     revealBg();
-
-    function reveal() {
-      const els = [
-        hero.querySelector('h1'),
-        hero.querySelector('.max-width-header'),
-        hero.querySelector('.hero_tags'),
-        hero.querySelector('.button-group')
-      ].filter(Boolean);
-      const delays = [120, 240, 340, 440];
-      els.forEach(function (el) { el.style.willChange = 'transform'; el.style.transition = 'none'; el.style.transform = 'translateY(30px)'; });
-      void hero.offsetWidth; // flush the resting offset before transitioning
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
-        els.forEach(function (el, i) {
-          el.style.transition = 'transform 1000ms cubic-bezier(0.22,1,0.36,1) ' + (delays[i] || 0) + 'ms';
-          el.style.transform = 'none';
-        });
-      }); });
-      // Safety net: if frames never run, force the visible resting state.
-      setTimeout(function () { els.forEach(function (el) { el.style.transition = 'none'; el.style.transform = 'none'; }); }, 2200);
-    }
 
     function revealBg() {
       function show() {
-        bg.style.transition = 'opacity 1200ms ease';
+        bg.style.transition = 'opacity 400ms ease';
         requestAnimationFrame(function () { bg.style.opacity = '1'; });
         bg.addEventListener('transitionend', function te(ev) {
           if (ev.propertyName !== 'opacity') return;
@@ -215,16 +201,17 @@
       }
       if (img.complete && img.naturalWidth) requestAnimationFrame(show);
       else { img.addEventListener('load', show, { once: true }); img.addEventListener('error', show, { once: true }); }
-      setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 1600);
+      setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 700);
     }
 
     // ---- Drive the scroll progress with a smoothed lerp (scrub feel). The rAF
     //      loop only runs while easing toward the target, then sleeps. ----
     let cur = 0, target = 0, rafId = null;
-    function targetProgress() {
+    function scrollFrac() {
       const y = window.pageYOffset || document.documentElement.scrollTop || 0;
       const vh = window.innerHeight || 1;
-      return clamp(y / (vh * TRAVEL));
+      const s = y / vh;
+      return s > 1.5 ? 1.5 : s; // cap so the lerp never chases a huge value
     }
     function frame() {
       cur += (target - cur) * LERP;
@@ -233,11 +220,11 @@
       rafId = requestAnimationFrame(frame);
     }
     function wake() { if (rafId === null) rafId = requestAnimationFrame(frame); }
-    function onScroll() { target = targetProgress(); wake(); }
+    function onScroll() { target = scrollFrac(); wake(); }
 
     apply(0);
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', function () { computeBp(); target = targetProgress(); wake(); }, { passive: true });
+    window.addEventListener('resize', function () { computeBp(); target = scrollFrac(); wake(); }, { passive: true });
     onScroll(); // sync to the current scroll position on load (e.g. refresh mid-page)
   }
 
