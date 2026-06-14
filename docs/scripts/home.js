@@ -45,13 +45,14 @@
   if (window.__cagdasHomeHero) return; // guard against double-load
   window.__cagdasHomeHero = true;
 
-  const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ef57e3f9feeabc21c4f1f_cagdasunal-transparent.avif';
+  const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ef57e3f9feeabc21c4f1f_47035e26c90d647761dcb2cc2f53df5b_cagdasunal-transparent.png';
   const GLOW = '18, 110, 245';   // #126ef5 — the Webflow-indigo aurora
-  // Transparent cutout, anchored to the CENTRE-BOTTOM of the hero and sized big
-  // by height (the chest-cut edge sits at the viewport bottom, so it's hidden at
-  // the fold; no vignette mask needed — the alpha edges are clean).
-  const PHOTO_AR = '1543 / 1643';                 // the cutout's intrinsic aspect
-  const PHOTO_H = 'min(92vh, 96vw, 1040px)';      // big; also capped by width so it fits on mobile
+  // Transparent cutout, anchored to the CENTRE-BOTTOM of the hero and sized by
+  // height (the chest-cut edge sits at the viewport bottom, hidden at the fold;
+  // no vignette mask — the alpha edges are clean). It stays STILL when idle (no
+  // "living push-in") — only opacity animates, and only while you scroll.
+  const PHOTO_AR = '1984 / 2114';                 // the cutout's intrinsic aspect
+  const PHOTO_H = 'min(72vh, 82vw, 820px)';       // smaller; capped by width so it fits on mobile
   // Head-centering: the head sits at x≈0.554 in this cutout → shift the box left
   // ~5% (translateX -55% vs -50%) so the head lands centred with the nav.
   const PHOTO_TX = '-55%';
@@ -199,7 +200,7 @@
       if (opts) for (const k in opts) o[k] = opts[k];
       try { el.animate(frames, o); } catch (e) {}
     }
-    loop(living, [{ transform: 'scale(1) translateY(0)' }, { transform: 'scale(1.05) translateY(-0.6%)' }], 15000, { direction: 'alternate' });
+    // (no idle "living push-in" on the portrait — it stays still until you scroll)
     loop(glowA,
       [{ transform: 'translate(0,0) scale(1) rotate(0deg)', offset: 0 },
        { transform: 'translate(-7%,5%) scale(1.18) rotate(7deg)', offset: 0.33 },
