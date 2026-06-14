@@ -3,38 +3,38 @@
  *
  * Drives the EXISTING Webflow homepage hero (header.section_hero, .is-home). It
  * injects a faint big B&W portrait + a soft Webflow-indigo (#126ef5) aurora
- * behind the text, PINS the hero (sticky) so the animation plays out over a long
- * scroll, then runs a scroll-linked choreography. The text stays the hero; the
- * face lives on the background (per the design brief).
+ * (centred) behind the text, PINS the hero so the whole animation plays out "in
+ * the first 100vh" before the next section appears, then runs a scroll-linked
+ * choreography. The text stays the hero; the face lives on the background.
  *
- * Structure (matches Claude Design "Hero Section Redesign" Hero.dc.html, which
- * uses a 200vh track + a position:sticky 100vh section):
- *   - The hero becomes a tall TRACK (PIN×100vh). Its content is wrapped in a
- *     sticky STAGE (top:0; height:100vh; overflow:hidden) so the hero stays
- *     pinned in the viewport while you scroll through the track — you scroll
- *     more, so you experience the animation more.
- *   - Into the stage (behind the text, which is lifted via z-index — no HTML
- *     restructuring of the content itself): the indigo aurora + the portrait.
+ * Pin (GSAP ScrollTrigger):
+ *   - The hero is pinned in the viewport for PIN_VIEWPORTS×100vh of scroll, so
+ *     you still SEE the first 100vh while the animation runs — the section below
+ *     only appears once it completes. The pin distance == the animation distance,
+ *     so the section slides up exactly as the photo finishes hiding: no whitespace.
+ *   - GSAP pins the hero AT its current position, so the hero's margin-top:-7rem
+ *     can't cause the shift a hand-rolled position:sticky pin had.
+ *   - Into the hero (behind the text, lifted via z-index — content not
+ *     restructured): the centred indigo aurora + the portrait.
  *
- * Scroll choreography (progress p = how far through the pinned track, smoothed
- * by a lerp ≈ GSAP scrub):
- *   - portrait gets LESS DARK almost immediately (felt the moment you scroll),
- *     then hides GRADUALLY across the whole pin so the fade-out is experienced.
+ * Scroll choreography (progress p, GSAP scrub):
+ *   - portrait gets LESS DARK almost immediately, then hides GRADUALLY, finishing
+ *     exactly at the pin end (p≈1).
  *   - the indigo glow blooms with the brighten, then clears with the hide.
  *   - the hero text drifts UP and fades — "moves to the top and disappears" —
- *     and the Webflow badge is held in the viewport and faded in LOCKSTEP with
- *     the text, so the two disappear together.
+ *     and the Webflow badge fades out early (lockstep) so it reads as a fade.
  *
  * Entrance: the background fades in smoothly (~850ms) once the photo decodes.
  * The hero TEXT shows instantly (no on-load animation, per the brief).
  *
  * Responsive to Webflow breakpoints (992/768/480); reduced-motion-safe (no pin,
- * static faint 100vh hero). The clock (.time_*) + availability dot
+ * static faint 100vh hero). If GSAP can't load it falls back to a plain
+ * scroll-driven (non-pinned) run. The clock (.time_*) + availability dot
  * (.icon_available) are owned by available-widget.js — not touched here.
  *
- * Self-contained: ZERO deps, ZERO <style> injection (WAAPI + inline styles).
- * Badge sync: sets window.__cagdasHeroFadesBadge so badge.js yields its own
- * scroll-fade (see its scroll guard).
+ * Deps: GSAP + ScrollTrigger (lazy-injected from cdnjs only on the homepage).
+ * ZERO <style> injection (WAAPI + inline styles). Badge sync: sets
+ * window.__cagdasHeroFadesBadge so badge.js yields its own scroll-fade.
  *
  * SSOT: sites/cagdas/scripts/src/home.js
  * Build: python3 scripts/site_deploy.py build --site cagdas --src home
@@ -56,9 +56,9 @@
   // Head-centering: the head sits at x≈0.554 in this cutout → shift the box left
   // ~5% (translateX -55% vs -50%) so the head lands centred with the nav.
   const PHOTO_TX = '-55%';
-  const PHOTO_PARALLAX = 0.22;   // how much the photo lags the scroll (0 = scrolls with page, 1 = stays put)
-  const LERP = 0.16;             // scrub smoothing toward the target
-  const TEXT_DRIFT_PX = 90;      // px the hero text drifts up (foreground, a touch faster than the photo)
+  const PIN_VIEWPORTS = 0.8;     // how far (× viewport) the hero stays PINNED while the animation plays
+  const LERP = 0.16;             // scrub smoothing for the no-GSAP fallback
+  const TEXT_DRIFT_PX = 150;     // px the hero text drifts up across the pin
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function smoothstep(v) { const x = clamp(v); return x * x * (3 - 2 * x); }
@@ -81,12 +81,14 @@
     bg.style.cssText = 'position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;opacity:0';
 
     const glow = document.createElement('div');
-    glow.style.cssText = 'position:absolute;inset:0;z-index:0;opacity:0.204;transform-origin:72% 46%;will-change:opacity,filter';
+    glow.style.cssText = 'position:absolute;inset:0;z-index:0;opacity:0.204;transform-origin:50% 50%;will-change:opacity,filter';
+    // Both blobs centred (V + H) so the aurora's bright centre sits at the middle
+    // of the hero; the drift animations just sway them gently around that centre.
     const glowA = document.createElement('div');
-    glowA.style.cssText = 'position:absolute;top:-6%;right:-8%;width:74%;height:108%;mix-blend-mode:screen;filter:blur(54px);' +
+    glowA.style.cssText = 'position:absolute;top:10%;left:10%;width:80%;height:80%;mix-blend-mode:screen;filter:blur(54px);' +
       'background:radial-gradient(closest-side, ' + rgba(0.34) + ', ' + rgba(0.12) + ' 48%, ' + rgba(0) + ' 76%)';
     const glowB = document.createElement('div');
-    glowB.style.cssText = 'position:absolute;top:12%;right:4%;width:52%;height:74%;mix-blend-mode:screen;filter:blur(62px);' +
+    glowB.style.cssText = 'position:absolute;top:25%;left:25%;width:50%;height:50%;mix-blend-mode:screen;filter:blur(62px);' +
       'background:radial-gradient(closest-side, ' + rgba(0.26) + ', ' + rgba(0) + ' 70%)';
     glow.appendChild(glowA);
     glow.appendChild(glowB);
@@ -141,12 +143,12 @@
     }
     computeBp();
 
-    // ---- Badge: fades in lockstep with the text (same curve) as you scroll. It
-    //      scrolls away naturally with the page (no pin), so only opacity is
-    //      driven here; pointer-events:none once invisible so it can't block
-    //      clicks. At the very top it's handed back to badge.js's own styling. ----
+    // ---- Badge: fades out EARLY in the pin (over p 0.05→0.32) so it disappears
+    //      as the animation begins — before the un-pinned badge would scroll off
+    //      the top — making it read as a fade, not a scroll-away. pointer-events:
+    //      none once invisible so it can't block clicks. Reverts at the very top. ----
     let badgeHosts = null;
-    function driveBadge(s, textFade) {
+    function driveBadge(p) {
       if (badgeHosts === null) {
         const n = document.querySelectorAll('.webflow_badge');
         if (!n.length) return;
@@ -154,10 +156,11 @@
       }
       for (let i = 0; i < badgeHosts.length; i++) {
         const h = badgeHosts[i];
-        if (s > 0.004) {
+        if (p > 0.004) {
+          const o = 1 - smoothstep(clamp((p - 0.05) / 0.27));
           h.style.transition = 'none';
-          h.style.opacity = String(1 - textFade);
-          h.style.pointerEvents = (1 - textFade) < 0.05 ? 'none' : '';
+          h.style.opacity = String(o);
+          h.style.pointerEvents = o < 0.05 ? 'none' : '';
         } else {
           h.style.transition = '';
           h.style.opacity = '';
@@ -166,21 +169,24 @@
       }
     }
 
-    // ---- Scroll choreography over s = how far you've scrolled (in viewports).
-    //      Photo lags the scroll (parallax) + brightens then fades; text drifts up
-    //      + fades; the next section follows the hero immediately (no pin). ----
-    function apply(s) {
-      const vh = window.innerHeight || 1;
-      const lessdark = smoothstep(clamp(s / 0.16));          // brighten — near-immediate
-      const hide = smoothstep(clamp((s - 0.2) / 0.6));       // hide — gradual, gone by ~0.8vh
-      photo.style.opacity = String((0.4 + 0.26 * lessdark) * (1 - hide));
-      // Parallax: shift the photo DOWN as you scroll so it rises slower than the page.
-      photo.style.transform = 'translate(' + PHOTO_TX + ',' + (s * vh * PHOTO_PARALLAX) + 'px) scale(' + bp.photoScale + ')';
-      glow.style.opacity = String(clamp(0.34 * (0.6 + 0.7 * lessdark) * (1 - hide)));
-      const textFade = smoothstep(clamp((s - 0.25) / 0.5));  // text fades a touch later
-      textcol.style.transform = 'translateY(' + (-s * TEXT_DRIFT_PX) + 'px)';
+    // ---- Scroll choreography over the pin progress p (0→1). The hero is PINNED
+    //      in the viewport for the whole of p, so the entire animation plays out
+    //      "in the first 100vh" before the next section appears. Everything
+    //      finishes by p≈1 — the photo hides exactly as the pin releases and the
+    //      next section slides up, so there's no empty whitespace handoff. ----
+    function apply(p) {
+      // The image gets LESS DARK across the pin and STAYS visible — it disappears
+      // by scrolling away with the hero once the pin releases, so the scroll-away
+      // is never an empty black gap: the portrait is on screen right up until the
+      // next section slides into its place.
+      const lessdark = smoothstep(clamp(p / 0.5));
+      photo.style.opacity = String(0.4 + 0.42 * lessdark);       // 0.40 → 0.82, brightens
+      photo.style.transform = 'translate(' + PHOTO_TX + ',0) scale(' + bp.photoScale + ')';
+      glow.style.opacity = String(clamp(0.46 + 0.22 * lessdark)); // centred glow visible at rest, blooms on scroll
+      const textFade = smoothstep(clamp((p - 0.12) / 0.6));      // text drifts up + fades, gone by ~0.72
+      textcol.style.transform = 'translateY(' + (-smoothstep(clamp(p / 0.85)) * TEXT_DRIFT_PX) + 'px)';
       textcol.style.opacity = String(1 - textFade);
-      driveBadge(s, textFade);
+      driveBadge(p);
     }
 
     // Looping idle motion — Web Animations API (no <style> injection).
@@ -191,19 +197,12 @@
       try { el.animate(frames, o); } catch (e) {}
     }
     // (no idle "living push-in" on the portrait — it stays still until you scroll)
+    // Gentle scale-only "breathing" (transform-origin centre) so the aurora STAYS
+    // centred — no translate/rotate drift that would push it off-centre.
     loop(glowA,
-      [{ transform: 'translate(0,0) scale(1) rotate(0deg)', offset: 0 },
-       { transform: 'translate(-7%,5%) scale(1.18) rotate(7deg)', offset: 0.33 },
-       { transform: 'translate(4%,-4%) scale(1.07) rotate(-5deg)', offset: 0.66 },
-       { transform: 'translate(0,0) scale(1) rotate(0deg)', offset: 1 }], 19000);
+      [{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }, { transform: 'scale(1)' }], 11000);
     loop(glowB,
-      [{ transform: 'translate(0,0) scale(1) rotate(0deg)', offset: 0 },
-       { transform: 'translate(8%,-7%) scale(1.14) rotate(-9deg)', offset: 0.5 },
-       { transform: 'translate(0,0) scale(1) rotate(0deg)', offset: 1 }], 25000);
-    loop(glow,
-      [{ filter: 'hue-rotate(-10deg) saturate(1)' },
-       { filter: 'hue-rotate(16deg) saturate(1.16)' },
-       { filter: 'hue-rotate(-10deg) saturate(1)' }], 21000);
+      [{ transform: 'scale(1)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], 14000);
 
     // ---- Entrance: smooth background fade-in once the photo decodes. ----
     (function revealBg() {
@@ -221,37 +220,84 @@
       setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 1500);
     })();
 
-    // ---- Scroll fraction: how far you've scrolled, in viewports (the hero is the
-    //      first section). The choreography completes within ~1 viewport — no pin,
-    //      so the next section is already there (no whitespace). Lerp-smoothed. ----
-    let cur = 0, target = 0, rafId = null;
-    function scrollFrac() {
-      const y = window.pageYOffset || document.documentElement.scrollTop || 0;
-      const vh = window.innerHeight || 1;
-      return clamp(y / vh);
-    }
-    function frame() {
-      const t = scrollFrac();           // always chase the LIVE scroll position
-      cur += (t - cur) * LERP;
-      const settled = Math.abs(t - cur) < 0.0004;
-      if (settled) cur = t;
-      apply(cur);
-      // Stay awake through the pin so we always track live scroll (no missed-event
-      // freeze on momentum); sleep only at the rest extremes (top / fully past).
-      if (settled && (t <= 0.001 || t >= 0.999)) { rafId = null; return; }
-      rafId = requestAnimationFrame(frame);
-    }
-    function wake() { if (rafId === null) rafId = requestAnimationFrame(frame); }
-
+    // ---- Pin via GSAP ScrollTrigger: hold the hero in the viewport while the
+    //      animation plays out, so the whole thing happens "in the first 100vh"
+    //      before the next section appears. Pin distance == animation distance →
+    //      the section slides up exactly as the photo finishes hiding (no
+    //      whitespace). GSAP pins the hero AT its current position, so the
+    //      hero's margin-top:-7rem can't cause the shift a hand-rolled sticky
+    //      pin had. If GSAP can't load, fall back to a plain scroll-driven run. ----
     apply(0);
-    // Wake on any input that can move the scroll position. Once awake the loop
-    // tracks live scroll each frame and only sleeps at the rest extremes, so a
-    // single event is enough to run the choreography to completion.
-    window.addEventListener('scroll', wake, { passive: true });
-    window.addEventListener('wheel', wake, { passive: true });
-    window.addEventListener('touchmove', wake, { passive: true });
-    window.addEventListener('resize', function () { computeBp(); wake(); }, { passive: true });
-    wake(); // sync to the current scroll position on load (e.g. refresh mid-page)
+    let started = false;
+
+    function refresh() {
+      computeBp();
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    }
+
+    function startPin() {
+      if (started) return true;
+      if (!(window.gsap && window.ScrollTrigger)) return false;
+      started = true;
+      const g = window.gsap;
+      g.registerPlugin(window.ScrollTrigger);
+      g.to({ p: 0 }, {
+        p: 1, ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: function () { return '+=' + Math.round((window.innerHeight || 1) * PIN_VIEWPORTS); },
+          pin: hero,
+          pinSpacing: true,
+          anticipatePin: 1,
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+          onUpdate: function (self) { apply(self.progress); },
+          onRefresh: function (self) { apply(self.progress); }
+        }
+      });
+      window.addEventListener('resize', refresh, { passive: true });
+      return true;
+    }
+
+    function startFallback() {
+      if (started) return;
+      started = true;
+      let cur = 0, rafId = null;
+      function frac() {
+        const y = window.pageYOffset || document.documentElement.scrollTop || 0;
+        return clamp(y / (window.innerHeight || 1));
+      }
+      function frame() {
+        const t = frac();
+        cur += (t - cur) * LERP;
+        const settled = Math.abs(t - cur) < 0.0004;
+        if (settled) cur = t;
+        apply(cur);
+        if (settled && (t <= 0.001 || t >= 0.999)) { rafId = null; return; }
+        rafId = requestAnimationFrame(frame);
+      }
+      function wake() { if (rafId === null) rafId = requestAnimationFrame(frame); }
+      window.addEventListener('scroll', wake, { passive: true });
+      window.addEventListener('wheel', wake, { passive: true });
+      window.addEventListener('touchmove', wake, { passive: true });
+      window.addEventListener('resize', function () { computeBp(); wake(); }, { passive: true });
+      wake();
+    }
+
+    if (!startPin()) {
+      const inject = function (src, cb) {
+        const sc = document.createElement('script');
+        sc.src = src; sc.async = true; sc.onload = cb; sc.onerror = cb;
+        (document.head || document.documentElement).appendChild(sc);
+      };
+      inject('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js', function () {
+        inject('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js', function () {
+          if (!startPin()) startFallback();
+        });
+      });
+      setTimeout(startFallback, 3500); // GSAP slow/blocked → don't leave the hero static
+    }
   }
 
   // Loaded with `defer` / in the footer, so the DOM is already parsed.
