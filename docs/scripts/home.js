@@ -90,7 +90,7 @@
 
     const photo = document.createElement('div');
     photo.style.cssText = 'position:absolute;top:0;bottom:0;left:50%;z-index:1;width:' + PHOTO_W + ';opacity:0.4;' +
-      'transform:translate(' + PHOTO_TX + ',0) scale(1.16);transform-origin:50% 36%;will-change:opacity,transform;' +
+      'transform:translate(' + PHOTO_TX + ',0) scale(1);transform-origin:50% 36%;will-change:opacity,transform;' +
       '-webkit-mask-image:radial-gradient(ellipse 62% 74% at 50% 40%, #000 36%, rgba(0,0,0,0) 82%);' +
       'mask-image:radial-gradient(ellipse 62% 74% at 50% 40%, #000 36%, rgba(0,0,0,0) 82%);' +
       '-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat';
@@ -100,7 +100,7 @@
     img.src = PHOTO_SRC;
     img.alt = '';
     img.setAttribute('aria-hidden', 'true');
-    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;' +
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 42%;' +
       'filter:grayscale(1) contrast(1.05) brightness(0.92);display:block';
     living.appendChild(img);
     photo.appendChild(living);
@@ -136,9 +136,11 @@
     let bp = { photoScale: 1.16, glowMul: 1.0 };
     function computeBp() {
       const w = window.innerWidth;
-      if (w >= 992)      bp = { photoScale: 1.16, glowMul: 1.0 };
-      else if (w >= 768) bp = { photoScale: 1.08, glowMul: 0.9 };
-      else if (w >= 480) bp = { photoScale: 1.0,  glowMul: 0.8 };
+      // photoScale ≤1 so `contain` shows the WHOLE photo (no edge crop); the
+      // glow still steps down on smaller screens.
+      if (w >= 992)      bp = { photoScale: 1.0,  glowMul: 1.0 };
+      else if (w >= 768) bp = { photoScale: 1.0,  glowMul: 0.9 };
+      else if (w >= 480) bp = { photoScale: 0.96, glowMul: 0.8 };
       else               bp = { photoScale: 0.92, glowMul: 0.68 };
       glow.style.transform = 'scale(' + (1.25 * bp.glowMul) + ')';
     }
