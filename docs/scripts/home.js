@@ -46,7 +46,11 @@
   window.__cagdasHomeHero = true;
 
   const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ef57e3f9feeabc21c4f1f_47035e26c90d647761dcb2cc2f53df5b_cagdasunal-transparent.png';
-  const GLOW = '18, 110, 245';   // #126ef5 — the Webflow-indigo aurora
+  // Glow target (on scroll): a deep indigo-violet with R≈G so it reads true blue
+  // even when dim/screen-blended — #126ef5's green channel (110) makes a dim blue
+  // read teal, and the gray→blue interpolation would pass through green.
+  const GLOW_RGB = [72, 66, 248];
+  const GLOW_REST = [58, 58, 58];    // very dark NEUTRAL gray (at rest) — true grey, no green cast
   // Transparent cutout, anchored to the CENTRE-BOTTOM of the hero and sized by
   // height (the chest-cut edge sits at the viewport bottom, hidden at the fold;
   // no vignette mask — the alpha edges are clean). It stays STILL when idle (no
@@ -62,17 +66,32 @@
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function smoothstep(v) { const x = clamp(v); return x * x * (3 - 2 * x); }
-  function rgba(a) { return 'rgba(' + GLOW + ', ' + a + ')'; }
+  function lerp(a, b, t) { return Math.round(a + (b - a) * t); }
+  // Radial-gradient for a glow blob in the given "r,g,b" colour. `big` = glowA's
+  // wider/softer falloff; otherwise glowB's tighter core.
+  function glowGrad(rgb, big) {
+    return big
+      ? 'radial-gradient(closest-side, rgba(' + rgb + ',0.34), rgba(' + rgb + ',0.12) 48%, rgba(' + rgb + ',0) 76%)'
+      : 'radial-gradient(closest-side, rgba(' + rgb + ',0.26), rgba(' + rgb + ',0) 70%)';
+  }
 
   function init() {
     const hero = document.querySelector('header.section_hero:not(.is-secondary)');
     if (!hero || !hero.querySelector('.is-home')) return; // homepage hero only
-    const textcol = hero.querySelector('.header-wrapper');
+    const textcol = hero.querySelector('.header_content') || hero.querySelector('.header-wrapper');
     const content = hero.querySelector('.padding-global');
     if (!textcol || !content) return;
     if (hero.querySelector('.cagdas-hero-bg')) return; // already initialised
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Declared BEFORE the reduced-motion early return — apply(0) runs in that
+    // branch and reads all of these, so they must be initialised (not in their
+    // temporal dead zone) by the time it's called.
+    let bp = { photoScale: 1.0, glowMul: 1.0 };  // responsive sizing (computeBp overwrites)
+    let badgeHosts = null;
+    let lastGlowRgb = '';
+    let pinned = false;                          // true once GSAP pins the hero (badge is held fixed only then)
 
     // ---- Background layers (glow behind, portrait in front). ----
     const bg = document.createElement('div');
@@ -81,15 +100,13 @@
     bg.style.cssText = 'position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;opacity:0';
 
     const glow = document.createElement('div');
-    glow.style.cssText = 'position:absolute;inset:0;z-index:0;opacity:0.204;transform-origin:50% 50%;will-change:opacity,filter';
+    glow.style.cssText = 'position:absolute;inset:0;z-index:0;opacity:0.204;transform-origin:50% 50%;will-change:opacity';
     // Both blobs centred (V + H) so the aurora's bright centre sits at the middle
     // of the hero; the drift animations just sway them gently around that centre.
     const glowA = document.createElement('div');
-    glowA.style.cssText = 'position:absolute;top:10%;left:10%;width:80%;height:80%;mix-blend-mode:screen;filter:blur(54px);' +
-      'background:radial-gradient(closest-side, ' + rgba(0.34) + ', ' + rgba(0.12) + ' 48%, ' + rgba(0) + ' 76%)';
+    glowA.style.cssText = 'position:absolute;top:10%;left:10%;width:80%;height:80%;mix-blend-mode:screen;filter:blur(54px)';
     const glowB = document.createElement('div');
-    glowB.style.cssText = 'position:absolute;top:25%;left:25%;width:50%;height:50%;mix-blend-mode:screen;filter:blur(62px);' +
-      'background:radial-gradient(closest-side, ' + rgba(0.26) + ', ' + rgba(0) + ' 70%)';
+    glowB.style.cssText = 'position:absolute;top:25%;left:25%;width:50%;height:50%;mix-blend-mode:screen;filter:blur(62px)';
     glow.appendChild(glowA);
     glow.appendChild(glowB);
 
@@ -97,7 +114,7 @@
     photo.style.cssText = 'position:absolute;left:50%;bottom:0;z-index:1;height:' + PHOTO_H + ';aspect-ratio:' + PHOTO_AR + ';width:auto;opacity:0.4;' +
       'transform:translate(' + PHOTO_TX + ',0) scale(1);transform-origin:50% 100%;will-change:opacity,transform';
     const living = document.createElement('div');
-    living.style.cssText = 'position:absolute;inset:0;transform-origin:50% 100%';
+    living.style.cssText = 'position:absolute;inset:0;transform-origin:50% 50%';
     const img = document.createElement('img');
     img.src = PHOTO_SRC;
     img.alt = '';
@@ -130,7 +147,6 @@
     window.__cagdasHeroFadesBadge = true; // badge.js yields its scroll-fade to us
 
     // ---- Responsive sizing keyed to Webflow breakpoints (992 / 768 / 480). ----
-    let bp = { photoScale: 1.16, glowMul: 1.0 };
     function computeBp() {
       const w = window.innerWidth;
       // photoScale ≤1 so `contain` shows the WHOLE photo (no edge crop); the
@@ -143,26 +159,36 @@
     }
     computeBp();
 
-    // ---- Badge: fades out EARLY in the pin (over p 0.05→0.32) so it disappears
-    //      as the animation begins — before the un-pinned badge would scroll off
-    //      the top — making it read as a fade, not a scroll-away. pointer-events:
-    //      none once invisible so it can't block clicks. Reverts at the very top. ----
-    let badgeHosts = null;
-    function driveBadge(p) {
+    // ---- Badge: moves with .header_content — same time, same speed. While the
+    //      hero is pinned the badge is HELD in the viewport (position:fixed) and
+    //      drifts up by the SAME amount as the text (via margin-top, so its own
+    //      centring transform is untouched + it works at every breakpoint) and
+    //      fades on the SAME curve. pointer-events:none once invisible so it can't
+    //      block clicks. Reverts to badge.js's own placement at the very top. ----
+    function driveBadge(p, driftY, textFade) {
       if (badgeHosts === null) {
         const n = document.querySelectorAll('.webflow_badge');
         if (!n.length) return;
         badgeHosts = n;
       }
+      // Active only across the actual choreography (p<0.999) — once it's complete
+      // the badge is invisible anyway, so let it fall back to badge.js's own
+      // placement rather than staying frozen position:fixed below the hero.
+      const active = p > 0.002 && p < 0.999;
       for (let i = 0; i < badgeHosts.length; i++) {
         const h = badgeHosts[i];
-        if (p > 0.004) {
-          const o = 1 - smoothstep(clamp((p - 0.05) / 0.27));
+        if (active) {
+          // Hold fixed only when GSAP actually pins the hero; in the non-pinned
+          // fallback leave position alone so the badge scrolls with the page.
+          h.style.position = pinned ? 'fixed' : '';
           h.style.transition = 'none';
-          h.style.opacity = String(o);
-          h.style.pointerEvents = o < 0.05 ? 'none' : '';
+          h.style.marginTop = driftY + 'px';
+          h.style.opacity = String(1 - textFade);
+          h.style.pointerEvents = (1 - textFade) < 0.05 ? 'none' : '';
         } else {
+          h.style.position = '';
           h.style.transition = '';
+          h.style.marginTop = '';
           h.style.opacity = '';
           h.style.pointerEvents = '';
         }
@@ -182,11 +208,27 @@
       const lessdark = smoothstep(clamp(p / 0.5));
       photo.style.opacity = String(0.4 + 0.42 * lessdark);       // 0.40 → 0.82, brightens
       photo.style.transform = 'translate(' + PHOTO_TX + ',0) scale(' + bp.photoScale + ')';
-      glow.style.opacity = String(clamp(0.46 + 0.22 * lessdark)); // centred glow visible at rest, blooms on scroll
-      const textFade = smoothstep(clamp((p - 0.12) / 0.6));      // text drifts up + fades, gone by ~0.72
-      textcol.style.transform = 'translateY(' + (-smoothstep(clamp(p / 0.85)) * TEXT_DRIFT_PX) + 'px)';
+      // Glow COLOUR: true dark GRAY at rest → indigo as you scroll. A near-black
+      // grey can't bleed through the faint portrait as a colour wash on the face;
+      // it warms to #126ef5 and blooms as the image brightens.
+      const warm = smoothstep(clamp(p / 0.7));
+      // Quantise the colour to ~14 steps so we only rewrite the blurred blobs'
+      // background a handful of times across the ramp (a blurred + screen-blended
+      // layer is the most expensive thing to repaint) — opacity stays continuous.
+      const wq = Math.round(warm * 14) / 14;
+      const rgbStr = lerp(GLOW_REST[0], GLOW_RGB[0], wq) + ',' + lerp(GLOW_REST[1], GLOW_RGB[1], wq) + ',' + lerp(GLOW_REST[2], GLOW_RGB[2], wq);
+      if (rgbStr !== lastGlowRgb) {            // only repaint the (blurred) blobs when the quantised colour changes
+        lastGlowRgb = rgbStr;
+        glowA.style.background = glowGrad(rgbStr, true);
+        glowB.style.background = glowGrad(rgbStr, false);
+      }
+      glow.style.opacity = String(clamp(0.36 + 0.3 * warm));
+      // Text + badge drift up and fade TOGETHER — same time, same speed.
+      const driftY = -smoothstep(clamp(p / 0.85)) * TEXT_DRIFT_PX;
+      const textFade = smoothstep(clamp((p - 0.12) / 0.6));      // gone by ~0.72
+      textcol.style.transform = 'translateY(' + driftY + 'px)';
       textcol.style.opacity = String(1 - textFade);
-      driveBadge(p);
+      driveBadge(p, driftY, textFade);
     }
 
     // Looping idle motion — Web Animations API (no <style> injection).
@@ -204,11 +246,16 @@
     loop(glowB,
       [{ transform: 'scale(1)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], 14000);
 
-    // ---- Entrance: smooth background fade-in once the photo decodes. ----
+    // ---- Entrance: when you first land, the portrait + glow FADE IN smoothly
+    //      (~1100ms) and the portrait gently rises + settles (one-shot, doesn't
+    //      touch apply()'s transform on `photo`). Fires once the photo decodes. ----
     (function revealBg() {
       function show() {
-        bg.style.transition = 'opacity 850ms cubic-bezier(0.22,1,0.36,1)';
+        bg.style.transition = 'opacity 1100ms cubic-bezier(0.22,1,0.36,1)';
         requestAnimationFrame(function () { bg.style.opacity = '1'; });
+        loop(living,
+          [{ transform: 'translateY(18px) scale(1.045)' }, { transform: 'translateY(0) scale(1)' }],
+          1300, { iterations: 1, fill: 'forwards', easing: 'cubic-bezier(0.22,1,0.36,1)' });
         bg.addEventListener('transitionend', function te(ev) {
           if (ev.propertyName !== 'opacity') return;
           bg.removeEventListener('transitionend', te);
@@ -217,7 +264,7 @@
       }
       if (img.complete && img.naturalWidth) requestAnimationFrame(show);
       else { img.addEventListener('load', show, { once: true }); img.addEventListener('error', show, { once: true }); }
-      setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 1500);
+      setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 1800);
     })();
 
     // ---- Pin via GSAP ScrollTrigger: hold the hero in the viewport while the
@@ -239,6 +286,7 @@
       if (started) return true;
       if (!(window.gsap && window.ScrollTrigger)) return false;
       started = true;
+      pinned = true;            // badge is held fixed only when the hero is genuinely pinned
       const g = window.gsap;
       g.registerPlugin(window.ScrollTrigger);
       g.to({ p: 0 }, {
@@ -265,8 +313,10 @@
       started = true;
       let cur = 0, rafId = null;
       function frac() {
+        // Match the pinned path's distance (PIN_VIEWPORTS×100vh) so the
+        // choreography completes at the same scroll depth in both code paths.
         const y = window.pageYOffset || document.documentElement.scrollTop || 0;
-        return clamp(y / (window.innerHeight || 1));
+        return clamp(y / ((window.innerHeight || 1) * PIN_VIEWPORTS));
       }
       function frame() {
         const t = frac();
