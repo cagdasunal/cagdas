@@ -45,14 +45,16 @@
   if (window.__cagdasHomeHero) return; // guard against double-load
   window.__cagdasHomeHero = true;
 
-  const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ebdc6b835d8b66988481a_cagdasunal-full.png';
+  const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ef57e3f9feeabc21c4f1f_cagdasunal-transparent.avif';
   const GLOW = '18, 110, 245';   // #126ef5 — the Webflow-indigo aurora
-  const PHOTO_W = 'clamp(440px, 50vw, 760px)';
-  // Head-centering: in this photo the head is already horizontally centred
-  // (x≈0.50), so the box is centred (translateX -50%) and `cover` crops to the
-  // centre strip — the head lands centred with the nav. Re-derive if the photo
-  // changes (analyse the head's x-fraction and offset translateX by that).
-  const PHOTO_TX = '-50%';
+  // Transparent cutout, anchored to the CENTRE-BOTTOM of the hero and sized big
+  // by height (the chest-cut edge sits at the viewport bottom, so it's hidden at
+  // the fold; no vignette mask needed — the alpha edges are clean).
+  const PHOTO_AR = '1543 / 1643';                 // the cutout's intrinsic aspect
+  const PHOTO_H = 'min(92vh, 96vw, 1040px)';      // big; also capped by width so it fits on mobile
+  // Head-centering: the head sits at x≈0.554 in this cutout → shift the box left
+  // ~5% (translateX -55% vs -50%) so the head lands centred with the nav.
+  const PHOTO_TX = '-55%';
   const PIN = 2.2;               // hero track height (× viewport) → ~120vh of pinned scroll
   const LERP = 0.16;             // scrub smoothing toward the target progress
   const TEXT_DRIFT_PX = 200;     // px the hero text drifts up across the pin
@@ -89,18 +91,15 @@
     glow.appendChild(glowB);
 
     const photo = document.createElement('div');
-    photo.style.cssText = 'position:absolute;top:0;bottom:0;left:50%;z-index:1;width:' + PHOTO_W + ';opacity:0.4;' +
-      'transform:translate(' + PHOTO_TX + ',0) scale(1);transform-origin:50% 36%;will-change:opacity,transform;' +
-      '-webkit-mask-image:radial-gradient(ellipse 62% 74% at 50% 40%, #000 36%, rgba(0,0,0,0) 82%);' +
-      'mask-image:radial-gradient(ellipse 62% 74% at 50% 40%, #000 36%, rgba(0,0,0,0) 82%);' +
-      '-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat';
+    photo.style.cssText = 'position:absolute;left:50%;bottom:0;z-index:1;height:' + PHOTO_H + ';aspect-ratio:' + PHOTO_AR + ';width:auto;opacity:0.4;' +
+      'transform:translate(' + PHOTO_TX + ',0) scale(1);transform-origin:50% 100%;will-change:opacity,transform';
     const living = document.createElement('div');
-    living.style.cssText = 'position:absolute;inset:0;transform-origin:50% 36%';
+    living.style.cssText = 'position:absolute;inset:0;transform-origin:50% 100%';
     const img = document.createElement('img');
     img.src = PHOTO_SRC;
     img.alt = '';
     img.setAttribute('aria-hidden', 'true');
-    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 42%;' +
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 100%;' +
       'filter:grayscale(1) contrast(1.05) brightness(0.92);display:block';
     living.appendChild(img);
     photo.appendChild(living);
