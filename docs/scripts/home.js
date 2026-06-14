@@ -45,14 +45,14 @@
   if (window.__cagdasHomeHero) return; // guard against double-load
   window.__cagdasHomeHero = true;
 
-  const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ea142a77c1ee08c8fc77d_cagdasunal-transparent.avif';
+  const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ebdc6b835d8b66988481a_cagdasunal-full.png';
   const GLOW = '18, 110, 245';   // #126ef5 — the Webflow-indigo aurora
-  const PHOTO_W = 'clamp(440px, 50vw, 760px)'; // a little smaller than before
-  // Head-centering: the head sits at x≈0.561 in the cutout (6% right of centre),
-  // so a centred photo box puts the head right-of-centre. The box is shifted
-  // left by ~7% of its width (translateX -57% vs the usual -50%) → the head lands
-  // centred with the nav, a hair to the left. Re-derive if the photo changes.
-  const PHOTO_TX = '-57%';
+  const PHOTO_W = 'clamp(440px, 50vw, 760px)';
+  // Head-centering: in this photo the head is already horizontally centred
+  // (x≈0.50), so the box is centred (translateX -50%) and `cover` crops to the
+  // centre strip — the head lands centred with the nav. Re-derive if the photo
+  // changes (analyse the head's x-fraction and offset translateX by that).
+  const PHOTO_TX = '-50%';
   const PIN = 2.2;               // hero track height (× viewport) → ~120vh of pinned scroll
   const LERP = 0.16;             // scrub smoothing toward the target progress
   const TEXT_DRIFT_PX = 200;     // px the hero text drifts up across the pin
@@ -100,7 +100,7 @@
     img.src = PHOTO_SRC;
     img.alt = '';
     img.setAttribute('aria-hidden', 'true');
-    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 42%;' +
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;' +
       'filter:grayscale(1) contrast(1.05) brightness(0.92);display:block';
     living.appendChild(img);
     photo.appendChild(living);
