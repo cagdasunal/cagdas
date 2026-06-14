@@ -3,15 +3,15 @@
  *
  * Applies the finalized "cell under a microscope" effect to every .avatar-home
  * on the page: the IMAGE never moves — only its membrane (border-radius)
- * breathes, driven by 8 per-corner sine oscillators, with a warm amber glow
- * edge (box-shadow) tuned to the portrait's warm key light. The element keeps
+ * breathes, driven by 8 per-corner sine oscillators, with a cool silver glow
+ * edge (box-shadow) tuned to the black-and-white portrait. The element keeps
  * its own size / object-fit / layout (set
  * in Webflow); this only animates border-radius and sets the glow + a
  * will-change hint. No <style> injection, no dependencies — all dynamic inline
  * styles, so nothing leaks to the page.
  *
- * Finalized look (per the design): liveliness 1.3, squish 14, warm amber glow
- * edge (#e8a45c = rgba(232,164,92,0.5)). Honors prefers-reduced-motion (static
+ * Finalized look (per the design): liveliness 0.8 (slow breathe), squish 14,
+ * cool silver glow edge (#d2deee = rgba(210,222,238,0.5)). Honors prefers-reduced-motion (static
  * membrane, no rAF loop), and pauses the rAF loop whenever no .avatar-home is
  * on screen (IntersectionObserver) — invisible, saves CPU when scrolled away.
  *
@@ -32,9 +32,9 @@
   window.__cagdasHomeAvatar = true;
 
   const TARGET = '.avatar-home';
-  const LIVELINESS = 1.3;   // pulse rate — the design's finalized look (its lab default was 1.8; raise for livelier)
+  const LIVELINESS = 0.8;   // pulse rate — slow, calm breathe (lab default 1.8; was 1.3; lower = slower)
   const SQUISH = 14;        // how much the membrane deforms (%)
-  const GLOW = 'inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 18px 3px rgba(232,164,92,0.5)';
+  const GLOW = 'inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 18px 3px rgba(210,222,238,0.5)';
   // Distinct per-corner freqs + phases so the membrane never settles into an
   // obvious repeat (organic, cell-like).
   const FREQ = [1.00, 1.27, 0.83, 1.11, 0.92, 1.19, 1.04, 0.88];
