@@ -17,13 +17,15 @@
  *         above both (z-index) — no HTML restructuring.
  *   - SCROLL choreography (smoothed lerp ≈ GSAP scrub, keyed to the first
  *     viewport — NOT pinned, so it never disturbs the Webflow IX2 section below):
- *       • portrait first gets LESS DARK (0.4 → 0.66), THEN hides (→ 0) — over a
- *         SHORT travel (~0.45 vh) so the effect is felt as soon as you scroll.
+ *       • portrait gets LESS DARK almost immediately (felt the moment you
+ *         scroll), THEN hides GRADUALLY across the scroll (→ 0 by ~0.84 vh) so
+ *         the fade-out is experienced, not abrupt.
  *       • the indigo glow blooms with the brighten, then clears with the hide.
- *       • the text column drifts up and fades over a gentler, longer range.
- *   - ENTRANCE on load: the background fades in quickly (~400ms) once the photo
- *     decodes. The hero TEXT is left untouched — it shows instantly (no on-load
- *     animation, per the brief).
+ *       • the hero text drifts up from the first scroll — moving away with the
+ *         badge — and fades a touch later.
+ *   - ENTRANCE on load: the background fades in smoothly (~850ms ease-out) once
+ *     the photo decodes. The hero TEXT is left untouched — it shows instantly
+ *     (no on-load animation, per the brief).
  *   - Animation is RESPONSIVE to Webflow breakpoints (992 / 768 / 480): portrait
  *     scale + glow size step down on smaller screens.
  *   - Honors prefers-reduced-motion (static faint portrait, no loops, no scroll
@@ -51,8 +53,14 @@
   // the black canvas — so it needs no opaque background, just a soft vignette.
   const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ea142a77c1ee08c8fc77d_cagdasunal-transparent.avif';
   const GLOW = '18, 110, 245';   // #126ef5 — the Webflow-indigo aurora
-  const PHOTO_TRAVEL = 0.45;     // viewport-fractions of scroll for the portrait/glow to fully resolve — short, so it's FELT as soon as you scroll
-  const TEXT_TRAVEL = 0.9;       // the text drifts/fades over a gentler, longer range (so it doesn't vanish while still on screen)
+  // Scroll timing (in viewport-fractions of scroll). Balance: the brighten is
+  // near-immediate so it's felt the moment you scroll, but the hide is spread
+  // across the scroll so the portrait fades out as you go (not abruptly).
+  const BRIGHTEN = 0.2;          // vh for the portrait to reach its brightest
+  const HIDE_AT = 0.22;          // vh where the portrait begins to hide
+  const HIDE_SPAN = 0.62;        // vh over which it hides (finishes ~0.84vh)
+  const TEXT_DRIFT_PX = 120;     // px the hero text drifts up (it moves away with the badge)
+  const TEXT_DRIFT_VH = 0.72;    // vh over which that drift plays
   const LERP = 0.18;             // scrub smoothing toward the target scroll position
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
@@ -87,7 +95,7 @@
     glow.appendChild(glowB);
 
     const photo = document.createElement('div');
-    photo.style.cssText = 'position:absolute;top:0;bottom:0;left:50%;z-index:1;width:clamp(620px, 70vw, 1040px);opacity:0.4;' +
+    photo.style.cssText = 'position:absolute;top:0;bottom:0;left:50%;z-index:1;width:clamp(520px, 58vw, 880px);opacity:0.4;' +
       'transform:translate(-50%,0) scale(1.16);transform-origin:50% 36%;will-change:opacity,transform;' +
       '-webkit-mask-image:radial-gradient(ellipse 62% 74% at 50% 40%, #000 36%, rgba(0,0,0,0) 82%);' +
       'mask-image:radial-gradient(ellipse 62% 74% at 50% 40%, #000 36%, rgba(0,0,0,0) 82%);' +
@@ -139,19 +147,19 @@
       for (let i = 0; i < badgeHosts.length; i++) badgeHosts[i].classList.toggle('wfb-faded', faded);
     }
 
-    // ---- Scroll choreography (s = viewport-fractions scrolled). The portrait +
-    //      glow resolve over a SHORT travel so the effect is felt immediately;
-    //      the text drifts/fades over a gentler, longer range. ----
+    // ---- Scroll choreography (s = viewport-fractions scrolled). Brighten is
+    //      near-immediate (felt the instant you scroll); the hide is spread
+    //      across the scroll so the portrait fades out as you go. The hero text
+    //      drifts up from the first scroll — moving away with the badge. ----
     function apply(s) {
-      const pPhoto = clamp(s / PHOTO_TRAVEL);
-      const pText = clamp(s / TEXT_TRAVEL);
-      const lessdark = smoothstep(clamp(pPhoto / 0.5));
-      const hide = smoothstep(clamp((pPhoto - 0.5) / 0.46));
+      const lessdark = smoothstep(clamp(s / BRIGHTEN));
+      const hide = smoothstep(clamp((s - HIDE_AT) / HIDE_SPAN));
       photo.style.opacity = String((0.4 + 0.26 * lessdark) * (1 - hide));
       photo.style.transform = 'translate(-50%,0) scale(' + bp.photoScale + ')';
       glow.style.opacity = String(clamp(0.34 * (0.6 + 0.7 * lessdark) * (1 - hide)));
-      textcol.style.transform = 'translateY(' + (-pText * 80) + 'px)';
-      textcol.style.opacity = String(1 - smoothstep((pText - 0.5) / 0.5));
+      const drift = smoothstep(clamp(s / TEXT_DRIFT_VH));
+      textcol.style.transform = 'translateY(' + (-drift * TEXT_DRIFT_PX) + 'px)';
+      textcol.style.opacity = String(1 - smoothstep(clamp((s - 0.28) / 0.52)));
       driveBadge(s);
     }
 
@@ -191,7 +199,7 @@
 
     function revealBg() {
       function show() {
-        bg.style.transition = 'opacity 400ms ease';
+        bg.style.transition = 'opacity 850ms cubic-bezier(0.22,1,0.36,1)';
         requestAnimationFrame(function () { bg.style.opacity = '1'; });
         bg.addEventListener('transitionend', function te(ev) {
           if (ev.propertyName !== 'opacity') return;
@@ -201,7 +209,7 @@
       }
       if (img.complete && img.naturalWidth) requestAnimationFrame(show);
       else { img.addEventListener('load', show, { once: true }); img.addEventListener('error', show, { once: true }); }
-      setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 700);
+      setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 1500);
     }
 
     // ---- Drive the scroll progress with a smoothed lerp (scrub feel). The rAF
