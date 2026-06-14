@@ -1,44 +1,40 @@
 /*!
  * home.js — scroll-driven editorial hero for cagd.as (homepage)
  *
- * Replaces the old "living blob" avatar effect entirely. Drives the EXISTING
- * Webflow homepage hero (header.section_hero, .is-home) — it injects a faint
- * big background portrait + a soft Webflow-indigo (#126ef5) aurora behind the
- * text, then animates the whole thing on scroll. The text stays the hero; the
+ * Drives the EXISTING Webflow homepage hero (header.section_hero, .is-home). It
+ * injects a faint big B&W portrait + a soft Webflow-indigo (#126ef5) aurora
+ * behind the text, PINS the hero (sticky) so the animation plays out over a long
+ * scroll, then runs a scroll-linked choreography. The text stays the hero; the
  * face lives on the background (per the design brief).
  *
- * What it does:
- *   - INJECTS, into header.section_hero (which is position:relative; 100vh):
- *       • a glow layer  — two blurred, screen-blended #126ef5 radial blobs that
- *         slowly drift + hue-breathe (Web Animations API; no <style> injection).
- *       • a portrait    — the transparent B&W cutout, big + faint (opacity 0.4),
- *         centered, grayscale, vignetted via a radial mask, with a slow
- *         "living push-in" (~5% zoom + breathe). The existing text is lifted
- *         above both (z-index) — no HTML restructuring.
- *   - SCROLL choreography (smoothed lerp ≈ GSAP scrub, keyed to the first
- *     viewport — NOT pinned, so it never disturbs the Webflow IX2 section below):
- *       • portrait gets LESS DARK almost immediately (felt the moment you
- *         scroll), THEN hides GRADUALLY across the scroll (→ 0 by ~0.84 vh) so
- *         the fade-out is experienced, not abrupt.
- *       • the indigo glow blooms with the brighten, then clears with the hide.
- *       • the hero text drifts up from the first scroll — moving away with the
- *         badge — and fades a touch later.
- *   - ENTRANCE on load: the background fades in smoothly (~850ms ease-out) once
- *     the photo decodes. The hero TEXT is left untouched — it shows instantly
- *     (no on-load animation, per the brief).
- *   - Animation is RESPONSIVE to Webflow breakpoints (992 / 768 / 480): portrait
- *     scale + glow size step down on smaller screens.
- *   - Honors prefers-reduced-motion (static faint portrait, no loops, no scroll
- *     drive, text shown immediately).
- *   - Badge sync: sets window.__cagdasHeroFadesBadge and drives .webflow_badge
- *     .wfb-faded from this same scroll, so the badge fades in lock-step with the
- *     hero (badge.js yields to it — see badge.js scroll-fade guard).
+ * Structure (matches Claude Design "Hero Section Redesign" Hero.dc.html, which
+ * uses a 200vh track + a position:sticky 100vh section):
+ *   - The hero becomes a tall TRACK (PIN×100vh). Its content is wrapped in a
+ *     sticky STAGE (top:0; height:100vh; overflow:hidden) so the hero stays
+ *     pinned in the viewport while you scroll through the track — you scroll
+ *     more, so you experience the animation more.
+ *   - Into the stage (behind the text, which is lifted via z-index — no HTML
+ *     restructuring of the content itself): the indigo aurora + the portrait.
  *
- * The clock (.time_*) and the availability dot (.icon_available) are owned by
- * available-widget.js — this script does NOT touch them.
+ * Scroll choreography (progress p = how far through the pinned track, smoothed
+ * by a lerp ≈ GSAP scrub):
+ *   - portrait gets LESS DARK almost immediately (felt the moment you scroll),
+ *     then hides GRADUALLY across the whole pin so the fade-out is experienced.
+ *   - the indigo glow blooms with the brighten, then clears with the hide.
+ *   - the hero text drifts UP and fades — "moves to the top and disappears" —
+ *     and the Webflow badge is held in the viewport and faded in LOCKSTEP with
+ *     the text, so the two disappear together.
  *
- * Design source: Claude Design "Hero Section Redesign" -> project/Hero.dc.html.
- * Self-contained: ZERO deps, ZERO <style> injection (WAAPI + inline styles only).
+ * Entrance: the background fades in smoothly (~850ms) once the photo decodes.
+ * The hero TEXT shows instantly (no on-load animation, per the brief).
+ *
+ * Responsive to Webflow breakpoints (992/768/480); reduced-motion-safe (no pin,
+ * static faint 100vh hero). The clock (.time_*) + availability dot
+ * (.icon_available) are owned by available-widget.js — not touched here.
+ *
+ * Self-contained: ZERO deps, ZERO <style> injection (WAAPI + inline styles).
+ * Badge sync: sets window.__cagdasHeroFadesBadge so badge.js yields its own
+ * scroll-fade (see its scroll guard).
  *
  * SSOT: sites/cagdas/scripts/src/home.js
  * Build: python3 scripts/site_deploy.py build --site cagdas --src home
@@ -49,19 +45,17 @@
   if (window.__cagdasHomeHero) return; // guard against double-load
   window.__cagdasHomeHero = true;
 
-  // The transparent B&W cutout (provided by the user). Small AVIF, blends into
-  // the black canvas — so it needs no opaque background, just a soft vignette.
   const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ea142a77c1ee08c8fc77d_cagdasunal-transparent.avif';
   const GLOW = '18, 110, 245';   // #126ef5 — the Webflow-indigo aurora
-  // Scroll timing (in viewport-fractions of scroll). Balance: the brighten is
-  // near-immediate so it's felt the moment you scroll, but the hide is spread
-  // across the scroll so the portrait fades out as you go (not abruptly).
-  const BRIGHTEN = 0.2;          // vh for the portrait to reach its brightest
-  const HIDE_AT = 0.22;          // vh where the portrait begins to hide
-  const HIDE_SPAN = 0.62;        // vh over which it hides (finishes ~0.84vh)
-  const TEXT_DRIFT_PX = 120;     // px the hero text drifts up (it moves away with the badge)
-  const TEXT_DRIFT_VH = 0.72;    // vh over which that drift plays
-  const LERP = 0.18;             // scrub smoothing toward the target scroll position
+  const PHOTO_W = 'clamp(440px, 50vw, 760px)'; // a little smaller than before
+  // Head-centering: the head sits at x≈0.561 in the cutout (6% right of centre),
+  // so a centred photo box puts the head right-of-centre. The box is shifted
+  // left by ~7% of its width (translateX -57% vs the usual -50%) → the head lands
+  // centred with the nav, a hair to the left. Re-derive if the photo changes.
+  const PHOTO_TX = '-57%';
+  const PIN = 2.2;               // hero track height (× viewport) → ~120vh of pinned scroll
+  const LERP = 0.16;             // scrub smoothing toward the target progress
+  const TEXT_DRIFT_PX = 200;     // px the hero text drifts up across the pin
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function smoothstep(v) { const x = clamp(v); return x * x * (3 - 2 * x); }
@@ -71,13 +65,13 @@
     const hero = document.querySelector('header.section_hero:not(.is-secondary)');
     if (!hero || !hero.querySelector('.is-home')) return; // homepage hero only
     const textcol = hero.querySelector('.header-wrapper');
-    if (!textcol) return;
+    const content = hero.querySelector('.padding-global');
+    if (!textcol || !content) return;
     if (hero.querySelector('.cagdas-hero-bg')) return; // already initialised
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // ---- Build the background layers (glow behind, portrait in front, both
-    //      behind the text). One detached subtree, appended once. ----
+    // ---- Background layers (glow behind, portrait in front). ----
     const bg = document.createElement('div');
     bg.className = 'cagdas-hero-bg';
     bg.setAttribute('aria-hidden', 'true');
@@ -95,8 +89,8 @@
     glow.appendChild(glowB);
 
     const photo = document.createElement('div');
-    photo.style.cssText = 'position:absolute;top:0;bottom:0;left:50%;z-index:1;width:clamp(520px, 58vw, 880px);opacity:0.4;' +
-      'transform:translate(-50%,0) scale(1.16);transform-origin:50% 36%;will-change:opacity,transform;' +
+    photo.style.cssText = 'position:absolute;top:0;bottom:0;left:50%;z-index:1;width:' + PHOTO_W + ';opacity:0.4;' +
+      'transform:translate(' + PHOTO_TX + ',0) scale(1.16);transform-origin:50% 36%;will-change:opacity,transform;' +
       '-webkit-mask-image:radial-gradient(ellipse 62% 74% at 50% 40%, #000 36%, rgba(0,0,0,0) 82%);' +
       'mask-image:radial-gradient(ellipse 62% 74% at 50% 40%, #000 36%, rgba(0,0,0,0) 82%);' +
       '-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat';
@@ -110,14 +104,33 @@
       'filter:grayscale(1) contrast(1.05) brightness(0.92);display:block';
     living.appendChild(img);
     photo.appendChild(living);
-
     bg.appendChild(glow);
     bg.appendChild(photo);
 
-    // Lift the existing hero content above the background (no HTML restructuring).
-    const content = hero.querySelector('.padding-global') || textcol.parentNode;
-    if (content) { content.style.position = 'relative'; content.style.zIndex = '2'; }
-    hero.appendChild(bg);
+    content.style.position = 'relative';
+    content.style.zIndex = '2';
+
+    // ---- Reduced motion: no pin, static faint 100vh hero, badge untouched. ----
+    if (reduce) {
+      hero.appendChild(bg);
+      bg.style.opacity = '1';
+      apply(0);
+      return;
+    }
+
+    // ---- Pin: wrap the content in a sticky stage inside a tall track. The hero
+    //      stays in the viewport while you scroll through PIN×100vh. ----
+    const stage = document.createElement('div');
+    stage.className = 'cagdas-hero-stage';
+    stage.style.cssText = 'position:sticky;top:0;height:100vh;width:100%;overflow:hidden;display:flex;flex-flow:column;justify-content:center';
+    hero.insertBefore(stage, content);
+    stage.appendChild(bg);      // behind
+    stage.appendChild(content); // above (z-index:2)
+    hero.style.height = (PIN * 100) + 'vh';
+    hero.style.maxHeight = 'none';
+    hero.style.display = 'block';
+
+    window.__cagdasHeroFadesBadge = true; // badge.js yields its scroll-fade to us
 
     // ---- Responsive sizing keyed to Webflow breakpoints (992 / 768 / 480). ----
     let bp = { photoScale: 1.16, glowMul: 1.0 };
@@ -131,45 +144,52 @@
     }
     computeBp();
 
-    // ---- Badge sync: own the badge's scroll fade so it's in lock-step with the
-    //      hero. badge.js yields when this flag is set (see its scroll guard). ----
+    // ---- Badge: held in the viewport during the pin and faded in lockstep with
+    //      the text (same curve), so the two disappear together. Outside the pin
+    //      it reverts to badge.js's own placement (it's already faded/off-screen
+    //      past the pin, so the position swap is invisible). ----
     let badgeHosts = null;
-    function driveBadge(s) {
+    function driveBadge(p, textFade) {
       if (badgeHosts === null) {
         const n = document.querySelectorAll('.webflow_badge');
         if (!n.length) return;
         badgeHosts = n;
       }
-      // badge.js's original feel (fade past 0.2vh, return under 0.1vh), now driven
-      // here so it stays in lock-step with the hero.
-      let faded = s > 0.2;
-      if (s < 0.1) faded = false;
-      for (let i = 0; i < badgeHosts.length; i++) badgeHosts[i].classList.toggle('wfb-faded', faded);
+      // Active fade zone: hold the badge fixed in the viewport and fade it inline
+      // in lockstep with the text. Outside it, hand back to badge.js's placement
+      // (position cleared) and use the .wfb-faded class once gone — the class
+      // sets pointer-events:none so an invisible badge can never block clicks.
+      const active = p > 0.002 && p < 0.82;
+      for (let i = 0; i < badgeHosts.length; i++) {
+        const h = badgeHosts[i];
+        if (active) {
+          h.classList.remove('wfb-faded');
+          h.style.position = 'fixed';     // stay in the viewport with the pinned hero
+          h.style.transition = 'none';
+          h.style.opacity = String(1 - textFade);
+          h.style.pointerEvents = (1 - textFade) < 0.05 ? 'none' : '';
+        } else {
+          h.style.position = '';
+          h.style.transition = '';
+          h.style.opacity = '';
+          h.style.pointerEvents = '';
+          h.classList.toggle('wfb-faded', p > 0.5); // gone past the pin; shown at the top
+        }
+      }
     }
 
-    // ---- Scroll choreography (s = viewport-fractions scrolled). Brighten is
-    //      near-immediate (felt the instant you scroll); the hide is spread
-    //      across the scroll so the portrait fades out as you go. The hero text
-    //      drifts up from the first scroll — moving away with the badge. ----
-    function apply(s) {
-      const lessdark = smoothstep(clamp(s / BRIGHTEN));
-      const hide = smoothstep(clamp((s - HIDE_AT) / HIDE_SPAN));
+    // ---- Scroll choreography over the pin progress p (0 → 1). ----
+    function apply(p) {
+      const lessdark = smoothstep(clamp(p / 0.18));          // brighten — near-immediate
+      const hide = smoothstep(clamp((p - 0.22) / 0.7));      // hide — gradual across the pin
       photo.style.opacity = String((0.4 + 0.26 * lessdark) * (1 - hide));
-      photo.style.transform = 'translate(-50%,0) scale(' + bp.photoScale + ')';
+      photo.style.transform = 'translate(' + PHOTO_TX + ',0) scale(' + bp.photoScale + ')';
       glow.style.opacity = String(clamp(0.34 * (0.6 + 0.7 * lessdark) * (1 - hide)));
-      const drift = smoothstep(clamp(s / TEXT_DRIFT_VH));
-      textcol.style.transform = 'translateY(' + (-drift * TEXT_DRIFT_PX) + 'px)';
-      textcol.style.opacity = String(1 - smoothstep(clamp((s - 0.28) / 0.52)));
-      driveBadge(s);
+      const textFade = smoothstep(clamp((p - 0.3) / 0.5));   // text fades from ~0.3
+      textcol.style.transform = 'translateY(' + (-smoothstep(clamp(p / 0.8)) * TEXT_DRIFT_PX) + 'px)';
+      textcol.style.opacity = String(1 - textFade);
+      driveBadge(p, textFade);
     }
-
-    if (reduce) {
-      // Static, faint hero. Show the bg + text immediately; no loops, no scroll.
-      bg.style.opacity = '1';
-      apply(0);
-      return;
-    }
-    window.__cagdasHeroFadesBadge = true; // tell badge.js to yield the scroll-fade
 
     // Looping idle motion — Web Animations API (no <style> injection).
     function loop(el, frames, dur, opts) {
@@ -193,11 +213,8 @@
        { filter: 'hue-rotate(16deg) saturate(1.16)' },
        { filter: 'hue-rotate(-10deg) saturate(1)' }], 21000);
 
-    // ---- Entrance: just a quick fade-in of the injected background. The hero
-    //      TEXT is left untouched — it shows instantly (no on-load animation). ----
-    revealBg();
-
-    function revealBg() {
+    // ---- Entrance: smooth background fade-in once the photo decodes. ----
+    (function revealBg() {
       function show() {
         bg.style.transition = 'opacity 850ms cubic-bezier(0.22,1,0.36,1)';
         requestAnimationFrame(function () { bg.style.opacity = '1'; });
@@ -210,30 +227,41 @@
       if (img.complete && img.naturalWidth) requestAnimationFrame(show);
       else { img.addEventListener('load', show, { once: true }); img.addEventListener('error', show, { once: true }); }
       setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 1500);
-    }
+    })();
 
-    // ---- Drive the scroll progress with a smoothed lerp (scrub feel). The rAF
-    //      loop only runs while easing toward the target, then sleeps. ----
+    // ---- Pin progress: how far through the track the sticky stage has scrolled,
+    //      smoothed by a lerp for a buttery scrub feel. ----
     let cur = 0, target = 0, rafId = null;
-    function scrollFrac() {
+    function pinProgress() {
+      // The hero is the first section, so page scrollY directly measures how far
+      // into the pinned track we are — immune to the hero's margin-top:-7rem
+      // (which would skew a getBoundingClientRect().top formula).
+      const total = hero.offsetHeight - window.innerHeight;
       const y = window.pageYOffset || document.documentElement.scrollTop || 0;
-      const vh = window.innerHeight || 1;
-      const s = y / vh;
-      return s > 1.5 ? 1.5 : s; // cap so the lerp never chases a huge value
+      return clamp(total > 0 ? y / total : 0);
     }
     function frame() {
-      cur += (target - cur) * LERP;
-      if (Math.abs(target - cur) < 0.0005) { cur = target; apply(cur); rafId = null; return; }
+      const t = pinProgress();          // always chase the LIVE scroll position
+      cur += (t - cur) * LERP;
+      const settled = Math.abs(t - cur) < 0.0004;
+      if (settled) cur = t;
       apply(cur);
+      // Stay awake through the pin so we always track live scroll (no missed-event
+      // freeze on momentum); sleep only at the rest extremes (top / fully past).
+      if (settled && (t <= 0.001 || t >= 0.999)) { rafId = null; return; }
       rafId = requestAnimationFrame(frame);
     }
     function wake() { if (rafId === null) rafId = requestAnimationFrame(frame); }
-    function onScroll() { target = scrollFrac(); wake(); }
 
     apply(0);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', function () { computeBp(); target = scrollFrac(); wake(); }, { passive: true });
-    onScroll(); // sync to the current scroll position on load (e.g. refresh mid-page)
+    // Wake on any input that can move the scroll position. Once awake the loop
+    // tracks live scroll each frame and only sleeps at the rest extremes, so a
+    // single event is enough to run the choreography to completion.
+    window.addEventListener('scroll', wake, { passive: true });
+    window.addEventListener('wheel', wake, { passive: true });
+    window.addEventListener('touchmove', wake, { passive: true });
+    window.addEventListener('resize', function () { computeBp(); wake(); }, { passive: true });
+    wake(); // sync to the current scroll position on load (e.g. refresh mid-page)
   }
 
   // Loaded with `defer` / in the footer, so the DOM is already parsed.
