@@ -37,7 +37,11 @@
   if (window.__cagdasHomeHero) return; // guard against double-load
   window.__cagdasHomeHero = true;
 
-  const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ef57e3f9feeabc21c4f1f_47035e26c90d647761dcb2cc2f53df5b_cagdasunal-transparent.png';
+  // Hero portrait — compressed AVIF on the Webflow CDN (~54KB; the old PNG was
+  // 4MB and re-downloaded on every hard refresh, making the load feel janky).
+  // Falls back to the original PNG if AVIF can't be decoded (very old browsers).
+  const PHOTO_SRC = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ef57e3f9feeabc21c4f1f_47035e26c90d647761dcb2cc2f53df5b_cagdasunal-transparent.avif';
+  const PHOTO_FALLBACK = 'https://cdn.prod.website-files.com/69db63dc2e8675a7ac610755/6a2ef57e3f9feeabc21c4f1f_47035e26c90d647761dcb2cc2f53df5b_cagdasunal-transparent.png';
   // Soft indigo aurora. R≈G so even at low opacity / screen-blended it reads a
   // true blue-violet, never teal (plain #126ef5's green channel (110) makes a dim
   // blue go teal). Used at a soft opacity at rest, blooming a little on scroll.
@@ -99,9 +103,14 @@
     const living = document.createElement('div');
     living.style.cssText = 'position:absolute;inset:0;transform-origin:50% 50%';
     const img = document.createElement('img');
-    img.src = PHOTO_SRC;
     img.alt = '';
     img.setAttribute('aria-hidden', 'true');
+    img.decoding = 'async';
+    img.addEventListener('error', function onerr() {       // AVIF unsupported → original PNG
+      img.removeEventListener('error', onerr);
+      if (img.getAttribute('src') !== PHOTO_FALLBACK) img.src = PHOTO_FALLBACK;
+    });
+    img.src = PHOTO_SRC;
     img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 100%;' +
       'filter:grayscale(1) contrast(1.05) brightness(0.92);display:block';
     living.appendChild(img);
@@ -202,24 +211,34 @@
     loop(glowA, [{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }, { transform: 'scale(1)' }], 11000);
     loop(glowB, [{ transform: 'scale(1)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], 14000);
 
-    // ---- Entrance: portrait + glow fade in (~1100ms) and the portrait gently
-    //      rises + settles, once the photo decodes. The hero text shows instantly. ----
+    // ---- Entrance: once the portrait is fully DECODED (paint-ready, so the fade
+    //      can't hitch), the portrait + glow ease in (~1300ms) and the portrait
+    //      gently rises + settles. The hero text shows instantly. Always a fade —
+    //      the safety fallback also fades, never pops. ----
     (function revealBg() {
-      function show() {
-        bg.style.transition = 'opacity 1100ms cubic-bezier(0.22,1,0.36,1)';
-        requestAnimationFrame(function () { bg.style.opacity = '1'; });
+      let shown = false;
+      function reveal() {
+        if (shown) return;
+        shown = true;
+        bg.style.transition = 'opacity 1300ms cubic-bezier(0.22,1,0.36,1)';
+        void bg.offsetWidth;            // flush so the 0→1 fade registers (no rAF dependency)
+        bg.style.opacity = '1';
         loop(living,
-          [{ transform: 'translateY(18px) scale(1.045)' }, { transform: 'translateY(0) scale(1)' }],
-          1300, { iterations: 1, fill: 'forwards', easing: 'cubic-bezier(0.22,1,0.36,1)' });
+          [{ transform: 'translateY(22px) scale(1.03)' }, { transform: 'translateY(0) scale(1)' }],
+          1500, { iterations: 1, fill: 'forwards', easing: 'cubic-bezier(0.22,1,0.36,1)' });
         bg.addEventListener('transitionend', function te(ev) {
           if (ev.propertyName !== 'opacity') return;
           bg.removeEventListener('transitionend', te);
           bg.style.transition = '';
         });
       }
-      if (img.complete && img.naturalWidth) requestAnimationFrame(show);
-      else { img.addEventListener('load', show, { once: true }); img.addEventListener('error', show, { once: true }); }
-      setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 1800);
+      // Trigger as soon as the image is ready. decode() is best-effort (paint-ready,
+      // but it can stall on a cross-origin image), so it NEVER gates the fade — the
+      // load event + a short backstop guarantee it always runs.
+      if (img.decode) { img.decode().then(reveal).catch(function () {}); }
+      if (img.complete && img.naturalWidth) { setTimeout(reveal, 0); }
+      else { img.addEventListener('load', reveal, { once: true }); img.addEventListener('error', reveal, { once: true }); }
+      setTimeout(reveal, 1200); // backstop — the fade always plays even if load/decode never fire
     })();
 
     // ---- Scroll driver: lerp-smoothed rAF loop (≈ GSAP scrub, no dependency).
