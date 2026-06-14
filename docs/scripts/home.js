@@ -52,13 +52,13 @@
   // no vignette mask — the alpha edges are clean). It stays STILL when idle (no
   // "living push-in") — only opacity animates, and only while you scroll.
   const PHOTO_AR = '1984 / 2114';                 // the cutout's intrinsic aspect
-  const PHOTO_H = 'min(72vh, 82vw, 820px)';       // smaller; capped by width so it fits on mobile
+  const PHOTO_H = 'min(82vh, 90vw, 920px)';       // a bit bigger; capped by width so it fits on mobile
   // Head-centering: the head sits at x≈0.554 in this cutout → shift the box left
   // ~5% (translateX -55% vs -50%) so the head lands centred with the nav.
   const PHOTO_TX = '-55%';
-  const PIN = 2.2;               // hero track height (× viewport) → ~120vh of pinned scroll
-  const LERP = 0.16;             // scrub smoothing toward the target progress
-  const TEXT_DRIFT_PX = 200;     // px the hero text drifts up across the pin
+  const PHOTO_PARALLAX = 0.22;   // how much the photo lags the scroll (0 = scrolls with page, 1 = stays put)
+  const LERP = 0.16;             // scrub smoothing toward the target
+  const TEXT_DRIFT_PX = 90;      // px the hero text drifts up (foreground, a touch faster than the photo)
 
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function smoothstep(v) { const x = clamp(v); return x * x * (3 - 2 * x); }
@@ -118,17 +118,12 @@
       return;
     }
 
-    // ---- Pin: wrap the content in a sticky stage inside a tall track. The hero
-    //      stays in the viewport while you scroll through PIN×100vh. ----
-    const stage = document.createElement('div');
-    stage.className = 'cagdas-hero-stage';
-    stage.style.cssText = 'position:sticky;top:0;height:100vh;width:100%;overflow:hidden;display:flex;flex-flow:column;justify-content:center';
-    hero.insertBefore(stage, content);
-    stage.appendChild(bg);      // behind
-    stage.appendChild(content); // above (z-index:2)
-    hero.style.height = (PIN * 100) + 'vh';
-    hero.style.maxHeight = 'none';
-    hero.style.display = 'block';
+    // ---- Parallax background (NOT pinned): the photo is a bottom-anchored layer
+    //      inside the natural-height (100vh) hero — so the whole image is visible
+    //      at rest and the next section follows immediately (no whitespace gap).
+    //      On scroll the hero scrolls away normally while the photo LAGS behind
+    //      (parallax) and fades. No sticky/track, so no margin-induced shift. ----
+    hero.appendChild(bg);
 
     window.__cagdasHeroFadesBadge = true; // badge.js yields its scroll-fade to us
 
@@ -146,51 +141,46 @@
     }
     computeBp();
 
-    // ---- Badge: held in the viewport during the pin and faded in lockstep with
-    //      the text (same curve), so the two disappear together. Outside the pin
-    //      it reverts to badge.js's own placement (it's already faded/off-screen
-    //      past the pin, so the position swap is invisible). ----
+    // ---- Badge: fades in lockstep with the text (same curve) as you scroll. It
+    //      scrolls away naturally with the page (no pin), so only opacity is
+    //      driven here; pointer-events:none once invisible so it can't block
+    //      clicks. At the very top it's handed back to badge.js's own styling. ----
     let badgeHosts = null;
-    function driveBadge(p, textFade) {
+    function driveBadge(s, textFade) {
       if (badgeHosts === null) {
         const n = document.querySelectorAll('.webflow_badge');
         if (!n.length) return;
         badgeHosts = n;
       }
-      // Active fade zone: hold the badge fixed in the viewport and fade it inline
-      // in lockstep with the text. Outside it, hand back to badge.js's placement
-      // (position cleared) and use the .wfb-faded class once gone — the class
-      // sets pointer-events:none so an invisible badge can never block clicks.
-      const active = p > 0.002 && p < 0.82;
       for (let i = 0; i < badgeHosts.length; i++) {
         const h = badgeHosts[i];
-        if (active) {
-          h.classList.remove('wfb-faded');
-          h.style.position = 'fixed';     // stay in the viewport with the pinned hero
+        if (s > 0.004) {
           h.style.transition = 'none';
           h.style.opacity = String(1 - textFade);
           h.style.pointerEvents = (1 - textFade) < 0.05 ? 'none' : '';
         } else {
-          h.style.position = '';
           h.style.transition = '';
           h.style.opacity = '';
           h.style.pointerEvents = '';
-          h.classList.toggle('wfb-faded', p > 0.5); // gone past the pin; shown at the top
         }
       }
     }
 
-    // ---- Scroll choreography over the pin progress p (0 → 1). ----
-    function apply(p) {
-      const lessdark = smoothstep(clamp(p / 0.18));          // brighten — near-immediate
-      const hide = smoothstep(clamp((p - 0.22) / 0.7));      // hide — gradual across the pin
+    // ---- Scroll choreography over s = how far you've scrolled (in viewports).
+    //      Photo lags the scroll (parallax) + brightens then fades; text drifts up
+    //      + fades; the next section follows the hero immediately (no pin). ----
+    function apply(s) {
+      const vh = window.innerHeight || 1;
+      const lessdark = smoothstep(clamp(s / 0.16));          // brighten — near-immediate
+      const hide = smoothstep(clamp((s - 0.2) / 0.6));       // hide — gradual, gone by ~0.8vh
       photo.style.opacity = String((0.4 + 0.26 * lessdark) * (1 - hide));
-      photo.style.transform = 'translate(' + PHOTO_TX + ',0) scale(' + bp.photoScale + ')';
+      // Parallax: shift the photo DOWN as you scroll so it rises slower than the page.
+      photo.style.transform = 'translate(' + PHOTO_TX + ',' + (s * vh * PHOTO_PARALLAX) + 'px) scale(' + bp.photoScale + ')';
       glow.style.opacity = String(clamp(0.34 * (0.6 + 0.7 * lessdark) * (1 - hide)));
-      const textFade = smoothstep(clamp((p - 0.3) / 0.5));   // text fades from ~0.3
-      textcol.style.transform = 'translateY(' + (-smoothstep(clamp(p / 0.8)) * TEXT_DRIFT_PX) + 'px)';
+      const textFade = smoothstep(clamp((s - 0.25) / 0.5));  // text fades a touch later
+      textcol.style.transform = 'translateY(' + (-s * TEXT_DRIFT_PX) + 'px)';
       textcol.style.opacity = String(1 - textFade);
-      driveBadge(p, textFade);
+      driveBadge(s, textFade);
     }
 
     // Looping idle motion — Web Animations API (no <style> injection).
@@ -231,19 +221,17 @@
       setTimeout(function () { if (bg.style.opacity !== '1') { bg.style.transition = ''; bg.style.opacity = '1'; } }, 1500);
     })();
 
-    // ---- Pin progress: how far through the track the sticky stage has scrolled,
-    //      smoothed by a lerp for a buttery scrub feel. ----
+    // ---- Scroll fraction: how far you've scrolled, in viewports (the hero is the
+    //      first section). The choreography completes within ~1 viewport — no pin,
+    //      so the next section is already there (no whitespace). Lerp-smoothed. ----
     let cur = 0, target = 0, rafId = null;
-    function pinProgress() {
-      // The hero is the first section, so page scrollY directly measures how far
-      // into the pinned track we are — immune to the hero's margin-top:-7rem
-      // (which would skew a getBoundingClientRect().top formula).
-      const total = hero.offsetHeight - window.innerHeight;
+    function scrollFrac() {
       const y = window.pageYOffset || document.documentElement.scrollTop || 0;
-      return clamp(total > 0 ? y / total : 0);
+      const vh = window.innerHeight || 1;
+      return clamp(y / vh);
     }
     function frame() {
-      const t = pinProgress();          // always chase the LIVE scroll position
+      const t = scrollFrac();           // always chase the LIVE scroll position
       cur += (t - cur) * LERP;
       const settled = Math.abs(t - cur) < 0.0004;
       if (settled) cur = t;
