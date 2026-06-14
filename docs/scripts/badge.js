@@ -40,7 +40,10 @@
  *   (still absolute, scrolls away).
  *   Scroll fade (ALL breakpoints): the badge fades out smoothly as the page
  *   scrolls past the first viewport and fades back in when the first 100vh
- *   returns to view (opacity only; JS toggles .wfb-faded on scroll).
+ *   returns to view (opacity only; JS toggles .wfb-faded on scroll). On the
+ *   homepage this fade is YIELDED to home.js (when it sets
+ *   window.__cagdasHeroFadesBadge) so the badge fades in lock-step with the
+ *   hero scroll choreography rather than running its own threshold.
  *   Per-page: on the contact/call/terms/privacy/cookies page slugs the badge
  *   is hidden at ≤991px (tablet + landscape + mobile); shown there above 991px.
  *   Load in the footer / before </body>, or with defer:
@@ -283,6 +286,9 @@
     }
     function apply() {
       ticking = false;
+      // On the homepage, home.js drives the badge fade in lock-step with the hero
+      // scroll choreography — yield to it so the two never fight.
+      if (window.__cagdasHeroFadesBadge) return;
       const y = window.pageYOffset || document.documentElement.scrollTop || 0;
       const vh = window.innerHeight || 1;
       if (y > vh * 0.2) setHidden(true);        // scrolled past first 100vh -> fade out
