@@ -24,12 +24,17 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      # @v6 runs on Node 24 (v4 was Node-20-deprecated). fetch-depth: 0 → full
+      # history so the rebase-before-push below can never fail on a shallow clone.
+      - uses: actions/checkout@v6
         with:
-          node-version: "20"
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22" # active LTS (Node 20 is past end-of-life)
 
       - name: Fetch latest rates
         run: node scripts/fetch-rates.mjs
@@ -44,4 +49,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore(rates): daily FX update [skip ci]"
-          git push
+          # The bare push raced with concurrent pushes to main (manual deploys,
+          # other crons) and was rejected non-fast-forward. Rebase onto the latest
+          # main and retry — rates.json is the only file this job writes and the
+          # concurrency group serialises runs, so the rebase never conflicts.
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Pushed on attempt ${attempt}."
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}) — rebasing onto origin/main and retrying."
+            git pull --rebase origin main
+          done
+          echo "::error::Push still failing after 5 rebase attempts."
+          exit 1
