@@ -258,7 +258,7 @@
   // Selecting a currency: roll the prices + relabel. persist only on commit.
   function setCurrency(code, persist) {
     if (code !== state.code) { state.code = code; applyCurrency(true); }
-    if (persist) { lsSet(LS_CURRENCY, code); dlPush("currency_select", { currency: code }); }
+    if (persist) { lsSet(LS_CURRENCY, code); dlPush("currency_select", { currency_code: code }); }
   }
 
   // ───────────────────────────── TRIGGER (hero code + chevron) ───────────────
