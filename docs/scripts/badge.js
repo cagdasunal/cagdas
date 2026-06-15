@@ -58,6 +58,14 @@
   if (window.__cagdasWebflowBadge) return; // guard against double-load
   window.__cagdasWebflowBadge = true;
 
+  // ── TEMPORARY GLOBAL HIDE (2026-06-14) ──────────────────────────────────
+  // Master kill-switch: when true the badge renders on NO page (and any
+  // authored .webflow_badge element is hidden via display:none). To restore,
+  // flip this to false and rebuild — the badge returns everywhere EXCEPT the
+  // existing per-page ≤991px hides (contact/call/terms/privacy/cookies via
+  // .wfb-page-hide), which stay in effect. Do NOT touch HIDE_PAGES to restore.
+  const BADGE_HIDDEN = true;
+
   const TARGET = '.webflow_badge';
   const STYLE_ID = 'cagdas-webflow-badge-styles';
   // Page slugs where the badge is hidden at ≤991px (tablet + landscape +
@@ -301,6 +309,16 @@
   }
 
   function init() {
+    if (BADGE_HIDDEN) {
+      // Render nothing; also hide any author-placed .webflow_badge element.
+      if (!document.getElementById(STYLE_ID)) {
+        const s = document.createElement('style');
+        s.id = STYLE_ID;
+        s.textContent = '.webflow_badge{display:none}';
+        (document.head || document.documentElement).appendChild(s);
+      }
+      return;
+    }
     injectStyles();
     const hosts = document.querySelectorAll(TARGET);
     if (!hosts.length) {
