@@ -158,9 +158,22 @@
 
   const state = { code: "USD", rates: cloneRates(FALLBACK), webDesign: false };
 
-  function cloneRates(src) {
+  // Clone rates, optionally merging `src` OVER a `base` (the baked FALLBACK) so a
+  // source that omits a currency — e.g. the frankfurter fallback (ECB) has no AED
+  // — keeps its baked rate instead of collapsing to rate 1 (the USD amount).
+  // Non-positive / non-finite values are skipped so junk can never override a good
+  // base rate. USD is forced to 1 (base by definition).
+  function cloneRates(src, base) {
     const out = {};
-    for (const k in src) if (Object.prototype.hasOwnProperty.call(src, k)) out[k] = src[k];
+    const merge = (obj) => {
+      for (const k in obj) {
+        if (!Object.prototype.hasOwnProperty.call(obj, k)) continue;
+        const v = Number(obj[k]);
+        if (Number.isFinite(v) && v > 0) out[k] = v;
+      }
+    };
+    if (base) merge(base);
+    merge(src);
     out.USD = 1;
     return out;
   }
@@ -310,6 +323,7 @@
 
   const rowEls = CURRENCIES.map(([code, name]) => {
     const r = document.createElement("span");
+    r.id = "cagdas-rate-opt-" + code;
     r.setAttribute("role", "option");
     r.setAttribute("aria-label", name);
     r.textContent = code;
@@ -324,9 +338,12 @@
   });
   panel.appendChild(viewport);
   trigger.appendChild(panel);
+  panel.id = "cagdas-rate-listbox";
+  codeBtn.setAttribute("aria-controls", panel.id);
 
   function renderWheel() {
     const base = mod(Math.round(pos));
+    codeBtn.setAttribute("aria-activedescendant", rowEls[base].id); // announce the centred option to AT
     for (let i = 0; i < N; i++) {
       const d = wrapD(i - mod(pos)), ad = Math.abs(d);
       const centered = base === i;
@@ -378,6 +395,16 @@
   const pinObserver = (typeof MutationObserver === "function" && heroValueEl)
     ? new MutationObserver(repin) : null;
 
+  // A viewport resize / orientation change while open reflows the whole line
+  // without firing a price mutation, so the captured anchor goes stale. Drop the
+  // stale compensation and re-anchor to the new layout (kept simple — resizing
+  // mid-interaction is rare and the handler is cheap).
+  function onResize() {
+    if (!open) return;
+    trigger.style.transform = "";
+    pinAnchor = trigger.offsetLeft;
+  }
+
   function openWheel() {
     if (open) return;
     open = true;
@@ -400,13 +427,16 @@
     renderWheel();
     document.addEventListener("mousedown", onDocDown, true);
     document.addEventListener("keydown", onKey, true);
+    window.addEventListener("resize", onResize);
   }
 
   function closeWheel() {
     if (!open) return;
     open = false; drag = false;
     if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
+    if (wheelTimer) { clearTimeout(wheelTimer); wheelTimer = null; }
     codeBtn.setAttribute("aria-expanded", "false");
+    codeBtn.removeAttribute("aria-activedescendant");
     codeBtn.style.color = "#fff"; codeBtn.style.textDecorationColor = "currentColor";
     chev.style.transform = "none";
     panel.style.opacity = "0";
@@ -417,6 +447,7 @@
     panel.style.visibility = "hidden";
     document.removeEventListener("mousedown", onDocDown, true);
     document.removeEventListener("keydown", onKey, true);
+    window.removeEventListener("resize", onResize);
     if (pinObserver) pinObserver.disconnect();
     trigger.style.transform = "";          // un-pin → sentence flows naturally again
   }
@@ -492,7 +523,7 @@
       const c = JSON.parse(raw);
       if (c && c.rates && typeof c.savedAt === "number" &&
           (nowMs() - c.savedAt) < CACHE_MAX_AGE_MS && Object.keys(c.rates).length > 1) {
-        state.rates = cloneRates(c.rates);
+        state.rates = cloneRates(c.rates, FALLBACK);
       }
     } catch (e) {}
   })();
@@ -517,7 +548,7 @@
         window.clearTimeout(timer);
         if (!data || !data.rates || typeof data.rates !== "object" ||
             !Object.keys(data.rates).length) return;
-        state.rates = cloneRates(data.rates);
+        state.rates = cloneRates(data.rates, FALLBACK);
         lsSet(LS_CACHE, JSON.stringify({ rates: data.rates, updated: data.updated || null, savedAt: nowMs() }));
         applyCurrency(false); // refresh prices to live rates without a jarring count
       })
