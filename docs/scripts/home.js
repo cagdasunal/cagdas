@@ -1,6 +1,10 @@
 /*!
  * home.js — scroll-driven editorial hero for cagd.as (homepage)
  *
+ * ► FULL DEV README + tunables table + per-breakpoint profiles + how-to recipes +
+ *   how to VERIFY responsive/scroll changes (iframe rig) + changelog:
+ *   sites/cagdas/docs/home-hero.md  ← read this before changing the hero.
+ *
  * Drives the EXISTING Webflow homepage hero (header.section_hero, .is-home). It
  * injects a faint big B&W portrait + a soft indigo aurora (centred) behind the
  * text. On first load the portrait + glow fade in and the portrait settles. As
