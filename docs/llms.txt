@@ -1,0 +1,16 @@
+# Çağdaş Ünal
+
+> Freelance Webflow developer building clean, custom, CMS-driven websites for agencies and businesses who care what's under the hood.
+
+## Pages
+
+- [Freelance Webflow Developer | Çağdaş Ünal](https://cagd.as): Accepting new projects. Freelance Webflow developer building clean, custom-coded sites with a CMS your team can manage.
+- [Webflow Developer for Agencies | Çağdaş Ünal](https://cagd.as/agencies): Webflow work for your agency you can hand off and forget about. Behind your brand, with reliable communication and deadlines you can count on.
+- [Contact | Çağdaş Ünal](https://cagd.as/contact): Contact information of Çağdaş Ünal who is a freelance Webflow Developer.
+- [Webflow Development Process | Çağdaş Ünal](https://cagd.as/process): You send the brief, I scope it, build it on Webflow, and keep you in the loop. From kickoff to launch + 30-day support.
+- [Webflow Developer Rates: $40/hour | Çağdaş Ünal](https://cagd.as/rates): Webflow developer rates: $40/hour, or fixed-price projects from $1,400. Scoped upfront, no surprises, with 30-day support after launch.
+- [Webflow Development Services | Çağdaş Ünal](https://cagd.as/services): Webflow development services: custom builds, Figma to Webflow, SEO, and WordPress migration. End-to-end or build-only.
+
+## Optional
+
+- [Çağdaş Ünal Sitemap](https://cagd.as/sitemap.xml): XML sitemap with all indexed pages

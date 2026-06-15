@@ -1,0 +1,63 @@
+# llms.txt for cagd.as, re-hosted on GitHub Pages.
+#
+# Reads Webflow's published sitemap (https://cagd.as/sitemap.xml), fetches each page's
+# title + meta description, and writes docs/llms.txt (served at
+# https://files.cagd.as/llms.txt). Runs every 12 hours; commits ONLY when the file
+# changes — so a sitemap change (page added/removed) or a title/description change
+# flows through, and an unchanged run is a no-op.
+#
+# SSOT: sites/cagdas/cron/update-llms.yml in the monorepo. The live copy lives in this
+# serving repo at .github/workflows/update-llms.yml — keep them in sync.
+name: Update llms.txt
+
+on:
+  schedule:
+    - cron: "23 */12 * * *" # every 12h at :23 (00:23 + 12:23 UTC), off the congested top-of-hour
+  workflow_dispatch: {} # manual run (also used for the first seed)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-llms
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Generate llms.txt from the sitemap
+        run: node scripts/generate-llms.mjs
+
+      - name: Commit if changed
+        run: |
+          git add docs/llms.txt
+          if git diff --cached --quiet; then
+            echo "No llms.txt changes — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(llms): refresh from sitemap [skip ci]"
+          # Same rebase-before-push retry as update-rates.yml: the bare push can race
+          # with concurrent pushes to main and get rejected non-fast-forward. llms.txt
+          # is the only file this job writes and the concurrency group serialises runs.
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Pushed on attempt ${attempt}."
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}) — rebasing onto origin/main and retrying."
+            git pull --rebase origin main
+          done
+          echo "::error::Push still failing after 5 rebase attempts."
+          exit 1
