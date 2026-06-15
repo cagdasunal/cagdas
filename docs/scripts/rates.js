@@ -51,12 +51,16 @@
 
   // ───────────────────────────── ANALYTICS ───────────────────────────────────
   // Push behavioral events to the dataLayer for GTM-KCKHRLL5 → GA4 (matches the
-  // cagdas-events.js taxonomy). Inert until GTM is live. The /rates currency wheel +
+  // events.js taxonomy). Inert until GTM is live. The /rates currency wheel +
   // pricing toggle are owned here, so this bundle emits their events directly:
   //   currency_picker_open · currency_select (currency) · web_design_toggle (web_design_included)
+  // rates.js runs only on /rates, so page_type is always "rates". Carry the same page identity
+  // (page_id / page_type / page_locale) as events.js so these events slice by page context in GA4.
+  const RATES_PAGE_ID = document.documentElement.getAttribute("data-wf-page") || "";
+  const RATES_PAGE_LOCALE = ((document.documentElement.getAttribute("lang") || "en").toLowerCase().split("-")[0]) || "en";
   const dlPush = (name, params) => {
     window.dataLayer = window.dataLayer || [];
-    const o = { event: name };
+    const o = { event: name, page_id: RATES_PAGE_ID, page_type: "rates", page_locale: RATES_PAGE_LOCALE };
     if (params) for (const k in params) if (Object.prototype.hasOwnProperty.call(params, k)) o[k] = params[k];
     window.dataLayer.push(o);
   };

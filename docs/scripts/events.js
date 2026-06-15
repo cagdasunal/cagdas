@@ -73,7 +73,7 @@
     // Portfolio project cards on the home page; a click on a card's external link →
     // portfolio_visit, labelled with the project name read from the card.
     portfolioCardSelector: '.work_item',
-    portfolioNameSelector: 'h1, h2, h3, h4, .work_item-text',
+    portfolioNameSelector: 'h1, h2, h3, h4, a',
 
     // Contact form: id/name that marks the lead form (Webflow injects .w-form-done on
     // AJAX success, .w-form-fail on failure).
@@ -87,8 +87,11 @@
       namespaces: ['call']
     },
 
-    // Cookie banner broadcast event (sites/cagdas/gdpr/gdpr.config.json → eventName).
-    consentEventName: 'cagdas:consent'
+    // Cookie banner broadcast event (sites/cagdas/gdpr/gdpr.config.json → eventName) + the
+    // OPT-IN categories the banner actually offers (cagd.as has analytics only). Used to label
+    // consent_action accept_all/reject_all/custom correctly for THIS site's category set.
+    consentEventName: 'cagdas:consent',
+    consentCategories: ['analytics']
   };
 
   /* ======================================================================
@@ -149,12 +152,16 @@
     try { return !!(a.matches(SITE_CONFIG.ctaSelector) || a.closest(SITE_CONFIG.ctaSelector)); }
     catch (_) { return false; }
   }
+  // The card's short brand name (e.g. "Humblebee") — the first SHORT heading/link text,
+  // skipping the long description paragraph, the "view the website"/"read the details" CTAs,
+  // and the metadata labels (Agency/Client/Role/Year). Falls back to the client domain.
   function portfolioName(card, a) {
+    const SKIP = /^(view the website|read the details|or|agency|client|role|year)$/i;
     try {
       const els = card.querySelectorAll(SITE_CONFIG.portfolioNameSelector);
       for (let i = 0; i < els.length; i++) {
         const t = clean(els[i].textContent);
-        if (t && !/view the website/i.test(t)) return t.slice(0, 80);
+        if (t && t.length <= 40 && !SKIP.test(t)) return t;
       }
     } catch (_) {}
     const u = urlOf(a);                                   // fallback: the client domain
@@ -210,8 +217,11 @@
     }
 
     // CTA buttons (Webflow .button / mobile-overlay CTA) OR protocol CTAs (mailto/tel/whatsapp).
+    // A CTA button counts regardless of destination, EXCEPT a bare "#" placeholder — e.g. the
+    // /rates "Include web design" toggle (rates.js already tracks that as web_design_toggle).
+    // A real in-page target like "#portfolio" still counts.
     const proto = protocolCta(raw, au);
-    if (proto || (raw && raw.charAt(0) !== '#' && isCtaButton(a)) || (raw.charAt(0) === '#' && isCtaButton(a))) {
+    if (proto || (isCtaButton(a) && raw && raw !== '#')) {
       const dest = proto ? raw : (au ? barePath(au.pathname) + (au.hash || '') : raw);
       push('cta_click', { cta_label: proto || linkText(a) || '(none)', cta_destination: dest, cta_location: ctaLocation(a) });
       return;
@@ -328,15 +338,27 @@
   (function () {
     const evName = SITE_CONFIG.consentEventName;
     if (!evName) return;
+    // The banner broadcasts on the consent DECISION but ALSO on every page load (and twice on
+    // first-accept), so dedupe: emit cookie_consent only when the consent STATE actually changes
+    // vs the last emission (persisted across loads). action is computed over the site's real
+    // opt-in categories so an analytics-only "Accept all" reads accept_all, not custom.
+    const OPTIN = SITE_CONFIG.consentCategories || [];
+    const SIG_KEY = 'cagdas_consent_sig';
+    function sigOf(d) { return OPTIN.map(function (k) { return k + (d[k] ? '1' : '0'); }).join(''); }
+    function lastSig() { try { return window.localStorage.getItem(SIG_KEY); } catch (_) { return null; } }
+    function saveSig(s) { try { window.localStorage.setItem(SIG_KEY, s); } catch (_) {} }
     window.addEventListener(evName, function (e) {
       const d = (e && e.detail) || {};
-      const a = !!d.analytics, mk = !!d.marketing, fn = !!d.functional;
-      const action = (a && mk && fn) ? 'accept_all' : (!a && !mk && !fn) ? 'reject_all' : 'custom';
+      const sig = sigOf(d);
+      if (sig === lastSig()) return;   // unchanged state (page-load re-assert / double-fire) — skip
+      saveSig(sig);
+      const granted = OPTIN.filter(function (k) { return d[k]; }).length;
+      const action = granted === 0 ? 'reject_all' : granted === OPTIN.length ? 'accept_all' : 'custom';
       push('cookie_consent', {
         consent_action: action,
-        consent_analytics: a ? 'granted' : 'denied',
-        consent_marketing: mk ? 'granted' : 'denied',
-        consent_functional: fn ? 'granted' : 'denied'
+        consent_analytics: d.analytics ? 'granted' : 'denied',
+        consent_marketing: d.marketing ? 'granted' : 'denied',
+        consent_functional: d.functional ? 'granted' : 'denied'
       });
     });
   })();
