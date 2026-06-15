@@ -76,7 +76,7 @@
 
     // Declared before any apply(0) call (incl. the reduced-motion branch) so they
     // aren't read in their temporal dead zone.
-    let bp = { photoScale: 1.0, glowMul: 1.0, drift: 1.0 };
+    let bp = { glowMul: 1.0, drift: 1.0 };
     let badgeHosts = null;
     let wcOn = true;                              // will-change currently on (set in the cssText below)
 
@@ -122,16 +122,29 @@
     content.style.zIndex = '2';
     hero.appendChild(bg);
 
-    // ---- Responsive sizing keyed to Webflow breakpoints (992 / 768 / 480). ----
+    // ---- Responsive sizing (Webflow breakpoints 992 / 768 / 480 + landscape).
+    //      The photo is sized by HEIGHT; width follows from `aspect-ratio` (so a
+    //      taller photo is also wider). On narrow/short screens the portrait must
+    //      be MUCH bigger — it's allowed to overflow the viewport width (sides
+    //      clip; the head stays centred via translateX so the face is always in
+    //      view). Head-centring is width-relative, so it holds at any size. ----
     function computeBp() {
-      const w = window.innerWidth;
-      // photoScale ≤1 so `contain` shows the WHOLE photo; the glow + the text/badge
-      // drift step down on smaller screens so the motion stays proportional.
-      if (w >= 992)      bp = { photoScale: 1.0,  glowMul: 1.0,  drift: 1.0 };
-      else if (w >= 768) bp = { photoScale: 1.0,  glowMul: 0.9,  drift: 0.85 };
-      else if (w >= 480) bp = { photoScale: 0.96, glowMul: 0.8,  drift: 0.7 };
-      else               bp = { photoScale: 0.92, glowMul: 0.68, drift: 0.6 };
-      glow.style.transform = 'scale(' + (1.25 * bp.glowMul) + ')';
+      const w = window.innerWidth, vh = window.innerHeight;
+      let ph, glowMul, drift;
+      if (w >= 992) {                 // desktop — unchanged (approved)
+        ph = 'min(82vh, 90vw, 920px)'; glowMul = 1.0;  drift = 1.0;
+      } else if (vh < 560) {          // landscape phones / short viewports (height-bound)
+        ph = 'min(90vh, 78vw)';        glowMul = 0.9;  drift = 0.7;
+      } else if (w >= 768) {          // tablet portrait — bigger
+        ph = 'min(90vh, 108vw)';       glowMul = 0.95; drift = 0.85;
+      } else if (w >= 480) {          // large phone — much bigger
+        ph = 'min(88vh, 132vw)';       glowMul = 0.85; drift = 0.7;
+      } else {                        // phone — much bigger
+        ph = 'min(86vh, 150vw)';       glowMul = 0.8;  drift = 0.6;
+      }
+      photo.style.height = ph;
+      bp = { glowMul: glowMul, drift: drift };
+      glow.style.transform = 'scale(' + (1.25 * glowMul) + ')';
     }
     computeBp();
 
@@ -181,7 +194,7 @@
       photo.style.opacity = String((0.5 + 0.25 * bright) * (1 - hide));   // 0.5 → 0.75 → 0
       // Parallax lag: the portrait rises slower than the page so it lingers, large,
       // covering the hand-off while the section rises beneath it.
-      photo.style.transform = 'translate(' + PHOTO_TX + ',' + (s * vh * PHOTO_PARALLAX) + 'px) scale(' + bp.photoScale + ')';
+      photo.style.transform = 'translate(' + PHOTO_TX + ',' + (s * vh * PHOTO_PARALLAX) + 'px)';
       glow.style.opacity = String(clamp((0.28 + 0.2 * bright) * (1 - hide)));   // soft → bloom → fade
       const driftY = -smoothstep(clamp(s / 0.85)) * TEXT_DRIFT_PX * bp.drift;
       const fade = smoothstep(clamp((s - 0.1) / 0.55));     // text + badge gone by ~0.65
