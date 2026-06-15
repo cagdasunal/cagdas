@@ -196,11 +196,17 @@
     const t = e.target;
     if (!t || !t.closest) return;
 
-    // FAQ accordion (rates) — fire on the question element, carry the question text.
-    const faq = t.closest('.faq_question, .faq-q, [class*="faq"][class*="question"], [class*="accordion"] [class*="trigger"]');
-    if (faq) {
-      const q = clean(faq.textContent).slice(0, 120);
-      if (q) push('faq_open', { faq_question: q });
+    // FAQ accordion (rates) — fire faq_open on OPEN only (skip closes), with the question text.
+    // events.js runs in capture phase BEFORE faq.js toggles, so .faq_item.is-open reflects the
+    // PRE-click state: absent → this click is opening the item.
+    const faqTrigger = t.closest('.faq_trigger, .faq_question');
+    if (faqTrigger) {
+      const item = faqTrigger.closest('.faq_item');
+      if (!item || !item.classList.contains('is-open')) {
+        const qEl = (item && item.querySelector('.faq_question')) || faqTrigger;
+        const q = clean(qEl.textContent).slice(0, 120);
+        if (q) push('faq_open', { faq_question: q });
+      }
       return;
     }
 
@@ -212,7 +218,7 @@
     // Portfolio project → its live site (home work cards). Any external link inside a card.
     const card = a.closest(SITE_CONFIG.portfolioCardSelector);
     if (card && au && au.hostname && au.hostname !== location.hostname) {
-      push('portfolio_visit', { portfolio_name: portfolioName(card, a), portfolio_url: a.href });
+      push('portfolio_visit', { portfolio_name: portfolioName(card, a) });
       return;
     }
 
@@ -222,7 +228,9 @@
     // A real in-page target like "#portfolio" still counts.
     const proto = protocolCta(raw, au);
     if (proto || (isCtaButton(a) && raw && raw !== '#')) {
-      const dest = proto ? raw : (au ? barePath(au.pathname) + (au.hash || '') : raw);
+      // Protocol CTAs (mailto/tel/whatsapp): the href is PII (an address/number) — NEVER send it.
+      // Use the scheme label as the destination. Other CTAs send the bare destination path.
+      const dest = proto ? proto : (au ? barePath(au.pathname) + (au.hash || '') : raw);
       push('cta_click', { cta_label: proto || linkText(a) || '(none)', cta_destination: dest, cta_location: ctaLocation(a) });
       return;
     }
@@ -236,7 +244,7 @@
 
     // Any other external link → outbound_click (link_domain only — no PII).
     if (raw && raw.charAt(0) !== '#' && au && au.hostname && au.hostname !== location.hostname) {
-      push('outbound_click', { link_domain: au.hostname, link_url: a.href });
+      push('outbound_click', { link_domain: au.hostname });
     }
   }, true);
 
@@ -267,16 +275,20 @@
     form.addEventListener('focusin', onFirst, true);
     form.addEventListener('input', onFirst, true);
 
-    // submit (once): Webflow reveals .w-form-done on AJAX success.
-    let submitFired = false;
+    // submit / error need a MutationObserver — guard for ancient engines (parity with rates.js).
+    if (typeof MutationObserver !== 'function') continue;
+    // submit (once): fire ONLY on the hidden→visible TRANSITION of .w-form-done (a genuine submit
+    // after load), never on the initial state — so a classic redirect-back or a designer-visible
+    // success block can't log a phantom conversion. Mirrors the .w-form-fail change-detection.
     const done = wrap.querySelector('.w-form-done');
     if (done) {
+      let submitFired = false, doneShown = visible(done);
       const obsDone = new MutationObserver(function () {
-        if (submitFired || !visible(done)) return;
-        submitFired = true; push('contact_form_submit', {}); obsDone.disconnect();
+        const now = visible(done);
+        if (now && !doneShown && !submitFired) { submitFired = true; push('contact_form_submit', {}); obsDone.disconnect(); }
+        doneShown = now;
       });
       obsDone.observe(done, { attributes: true, attributeFilter: ['style', 'class'] });
-      if (visible(done)) { submitFired = true; push('contact_form_submit', {}); obsDone.disconnect(); }
     }
     // error: Webflow reveals .w-form-fail on validation/submit failure (can repeat).
     const fail = wrap.querySelector('.w-form-fail');
@@ -303,12 +315,14 @@
     const cc = SITE_CONFIG.calcom || {};
     if (!cc.enabled || (cc.onPageTypes || []).indexOf(PT) === -1) return;
     const ACTIONS = ['bookingSuccessfulV2', 'bookingSuccessful'];
-    let booked = false;
+    const seen = {};   // de-dupe by booking uid: collapses the V2+legacy double-dispatch for ONE
+                       // booking, but still lets a genuine SECOND booking in the same session count.
     function onBooking(e) {
-      if (booked) return;
-      booked = true;
       const d = (e && e.detail) || {};
       const data = d.data || {};
+      const uid = data.uid || data.bookingUid || ('once-' + (d.namespace || ''));
+      if (seen[uid]) return;
+      seen[uid] = true;
       const et = data.eventType;
       push('call_booked', {
         booking_surface: d.namespace ? d.namespace : 'default',
@@ -344,13 +358,15 @@
     // opt-in categories so an analytics-only "Accept all" reads accept_all, not custom.
     const OPTIN = SITE_CONFIG.consentCategories || [];
     const SIG_KEY = 'cagdas_consent_sig';
+    let sigMem = null;   // in-memory fallback when localStorage is blocked (private mode): bounds the
+                         // over-count to once-per-load instead of unbounded per-pageview.
     function sigOf(d) { return OPTIN.map(function (k) { return k + (d[k] ? '1' : '0'); }).join(''); }
     function lastSig() { try { return window.localStorage.getItem(SIG_KEY); } catch (_) { return null; } }
-    function saveSig(s) { try { window.localStorage.setItem(SIG_KEY, s); } catch (_) {} }
+    function saveSig(s) { sigMem = s; try { window.localStorage.setItem(SIG_KEY, s); } catch (_) {} }
     window.addEventListener(evName, function (e) {
       const d = (e && e.detail) || {};
       const sig = sigOf(d);
-      if (sig === lastSig()) return;   // unchanged state (page-load re-assert / double-fire) — skip
+      if (sig === lastSig() || sig === sigMem) return;   // unchanged (page-load re-assert / double-fire) — skip
       saveSig(sig);
       const granted = OPTIN.filter(function (k) { return d[k]; }).length;
       const action = granted === 0 ? 'reject_all' : granted === OPTIN.length ? 'accept_all' : 'custom';
@@ -389,17 +405,25 @@
   const THRESH = [25, 50, 75, 90];
   const hit = {};
   let ticking = false;
+  function measureScroll() {
+    ticking = false;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (max <= window.innerHeight * 0.2) return;
+    const pct = (window.pageYOffset / max) * 100;
+    for (let k = 0; k < THRESH.length; k++) { if (pct >= THRESH[k] && !hit[THRESH[k]]) { hit[THRESH[k]] = true; push('scroll_depth', { percent_scrolled: String(THRESH[k]) }); } }
+    if (!engagedFired && pct >= 50) fireEngaged('scroll_50');
+  }
   function onScroll() {
     if (ticking) return;
     ticking = true;
-    window.requestAnimationFrame(function () {
-      ticking = false;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (max <= window.innerHeight * 0.2) return;
-      const pct = (window.pageYOffset / max) * 100;
-      for (let k = 0; k < THRESH.length; k++) { if (pct >= THRESH[k] && !hit[THRESH[k]]) { hit[THRESH[k]] = true; push('scroll_depth', { percent_scrolled: String(THRESH[k]) }); } }
-      if (!engagedFired && pct >= 50) fireEngaged('scroll_50');
-    });
+    // rAF coalesces the layout reads, but it is PAUSED in a hidden/backgrounded tab — relying on it
+    // alone latches `ticking` true forever and kills all later scroll tracking. When the tab isn't
+    // visible (rAF won't fire), measure synchronously so the guard always resets.
+    if (document.visibilityState === 'visible' && typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(measureScroll);
+    } else {
+      measureScroll();
+    }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
