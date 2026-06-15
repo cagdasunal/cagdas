@@ -262,7 +262,12 @@
   // Selecting a currency: roll the prices + relabel. persist only on commit.
   function setCurrency(code, persist) {
     if (code !== state.code) { state.code = code; applyCurrency(true); }
-    if (persist) { lsSet(LS_CURRENCY, code); dlPush("currency_select", { currency_code: code }); }
+    if (persist) {
+      lsSet(LS_CURRENCY, code);
+      // Skip a no-op re-confirm of the currency the wheel opened on (open→scroll→land-back→commit)
+      // so an open-then-dismiss can't log a phantom currency_select. A real change still fires.
+      if (code !== openCode) dlPush("currency_select", { currency_code: code });
+    }
   }
 
   // ───────────────────────────── TRIGGER (hero code + chevron) ───────────────
@@ -306,7 +311,7 @@
   });
 
   // ───────────────────────────── WHEEL ───────────────────────────────────────
-  let open = false;
+  let open = false, openCode = null;
   let pos = 0;          // float wheel position (row units), unbounded → loops
   let drag = false;
   let dragInfo = null;
@@ -424,6 +429,7 @@
   function openWheel() {
     if (open) return;
     open = true;
+    openCode = state.code;   // remember the currency in effect at open (M1 phantom-select guard)
     dlPush("currency_picker_open");
     trigger.style.transform = "";          // measure the untransformed position
     pinAnchor = trigger.offsetLeft;

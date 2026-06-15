@@ -125,7 +125,7 @@
     if (/^mailto:/i.test(raw)) return 'Email';
     if (/^tel:/i.test(raw)) return 'Phone';
     const host = (url && url.hostname || '').toLowerCase();
-    if (host.indexOf('whatsapp.com') !== -1 || host === 'wa.me') return 'WhatsApp';
+    if (host.indexOf('whatsapp.com') !== -1 || host === 'wa.me' || host.endsWith('.wa.me')) return 'WhatsApp';
     return null;
   }
 
@@ -288,16 +288,20 @@
     // submit (once): fire ONLY on the hidden→visible TRANSITION of .w-form-done (a genuine submit
     // after load), never on the initial state — so a classic redirect-back or a designer-visible
     // success block can't log a phantom conversion. Mirrors the .w-form-fail change-detection.
-    const done = wrap.querySelector('.w-form-done');
-    if (done) {
-      let submitFired = false, doneShown = visible(done);
-      const obsDone = new MutationObserver(function () {
-        const now = visible(done);
-        if (now && !doneShown && !submitFired) { submitFired = true; push('contact_form_submit', {}); obsDone.disconnect(); }
-        doneShown = now;
-      });
-      obsDone.observe(done, { attributes: true, attributeFilter: ['style', 'class'] });
-    }
+    // Observe the whole .w-form wrap subtree (not just a node present at init), re-querying
+    // .w-form-done each mutation, so a lazily-injected or re-rendered success block is still
+    // caught. Fire ONLY on the hidden→visible TRANSITION (doneShown seeds from the init state).
+    let submitFired = false;
+    const doneInit = wrap.querySelector('.w-form-done');
+    let doneShown = !!(doneInit && visible(doneInit));
+    const obsDone = new MutationObserver(function () {
+      if (submitFired) return;
+      const dn = wrap.querySelector('.w-form-done');
+      const now = !!(dn && visible(dn));
+      if (now && !doneShown) { submitFired = true; push('contact_form_submit', {}); obsDone.disconnect(); }
+      doneShown = now;
+    });
+    obsDone.observe(wrap, { attributes: true, attributeFilter: ['style', 'class'], childList: true, subtree: true });
     // error: Webflow reveals .w-form-fail on validation/submit failure (can repeat).
     const fail = wrap.querySelector('.w-form-fail');
     if (fail) {
@@ -325,12 +329,20 @@
     const ACTIONS = ['bookingSuccessfulV2', 'bookingSuccessful'];
     const seen = {};   // de-dupe by booking uid: collapses the V2+legacy double-dispatch for ONE
                        // booking, but still lets a genuine SECOND booking in the same session count.
+    let lastAnon = 0;  // no-uid fallback: a time-window (not a constant key) so the ~simultaneous
+                       // V2+legacy pair collapses, but a real 2nd booking >1.5s later still counts.
     function onBooking(e) {
       const d = (e && e.detail) || {};
       const data = d.data || {};
-      const uid = data.uid || data.bookingUid || ('once-' + (d.namespace || ''));
-      if (seen[uid]) return;
-      seen[uid] = true;
+      const uid = data.uid || data.bookingUid || '';
+      if (uid) {
+        if (seen[uid]) return;        // same booking re-dispatched (V2+legacy) — count once
+        seen[uid] = true;
+      } else {
+        const now = Date.now();
+        if (now - lastAnon < 1500) return;   // collapse the double-dispatch when no uid is present
+        lastAnon = now;
+      }
       const et = data.eventType;
       push('call_booked', {
         booking_surface: d.namespace ? d.namespace : 'default',
@@ -381,6 +393,8 @@
       push('cookie_consent', {
         consent_action: action,
         consent_analytics: d.analytics ? 'granted' : 'denied',
+        // marketing/functional are forward-compatible placeholders: the banner is analytics-only
+        // today, so these stay 'denied' until/unless those categories are added to the banner.
         consent_marketing: d.marketing ? 'granted' : 'denied',
         consent_functional: d.functional ? 'granted' : 'denied'
       });
@@ -405,7 +419,8 @@
     if (engagedFired) return;
     engagedFired = true;
     if (engagedTimer) { window.clearInterval(engagedTimer); engagedTimer = 0; }
-    push('page_engaged', { engaged_via: via, engaged_seconds: Math.round(activeMs() / 1000) });
+    // floor at 1s: a scroll_50 within <500ms of load is real engagement, not a 0-second dwell.
+    push('page_engaged', { engaged_via: via, engaged_seconds: Math.max(1, Math.round(activeMs() / 1000)) });
   }
   engagedTimer = window.setInterval(function () { if (activeMs() >= 15000) fireEngaged('dwell_15s'); }, 3000);
 
