@@ -22,8 +22,8 @@
  *   scroll_depth         — scroll milestone reached (percent_scrolled 25/50/75/90)
  *   cta_click            — clicked a CTA button (cta_label, cta_destination, cta_location)
  *   menu_click           — clicked a header/footer/mobile menu link (menu_item, menu_location)
- *   portfolio_visit      — clicked into a portfolio project's live site (portfolio_name, portfolio_url)
- *   outbound_click       — clicked any other external link (link_domain, link_url)
+ *   portfolio_visit      — clicked into a portfolio project's live site (portfolio_name)
+ *   outbound_click       — clicked any other external link (link_domain — hostname only)
  *   faq_open             — opened an FAQ item (faq_question)
  *   contact_form_start   — began filling the contact form
  *   contact_form_submit  — submitted the contact form           [CONVERSION]
@@ -129,11 +129,15 @@
     return null;
   }
 
-  // Where a CTA sits: navbar / footer / mobile menu / hero / body (geometry fallback).
+  // Where a CTA sits: footer / mobile menu / navbar / hero / body (geometry fallback).
+  // Footer + mobile-overlay are checked BEFORE the generic navbar selector: the site
+  // footer is itself a Webflow Navbar (.w-nav) and the mobile menu is its .w-nav-overlay,
+  // so a navbar-first check would shadow a footer or mobile-menu CTA as 'navbar' (same
+  // root cause as the menuLocation footer fix below).
   function ctaLocation(a) {
-    if (a.closest('nav, .navbar, [class*="navbar"], .w-nav')) return 'navbar';
-    if (a.closest('.w-nav-overlay, [class*="mobile-menu"], [class*="menu_overlay"], [class*="nav_overlay"]')) return 'mobile';
     if (a.closest('footer, .footer, [class*="footer_"]')) return 'footer';
+    if (a.closest('.w-nav-overlay, [class*="mobile-menu"], [class*="menu_overlay"], [class*="nav_overlay"]')) return 'mobile';
+    if (a.closest('nav, .navbar, [class*="navbar"], .w-nav')) return 'navbar';
     let top;
     try { const r = a.getBoundingClientRect(); top = r.top + (window.pageYOffset || document.documentElement.scrollTop || 0); }
     catch (_) { return 'body'; }
@@ -142,10 +146,14 @@
     return 'body';
   }
   // Where a menu link sits: header / footer / mobile.
+  // Footer is checked FIRST: the site footer is a Webflow Navbar component
+  // (footer.footer_component wraps a .w-nav), so the navbar selector below would
+  // otherwise shadow every footer link as 'header'. A footer link is never inside
+  // the header's nav/overlay, so footer-first stays correct for header + mobile links.
   function menuLocation(a) {
+    if (a.closest('footer, .footer, [class*="footer_"]')) return 'footer';
     if (a.closest('.w-nav-overlay, [class*="mobile-menu"], [class*="menu_overlay"], [class*="nav_overlay"]')) return 'mobile';
     if (a.closest('nav, .navbar, [class*="navbar"], .w-nav')) return 'header';
-    if (a.closest('footer, .footer, [class*="footer_"]')) return 'footer';
     return null;
   }
   function isCtaButton(a) {
