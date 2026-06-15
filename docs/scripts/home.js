@@ -49,7 +49,6 @@
   const PHOTO_AR = '1984 / 2114';                 // the cutout's intrinsic aspect
   const PHOTO_H = 'min(82vh, 90vw, 920px)';       // sized by height; capped by width so it fits on mobile
   const PHOTO_TX = '-55%';                         // head x≈0.554 → shift left so it's centred with the nav
-  const PHOTO_PARALLAX = 0.3;     // how much the portrait LAGS the scroll (lingers while the section rises)
   const RANGE = 1.0;              // scroll distance (× viewport) over which the choreography completes
   const LERP = 0.16;              // scrub smoothing toward the live scroll position
   const TEXT_DRIFT_PX = 140;      // px the hero text + badge drift up as they fade (× breakpoint factor)
@@ -76,7 +75,7 @@
 
     // Declared before any apply(0) call (incl. the reduced-motion branch) so they
     // aren't read in their temporal dead zone.
-    let bp = { glowMul: 1.0, drift: 1.0 };
+    let bp = { rest: 0.5, bright: 0.25, parallax: 0.3, hideAt: 0.32, hideSpan: 0.6, glowRest: 0.28, glowMul: 1.0, drift: 1.0 };
     let badgeHosts = null;
     let wcOn = true;                              // will-change currently on (set in the cssText below)
 
@@ -128,23 +127,33 @@
     //      be MUCH bigger — it's allowed to overflow the viewport width (sides
     //      clip; the head stays centred via translateX so the face is always in
     //      view). Head-centring is width-relative, so it holds at any size. ----
+    //      Each breakpoint also carries its own opacity/dissolve profile: small
+    //      screens start the portrait FAINTER (it sits behind the text) and, because
+    //      it's fainter, let the portrait + glow LINGER longer on scroll (later/wider
+    //      `hide` + more `parallax`) so they fill the scroll space and approach the
+    //      next section — without making the hero any taller. Glow rest is higher on
+    //      small screens so the aurora is visible through the faint portrait.
     function computeBp() {
       const w = window.innerWidth, vh = window.innerHeight;
-      let ph, glowMul, drift;
+      let ph;
       if (w >= 992) {                 // desktop — unchanged (approved)
-        ph = 'min(82vh, 90vw, 920px)'; glowMul = 1.0;  drift = 1.0;
-      } else if (vh < 560) {          // landscape phones / short viewports (height-bound)
-        ph = 'min(90vh, 78vw)';        glowMul = 0.9;  drift = 0.7;
-      } else if (w >= 768) {          // tablet portrait — bigger
-        ph = 'min(90vh, 108vw)';       glowMul = 0.95; drift = 0.85;
-      } else if (w >= 480) {          // large phone — much bigger
-        ph = 'min(88vh, 132vw)';       glowMul = 0.85; drift = 0.7;
-      } else {                        // phone — much bigger
-        ph = 'min(86vh, 150vw)';       glowMul = 0.8;  drift = 0.6;
+        ph = 'min(82vh, 90vw, 920px)';
+        bp = { rest: 0.5,  bright: 0.25, parallax: 0.30, hideAt: 0.32, hideSpan: 0.60, glowRest: 0.28, glowMul: 1.0,  drift: 1.0 };
+      } else if (vh < 560) {          // landscape phones / short viewports
+        ph = 'min(90vh, 78vw)';
+        bp = { rest: 0.40, bright: 0.17, parallax: 0.40, hideAt: 0.42, hideSpan: 0.56, glowRest: 0.40, glowMul: 0.95, drift: 0.7 };
+      } else if (w >= 768) {          // tablet portrait
+        ph = 'min(90vh, 108vw)';
+        bp = { rest: 0.40, bright: 0.18, parallax: 0.42, hideAt: 0.42, hideSpan: 0.56, glowRest: 0.40, glowMul: 0.98, drift: 0.85 };
+      } else if (w >= 480) {          // large phone
+        ph = 'min(88vh, 132vw)';
+        bp = { rest: 0.38, bright: 0.17, parallax: 0.45, hideAt: 0.44, hideSpan: 0.55, glowRest: 0.42, glowMul: 0.95, drift: 0.7 };
+      } else {                        // phone
+        ph = 'min(86vh, 150vw)';
+        bp = { rest: 0.36, bright: 0.16, parallax: 0.48, hideAt: 0.45, hideSpan: 0.55, glowRest: 0.44, glowMul: 0.92, drift: 0.6 };
       }
       photo.style.height = ph;
-      bp = { glowMul: glowMul, drift: drift };
-      glow.style.transform = 'scale(' + (1.25 * glowMul) + ')';
+      glow.style.transform = 'scale(' + (1.25 * bp.glowMul) + ')';
     }
     computeBp();
 
@@ -180,8 +189,8 @@
     //      a smooth hand-off with no frozen frame and no empty gap. ----
     function apply(s) {
       const vh = window.innerHeight || 1;
-      const bright = smoothstep(clamp(s / 0.3));            // a touch LESS DARK, early
-      const hide = smoothstep(clamp((s - 0.32) / 0.6));     // then dissolves to invisible (~0.92)
+      const bright = smoothstep(clamp(s / 0.3));                      // a touch LESS DARK, early
+      const hide = smoothstep(clamp((s - bp.hideAt) / bp.hideSpan));  // then dissolves (later/wider on small → lingers)
       // will-change hygiene: only keep the photo/glow promoted to GPU layers while
       // they're actually animating; release them once fully dissolved (toggled at
       // the threshold, not every frame). Re-promoted when you scroll back up.
@@ -191,11 +200,11 @@
         photo.style.willChange = wantWC ? 'opacity,transform' : '';
         glow.style.willChange = wantWC ? 'opacity' : '';
       }
-      photo.style.opacity = String((0.5 + 0.25 * bright) * (1 - hide));   // 0.5 → 0.75 → 0
+      photo.style.opacity = String((bp.rest + bp.bright * bright) * (1 - hide));   // fainter rest on small screens
       // Parallax lag: the portrait rises slower than the page so it lingers, large,
-      // covering the hand-off while the section rises beneath it.
-      photo.style.transform = 'translate(' + PHOTO_TX + ',' + (s * vh * PHOTO_PARALLAX) + 'px)';
-      glow.style.opacity = String(clamp((0.28 + 0.2 * bright) * (1 - hide)));   // soft → bloom → fade
+      // covering the hand-off while the section rises beneath it (more lag on small).
+      photo.style.transform = 'translate(' + PHOTO_TX + ',' + (s * vh * bp.parallax) + 'px)';
+      glow.style.opacity = String(clamp((bp.glowRest + 0.2 * bright) * (1 - hide)));   // soft → bloom → fade
       const driftY = -smoothstep(clamp(s / 0.85)) * TEXT_DRIFT_PX * bp.drift;
       const fade = smoothstep(clamp((s - 0.1) / 0.55));     // text + badge gone by ~0.65
       textcol.style.transform = 'translateY(' + driftY + 'px)';
