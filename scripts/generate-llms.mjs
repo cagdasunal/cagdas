@@ -28,6 +28,9 @@ const SOURCE_DEFAULT = `${ORIGIN}/sitemap.xml`;
 const ORG_NAME = "Çağdaş Ünal";
 const ORG_DESC =
   "Freelance Webflow developer building clean, custom, CMS-driven websites for agencies and businesses who care what's under the hood.";
+// High-intent pages worth listing for an LLM but intentionally NOT in the sitemap
+// (thin/utility pages Webflow keeps out of search indexing). Same-origin only.
+const EXTRA_URLS = [`${ORIGIN}/call`];
 const TIMEOUT_MS = 15000;
 const MIN_URLS = 3; // a sane sitemap has at least this many; fewer => treat the fetch as broken
 
@@ -118,6 +121,12 @@ async function main() {
     console.error(`error: parsed only ${urls.length} same-origin URL(s) from ${SOURCE} (min ${MIN_URLS}); refusing to write.`);
     return 1;
   }
+  // Add the curated extra pages (not in the sitemap), then re-sort root-first/alpha.
+  for (const e of EXTRA_URLS) {
+    const u = e.replace(/([^:])\/{2,}/g, "$1/").replace(/\/+$/, "") || ORIGIN;
+    if (u.startsWith(ORIGIN) && !urls.includes(u)) urls.push(u);
+  }
+  urls.sort((a, b) => (a === ORIGIN ? -1 : b === ORIGIN ? 1 : a.localeCompare(b)));
   const pages = await Promise.all(urls.map(pageMeta));
   const output = buildLlms(pages);
   if (dryRun) {
