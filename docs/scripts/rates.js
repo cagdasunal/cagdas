@@ -49,6 +49,18 @@
   if (window.__cagdasRates) return;
   window.__cagdasRates = true;
 
+  // ───────────────────────────── ANALYTICS ───────────────────────────────────
+  // Push behavioral events to the dataLayer for GTM-KCKHRLL5 → GA4 (matches the
+  // cagdas-events.js taxonomy). Inert until GTM is live. The /rates currency wheel +
+  // pricing toggle are owned here, so this bundle emits their events directly:
+  //   currency_picker_open · currency_select (currency) · web_design_toggle (web_design_included)
+  const dlPush = (name, params) => {
+    window.dataLayer = window.dataLayer || [];
+    const o = { event: name };
+    if (params) for (const k in params) if (Object.prototype.hasOwnProperty.call(params, k)) o[k] = params[k];
+    window.dataLayer.push(o);
+  };
+
   // ───────────────────────────── CONFIG ──────────────────────────────────────
   // [code, name, fallbackRate, symbol]. Wheel order = this order (matches the
   // design). The cron saves ~160 rates, so a new currency needs no cron change —
@@ -246,7 +258,7 @@
   // Selecting a currency: roll the prices + relabel. persist only on commit.
   function setCurrency(code, persist) {
     if (code !== state.code) { state.code = code; applyCurrency(true); }
-    if (persist) lsSet(LS_CURRENCY, code);
+    if (persist) { lsSet(LS_CURRENCY, code); dlPush("currency_select", { currency: code }); }
   }
 
   // ───────────────────────────── TRIGGER (hero code + chevron) ───────────────
@@ -408,6 +420,7 @@
   function openWheel() {
     if (open) return;
     open = true;
+    dlPush("currency_picker_open");
     trigger.style.transform = "";          // measure the untransformed position
     pinAnchor = trigger.offsetLeft;
     if (pinObserver) {
@@ -512,6 +525,7 @@
       state.webDesign = !state.webDesign;
       toggleBtn.setAttribute("aria-pressed", state.webDesign ? "true" : "false");
       applyCurrency(true);
+      dlPush("web_design_toggle", { web_design_included: state.webDesign });
     });
   }
 
