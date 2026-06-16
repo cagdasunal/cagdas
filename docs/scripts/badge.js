@@ -103,31 +103,37 @@
 
   // --- scoped CSS (badge only; namespaced; nothing leaks to the page) -----
   const CSS = [
-    ".webflow_badge{--wfb-hover:#8f8f8f;position:absolute;top:50vh;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100;transition:opacity .3s ease;text-decoration:none}",
+    ".webflow_badge{--wfb-hover:#8f8f8f;position:absolute;top:50vh;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100;transition:opacity .3s ease;text-decoration:none;-webkit-tap-highlight-color:transparent}",
     // Scroll fade (ALL breakpoints): JS toggles .wfb-faded as the page scrolls
     // past the first viewport; the badge fades back in when the first 100vh
     // returns to view. Opacity only — positioning/transform are untouched.
     ".webflow_badge.wfb-faded{opacity:0;pointer-events:none}",
-    ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;background:#080808;border-radius:12px;padding:16px 11px;box-sizing:border-box;margin:0 auto}",
+    ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;background:#080808;border:none;border-radius:12px;padding:8px;box-sizing:border-box;margin:0 auto}",
     ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:13px}",
     ".webflow_badge .wfb-vsvg{display:block;overflow:visible}",
     ".webflow_badge .wfb-hsvg{display:none;overflow:visible}",
     ".webflow_badge .wfb-vword{transform-box:fill-box;transition:opacity .4s ease,transform .55s cubic-bezier(.22,.9,.24,1)}",
     ".webflow_badge .wfb-vword.wfb-from{fill:#fff;opacity:1;transform:translateX(0)}",
     ".webflow_badge .wfb-vword.wfb-to{fill:var(--wfb-hover);opacity:0;transform:translateX(-7px)}",
-    ".webflow_badge .wfb-corner:hover .wfb-vword.wfb-from{opacity:0;transform:translateX(7px)}",
-    ".webflow_badge .wfb-corner:hover .wfb-vword.wfb-to{opacity:1;transform:translateX(0)}",
     ".webflow_badge .wfb-seal{position:relative;flex:none;display:inline-block;width:30px;height:30px}",
     ".webflow_badge .wfb-seal-bg{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .45s ease}",
     ".webflow_badge .wfb-glyphs{position:absolute;inset:0;display:grid;place-items:center}",
     ".webflow_badge .wfb-tween{display:block;transform:scale(1.42);transition:transform .45s cubic-bezier(.22,.9,.24,1)}",
     ".webflow_badge .wfb-tween path{fill:#146EF5;transition:fill .45s ease}",
-    // Hover: the Webflow W transforms into the verified seal-with-tick — the seal
-    // blooms in (opacity), the glyph morphs W→check (JS), shrinks to fit the seal
-    // (scale 1.42→1), and recolours blue→white. At rest only the blue W shows.
-    ".webflow_badge .wfb-corner:hover .wfb-seal-bg{opacity:1}",
-    ".webflow_badge .wfb-corner:hover .wfb-tween{transform:scale(1)}",
-    ".webflow_badge .wfb-corner:hover .wfb-tween path{fill:#fff}",
+    // Hover is DESKTOP-ONLY (≥992px). On tablet/landscape/mobile (≤991px) hover
+    // is unreliable on touch and can stick, so the badge stays at REST there
+    // (blue W, "Certified Partner") — the JS morph is gated to ≥992px too (see
+    // runSeal). On hover the Webflow W transforms into the verified
+    // seal-with-tick: the seal blooms in (opacity), the label crossfades, the
+    // glyph morphs W→check (JS), shrinks to fit the seal (scale 1.42→1), and
+    // recolours blue→white.
+    "@media (min-width:992px){" +
+      ".webflow_badge .wfb-corner:hover .wfb-vword.wfb-from{opacity:0;transform:translateX(7px)}" +
+      ".webflow_badge .wfb-corner:hover .wfb-vword.wfb-to{opacity:1;transform:translateX(0)}" +
+      ".webflow_badge .wfb-corner:hover .wfb-seal-bg{opacity:1}" +
+      ".webflow_badge .wfb-corner:hover .wfb-tween{transform:scale(1)}" +
+      ".webflow_badge .wfb-corner:hover .wfb-tween path{fill:#fff}" +
+    "}",
     "@media (prefers-reduced-motion:reduce){.webflow_badge .wfb-seal-bg,.webflow_badge .wfb-tween,.webflow_badge .wfb-tween path,.webflow_badge .wfb-vword{transition:none}}",
     // ≤767px (landscape + mobile): horizontal lockup, scaled down a little
     // (0.85), anchored bottom-LEFT (left:5vw) at bottom:50px within the FIRST
@@ -136,7 +142,7 @@
     // NOT rotated. (The scroll fade is global — see .wfb-faded in the base CSS.)
     "@media (max-width:767px){" +
       ".webflow_badge{top:calc(100vh - 50px);bottom:auto;left:5vw;right:auto;transform:translateY(-100%)}" +
-      ".webflow_badge .wfb-corner{padding:9px 14px;transform:scale(0.85);transform-origin:bottom left}" +
+      ".webflow_badge .wfb-corner{padding:7px 10px;transform:scale(0.85);transform-origin:bottom left}" +
       ".webflow_badge .wfb-vlockup{flex-direction:row;gap:10px}" +
       ".webflow_badge .wfb-vsvg{display:none}" +
       ".webflow_badge .wfb-hsvg{display:block}" +
@@ -251,10 +257,11 @@
   function runSeal(pathEl, isHover) {
     const morph = makeMorph(sampleRing(CB_W, false), sampleRing(CB_CHECK, true));
     const snap = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mqDesktop = matchMedia('(min-width:992px)'); // hover only ≥992px
     let cur = 0;
     pathEl.setAttribute('d', morph(0)); // rest = W
     (function frame() {
-      const goal = isHover() ? 1 : 0;
+      const goal = (isHover() && mqDesktop.matches) ? 1 : 0;
       cur += (goal - cur) * (snap ? 1 : 0.14);
       pathEl.setAttribute('d', morph(cur));
       requestAnimationFrame(frame);
