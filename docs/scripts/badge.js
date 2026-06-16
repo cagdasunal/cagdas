@@ -108,7 +108,7 @@
     // past the first viewport; the badge fades back in when the first 100vh
     // returns to view. Opacity only — positioning/transform are untouched.
     ".webflow_badge.wfb-faded{opacity:0;pointer-events:none}",
-    ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;background:#080808;border:none;border-radius:12px;padding:8px;box-sizing:border-box;margin:0 auto}",
+    ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;background:#080808;border:none;border-radius:12px;padding:0;box-sizing:border-box;margin:0 auto}",
     ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:13px}",
     ".webflow_badge .wfb-vsvg{display:block;overflow:visible}",
     ".webflow_badge .wfb-hsvg{display:none;overflow:visible}",
