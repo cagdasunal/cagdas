@@ -9,8 +9,9 @@
  *   - A living Webflow-blue (#146EF5) seal whose inner glyph morphs between a
  *     filled checkmark and the Webflow "W" on a slow loop.
  *   - On hover: the label crossfades to "Verify on Webflow" (also outlines)
- *     and the seal resolves to the "W". This script renders NO link — wire the
- *     URL on the Webflow element itself (e.g. make .webflow_badge a Link Block).
+ *     and the seal resolves to the "W". The badge is a link to BADGE_HREF
+ *     (opens in a new tab) — the auto-created element is an <a>; set
+ *     BADGE_HREF='' to render a plain, non-linking div instead.
  *   - Respects prefers-reduced-motion (renders the check statically, no loop).
  *
  * Self-contained — ZERO runtime dependencies and ZERO web requests. Every
@@ -26,10 +27,10 @@
  *   natural shaping) to match the browser's font rendering of the first version.
  *
  * Webflow usage — zero setup: just load this bundle. If no .webflow_badge
- *   element exists, the script creates one (a div) and positions it. Optional:
- *   add your own  <a class="webflow_badge">  (a Link Block) to make the badge a
- *   link — set the URL on it; this script adds no link of its own, and skips
- *   creating the div when one already exists.
+ *   element exists, the script creates one (an <a> linking to BADGE_HREF in a
+ *   new tab, or a div if BADGE_HREF is '') and positions it. If you instead
+ *   place your own <a class="webflow_badge"> in Webflow, the script uses it and
+ *   sets the BADGE_HREF/target on it (skips creating its own element).
  *   Positioning: the script moves .webflow_badge to <body> and sets
  *   position:absolute, vertically centered in the FIRST viewport (top:50vh) on
  *   load and scrolling away with the page (NOT sticky/fixed). Right edge pinned
@@ -58,13 +59,18 @@
   if (window.__cagdasWebflowBadge) return; // guard against double-load
   window.__cagdasWebflowBadge = true;
 
-  // ── TEMPORARY GLOBAL HIDE (2026-06-14) ──────────────────────────────────
-  // Master kill-switch: when true the badge renders on NO page (and any
-  // authored .webflow_badge element is hidden via display:none). To restore,
-  // flip this to false and rebuild — the badge returns everywhere EXCEPT the
-  // existing per-page ≤991px hides (contact/call/terms/privacy/cookies via
-  // .wfb-page-hide), which stay in effect. Do NOT touch HIDE_PAGES to restore.
-  const BADGE_HIDDEN = true;
+  // ── Global kill-switch ──────────────────────────────────────────────────
+  // When true the badge renders on NO page (any authored .webflow_badge is
+  // hidden via display:none). When false (current) the badge shows everywhere
+  // EXCEPT the per-page ≤991px hides (contact/call/terms/privacy/cookies via
+  // .wfb-page-hide), which stay in effect regardless. (Hidden 2026-06-14,
+  // shown again 2026-06-15.)
+  const BADGE_HIDDEN = false;
+
+  // The badge is a link to this URL, opened in a new tab. Empty string ('')
+  // = no link (render the badge as a plain div). Applied to the auto-created
+  // element and to any author-placed <a class="webflow_badge">.
+  const BADGE_HREF = 'https://webflow.com/@cagdas';
 
   const TARGET = '.webflow_badge';
   const STYLE_ID = 'cagdas-webflow-badge-styles';
@@ -93,7 +99,7 @@
 
   // --- scoped CSS (badge only; namespaced; nothing leaks to the page) -----
   const CSS = [
-    ".webflow_badge{--wfb-hover:#8f8f8f;position:absolute;top:50vh;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100;transition:opacity .3s ease}",
+    ".webflow_badge{--wfb-hover:#8f8f8f;position:absolute;top:50vh;right:max(5vw, calc((100vw - 120rem) / 2));left:auto;bottom:auto;transform:translateY(-50%);z-index:100;transition:opacity .3s ease;text-decoration:none}",
     // Scroll fade (ALL breakpoints): JS toggles .wfb-faded as the page scrolls
     // past the first viewport; the badge fades back in when the first 100vh
     // returns to view. Opacity only — positioning/transform are untouched.
@@ -263,8 +269,15 @@
     // it has no layout impact; this keeps placement consistent everywhere.
     if (host.parentNode !== document.body) document.body.appendChild(host);
 
-    // No link here — the badge is just the visual. Wrap .webflow_badge in a
-    // Webflow link (or add the URL to it) to make it clickable.
+    // Wire the badge as a link to BADGE_HREF, opening in a new tab. Only an
+    // anchor can navigate: the auto-created host is an <a> (see init), and any
+    // author-placed <a class="webflow_badge"> is given the same href/target.
+    if (BADGE_HREF && host.tagName === 'A') {
+      host.setAttribute('href', BADGE_HREF);
+      host.setAttribute('target', '_blank');
+      host.setAttribute('rel', 'noopener noreferrer');
+    }
+
     host.innerHTML =
       '<span class="wfb-corner">' +
         '<span class="wfb-vlockup">' + labelSVG() + sealHTML() + '</span>' +
@@ -322,10 +335,11 @@
     injectStyles();
     const hosts = document.querySelectorAll(TARGET);
     if (!hosts.length) {
-      // No .webflow_badge on the page — create one (a div) so the badge needs
-      // zero Webflow setup. To make it a link instead, add your own
-      // <a class="webflow_badge"> in Webflow and this branch is skipped.
-      const created = document.createElement('div');
+      // No .webflow_badge on the page — create one so the badge needs zero
+      // Webflow setup. It's an <a> when BADGE_HREF is set (clickable link,
+      // wired in setup), else a plain div. An author-placed element is used
+      // as-is when present (this branch is skipped).
+      const created = document.createElement(BADGE_HREF ? 'a' : 'div');
       created.className = 'webflow_badge';
       (document.body || document.documentElement).appendChild(created);
       setup(created);
