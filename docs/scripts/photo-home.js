@@ -4,12 +4,14 @@
  * Identical to home.js in every animation respect — the soft indigo aurora, the entrance fade,
  * the on-scroll brighten→DISSOLVE with a parallax lag, the hero text + Webflow badge drift — but the
  * single static portrait is replaced by a SCROLL-SCRUBBED IMAGE SEQUENCE: as you scroll, the same
- * lerp-smoothed progress `s` (0→1) picks a transparent frame and draws it to a <canvas>, so the
- * portrait gently comes alive (a warm smile blooms + a small shoulder/upper-body settle; the head
- * stays put — no turns). Frames are transparent (the indigo glow shows through) and pre-graded to the
- * home.js look (grayscale, contrast 1.05, brightness 0.92), so NO CSS filter is applied here.
+ * lerp-smoothed progress `s` picks a transparent frame and draws it to a <canvas>, so the portrait
+ * gently comes alive (a warm expression blooms + a subtle head movement) WITHOUT ever breaking eye
+ * contact with the camera. The sequence is FRONT-LOADED (mapped to s/bp.playEnd) so the whole clip
+ * plays inside the visible window, before the hero dissolves. Frames are transparent (the indigo glow
+ * shows through) and pre-graded to the home.js look (grayscale, contrast 1.05, brightness 0.92), so
+ * NO CSS filter is applied here.
  *
- * Frames: 91 transparent AVIF, ~16KB each (~1.44MB total), hosted on GitHub Pages (files.cagd.as).
+ * Frames: 121 transparent AVIF, ~17KB each (~2.0MB total), hosted on GitHub Pages (files.cagd.as).
  * The hero still DISSOLVES out on scroll, so the sequence is one-directional (no loop).
  *
  * Build: python3 scripts/site_deploy.py build --site cagdas --src photo-home
@@ -23,14 +25,14 @@
 
   // ---- Frame sequence (transparent, pre-graded AVIF on the GitHub-Pages CDN). ----
   const FRAME_BASE = 'https://files.cagd.as/hero-frames/';
-  const FRAME_COUNT = 91;
-  const FRAME_W = 846, FRAME_H = 920;           // native frame px (canvas bitmap size)
+  const FRAME_COUNT = 121;
+  const FRAME_W = 927, FRAME_H = 920;           // native frame px (canvas bitmap size)
   function frameURL(i) { let n = '' + (i + 1); while (n.length < 3) n = '0' + n; return FRAME_BASE + 'f' + n + '.avif'; }
 
   const GLOW_RGB = '72,66,248';
-  const PHOTO_AR = '846 / 920';                 // the sequence frame's intrinsic aspect
+  const PHOTO_AR = '927 / 920';                 // the sequence frame's intrinsic aspect
   const PHOTO_H  = 'min(82vh, 90vw, 920px)';    // sized by height; capped by width so it fits on mobile
-  const PHOTO_TX = '-59%';                       // head x≈0.586 → shift left so it's centred with the nav
+  const PHOTO_TX = '-57%';                       // head x≈0.573 → shift left so it's centred with the nav
   const RANGE = 1.0;
   const LERP = 0.16;
   const TEXT_DRIFT_PX = 140;
@@ -53,7 +55,7 @@
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    let bp = { rest: 0.5, bright: 0.25, parallax: 0.3, glowPar: 0, glowShiftY: 0, hideAt: 0.32, hideSpan: 0.6, glowRest: 0.28, glowBloom: 0.2, glowMul: 1.0, drift: 1.0, driftSpan: 0.85, fadeStart: 0.1, fadeSpan: 0.55 };
+    let bp = { rest: 0.5, bright: 0.25, parallax: 0.3, glowPar: 0, glowShiftY: 0, hideAt: 0.32, hideSpan: 0.6, glowRest: 0.28, glowBloom: 0.2, glowMul: 1.0, drift: 1.0, driftSpan: 0.85, fadeStart: 0.1, fadeSpan: 0.55, playEnd: 0.42 };
     let badgeHosts = null;
     let wcOn = true;
 
@@ -112,19 +114,19 @@
       let ph, pb;
       if (w >= 992) {                 // desktop — UNCHANGED (approved): static glow, slow content fade
         ph = 'min(82vh, 90vw, 920px)'; pb = '0';
-        bp = { rest: 0.5,  bright: 0.25, parallax: 0.30, glowPar: 0,    glowShiftY: 0,    hideAt: 0.32, hideSpan: 0.60, glowRest: 0.28, glowBloom: 0.20, glowMul: 1.0,  drift: 1.0,  driftSpan: 0.85, fadeStart: 0.10, fadeSpan: 0.55 };
+        bp = { rest: 0.5,  bright: 0.25, parallax: 0.30, glowPar: 0,    glowShiftY: 0,    hideAt: 0.32, hideSpan: 0.60, glowRest: 0.28, glowBloom: 0.20, glowMul: 1.0,  drift: 1.0,  driftSpan: 0.85, fadeStart: 0.10, fadeSpan: 0.55, playEnd: 0.42 };
       } else if (vh < 560) {          // landscape phones / short viewports
         ph = 'min(90vh, 78vw)'; pb = '4vh';
-        bp = { rest: 0.40, bright: 0.17, parallax: 0.40, glowPar: 0.40, glowShiftY: 0.12, hideAt: 0.42, hideSpan: 0.56, glowRest: 0, glowBloom: 0.85, glowMul: 0.95, drift: 0.7,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22 };
+        bp = { rest: 0.40, bright: 0.17, parallax: 0.40, glowPar: 0.40, glowShiftY: 0.12, hideAt: 0.42, hideSpan: 0.56, glowRest: 0, glowBloom: 0.85, glowMul: 0.95, drift: 0.7,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22, playEnd: 0.52 };
       } else if (w >= 768) {          // tablet portrait
         ph = 'min(90vh, 108vw)'; pb = '9vh';
-        bp = { rest: 0.40, bright: 0.18, parallax: 0.42, glowPar: 0.42, glowShiftY: 0.15, hideAt: 0.42, hideSpan: 0.56, glowRest: 0, glowBloom: 0.85, glowMul: 0.98, drift: 0.85, driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22 };
+        bp = { rest: 0.40, bright: 0.18, parallax: 0.42, glowPar: 0.42, glowShiftY: 0.15, hideAt: 0.42, hideSpan: 0.56, glowRest: 0, glowBloom: 0.85, glowMul: 0.98, drift: 0.85, driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22, playEnd: 0.52 };
       } else if (w >= 480) {          // large phone
         ph = 'min(88vh, 132vw)'; pb = '9vh';
-        bp = { rest: 0.38, bright: 0.17, parallax: 0.45, glowPar: 0.45, glowShiftY: 0.16, hideAt: 0.44, hideSpan: 0.55, glowRest: 0, glowBloom: 0.85, glowMul: 0.95, drift: 0.7,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22 };
+        bp = { rest: 0.38, bright: 0.17, parallax: 0.45, glowPar: 0.45, glowShiftY: 0.16, hideAt: 0.44, hideSpan: 0.55, glowRest: 0, glowBloom: 0.85, glowMul: 0.95, drift: 0.7,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22, playEnd: 0.54 };
       } else {                        // phone
         ph = 'min(86vh, 150vw)'; pb = '9vh';
-        bp = { rest: 0.36, bright: 0.16, parallax: 0.48, glowPar: 0.48, glowShiftY: 0.16, hideAt: 0.45, hideSpan: 0.55, glowRest: 0, glowBloom: 0.85, glowMul: 0.92, drift: 0.6,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22 };
+        bp = { rest: 0.36, bright: 0.16, parallax: 0.48, glowPar: 0.48, glowShiftY: 0.16, hideAt: 0.45, hideSpan: 0.55, glowRest: 0, glowBloom: 0.85, glowMul: 0.92, drift: 0.6,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22, playEnd: 0.54 };
       }
       photo.style.height = ph;
       photo.style.bottom = pb;
@@ -155,7 +157,7 @@
 
     function apply(s) {
       const vh = window.innerHeight || 1;
-      drawFrame(Math.round(clamp(s) * (FRAME_COUNT - 1)));   // <-- scrub the sequence
+      drawFrame(Math.round(clamp(s / bp.playEnd) * (FRAME_COUNT - 1)));   // <-- front-loaded scrub: whole clip plays by s=playEnd, before the dissolve
       const bright = smoothstep(clamp(s / 0.3));
       const hide = smoothstep(clamp((s - bp.hideAt) / bp.hideSpan));
       const wantWC = hide < 0.995;
