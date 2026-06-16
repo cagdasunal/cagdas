@@ -1,18 +1,22 @@
 /*!
  * badge.js — "Webflow Certified Partner" badge for cagd.as
  *
- * Injects a vertical corner badge into every .webflow_badge on the page:
+ * Injects the official Webflow Certified Partner badge into every
+ * .webflow_badge on the page — a black (#080808) rounded card holding, top to
+ * bottom, the Webflow icon and the "Certified Partner" lockup:
  *   - "Certified Partner" set vertically (reads bottom-to-top), as TRUE SVG
  *     <path> outlines vectorized from WF Visual Sans 600 — NOT live <text>.
  *     No @font-face, no font download, no document.fonts. The <g> is rotated
  *     -90deg at author time so the lockup is authored natively vertical.
- *   - A living Webflow-blue (#146EF5) seal whose inner glyph morphs between a
- *     filled checkmark and the Webflow "W" on a slow loop.
- *   - On hover: the label crossfades to "Verify on Webflow" (also outlines)
- *     and the seal resolves to the "W". The badge is a link to BADGE_HREF
- *     (opens in a new tab) — the auto-created element is an <a>; set
- *     BADGE_HREF='' to render a plain, non-linking div instead.
- *   - Respects prefers-reduced-motion (renders the check statically, no loop).
+ *   - At REST the icon is the Webflow-blue (#146EF5) "W" (the official mark).
+ *     On HOVER it TRANSFORMS into the verified seal-with-tick: the blue seal
+ *     blooms in (opacity), the glyph morphs W→check (JS ring-lerp) + shrinks to
+ *     fit the seal (scale) + recolours blue→white, and the label crossfades to
+ *     "Verify on Webflow". The badge is a link to BADGE_HREF (opens in a new
+ *     tab) — the auto-created element is an <a>; set BADGE_HREF='' for a plain,
+ *     non-linking div.
+ *   - Respects prefers-reduced-motion (the morph snaps instead of easing; CSS
+ *     transitions are disabled).
  *
  * Self-contained — ZERO runtime dependencies and ZERO web requests. Every
  *   glyph (labels + seal) is baked path data; it injects its own scoped <style>
@@ -104,8 +108,8 @@
     // past the first viewport; the badge fades back in when the first 100vh
     // returns to view. Opacity only — positioning/transform are untouched.
     ".webflow_badge.wfb-faded{opacity:0;pointer-events:none}",
-    ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;height:190px;margin:0 auto}",
-    ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:9px}",
+    ".webflow_badge .wfb-corner{display:flex;align-items:center;justify-content:center;width:auto;background:#080808;border-radius:12px;padding:16px 11px;box-sizing:border-box;margin:0 auto}",
+    ".webflow_badge .wfb-vlockup{display:flex;flex-direction:column;align-items:center;gap:13px}",
     ".webflow_badge .wfb-vsvg{display:block;overflow:visible}",
     ".webflow_badge .wfb-hsvg{display:none;overflow:visible}",
     ".webflow_badge .wfb-vword{transform-box:fill-box;transition:opacity .4s ease,transform .55s cubic-bezier(.22,.9,.24,1)}",
@@ -114,9 +118,17 @@
     ".webflow_badge .wfb-corner:hover .wfb-vword.wfb-from{opacity:0;transform:translateX(7px)}",
     ".webflow_badge .wfb-corner:hover .wfb-vword.wfb-to{opacity:1;transform:translateX(0)}",
     ".webflow_badge .wfb-seal{position:relative;flex:none;display:inline-block;width:30px;height:30px}",
-    ".webflow_badge .wfb-seal-bg{position:absolute;inset:0;width:100%;height:100%;display:block}",
+    ".webflow_badge .wfb-seal-bg{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .45s ease}",
     ".webflow_badge .wfb-glyphs{position:absolute;inset:0;display:grid;place-items:center}",
-    ".webflow_badge .wfb-tween{display:block}",
+    ".webflow_badge .wfb-tween{display:block;transform:scale(1.42);transition:transform .45s cubic-bezier(.22,.9,.24,1)}",
+    ".webflow_badge .wfb-tween path{fill:#146EF5;transition:fill .45s ease}",
+    // Hover: the Webflow W transforms into the verified seal-with-tick — the seal
+    // blooms in (opacity), the glyph morphs W→check (JS), shrinks to fit the seal
+    // (scale 1.42→1), and recolours blue→white. At rest only the blue W shows.
+    ".webflow_badge .wfb-corner:hover .wfb-seal-bg{opacity:1}",
+    ".webflow_badge .wfb-corner:hover .wfb-tween{transform:scale(1)}",
+    ".webflow_badge .wfb-corner:hover .wfb-tween path{fill:#fff}",
+    "@media (prefers-reduced-motion:reduce){.webflow_badge .wfb-seal-bg,.webflow_badge .wfb-tween,.webflow_badge .wfb-tween path,.webflow_badge .wfb-vword{transition:none}}",
     // ≤767px (landscape + mobile): horizontal lockup, scaled down a little
     // (0.85), anchored bottom-LEFT (left:5vw) at bottom:50px within the FIRST
     // 100vh (absolute, scrolls away). The scale origin is the bottom-left
@@ -124,8 +136,8 @@
     // NOT rotated. (The scroll fade is global — see .wfb-faded in the base CSS.)
     "@media (max-width:767px){" +
       ".webflow_badge{top:calc(100vh - 50px);bottom:auto;left:5vw;right:auto;transform:translateY(-100%)}" +
-      ".webflow_badge .wfb-corner{height:auto}" +
-      ".webflow_badge .wfb-vlockup{flex-direction:row-reverse;transform:scale(0.85);transform-origin:bottom left}" +
+      ".webflow_badge .wfb-corner{padding:9px 14px;transform:scale(0.85);transform-origin:bottom left}" +
+      ".webflow_badge .wfb-vlockup{flex-direction:row;gap:10px}" +
       ".webflow_badge .wfb-vsvg{display:none}" +
       ".webflow_badge .wfb-hsvg{display:block}" +
     "}",
@@ -173,7 +185,7 @@
   function sealHTML() {
     const bg = '<svg class="wfb-seal-bg" viewBox="86.7 136.5 181.2 180.5" xmlns="' + SVGNS + '">' +
       '<g transform="' + G + '"><path d="' + CB_SEAL + '" fill="#146EF5"/></g></svg>';
-    const inner = '<div class="wfb-glyphs"><svg class="wfb-tween" width="16.2" height="16.2" viewBox="0 0 100 100" xmlns="' + SVGNS + '"><path fill="#fff"></path></svg></div>';
+    const inner = '<div class="wfb-glyphs"><svg class="wfb-tween" width="20" height="20" viewBox="0 0 100 100" xmlns="' + SVGNS + '"><path></path></svg></div>';
     return '<span class="wfb-seal">' + bg + inner + '</span>';
   }
 
@@ -232,29 +244,21 @@
     };
   }
 
-  // --- drive one seal's check<->W morph (auto loop + ease-to-W on hover) --
+  // --- drive the icon glyph: Webflow W (rest) → check/tick (hover). No loop —
+  //     it rests on the W and morphs to the tick only while hovered (in concert
+  //     with the seal blooming in + the recolour/scale, both CSS). morph(0)=W,
+  //     morph(1)=check. Reduced-motion snaps instead of easing.
   function runSeal(pathEl, isHover) {
-    const morph = makeMorph(sampleRing(CB_CHECK, true), sampleRing(CB_W, false));
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      pathEl.setAttribute('d', morph(0)); // static check
-      return;
-    }
-    const ease = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
-    const start = performance.now();
+    const morph = makeMorph(sampleRing(CB_W, false), sampleRing(CB_CHECK, true));
+    const snap = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let cur = 0;
-    (function frame(now) {
-      const p = ((now - start) % CYCLE) / CYCLE;
-      let k;
-      if (p < 0.26) k = 0;
-      else if (p < 0.48) k = ease((p - 0.26) / 0.22);
-      else if (p < 0.74) k = 1;
-      else if (p < 0.96) k = 1 - ease((p - 0.74) / 0.22);
-      else k = 0;
-      const goal = isHover() ? 1 : k;
-      cur += (goal - cur) * 0.10;
+    pathEl.setAttribute('d', morph(0)); // rest = W
+    (function frame() {
+      const goal = isHover() ? 1 : 0;
+      cur += (goal - cur) * (snap ? 1 : 0.14);
       pathEl.setAttribute('d', morph(cur));
       requestAnimationFrame(frame);
-    })(performance.now());
+    })();
   }
 
   function setup(host) {
@@ -278,9 +282,12 @@
       host.setAttribute('rel', 'noopener noreferrer');
     }
 
+    // Icon FIRST, label SECOND — matches the official badge (W/seal on top,
+    // "Certified Partner" below). Desktop column = icon-top; mobile row =
+    // icon-left.
     host.innerHTML =
       '<span class="wfb-corner">' +
-        '<span class="wfb-vlockup">' + labelSVG() + sealHTML() + '</span>' +
+        '<span class="wfb-vlockup">' + sealHTML() + labelSVG() + '</span>' +
       '</span>';
 
     const corner = host.querySelector('.wfb-corner');
