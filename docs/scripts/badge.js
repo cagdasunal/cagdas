@@ -142,7 +142,7 @@
     // NOT rotated. (The scroll fade is global — see .wfb-faded in the base CSS.)
     "@media (max-width:767px){" +
       ".webflow_badge{top:calc(100vh - 50px);bottom:auto;left:5vw;right:auto;transform:translateY(-100%)}" +
-      ".webflow_badge .wfb-corner{padding:7px 10px;transform:scale(0.85);transform-origin:bottom left}" +
+      ".webflow_badge .wfb-corner{padding:0;transform:scale(0.85);transform-origin:bottom left}" +
       ".webflow_badge .wfb-vlockup{flex-direction:row;gap:10px}" +
       ".webflow_badge .wfb-vsvg{display:none}" +
       ".webflow_badge .wfb-hsvg{display:block}" +
