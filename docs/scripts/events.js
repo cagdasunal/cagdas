@@ -23,6 +23,7 @@
  *   cta_click            — clicked a CTA button (cta_label, cta_destination, cta_location)
  *   menu_click           — clicked a header/footer/mobile menu link (menu_item, menu_location)
  *   portfolio_visit      — clicked into a portfolio project's live site (portfolio_name)
+ *   portfolio_details_open — expanded a portfolio item's details ("Read the details", mobile) (portfolio_name)
  *   outbound_click       — clicked any other external link (link_domain — hostname only)
  *   faq_open             — opened an FAQ item (faq_question)
  *   contact_form_start   — began filling the contact form
@@ -197,6 +198,10 @@
     push('visit_start', { traffic_source: trafficSource(rh, us), referrer_host: rh });
   })();
 
+  // de-dupe portfolio "Read the details" opens: the details are hidden by default, so the FIRST
+  // .button_details click per card IS the open — count it once, ignore toggle/close churn.
+  const detailsSeen = new Set();
+
   /* ======================================================================
    * One delegated capture-phase click listener (specific → generic)
    * ====================================================================== */
@@ -214,6 +219,20 @@
         const qEl = (item && item.querySelector('.faq_question')) || faqTrigger;
         const q = clean(qEl.textContent).slice(0, 120);
         if (q) push('faq_open', { faq_question: q });
+      }
+      return;
+    }
+
+    // Portfolio "Read the details" toggle (.button_details, mobile-only) — a <div>, so the
+    // a[href] handler below never sees it. Reveals .work_details; details are hidden by default,
+    // so the FIRST click per card is the OPEN. Fire once per card (de-dupe) — captures "this
+    // visitor expanded this project", not toggle/close churn. NOT a CTA (per the site owner).
+    const detailsBtn = t.closest('.button_details');
+    if (detailsBtn) {
+      const dcard = detailsBtn.closest(SITE_CONFIG.portfolioCardSelector);
+      if (dcard && !detailsSeen.has(dcard)) {
+        detailsSeen.add(dcard);
+        push('portfolio_details_open', { portfolio_name: portfolioName(dcard, detailsBtn) });
       }
       return;
     }
