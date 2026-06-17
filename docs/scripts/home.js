@@ -79,7 +79,7 @@
 
     // Declared before any apply(0) call (incl. the reduced-motion branch) so they
     // aren't read in their temporal dead zone.
-    let bp = { rest: 0.5, bright: 0.25, parallax: 0.3, hideAt: 0.32, hideSpan: 0.6, glowRest: 0.28, glowMul: 1.0, drift: 1.0 };
+    let bp = { rest: 0.5, bright: 0.25, parallax: 0.3, glowPar: 0, glowShiftY: 0, hideAt: 0.32, hideSpan: 0.6, glowRest: 0.28, glowBloom: 0.2, glowMul: 1.0, drift: 1.0, driftSpan: 0.85, fadeStart: 0.1, fadeSpan: 0.55 };
     let badgeHosts = null;
     let wcOn = true;                              // will-change currently on (set in the cssText below)
 
@@ -139,25 +139,35 @@
     //      small screens so the aurora is visible through the faint portrait.
     function computeBp() {
       const w = window.innerWidth, vh = window.innerHeight;
-      let ph;
-      if (w >= 992) {                 // desktop — unchanged (approved)
-        ph = 'min(82vh, 90vw, 920px)';
-        bp = { rest: 0.5,  bright: 0.25, parallax: 0.30, hideAt: 0.32, hideSpan: 0.60, glowRest: 0.28, glowMul: 1.0,  drift: 1.0 };
+      let ph, pb;
+      // DESKTOP (w≥992) is the approved baseline — DO NOT TOUCH. On tablet/landscape/mobile:
+      //  • content is bottom-aligned (Webflow), so the photo is lifted up (pb = bottom offset)
+      //    so the face sits a little higher, clear of the bottom content.
+      //  • glowRest 0 → the glow is INVISIBLE at rest; it only blooms IN on scroll (glowBloom).
+      //  • glowShiftY pushes the glow's bright core DOWN (behind the torso / lower background,
+      //    BELOW the face) so the screen-blended glow never tints the (semi-transparent) face
+      //    blue — the brightest part is well below it. glowBloom is strong so it reads clearly.
+      //  • fadeStart/fadeSpan small → the content clears SOON (~0.25) so the image reads.
+      //  • glowPar = parallax → the glow still rides the photo's lag once it's blooming.
+      if (w >= 992) {                 // desktop — UNCHANGED (approved): static glow, slow content fade
+        ph = 'min(82vh, 90vw, 920px)'; pb = '0';
+        bp = { rest: 0.5,  bright: 0.25, parallax: 0.30, glowPar: 0,    glowShiftY: 0,    hideAt: 0.32, hideSpan: 0.60, glowRest: 0.28, glowBloom: 0.20, glowMul: 1.0,  drift: 1.0,  driftSpan: 0.85, fadeStart: 0.10, fadeSpan: 0.55 };
       } else if (vh < 560) {          // landscape phones / short viewports
-        ph = 'min(90vh, 78vw)';
-        bp = { rest: 0.40, bright: 0.17, parallax: 0.40, hideAt: 0.42, hideSpan: 0.56, glowRest: 0.40, glowMul: 0.95, drift: 0.7 };
+        ph = 'min(90vh, 78vw)'; pb = '4vh';
+        bp = { rest: 0.40, bright: 0.17, parallax: 0.40, glowPar: 0.40, glowShiftY: 0.12, hideAt: 0.42, hideSpan: 0.56, glowRest: 0, glowBloom: 0.85, glowMul: 0.95, drift: 0.7,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22 };
       } else if (w >= 768) {          // tablet portrait
-        ph = 'min(90vh, 108vw)';
-        bp = { rest: 0.40, bright: 0.18, parallax: 0.42, hideAt: 0.42, hideSpan: 0.56, glowRest: 0.40, glowMul: 0.98, drift: 0.85 };
+        ph = 'min(90vh, 108vw)'; pb = '9vh';
+        bp = { rest: 0.40, bright: 0.18, parallax: 0.42, glowPar: 0.42, glowShiftY: 0.15, hideAt: 0.42, hideSpan: 0.56, glowRest: 0, glowBloom: 0.85, glowMul: 0.98, drift: 0.85, driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22 };
       } else if (w >= 480) {          // large phone
-        ph = 'min(88vh, 132vw)';
-        bp = { rest: 0.38, bright: 0.17, parallax: 0.45, hideAt: 0.44, hideSpan: 0.55, glowRest: 0.42, glowMul: 0.95, drift: 0.7 };
+        ph = 'min(88vh, 132vw)'; pb = '9vh';
+        bp = { rest: 0.38, bright: 0.17, parallax: 0.45, glowPar: 0.45, glowShiftY: 0.16, hideAt: 0.44, hideSpan: 0.55, glowRest: 0, glowBloom: 0.85, glowMul: 0.95, drift: 0.7,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22 };
       } else {                        // phone
-        ph = 'min(86vh, 150vw)';
-        bp = { rest: 0.36, bright: 0.16, parallax: 0.48, hideAt: 0.45, hideSpan: 0.55, glowRest: 0.44, glowMul: 0.92, drift: 0.6 };
+        ph = 'min(86vh, 150vw)'; pb = '9vh';
+        bp = { rest: 0.36, bright: 0.16, parallax: 0.48, glowPar: 0.48, glowShiftY: 0.16, hideAt: 0.45, hideSpan: 0.55, glowRest: 0, glowBloom: 0.85, glowMul: 0.92, drift: 0.6,  driftSpan: 0.42, fadeStart: 0.03, fadeSpan: 0.22 };
       }
       photo.style.height = ph;
-      glow.style.transform = 'scale(' + (1.25 * bp.glowMul) + ')';
+      photo.style.bottom = pb;        // lift the portrait up on small screens (content is bottom-aligned)
+      // glow transform (scale + shift + the shared parallax lag) is owned by apply().
     }
     computeBp();
 
@@ -202,15 +212,19 @@
       if (wantWC !== wcOn) {
         wcOn = wantWC;
         photo.style.willChange = wantWC ? 'opacity,transform' : '';
-        glow.style.willChange = wantWC ? 'opacity' : '';
+        glow.style.willChange = wantWC ? 'opacity,transform' : '';
       }
+      // Parallax LAG — the portrait rises slower than the page so it lingers, large,
+      // while the next section rises beneath it (more lag on small screens). The glow
+      // gets its OWN lag (bp.glowPar): on small screens glowPar === parallax so the glow
+      // MOVES WITH the photo; on desktop glowPar is 0 so the glow stays put (unchanged).
+      const lag = s * vh * bp.parallax;
       photo.style.opacity = String((bp.rest + bp.bright * bright) * (1 - hide));   // fainter rest on small screens
-      // Parallax lag: the portrait rises slower than the page so it lingers, large,
-      // covering the hand-off while the section rises beneath it (more lag on small).
-      photo.style.transform = 'translate(' + PHOTO_TX + ',' + (s * vh * bp.parallax) + 'px)';
-      glow.style.opacity = String(clamp((bp.glowRest + 0.2 * bright) * (1 - hide)));   // soft → bloom → fade
-      const driftY = -smoothstep(clamp(s / 0.85)) * TEXT_DRIFT_PX * bp.drift;
-      const fade = smoothstep(clamp((s - 0.1) / 0.55));     // text + badge gone by ~0.65
+      photo.style.transform = 'translate(' + PHOTO_TX + ',' + lag + 'px)';
+      glow.style.opacity = String(clamp((bp.glowRest + bp.glowBloom * bright) * (1 - hide)));   // soft → bloom → fade (brighter + harder bloom on small screens)
+      glow.style.transform = 'translate(0,' + ((bp.glowShiftY + s * bp.glowPar) * vh) + 'px) scale(' + (1.25 * bp.glowMul) + ')';   // behind the photo; glowShiftY pushes the core BELOW the face (small screens), then tracks the photo's lag
+      const driftY = -smoothstep(clamp(s / bp.driftSpan)) * TEXT_DRIFT_PX * bp.drift;   // text + badge lift (fast on small screens)
+      const fade = smoothstep(clamp((s - bp.fadeStart) / bp.fadeSpan));   // content fade: slow on desktop (~0.65), FAST on small screens (~0.40)
       textcol.style.transform = 'translateY(' + driftY + 'px)';
       textcol.style.opacity = String(1 - fade);
       driveBadge(driftY, fade);
