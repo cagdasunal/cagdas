@@ -88,6 +88,19 @@
   const RING = 140;        // sample points per seal glyph (morph smoothness)
   const CYCLE = 9200;      // ms for one check -> W -> check loop
 
+  // Ink extents of the baked label outlines (baseline y=0, y grows down):
+  //   LABEL_FROM "Certified Partner"  y -11.89 → +0.21  (no descender)
+  //   LABEL_TO   "Verify on Webflow"  y -11.94 → +3.50  ('y' descender)
+  // The VERTICAL svg centres the UNION of both (desktop hover crossfades
+  // between them). The HORIZONTAL svg is only ever seen ≤767px, where hover is
+  // impossible (see runSeal + the ≥992px hover media query), so its box hugs
+  // LABEL_FROM's ink alone — then the lockup's `align-items:center` centres the
+  // TEXT ink against the W's ink (sampleRing centres the W exactly inside the
+  // 30px seal). Sizing that box 16px tall with the baseline at y=12 centred the
+  // union instead, leaving "Certified Partner" 1.84px above the W's centre.
+  const HLABEL_TOP = -11.89;   // LABEL_FROM ink top (ascender)
+  const HLABEL_H = 12.1;       // LABEL_FROM ink height (ascender → overshoot)
+
   // --- label outlines: WF Visual Sans 600, baseline y=0, x grows right.
   //     Dropped into a -90deg group so the lockup reads bottom-to-top. ------
   const LABEL_TRACK = 132;   // svg height = max label advance + 2
@@ -179,8 +192,8 @@
         '</g>' +
       '</svg>';
     const horizontal =
-      '<svg class="wfb-hsvg" width="131" height="16" viewBox="0 0 131 16" aria-hidden="true">' +
-        '<g transform="translate(0.5,12)">' +
+      '<svg class="wfb-hsvg" width="131" height="' + HLABEL_H + '" viewBox="0 ' + HLABEL_TOP + ' 131 ' + HLABEL_H + '" aria-hidden="true">' +
+        '<g transform="translate(0.5,0)">' +
           '<path class="wfb-vword wfb-from" d="' + LABEL_FROM + '"></path>' +
           '<path class="wfb-vword wfb-to" d="' + LABEL_TO + '"></path>' +
         '</g>' +
