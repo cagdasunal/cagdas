@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>AMT — Academy for Mindful Teaching</title>
+<link rel="icon" href="../brand/logo/Favicon.png">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<style>
+.team_swiper{overflow:hidden}
+.team_swiper .swiper-slide{height:auto}
+.team_nav{display:flex;align-items:center;gap:1.5rem;width:100%;margin-top:var(--space-m)}
+.team_nav-btn{flex:none;display:inline-flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;border-radius:var(--radius--pill);border:1.5px solid var(--color--border--soft);color:var(--color--text--heading);transition:background-color .18s ease,border-color .18s ease}
+.team_nav-btn svg{width:1.25rem;height:1.25rem}
+.team_nav-btn:hover{background:var(--color--surface--cool);border-color:var(--color--surface--cool)}
+.team_nav-btn.swiper-button-disabled{opacity:.35}
+.team_progress{flex:1;height:3px;background:var(--color--border--rule);border-radius:var(--radius--pill);overflow:hidden}
+.team_progress-fill{height:100%;width:0;background:var(--color--surface--green);border-radius:var(--radius--pill);transition-property:width;transition-timing-function:cubic-bezier(.33,1,.68,1)}
+.team_swiper .swiper-wrapper{transition-timing-function:cubic-bezier(.33,1,.68,1)}
+/* brand marks — settle/draw in when scrolled into view; visible by default (fail-safe if JS is off), entrance plays via a run-once keyframe; reach rings keep a slow idle spin; honour reduced-motion (client 2026-07-22, restored) */
+.figure_illustration.is-inview{animation:markIn .8s cubic-bezier(.34,1.4,.5,1) both}
+@keyframes markIn{from{opacity:0;transform:translateY(14px) scale(.92)}to{opacity:1;transform:none}}
+/* per-mark thematic entrances — each plays ONCE on scroll-in, no loop (client 2026-07-22) */
+.section-mark .figure_illustration.is-inview{animation:markWave 1.5s cubic-bezier(.22,1,.36,1) both}
+.section_pillars .section-header .figure_illustration.is-inview{animation:markDrop 1.7s cubic-bezier(.22,1,.36,1) both}
+.section_reach .section-header .figure_illustration.is-inview{animation:markRotate 1.8s cubic-bezier(.22,1,.36,1) both}
+.section_testimonials .section-header .figure_illustration.is-inview{animation:markNotify 1.1s cubic-bezier(.34,1.5,.5,1) both}
+.section_team .section-header .figure_illustration.is-inview{transform-origin:68% 88%;animation:markWaveHand 1.7s ease-in-out both}
+.section_free-exercise .copy-block .figure_illustration.is-inview{animation:markRotate 1.8s cubic-bezier(.22,1,.36,1) both}
+@keyframes markWave{0%{opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-10px)}100%{opacity:1;clip-path:inset(0 0 0 0);transform:translateX(0)}}
+@keyframes markDrop{0%{opacity:0;transform:translateY(-48px) rotate(-16deg)}55%{opacity:1}80%{transform:translateY(5px) rotate(7deg)}100%{transform:none}}
+@keyframes markRotate{0%{opacity:0;transform:rotate(-175deg) scale(.7)}100%{opacity:1;transform:none}}
+@keyframes markNotify{0%{opacity:0;transform:scale(.5) translateY(12px)}55%{opacity:1;transform:scale(1.14) translateY(-5px)}80%{transform:scale(.97)}100%{transform:none}}
+@keyframes markWaveHand{0%{opacity:0;transform:rotate(-6deg)}22%{opacity:1;transform:rotate(16deg)}44%{transform:rotate(-12deg)}62%{transform:rotate(9deg)}80%{transform:rotate(-5deg)}100%{transform:rotate(0)}}
+/* path divider — smaller, sits between sections (client 2026-07-22) */
+.path-divider{max-width:13rem;padding:var(--section-space-divider) 0;margin:0 auto}
+.pillars_tree{display:block;margin:var(--space-m) auto 0;max-width:min(90%,44rem)}
+.pillars_tree-roots{width:100%;height:auto;overflow:visible;display:block}
+@keyframes rootGrow{from{opacity:0;clip-path:inset(-4% -4% 104% -4%)}to{opacity:1;clip-path:inset(-4% -4% -4% -4%)}}
+.pillars_tree.is-inview .pillars_tree-roots .root{animation-name:rootGrow;animation-duration:1.15s;animation-timing-function:cubic-bezier(.33,1,.68,1);animation-fill-mode:both}
+.pillars_tree-word{font-family:var(--font--body);font-weight:600;font-size:20px;letter-spacing:.01em;fill:var(--color--text--on-dark)}
+.pillars_tree.is-inview .pillars_tree-word{animation:treeWord .7s ease 1.3s both}
+@keyframes treeWord{from{opacity:0}to{opacity:1}}
+/* nav — hides on scroll down, returns on scroll up; slow + smooth (client 2026-07-23) */
+.nav_component{transition:transform .55s cubic-bezier(.33,1,.68,1),background-color .3s ease}
+.nav_component.is-hidden{transform:translateY(-100%)}
+/* CTA + footer — huts-style sheets: rounded top corners; scroll-scrubbed rise (bottom→top on scroll down, reverses on scroll up), lerp-smoothed (client 2026-07-23) */
+.section_cta{position:relative;z-index:1;border-top-left-radius:var(--radius--card);border-top-right-radius:var(--radius--card)}
+.section_cta .cta_banner{will-change:opacity,transform}
+.footer_component{position:relative;z-index:2;margin-top:calc(-1 * var(--radius--card));border-top-left-radius:var(--radius--card);border-top-right-radius:var(--radius--card);overflow:hidden}
+/* hidden-until-revealed (JS-gated so nothing is permanently hidden if JS is off) — removes the "default then jump" flash (client 2026-07-22) */
+.js-anim .figure_illustration{opacity:0}
+.js-anim .pillars_tree-word{opacity:0}
+.js-anim .pillars_tree-roots .root{opacity:0}
+.js-anim .figure_illustration.is-inview{opacity:1}
+.js-anim .pillars_tree.is-inview .pillars_tree-word{opacity:1}
+@media(prefers-reduced-motion:reduce){.js-anim .figure_illustration,.js-anim .pillars_tree-word{opacity:1!important}.js-anim .pillars_tree-roots .root{opacity:1!important;clip-path:none!important}.figure_illustration.is-inview,.pillars_tree.is-inview *{animation:none!important;transform:none!important}}
+/* reach — one frog seeds a ripple that reaches many, then keeps spreading; three stages linked by a drawn-in flow line (client 2026-07-22, restored) */
+.section_reach .grid_4-4-4{position:relative;gap:clamp(.75rem,2vw,1.75rem);max-width:58rem;margin-inline:auto}
+.reach_flow{position:absolute;left:0;right:0;top:3.75rem;margin:0 16.6%;border-top:2px dotted color-mix(in srgb,var(--color--surface--green) 60%,transparent);transform:scaleX(0);transform-origin:left center;transition:transform 1.5s cubic-bezier(.33,1,.68,1);z-index:0}
+.reach_flow.is-live{transform:scaleX(1)}
+.reach_viz{position:relative;z-index:1;display:grid;place-content:center;width:7.5rem;height:7.5rem;margin:0 auto}
+.reach_frog{position:relative;z-index:2;width:4.75rem;height:auto;opacity:0;transform:scale(.6);transition:opacity .6s ease,transform .7s cubic-bezier(.34,1.56,.64,1)}
+.reach_viz.is-live .reach_frog{opacity:1;transform:scale(1);animation:reachBreathe 4.5s ease-in-out 1.1s infinite}
+@keyframes reachBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.reach_dot,.reach_core{position:absolute;left:50%;top:50%;border-radius:50%;background:var(--color--surface--green);opacity:0;transform:scale(.3);transition:opacity .5s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
+.reach_viz.is-live .reach_dot,.reach_viz.is-live .reach_core{opacity:1;transform:scale(1)}
+.reach_core{width:1.15rem;height:1.15rem;margin:-.575rem}
+.reach_viz.is-hundreds .reach_dot{width:.72rem;height:.72rem;margin:-.36rem}
+.reach_viz.is-thousands .reach_dot{width:.5rem;height:.5rem;margin:-.25rem}
+.reach_ring{position:absolute;left:50%;top:50%;width:2.6rem;height:2.6rem;margin:-1.3rem 0 0 -1.3rem;border-radius:50%;border:1.5px solid var(--color--surface--green);opacity:0}
+.reach_viz.is-live .reach_ring{animation:reachRing 3.6s ease-out infinite}
+.reach_viz.is-live .reach_ring.is-2{animation-delay:1.2s}
+.reach_viz.is-live .reach_ring.is-3{animation-delay:2.4s}
+@keyframes reachRing{0%{transform:scale(.35);opacity:.55}70%{opacity:0}100%{transform:scale(2.9);opacity:0}}
+@media(prefers-reduced-motion:reduce){.reach_viz.is-live .reach_frog{animation:none}.reach_viz.is-live .reach_ring{animation:none;opacity:.28;transform:scale(1.5)}}
+@media(max-width:767px){.reach_flow{display:none}}
+/* free-exercise timeline — horizontal reveal on scroll */
+.timeline.is-horizontal::before{transform:scaleX(0);transform-origin:left;transition:transform .7s ease .1s}
+.timeline.is-horizontal.is-live::before{transform:scaleX(1)}
+.timeline.is-horizontal .timeline_item{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s cubic-bezier(.33,1,.68,1)}
+.timeline.is-horizontal.is-live .timeline_item{opacity:1;transform:none}
+.timeline.is-horizontal .timeline_item:nth-child(2){transition-delay:.12s}
+.timeline.is-horizontal .timeline_item:nth-child(3){transition-delay:.24s}
+/* free-exercise lead-in — full-bleed parallax banner */
+.parallax_band{position:relative;width:100%;height:clamp(18rem,40vw,30rem);overflow:hidden;background:var(--color--surface--warm)}
+.parallax_band img{position:absolute;left:0;top:-12%;width:100%;height:124%;object-fit:cover;will-change:transform}
+/* hero — tighter top (it already sits below the sticky nav); media fills its column full-width at natural portrait height (client 2026-07-22, restored) */
+.section_home-hero .padding-section-large{padding-top:clamp(3rem,4.5vw,4.5rem)}
+.section_home-hero .hero_media{margin-right:0}
+/* pull-quote — larger than default h3 (client 2026-07-22) */
+.section_quote blockquote{font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.3}
+/* quote — centred one-column testimonial; portrait circled, below the quote (client 2026-07-22) */
+.section_quote .container-medium{max-width:64rem}
+.section_quote .grid_6-6{grid-template-columns:1fr;max-width:62rem;margin-inline:auto;justify-items:center;gap:var(--space-l)}
+.section_quote .copy-block{align-items:center;text-align:center}
+.quote_portrait{width:clamp(6.5rem,12vw,9rem);aspect-ratio:1;border-radius:50%;overflow:hidden;margin:.25rem auto .35rem;background:var(--color--surface--cool)}
+.section_quote .quote_portrait img{width:100%;height:100%;object-fit:cover}
+.quote_cite{display:block;line-height:1.7}
+.quote_name{text-transform:uppercase;letter-spacing:.06em}
+/* nudge — fully centred; intro one line from desktop up (client 2026-07-22) */
+@media(min-width:992px){.section_nudge .copy-block p{white-space:nowrap}}
+/* free-exercise — tighten the stack gap between the steps and the form (client 2026-07-22) */
+.section_free-exercise .grid_6-6.is-single{gap:var(--space-l)}
+/* pillars — tighten the gap above the turning ring (client 2026-07-22) */
+.section_pillars .section-header{margin-bottom:var(--space-m)}
+.section_pillars .pillars_track{margin-top:0}
+.testimonial_avatar{overflow:hidden}
+.testimonial_avatar img{width:100%;height:100%;object-fit:cover;display:block}
+/* testimonials head — one line on desktop AND tablet, wrap only on true mobile ≤767 (client 2026-07-22, restored) */
+@media(min-width:768px){.section_testimonials .section-header .heading-style-h2{white-space:nowrap;width:max-content;max-width:none;margin-inline:auto}}
+.section_family .section-header{max-width:none}
+@media(min-width:768px){.section_family .section-header{max-width:none;align-items:center}.section_family .section-header .heading-style-h2{white-space:nowrap;width:auto;max-width:none;margin-inline:auto}}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+<header class="nav_component">
+<div class="nav_bar">
+<a class="nav_logo-link" href="/" aria-label="AMT — Academy for Mindful Teaching"><img class="nav_logo" src="../brand/logo/Primary_landscape.png" alt="Academy for Mindful Teaching"><img class="nav_logo is-submark" src="../brand/logo/Submark.png" alt="AMT"></a>
+<nav class="nav_menu" aria-label="Primary">
+<div class="nav_menu-list">
+<div class="nav_menu-item"><button class="nav_menu-trigger" type="button" aria-expanded="false" aria-controls="panel-trainings">Trainings <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button></div>
+<div class="nav_menu-item"><button class="nav_menu-trigger" type="button" aria-expanded="false" aria-controls="panel-approach">Our Approach <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button></div>
+<div class="nav_menu-item"><button class="nav_menu-trigger" type="button" aria-expanded="false" aria-controls="panel-schools">For Schools <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button></div>
+<div class="nav_menu-item"><button class="nav_menu-trigger" type="button" aria-expanded="false" aria-controls="panel-organizations">For Organizations <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button></div>
+<div class="nav_menu-item"><button class="nav_menu-trigger" type="button" aria-expanded="false" aria-controls="panel-about">About <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button></div>
+<div class="nav_menu-item"><button class="nav_menu-trigger" type="button" aria-expanded="false" aria-controls="panel-explore">Explore <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button></div>
+</div>
+</nav>
+<div class="nav_utility">
+<a class="nav_utility-link" href="/about/contact">Contact</a>
+<a class="button is-small" href="/apply">Apply</a>
+<div class="nav_lang" data-lang>
+<button class="nav_lang-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Change language, current: English"><span class="nav_lang-value">EN</span><span class="nav_lang-caret" aria-hidden="true"></span></button>
+<ul class="nav_lang-menu" role="listbox" aria-label="Language" tabindex="-1">
+<li role="none"><button class="nav_lang-option is-active" type="button" role="option" aria-selected="true" data-code="EN" data-name="English" lang="en"><span class="nav_lang-tile" aria-hidden="true">EN</span><span class="nav_link-text"><span class="nav_link-label">English</span></span></button></li>
+<li role="none"><button class="nav_lang-option" type="button" role="option" aria-selected="false" data-code="NL" data-name="Nederlands" lang="nl"><span class="nav_lang-tile" aria-hidden="true">NL</span><span class="nav_link-text"><span class="nav_link-label">Nederlands</span></span></button></li>
+</ul>
+</div>
+<button class="nav_expand-btn" type="button" aria-label="Open menu" aria-expanded="false"><div class="nav_expand-line is-a"></div><div class="nav_expand-line is-b"></div></button>
+</div>
+</div>
+<div class="nav_sheet">
+<div class="nav_desktop">
+<div class="nav_panel" id="panel-trainings" role="menu" aria-label="Trainings"><div class="nav_panel-grid"><div class="nav_mega-col"><div class="nav_col-heading">By profession — start here</div><a class="nav_link is-figure" href="/for/teachers" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Hand.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">For teachers</div></div></a>
+<a class="nav_link is-figure" href="/for/therapists" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Heart.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">For therapists &amp; coaches</div></div></a>
+<a class="nav_link is-figure" href="/for/mbsr-trainers" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Spiral.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">For MBSR-trainers</div></div></a>
+<a class="nav_link is-figure" href="/for/parents" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Moon.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">For parents</div></div></a></div>
+<div class="nav_mega-col"><div class="nav_col-heading">Programs &amp; courses</div><a class="nav_link is-figure" href="/trainings/child-trainer" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Leaf.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindfulness Child Trainer</div></div></a>
+<a class="nav_link is-figure" href="/trainings/youth-trainer" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Waves.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindfulness Youth Trainer</div></div></a>
+<a class="nav_link is-figure" href="/trainings/parenting-trainer" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindful Parenting Trainer</div></div></a>
+<a class="nav_link is-figure" href="/trainings/short-courses" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Note.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Short courses &amp; masterclasses</div></div></a></div>
+<div class="nav_mega-col"><div class="nav_col-heading">Practical</div><a class="nav_link is-figure" href="/trainings/agenda" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Path.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Agenda &amp; start dates</div></div></a>
+<a class="nav_link is-figure" href="/trainings/compare" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Eye.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Compare the courses</div></div></a>
+<a class="nav_link is-figure" href="/trainings/application" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Application &amp; FAQ</div></div></a>
+<a class="nav_link is-figure" href="/trainings/certification" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Stone.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">The AMT certification<span class="nav_badge">New</span></div></div></a></div></div></div>
+<div class="nav_panel" id="panel-approach" role="menu" aria-label="Our Approach"><div class="nav_panel-grid"><a class="nav_link is-figure" href="/approach/resilience-model" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Eye.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">The Resilience Model</div><div class="nav_link-sub">The heart of AMT</div></div></a>
+<a class="nav_link is-figure" href="/approach/method" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Spiral.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">The Method · Attention Matters</div><div class="nav_link-sub">The roots: awareness</div></div></a>
+<a class="nav_link is-figure" href="/approach/research" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Stone.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Research &amp; evidence base</div></div></a></div></div>
+<div class="nav_panel" id="panel-schools" role="menu" aria-label="For Schools"><div class="nav_panel-grid is-cards"><a class="nav_link is-card" href="/schools/why" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Why a Mindful School?</div><div class="nav_link-sub">What a whole-school approach changes.</div></div></a>
+<a class="nav_link is-card" href="/schools/how" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Path.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">How to become a Mindful School</div><div class="nav_link-sub">The steps, from first call to certified.</div></div></a>
+<a class="nav_link is-card" href="/schools/stories" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Teacher stories &amp; case studies</div><div class="nav_link-sub">Schools already doing the work.</div></div></a>
+<a class="nav_link is-card" href="/schools/discovery-call" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Hand.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Plan a discovery call</div><div class="nav_link-sub">Talk it through with our team.</div></div></a></div></div>
+<div class="nav_panel" id="panel-organizations" role="menu" aria-label="For Organizations"><div class="nav_panel-grid is-two"><a class="nav_link is-figure" href="/organizations/keynotes" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Keynotes &amp; workshops</div></div></a>
+<a class="nav_link is-figure" href="/organizations/mindful-parenting-teams" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindful Parenting for teams</div></div></a></div></div>
+<div class="nav_panel" id="panel-about" role="menu" aria-label="About"><div class="nav_panel-grid is-tight"><a class="nav_link is-figure" href="/about/story" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Path.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Our story</div></div></a>
+<a class="nav_link is-figure" href="/about/mission" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Heart.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mission &amp; impact</div></div></a>
+<a class="nav_link is-figure" href="/about/people" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Hand.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Meet the people</div></div></a>
+<a class="nav_link is-figure" href="/about/media" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">In the media</div></div></a>
+<a class="nav_link is-figure" href="/about/eline-snel" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Note.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">About Eline Snel</div></div></a>
+<a class="nav_link is-figure" href="/about/contact" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Contact</div></div></a></div></div>
+<div class="nav_panel" id="panel-explore" role="menu" aria-label="Explore"><div class="nav_panel-grid"><div class="nav_mega-col"><div class="nav_col-heading">Stories &amp; community</div><a class="nav_link is-figure" href="/stories" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Stories<span class="nav_badge">New</span></div></div></a>
+<a class="nav_link is-figure" href="/alumni" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Alumni community</div></div></a>
+<a class="nav_link is-figure" href="/trainers" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Hand.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Find a trainer</div></div></a></div>
+<div class="nav_mega-col"><div class="nav_col-heading">For parents</div><a class="nav_link is-figure" href="/mindful-kids-academy" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Moon.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindful Kids Academy</div></div></a>
+<a class="nav_link is-figure" href="/mindful-parenting" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Heart.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">8-week Mindful Parenting</div></div></a></div>
+<div class="nav_mega-col"><div class="nav_col-heading">Knowledge</div><a class="nav_link is-figure" href="/resources" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Note.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Free resources</div></div></a>
+<a class="nav_link is-figure" href="/blog" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Leaf.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Blog</div></div></a></div></div></div>
+</div>
+<div class="nav_mobile">
+<div class="nav_mobile-item"><button class="nav_mobile-row" type="button" aria-expanded="false" aria-controls="m-trainings">Trainings <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button><div class="nav_mobile-panel" id="m-trainings"><div class="nav_col-heading">By profession — start here</div><a class="nav_link is-figure" href="/for/teachers" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Hand.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">For teachers</div></div></a>
+<a class="nav_link is-figure" href="/for/therapists" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Heart.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">For therapists &amp; coaches</div></div></a>
+<a class="nav_link is-figure" href="/for/mbsr-trainers" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Spiral.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">For MBSR-trainers</div></div></a>
+<a class="nav_link is-figure" href="/for/parents" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Moon.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">For parents</div></div></a>
+<div class="nav_col-heading">Programs &amp; courses</div><a class="nav_link is-figure" href="/trainings/child-trainer" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Leaf.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindfulness Child Trainer</div></div></a>
+<a class="nav_link is-figure" href="/trainings/youth-trainer" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Waves.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindfulness Youth Trainer</div></div></a>
+<a class="nav_link is-figure" href="/trainings/parenting-trainer" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindful Parenting Trainer</div></div></a>
+<a class="nav_link is-figure" href="/trainings/short-courses" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Note.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Short courses &amp; masterclasses</div></div></a>
+<div class="nav_col-heading">Practical</div><a class="nav_link is-figure" href="/trainings/agenda" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Path.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Agenda &amp; start dates</div></div></a>
+<a class="nav_link is-figure" href="/trainings/compare" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Eye.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Compare the courses</div></div></a>
+<a class="nav_link is-figure" href="/trainings/application" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Application &amp; FAQ</div></div></a>
+<a class="nav_link is-figure" href="/trainings/certification" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Stone.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">The AMT certification<span class="nav_badge">New</span></div></div></a></div></div>
+<div class="nav_mobile-item"><button class="nav_mobile-row" type="button" aria-expanded="false" aria-controls="m-approach">Our Approach <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button><div class="nav_mobile-panel" id="m-approach"><a class="nav_link is-figure" href="/approach/resilience-model" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Eye.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">The Resilience Model</div><div class="nav_link-sub">The heart of AMT</div></div></a>
+<a class="nav_link is-figure" href="/approach/method" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Spiral.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">The Method · Attention Matters</div><div class="nav_link-sub">The roots: awareness</div></div></a>
+<a class="nav_link is-figure" href="/approach/research" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Stone.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Research &amp; evidence base</div></div></a></div></div>
+<div class="nav_mobile-item"><button class="nav_mobile-row" type="button" aria-expanded="false" aria-controls="m-schools">For Schools <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button><div class="nav_mobile-panel" id="m-schools"><a class="nav_link is-figure" href="/schools/why" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Why a Mindful School?</div></div></a>
+<a class="nav_link is-figure" href="/schools/how" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Path.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">How to become a Mindful School</div></div></a>
+<a class="nav_link is-figure" href="/schools/stories" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Teacher stories &amp; case studies</div></div></a>
+<a class="nav_link is-figure" href="/schools/discovery-call" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Hand.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Plan a discovery call</div></div></a></div></div>
+<div class="nav_mobile-item"><button class="nav_mobile-row" type="button" aria-expanded="false" aria-controls="m-organizations">For Organizations <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button><div class="nav_mobile-panel" id="m-organizations"><a class="nav_link is-figure" href="/organizations/keynotes" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Keynotes &amp; workshops</div></div></a>
+<a class="nav_link is-figure" href="/organizations/mindful-parenting-teams" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindful Parenting for teams</div></div></a></div></div>
+<div class="nav_mobile-item"><button class="nav_mobile-row" type="button" aria-expanded="false" aria-controls="m-about">About <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button><div class="nav_mobile-panel" id="m-about"><a class="nav_link is-figure" href="/about/story" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Path.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Our story</div></div></a>
+<a class="nav_link is-figure" href="/about/mission" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Heart.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mission &amp; impact</div></div></a>
+<a class="nav_link is-figure" href="/about/people" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Hand.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Meet the people</div></div></a>
+<a class="nav_link is-figure" href="/about/media" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">In the media</div></div></a>
+<a class="nav_link is-figure" href="/about/eline-snel" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Note.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">About Eline Snel</div></div></a>
+<a class="nav_link is-figure" href="/about/contact" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Contact</div></div></a></div></div>
+<div class="nav_mobile-item"><button class="nav_mobile-row" type="button" aria-expanded="false" aria-controls="m-explore">Explore <svg class="nav_plus" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button><div class="nav_mobile-panel" id="m-explore"><div class="nav_col-heading">Stories &amp; community</div><a class="nav_link is-figure" href="/stories" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/SpeechBubble.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Stories<span class="nav_badge">New</span></div></div></a>
+<a class="nav_link is-figure" href="/alumni" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Circles.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Alumni community</div></div></a>
+<a class="nav_link is-figure" href="/trainers" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Hand.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Find a trainer</div></div></a>
+<div class="nav_col-heading">For parents</div><a class="nav_link is-figure" href="/mindful-kids-academy" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Moon.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Mindful Kids Academy</div></div></a>
+<a class="nav_link is-figure" href="/mindful-parenting" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Heart.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">8-week Mindful Parenting</div></div></a>
+<div class="nav_col-heading">Knowledge</div><a class="nav_link is-figure" href="/resources" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Note.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Free resources</div></div></a>
+<a class="nav_link is-figure" href="/blog" role="menuitem"><div class="nav_figure"><img src="../brand/illustrations/Leaf.png" alt=""></div><div class="nav_link-text"><div class="nav_link-label">Blog</div></div></a></div></div>
+<div class="nav_mobile-cta">
+<a class="button is-small" href="/apply">Apply</a>
+<a class="nav_utility-link" href="/about/contact">Contact</a>
+</div>
+</div>
+</div>
+</header>
+<div class="nav_page-dim"></div>
+
+<div class="main-wrapper">
+
+<section class="section_home-hero">
+<div class="padding-global">
+<div class="padding-section-large is-flush-bottom">
+<div class="container-xlarge">
+<div class="grid_6-6">
+<div class="copy-block">
+<span class="tagline">For teachers, therapists &amp; coaches</span>
+<h1 class="heading-style-h1">Resilience grows with practice. We train you to pass it on.</h1>
+<p class="text-size-large max-width-medium text-color-primary">Get certified in the methods that help children grow in awareness, confidence and resilience — and reach hundreds of them, year after year.</p>
+<div class="button-group">
+<a class="button is-large" href="#offer">Find your training</a>
+<a class="button is-secondary is-large" href="#why">Why it matters</a>
+</div>
+<p class="text-size-small text-color-secondary">Since 2008 · 25+ countries · 2,000+ certified professionals</p>
+</div>
+<div class="hero_media">
+<div class="media_wrap">
+<div class="media_arch media_ratio-portrait">
+<video class="media_video" src="../brand/video/amt-hero-loop.mp4" poster="../brand/video/amt-hero-loop-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="A parent and young child meditating together on the sofa at home"></video>
+<img class="media_still" src="../brand/photos/amt-photo-parent-child-sofa.jpg" alt="A parent and young child meditating together on the sofa at home">
+</div>
+<div class="media_seal"><div class="media_seal_disc"></div><img src="../brand/logo/Secondary.png" alt="AMT — the lotus frog badge"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_accreditation">
+<div class="padding-global">
+<div class="padding-section-medium">
+<div class="container-xlarge">
+<div class="accreditation_strip">
+<div class="accreditation_label">Featured in</div>
+<div class="accreditation_item">The Washington Post</div>
+<div class="accreditation_item">The New York Times</div>
+<div class="accreditation_item">Paris Match</div>
+<div class="accreditation_item">SpaceBuzz</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_impact">
+<div class="padding-global">
+<div class="padding-section-large is-flush-top is-flush-bottom">
+<div class="container-xlarge">
+<div class="impact_grid">
+<div class="impact_stat is-first"><div class="impact_number">2008</div><p class="impact_label">Training professionals since</p></div>
+<div class="impact_stat"><div class="impact_number">25+</div><p class="impact_label">Countries worldwide</p></div>
+<div class="impact_stat"><div class="impact_number">2,000+</div><p class="impact_label">Certified professionals</p></div>
+<div class="impact_stat"><div class="impact_number">9 / 10</div><p class="impact_label">Apply the method weekly in their practice*</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<div class="path-divider"><img src="../brand/illustrations/Path.png" alt="A hand-brushed path — the journey to certification"></div>
+
+<section class="section_offer" id="offer">
+<div class="padding-global">
+<div class="padding-section-large is-flush-top">
+<div class="container-xlarge">
+<div class="section-header">
+<span class="tagline">Get certified</span>
+<h2 class="heading-style-h2 is-nowrap">Become a certified trainer.</h2>
+<p class="section-header_intro text-size-large">Choose the path that fits your work with children. All trainings are available in-person and online.</p>
+</div>
+<div class="grid_3-3-3-3">
+<div class="card">
+<div class="card_tag">Certification</div>
+<h3 class="heading-style-h3 card_title">Child Mindfulness Trainer</h3>
+<p class="card_meta card_body">Work with children (4–12)</p>
+<div class="card_cta"><a class="button is-text" href="/trainings/child-trainer">Explore <span class="btn_arrow">→</span></a></div>
+</div>
+<div class="card">
+<div class="card_tag">Certification</div>
+<h3 class="heading-style-h3 card_title">Youth Mindfulness Trainer</h3>
+<p class="card_meta card_body">Work with adolescents</p>
+<div class="card_cta"><a class="button is-text" href="/trainings/youth-trainer">Explore <span class="btn_arrow">→</span></a></div>
+</div>
+<div class="card">
+<div class="card_tag">Certification</div>
+<h3 class="heading-style-h3 card_title">Mindfulness in Education</h3>
+<p class="card_meta card_body">For schools &amp; classrooms</p>
+<div class="card_cta"><a class="button is-text" href="/trainings/short-courses">Explore <span class="btn_arrow">→</span></a></div>
+</div>
+<div class="card">
+<div class="card_tag">Certification</div>
+<h3 class="heading-style-h3 card_title">Mindful Parenting Trainer</h3>
+<p class="card_meta card_body">Guide parents &amp; families</p>
+<div class="card_cta"><a class="button is-text" href="/trainings/parenting-trainer">Explore <span class="btn_arrow">→</span></a></div>
+</div>
+</div>
+<div class="offer_ledger">
+<div class="ledger">
+<div class="ledger_header">
+<h3 class="heading-style-h3">Upcoming start dates</h3>
+<a class="button is-text" href="/trainings/agenda">View all dates <span class="btn_arrow">→</span></a>
+</div>
+<div class="ledger_list">
+<div class="ledger_row is-first"><div class="ledger_month">Aug</div><div class="ledger_content"><div class="ledger_programme">Child Mindfulness Trainer</div><div class="ledger_location">Online · EN</div></div></div>
+<div class="ledger_row"><div class="ledger_month">Sep</div><div class="ledger_content"><div class="ledger_programme">Mindfulness in Education</div><div class="ledger_location">Utrecht · NL</div></div></div>
+<div class="ledger_row"><div class="ledger_month">Oct</div><div class="ledger_content"><div class="ledger_programme">Child Mindfulness Trainer</div><div class="ledger_location">Amsterdam · NL</div></div></div>
+<div class="ledger_row"><div class="ledger_month">Oct</div><div class="ledger_content"><div class="ledger_programme">Kindertraining</div><div class="ledger_location">Lyon · FR</div></div></div>
+<div class="ledger_row"><div class="ledger_month">Nov</div><div class="ledger_content"><div class="ledger_programme">Youth Mindfulness Trainer</div><div class="ledger_location">Online · EN</div></div></div>
+</div>
+</div>
+</div>
+<div class="button-group is-center is-stack margin-top margin-xlarge">
+<a class="button is-text" href="/about/people">Get to know our trainers <span class="btn_arrow">→</span></a>
+<a class="button is-text" href="/about/contact">Not near a location? Tell us where you’d want to train <span class="btn_arrow">→</span></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_certification background-color-warm">
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="grid_6-6">
+<div class="media_wrap">
+<div class="media_arch media_ratio-portrait">
+<img src="../brand/photos/amt-photo-children-wide-circle.jpg" alt="An AMT trainer leading a circle of children on green mats — a real session">
+</div>
+<div class="media_seal is-bottom-left"><div class="media_seal_disc"></div><img src="../brand/logo/Secondary.png" alt="AMT certification seal — the lotus frog badge"></div>
+</div>
+<div class="copy-block">
+<span class="tagline">The AMT certification</span>
+<h2 class="heading-style-h2">More than a course. A recognised qualification.</h2>
+<p class="text-size-large text-color-primary">Complete an AMT training and you become a <strong>certified AMT trainer</strong> — qualified to bring the method into your own practice, and recognised wherever our trainers work.</p>
+<div class="margin-0">
+<h4 class="heading-style-h4">Recognised &amp; accredited</h4>
+<p class="text-size-small text-color-secondary">A CRKBO-registered qualification, recognised across the 25+ countries where our trainers work.</p>
+</div>
+<div class="margin-0">
+<h4 class="heading-style-h4">For you</h4>
+<p class="text-size-small text-color-secondary">A credential for your CV and practice, the standing to call yourself a certified trainer — and the confidence to match it.</p>
+</div>
+<div class="margin-0">
+<h4 class="heading-style-h4">For your school</h4>
+<p class="text-size-small text-color-secondary">Schools with AMT-certified teachers can show parents they invest in children’s wellbeing and resilience.</p>
+</div>
+<a class="button is-text" href="/trainings/certification">Learn about our certification <span class="btn_arrow">→</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_free-exercise" id="free-exercise">
+<div class="padding-global">
+<div class="padding-section-large is-flush-bottom">
+<div class="container-xlarge">
+<div class="grid_6-6 is-single">
+<div class="copy-block is-center">
+<figure class="figure_illustration is-large"><img src="../brand/illustrations/Spiral.png" alt="Hand-brushed spiral — breathing"></figure>
+<span class="tagline">Try the method first</span>
+<h2 class="heading-style-h2">Your first exercise, in three simple steps.</h2>
+<p class="text-size-large text-color-primary max-width-wide">A taste of how we work — something you can try with a child this week, straight from our method. The perfect first step before a full training.</p>
+<div class="timeline is-horizontal">
+<div class="timeline_item"><div class="timeline_node">01</div><div class="timeline_content"><h3 class="heading-style-h4 timeline_title">Notice</h3><p class="timeline_body text-size-small">Help a child pause and feel what’s happening in their body.</p></div></div>
+<div class="timeline_item"><div class="timeline_node">02</div><div class="timeline_content"><h3 class="heading-style-h4 timeline_title">Name</h3><p class="timeline_body text-size-small">Give the feeling a name, gently, without judging it.</p></div></div>
+<div class="timeline_item"><div class="timeline_node">03</div><div class="timeline_content"><h3 class="heading-style-h4 timeline_title">Return</h3><p class="timeline_body text-size-small">Guide them softly back to calm and focus.</p></div></div>
+</div>
+</div>
+<div class="form_card is-narrow">
+<div class="margin-bottom margin-xxsmall"><h3 class="heading-style-h3">Get the free exercise</h3></div>
+<div class="margin-bottom margin-small"><p class="text-size-small text-color-secondary">Leave your email and we’ll send the full step-by-step straight to your inbox.</p></div>
+<form class="form_component">
+<div class="form_field-wrapper">
+<input class="form_input" type="email" id="lead-email" name="email" placeholder="Enter your email address" aria-label="Email">
+</div>
+<button class="button" type="submit">Send it to me</button>
+<div class="form_fine">No spam. Just one genuinely useful exercise.</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_why" id="why">
+<div class="padding-global">
+<div class="padding-section-large is-flush-bottom">
+<div class="container-xlarge">
+<div class="grid_6-6">
+<div class="media_frame media_ratio-portrait">
+<img src="../brand/photos/amt-photo-children-floor-circle.jpg" alt="Four children on a hall floor mid-practice — one reaching, one settled with eyes closed">
+<div class="media_seal is-bottom-left"><div class="media_seal_disc"></div><img src="../brand/logo/Secondary.png" alt="AMT — the lotus frog badge"></div>
+</div>
+<div class="copy-block">
+<span class="tagline">Why this matters</span>
+<h2 class="heading-style-h2">The world is a lot for a child. And you’re the one in the room with them.</h2>
+<p class="text-size-large text-color-primary">Around one in seven children and adolescents lives with a mental health condition — in the European Union alone, more than 11 million young people. Anxiety, depression and behavioural difficulties are among the leading causes of illness and disability during adolescence.</p>
+<p class="text-size-medium">Behind every statistic is a child trying to cope with pressure, uncertainty and a world that rarely slows down. The adults around them can make a lasting difference — by helping children notice what they feel, respond more consciously and recover from hard moments, we give resilience room to grow.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_quote">
+<div class="padding-global">
+<div class="padding-section-large is-flush-top">
+<div class="section-mark"><figure class="figure_illustration is-large"><img src="../brand/illustrations/Waves.png" alt="Two hand-brushed wave lines — calm"></figure></div>
+<div class="container-medium">
+<div class="grid_6-6">
+<div class="copy-block">
+<blockquote class="heading-style-h3">“Mindfulness supports and strengthens learning, emotional intelligence and a general sense of wellbeing throughout our entire lives.”</blockquote>
+<figure class="quote_portrait"><img src="https://jonkabat-zinn.com/wp-content/uploads/2022/11/JonKabat-Zinn-Portrait.jpg" alt="Jon Kabat-Zinn, who wrote the foreword to Sitting Still Like a Frog" referrerpolicy="no-referrer"></figure>
+<cite class="text-size-small text-color-secondary quote_cite"><span class="quote_name">Jon Kabat-Zinn</span><br>foreword to <em>Sitting Still Like a Frog</em> by Eline Snel</cite>
+<a class="button is-text" href="/approach/method">Learn about the method we train in <span class="btn_arrow">→</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_pillars is-green-dark background-color-green-dark">
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="section-header is-wide">
+<figure class="figure_illustration is-large"><img src="../brand/illustrations/Leaf.png" alt="Hand-brushed leaf — growth"></figure>
+<span class="tagline">The heart of AMT</span>
+<h2 class="heading-style-h2">Resilience doesn’t grow from one thing. It’s rooted in awareness.</h2>
+<p class="section-header_intro text-size-large text-color-primary pillars_lede">Our model shows how it grows: awareness as the soil, a trunk of inner strength, a crown that reaches out to others and the world.</p>
+</div>
+<figure class="pillars_tree">
+<svg class="pillars_tree-roots" viewBox="0 0 960 560" fill="none" role="img" aria-label="The seven roots of resilience: Awareness, Confidence, Coping, Agency, Connection, Values, Contribution">
+<g fill="var(--color--surface--green)" opacity=".55">
+<path class="root rt-sec" style="animation-delay:0.55s" d="M296.8 186.4L293.9 189.5L290.3 193.2L285.9 197.4L281.0 202.2L275.6 207.4L269.8 212.9L263.8 218.6L257.6 224.5L251.5 230.4L245.4 236.4L239.5 242.4L233.9 248.3L228.8 254.1L224.0 260.1L219.1 266.6L214.1 273.6L209.3 280.9L204.6 288.3L200.0 295.8L195.7 303.2L191.7 310.3L187.9 317.1L184.6 323.3L181.7 328.9L179.2 333.7L177.1 337.5L178.5 338.3L180.7 334.5L183.3 329.8L186.4 324.3L189.9 318.2L193.8 311.5L198.0 304.5L202.5 297.3L207.2 289.9L212.1 282.6L217.1 275.5L222.1 268.8L227.2 262.5L232.1 256.7L237.2 251.3L242.9 245.7L248.8 239.9L255.0 234.2L261.3 228.5L267.5 222.8L273.7 217.3L279.6 212.0L285.1 207.1L290.2 202.5L294.8 198.4L298.6 194.8L301.7 191.9Z"></path>
+<path class="root rt-sec" style="animation-delay:0.6s" d="M392.5 241.2L394.4 244.6L396.8 248.8L399.4 253.8L402.3 259.5L405.4 265.6L408.6 272.2L411.9 279.0L415.1 286.0L418.3 293.0L421.4 300.0L424.2 306.7L426.8 313.1L429.0 319.0L431.0 324.9L432.8 331.0L434.6 337.4L436.3 343.9L437.8 350.5L439.2 356.9L440.6 363.2L441.7 369.2L442.8 374.9L443.7 380.1L444.5 384.8L445.2 388.8L445.8 392.0L447.4 391.8L447.0 388.5L446.5 384.5L445.8 379.8L445.1 374.6L444.3 368.9L443.3 362.8L442.2 356.4L441.0 349.9L439.6 343.3L438.2 336.6L436.6 330.1L435.0 323.7L433.2 317.6L431.1 311.4L428.7 304.8L426.1 297.9L423.2 290.7L420.2 283.5L417.2 276.4L414.1 269.4L411.2 262.7L408.3 256.4L405.6 250.6L403.2 245.5L401.2 241.2L399.5 237.8Z"></path>
+<path class="root rt-sec" style="animation-delay:0.65s" d="M471.6 207.6L469.9 211.0L467.8 215.3L465.2 220.4L462.4 226.1L459.3 232.4L456.0 239.0L452.7 245.9L449.4 252.9L446.1 259.9L442.9 266.8L440.0 273.5L437.3 279.8L434.9 285.6L432.9 291.2L431.0 297.0L429.2 302.9L427.5 308.9L426.0 314.8L424.6 320.6L423.3 326.2L422.2 331.6L421.2 336.6L420.4 341.2L419.7 345.3L419.1 348.8L418.6 351.7L420.2 352.0L420.8 349.2L421.6 345.6L422.5 341.5L423.5 337.0L424.6 332.0L425.9 326.7L427.4 321.2L429.0 315.5L430.7 309.7L432.6 303.9L434.6 298.1L436.7 292.5L438.9 287.1L441.3 281.6L444.2 275.5L447.3 269.0L450.7 262.3L454.1 255.5L457.7 248.6L461.2 241.9L464.6 235.4L467.9 229.3L471.0 223.7L473.8 218.7L476.2 214.5L478.2 211.2Z"></path>
+<path class="root rt-sec" style="animation-delay:0.6s" d="M480.9 301.9L483.0 304.5L485.5 307.8L488.4 311.7L491.5 316.1L494.8 320.9L498.2 326.1L501.6 331.6L505.0 337.3L508.3 343.1L511.4 348.8L514.4 354.5L517.1 360.0L519.4 365.2L521.6 370.4L523.8 375.9L526.0 381.7L528.2 387.7L530.3 393.7L532.4 399.6L534.4 405.5L536.4 411.0L538.2 416.3L539.8 421.1L541.3 425.4L542.7 429.1L543.7 432.1L545.3 431.6L544.3 428.6L543.2 424.9L541.9 420.5L540.4 415.7L538.8 410.3L537.1 404.7L535.3 398.8L533.4 392.7L531.5 386.6L529.5 380.5L527.6 374.5L525.6 368.8L523.5 363.3L521.3 357.9L518.8 352.2L516.0 346.3L513.0 340.3L509.9 334.3L506.7 328.4L503.5 322.8L500.4 317.4L497.3 312.4L494.4 307.8L491.8 303.8L489.5 300.4L487.7 297.7Z"></path>
+<path class="root rt-sec" style="animation-delay:0.7s" d="M545.8 204.1L544.3 207.5L542.5 211.7L540.2 216.7L537.6 222.2L534.9 228.3L532.0 234.7L529.1 241.5L526.3 248.4L523.6 255.3L521.1 262.2L518.8 268.9L516.9 275.3L515.3 281.2L514.1 287.0L513.0 292.9L512.0 299.0L511.2 305.0L510.4 311.0L509.7 316.9L509.1 322.5L508.5 327.9L507.8 332.9L507.2 337.5L506.7 341.5L506.1 345.1L505.5 347.9L507.1 348.2L507.8 345.3L508.5 341.8L509.3 337.7L510.1 333.2L510.9 328.2L511.7 322.9L512.5 317.3L513.4 311.5L514.4 305.6L515.4 299.7L516.6 293.8L517.9 288.0L519.3 282.4L521.0 276.6L523.1 270.4L525.6 263.9L528.3 257.1L531.2 250.3L534.2 243.5L537.3 236.9L540.4 230.6L543.4 224.6L546.2 219.2L548.6 214.3L550.8 210.1L552.5 206.8Z"></path>
+<path class="root rt-sec" style="animation-delay:0.65s" d="M605.9 254.2L605.8 257.6L605.4 261.9L604.9 266.8L604.2 272.3L603.3 278.3L602.3 284.6L601.2 291.2L600.0 297.9L598.7 304.7L597.4 311.3L596.2 317.8L595.0 323.9L593.9 329.7L592.9 335.3L592.0 341.2L591.2 347.3L590.4 353.4L589.8 359.5L589.2 365.5L588.7 371.3L588.4 376.9L588.1 382.2L587.8 387.0L587.7 391.2L587.5 394.9L587.4 397.9L589.0 398.1L589.3 395.1L589.6 391.4L589.9 387.2L590.3 382.4L590.8 377.2L591.4 371.6L592.1 365.8L592.8 359.8L593.7 353.8L594.7 347.7L595.7 341.7L596.9 335.9L598.1 330.3L599.4 324.7L600.8 318.6L602.3 312.2L603.8 305.6L605.3 298.9L606.7 292.3L608.1 285.8L609.3 279.5L610.5 273.5L611.4 268.1L612.2 263.2L612.8 259.0L613.2 255.6Z"></path>
+<path class="root rt-sec" style="animation-delay:0.7s" d="M667.9 192.6L670.2 195.6L673.1 199.5L676.5 204.1L680.4 209.2L684.5 214.7L688.8 220.7L693.2 226.8L697.5 233.1L701.6 239.5L705.5 245.7L709.1 251.7L712.2 257.4L714.8 262.6L717.0 267.5L719.0 272.6L720.7 277.7L722.3 282.8L723.8 287.8L725.2 292.7L726.5 297.3L727.7 301.8L728.8 305.9L729.9 309.7L731.0 313.0L732.0 315.9L732.9 318.3L734.5 317.9L733.6 315.5L732.8 312.5L731.9 309.1L731.0 305.3L730.0 301.1L729.0 296.6L727.9 291.9L726.7 286.9L725.4 281.8L724.0 276.6L722.4 271.3L720.6 266.0L718.5 260.8L716.1 255.3L713.1 249.5L709.7 243.3L705.9 236.8L701.9 230.3L697.8 223.9L693.6 217.6L689.5 211.5L685.6 205.8L682.0 200.6L678.7 195.9L676.1 191.9L674.0 188.7Z"></path>
+<path class="root rt-sec" style="animation-delay:0.75s" d="M226.1 299.1L225.3 301.3L224.2 304.0L222.7 307.2L220.9 310.7L218.9 314.5L216.7 318.4L214.4 322.6L212.1 326.8L209.8 331.0L207.7 335.2L205.7 339.4L203.9 343.3L202.5 347.1L201.3 350.9L200.3 354.8L199.5 358.8L198.8 362.8L198.2 366.9L197.8 370.8L197.4 374.6L197.2 378.3L196.9 381.7L196.6 384.9L196.4 387.6L196.1 390.0L195.8 392.0L197.4 392.3L197.8 390.3L198.2 387.9L198.6 385.1L199.0 382.0L199.4 378.7L199.8 375.0L200.3 371.3L200.9 367.4L201.6 363.4L202.5 359.5L203.4 355.6L204.6 351.9L205.9 348.3L207.4 344.7L209.3 340.9L211.4 336.9L213.7 332.9L216.1 328.7L218.6 324.6L221.0 320.6L223.3 316.8L225.5 313.1L227.5 309.7L229.2 306.6L230.5 303.9L231.5 301.7Z"></path>
+<path class="root rt-sec" style="animation-delay:0.75s" d="M804.6 260.7L805.8 263.0L807.4 266.0L809.1 269.5L811.0 273.4L813.1 277.7L815.3 282.3L817.5 287.0L819.7 291.7L822.0 296.4L824.1 301.0L826.1 305.3L827.9 309.3L829.5 312.9L830.9 316.3L832.1 319.8L833.3 323.3L834.5 326.8L835.5 330.3L836.3 333.7L837.1 337.0L837.8 340.1L838.3 343.1L838.8 345.8L839.2 348.2L839.5 350.3L839.7 352.0L841.3 351.8L841.2 350.0L841.0 347.9L840.7 345.5L840.4 342.8L840.0 339.8L839.5 336.7L838.8 333.3L838.1 329.8L837.2 326.3L836.3 322.6L835.2 319.0L834.0 315.3L832.8 311.7L831.3 307.9L829.6 303.8L827.7 299.3L825.7 294.6L823.6 289.7L821.5 284.9L819.4 280.1L817.4 275.4L815.5 271.0L813.7 267.0L812.1 263.4L810.8 260.4L809.7 258.1Z"></path>
+</g>
+<g fill="var(--color--surface--cool)">
+<path class="root rt-main" style="animation-delay:0s" d="M451.0 -7.3L451.3 -5.9L451.5 -4.2L451.9 -2.1L452.3 0.2L452.7 2.8L453.2 5.6L453.7 8.6L454.3 11.7L454.9 14.9L455.4 18.2L455.9 21.5L456.5 24.8L457.0 28.0L457.5 31.3L457.9 34.9L458.4 38.7L458.8 42.7L459.2 46.7L459.6 50.6L460.0 54.6L460.3 58.3L460.8 61.9L461.2 65.1L461.6 68.0L462.0 70.5L462.4 72.4L476.3 71.7L476.5 69.7L476.7 67.2L477.0 64.2L477.3 60.9L477.6 57.3L478.0 53.6L478.4 49.7L478.8 45.7L479.3 41.8L479.7 38.0L480.1 34.3L480.5 31.0L480.9 28.0L481.3 25.2L481.6 22.3L482.0 19.4L482.3 16.5L482.7 13.5L483.0 10.7L483.4 7.9L483.8 5.3L484.3 2.9L484.9 0.6L485.5 -1.5L486.2 -3.3L486.9 -4.9Z"></path>
+<path class="root rt-main" style="animation-delay:0.15s" d="M456.0 59.1L447.6 66.6L436.5 76.6L423.3 88.6L408.5 101.8L392.6 115.6L376.0 129.4L358.8 142.5L339.2 156.1L317.7 170.3L295.3 184.7L273.1 199.4L252.2 214.2L233.6 229.0L217.1 243.9L202.1 259.1L188.1 274.4L175.2 289.5L163.1 304.1L151.7 318.0L140.9 331.2L130.6 344.7L120.9 358.1L112.2 370.8L104.6 382.2L98.3 391.8L93.5 399.0L95.5 400.3L100.6 393.4L107.3 384.0L115.2 372.8L124.3 360.5L134.3 347.4L144.9 334.4L156.1 321.6L167.9 308.1L180.3 293.9L193.5 279.3L207.7 264.7L222.9 250.2L239.3 236.0L257.8 222.1L278.7 208.0L301.0 194.0L323.7 180.0L345.7 166.3L366.1 153.0L384.1 140.0L401.4 126.5L418.0 112.9L433.4 100.1L447.1 88.5L458.5 79.0L467.3 72.1Z"></path>
+<path class="root rt-main" style="animation-delay:0.25s" d="M453.0 66.9L446.2 72.1L437.0 78.9L426.0 87.0L413.7 96.1L400.7 105.8L387.4 115.9L374.5 126.2L362.5 136.3L351.8 146.0L341.6 155.6L331.4 165.3L321.4 175.2L311.7 185.2L302.2 195.3L293.1 205.6L284.4 216.1L276.2 226.7L268.4 237.8L260.9 250.1L253.8 263.1L247.1 276.4L241.0 289.5L235.4 301.8L230.7 312.9L226.7 322.2L223.5 329.3L225.7 330.3L229.1 323.4L233.4 314.2L238.6 303.3L244.4 291.1L250.9 278.3L257.9 265.3L265.3 252.6L273.1 240.8L281.0 230.3L289.5 220.2L298.4 210.2L307.7 200.4L317.4 190.8L327.4 181.2L337.6 171.8L347.9 162.6L358.4 153.5L369.2 144.4L381.2 135.0L394.2 125.3L407.6 115.7L420.8 106.5L433.4 97.9L444.7 90.3L454.2 83.9L461.5 79.0Z"></path>
+<path class="root rt-main" style="animation-delay:0.2s" d="M458.1 78.8L456.1 85.5L453.3 93.9L449.8 103.8L445.7 114.9L441.2 127.1L436.5 140.0L431.6 153.5L426.8 167.2L422.0 181.1L417.2 195.8L412.0 211.4L406.8 227.8L401.5 244.6L396.2 261.8L391.1 279.1L386.2 296.4L381.6 313.4L377.2 330.5L372.9 349.0L368.6 368.4L364.4 388.0L360.5 407.1L356.9 425.0L353.7 441.0L351.1 454.5L349.1 464.8L351.5 465.3L353.8 455.1L356.8 441.7L360.4 425.8L364.4 408.0L368.8 389.0L373.4 369.6L378.2 350.3L383.1 332.0L387.9 315.1L393.0 298.3L398.4 281.3L404.0 264.2L409.8 247.2L415.6 230.6L421.4 214.5L427.0 199.1L432.4 184.7L437.6 171.2L443.0 157.8L448.4 144.7L453.6 132.1L458.6 120.2L463.2 109.4L467.3 99.7L470.7 91.5L473.3 85.0Z"></path>
+<path class="root rt-main" style="animation-delay:0.1s" d="M459.8 58.4L460.2 66.4L460.6 76.6L461.2 88.7L461.9 102.4L462.8 117.3L463.8 133.0L465.0 149.2L466.4 165.6L467.9 181.9L469.8 199.0L471.8 216.9L474.0 235.6L476.2 254.7L478.4 274.0L480.4 293.5L482.2 312.9L483.7 331.9L484.9 351.0L485.8 371.6L486.4 393.2L487.0 414.9L487.4 436.1L487.7 455.9L487.9 473.7L488.1 488.6L488.4 500.0L490.8 500.0L491.0 488.6L491.2 473.7L491.6 455.9L491.8 436.0L492.1 414.9L492.2 393.1L492.1 371.5L491.9 350.7L491.4 331.5L490.6 312.3L489.5 292.8L488.2 273.3L486.7 253.8L485.2 234.6L483.7 216.0L482.4 198.1L481.3 181.1L480.5 164.8L479.9 148.5L479.5 132.3L479.2 116.6L479.1 101.8L479.2 88.1L479.4 76.0L479.8 65.7L480.2 57.6Z"></path>
+<path class="root rt-main" style="animation-delay:0.3s" d="M472.4 82.0L477.3 88.0L483.6 95.8L491.0 105.1L499.0 115.5L507.4 126.9L515.8 138.8L523.9 150.8L531.2 162.8L537.5 174.3L543.6 186.2L549.5 198.5L555.2 211.2L560.8 224.1L566.2 237.1L571.4 250.0L576.3 262.7L581.0 275.1L585.3 287.4L589.4 300.4L593.3 313.9L596.8 327.5L600.1 340.6L603.0 352.8L605.6 363.8L607.7 373.0L609.5 380.1L611.8 379.6L610.4 372.5L608.6 363.2L606.4 352.1L603.9 339.8L601.1 326.5L597.9 312.8L594.5 299.1L590.8 285.7L586.9 273.2L582.6 260.5L578.1 247.5L573.4 234.3L568.4 221.0L563.3 207.7L557.9 194.6L552.4 181.8L546.7 169.4L540.6 157.2L533.5 144.7L525.8 132.0L517.7 119.6L509.6 107.8L502.0 96.9L495.1 87.3L489.3 79.2L484.9 73.0Z"></path>
+<path class="root rt-main" style="animation-delay:0.22s" d="M476.6 90.1L482.1 97.0L488.9 105.9L497.0 116.6L506.1 128.6L516.0 141.6L526.6 155.3L537.8 169.2L549.3 183.1L561.2 196.7L574.5 210.7L589.1 225.2L604.4 240.0L620.1 255.0L635.6 270.1L650.4 285.2L664.1 300.2L676.0 314.8L686.2 329.5L695.2 345.5L703.3 362.2L710.5 379.0L716.8 395.5L722.2 410.9L726.9 424.7L730.9 436.4L734.2 445.3L736.5 444.5L733.4 435.5L729.8 423.7L725.6 409.8L720.5 394.1L714.6 377.4L707.8 360.2L700.1 343.1L691.3 326.5L681.3 311.1L669.4 295.8L656.0 280.2L641.4 264.6L626.2 249.0L610.8 233.5L595.9 218.4L581.9 203.7L569.2 189.6L558.0 175.9L547.0 161.8L536.4 147.6L526.3 133.7L516.9 120.4L508.3 108.0L500.8 97.0L494.4 87.7L489.3 80.4Z"></path>
+<path class="root rt-main" style="animation-delay:0.32s" d="M481.9 77.1L489.9 81.1L500.0 86.3L511.8 92.4L525.2 99.5L539.7 107.4L555.3 115.9L571.7 125.1L588.6 134.7L605.9 144.8L625.3 155.8L646.6 167.9L669.1 180.6L692.1 193.9L714.9 207.3L736.7 220.8L756.9 234.0L774.6 246.6L789.7 258.9L803.4 271.9L815.9 285.3L827.2 298.8L837.4 311.7L846.4 323.9L854.4 334.7L861.2 343.8L867.0 350.8L868.9 349.3L863.4 342.2L856.8 333.0L849.2 321.9L840.4 309.5L830.5 296.2L819.4 282.3L807.0 268.4L793.3 254.8L778.2 241.9L760.5 228.7L740.4 215.0L718.7 201.1L696.1 187.1L673.2 173.4L651.0 160.2L629.9 147.8L610.9 136.4L593.8 125.9L577.2 115.8L561.0 106.2L545.7 97.2L531.3 88.9L518.3 81.4L506.7 74.7L496.9 69.1L489.1 64.6Z"></path>
+</g>
+<g>
+<text class="pillars_tree-word" x="95" y="432" text-anchor="middle">Awareness</text>
+<text class="pillars_tree-word" x="225" y="362" text-anchor="middle">Confidence</text>
+<text class="pillars_tree-word" x="350" y="497" text-anchor="middle">Coping</text>
+<text class="pillars_tree-word" x="490" y="532" text-anchor="middle">Agency</text>
+<text class="pillars_tree-word" x="610" y="412" text-anchor="middle">Connection</text>
+<text class="pillars_tree-word" x="735" y="477" text-anchor="middle">Values</text>
+<text class="pillars_tree-word" x="868" y="382" text-anchor="middle">Contribution</text>
+</g>
+</svg>
+</figure>
+<div class="text-align-center margin-top margin-large"><a class="button is-secondary is-inverse" href="/approach/resilience-model">Explore the model</a></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_reach">
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="section-header">
+<figure class="figure_illustration is-xlarge"><img src="../brand/illustrations/Circles.png" alt="Two overlapping brushed rings — connection"></figure>
+<span class="tagline">The ripple effect</span>
+<h2 class="heading-style-h2 is-nowrap">Your impact doesn’t stop at one classroom.</h2>
+</div>
+<div class="grid_4-4-4">
+<div class="reach_flow" aria-hidden="true"></div>
+<div class="stat_block is-center"><div class="reach_viz is-one"></div><div class="stat_number text-color-heading">1</div><h3 class="heading-style-h4">It starts with you</h3><p class="stat_label">One trained professional.</p></div>
+<div class="stat_block is-center"><div class="reach_viz is-hundreds"></div><div class="stat_number text-color-heading">100s</div><h3 class="heading-style-h4">You reach children</h3><p class="stat_label">Hundreds, every year.</p></div>
+<div class="stat_block is-center"><div class="reach_viz is-thousands"></div><div class="stat_number text-color-heading">1,000s</div><h3 class="heading-style-h4">It keeps spreading</h3><p class="stat_label">They carry it onward.</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_testimonials">
+<div class="padding-global">
+<div class="padding-section-large is-flush-top">
+<div class="container-xlarge">
+<div class="section-header">
+<figure class="figure_illustration is-medium"><img src="../brand/illustrations/SpeechBubble.png" alt="Hand-brushed speech bubble — reflection"></figure>
+<span class="tagline">From our trainers</span>
+<h2 class="heading-style-h2">People who took the step.</h2>
+</div>
+<div class="grid_4-4-4">
+<div class="testimonial_card">
+<div class="testimonial_quote">“I finally have something to reach for when a child is overwhelmed — instead of just hoping it passes. It changed how my whole classroom feels.”</div>
+<div class="testimonial_person"><div class="testimonial_avatar"><img src="../stock/stock-headshot-woman-1.jpg" alt="Sophie M."></div><div class="testimonial_who"><div class="testimonial_name">Sophie M.</div><div class="testimonial_role">Primary school teacher · Utrecht, NL</div></div></div>
+</div>
+<div class="testimonial_card">
+<div class="testimonial_quote">“As a child psychologist I’ve done many trainings. This one actually gave me a method I use every single week with the kids I work with.”</div>
+<div class="testimonial_person"><div class="testimonial_avatar"><img src="../stock/stock-headshot-man-1.jpg" alt="Thomas L."></div><div class="testimonial_who"><div class="testimonial_name">Thomas L.</div><div class="testimonial_role">Child therapist · Antwerp, BE</div></div></div>
+</div>
+<div class="testimonial_card">
+<div class="testimonial_quote">“It’s the depth behind it. I didn’t just learn exercises — I understood why they work, and that gave me real confidence.”</div>
+<div class="testimonial_person"><div class="testimonial_avatar"><img src="../stock/stock-headshot-woman-2.jpg" alt="Camille R."></div><div class="testimonial_who"><div class="testimonial_name">Camille R.</div><div class="testimonial_role">Coach &amp; MBSR-trainer · Lyon, FR</div></div></div>
+</div>
+</div>
+<div class="text-align-center margin-top margin-xlarge"><a class="button is-secondary" href="/stories">Read all experiences</a></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_team">
+<div class="padding-global">
+<div class="padding-section-large is-flush-top">
+<div class="container-xlarge">
+<div class="section-header">
+<figure class="figure_illustration is-large"><img src="../brand/illustrations/Hand.png" alt="Hand-brushed open hand — guidance"></figure>
+<span class="tagline">Get to know us</span>
+<h2 class="heading-style-h2">The people behind AMT.</h2>
+<p class="section-header_intro text-size-large team_intro">AMT is a warm, international community — trainers and partners in more than 25 countries, each bringing this work to children in their own practice. Get to know the people who make it, and where it all comes from.</p>
+</div>
+<div class="swiper team_swiper">
+<div class="swiper-wrapper">
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-eline.jpg" alt="Eline Snel"></div><div class="team_name">Eline Snel</div><div class="team_role">Founder of the Eline Snel® Method</div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-christel.jpg" alt="Christel van Hoof - Elderhorst"></div><div class="team_name">Christel van Hoof - Elderhorst</div><div class="team_role">Director · AMT</div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-vanessa.jpg" alt="Vanessa van der Sommen"></div><div class="team_name">Vanessa van der Sommen</div><div class="team_role">Back Office Manager</div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-janpaul.jpg" alt="Jan-Paul Buijk"></div><div class="team_name">Jan-Paul Buijk</div><div class="team_role">Trainer · Netherlands</div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-mirjam.jpg" alt="Mirjam Blok"></div><div class="team_name">Mirjam Blok</div><div class="team_role"></div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-anouk.jpg" alt="Anouk Poortenga"></div><div class="team_name">Anouk Poortenga</div><div class="team_role">Trainer · Netherlands</div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-wendy.jpg" alt="Wendy Kersemaekers"></div><div class="team_name">Wendy Kersemaekers</div><div class="team_role"></div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-marianne.jpg" alt="Marianne Hooijer"></div><div class="team_name">Marianne Hooijer</div><div class="team_role">Trainer &amp; Coordinator · France</div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-angie.jpg" alt="Angie Bucu"></div><div class="team_name">Angie Bucu</div><div class="team_role"></div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-bea.jpg" alt="Bea Peco"></div><div class="team_name">Bea Peco</div><div class="team_role"></div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-christian.jpg" alt="Christian Plebst"></div><div class="team_name">Christian Plebst</div><div class="team_role"></div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-vicky.jpg" alt="Vicky Severini"></div><div class="team_name">Vicky Severini</div><div class="team_role"></div></div></div>
+<div class="swiper-slide"><div class="team_card"><div class="team_photo"><img src="../brand/photos/amt-team-vero.jpg" alt="Vero Martorello"></div><div class="team_name">Vero Martorello</div><div class="team_role"></div></div></div>
+</div>
+<div class="team_nav">
+<button class="team_nav-btn team_nav-prev" type="button" aria-label="Previous trainers"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4 6.5 10l6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+<div class="team_progress"><div class="team_progress-fill"></div></div>
+<button class="team_nav-btn team_nav-next" type="button" aria-label="Next trainers"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.5 4l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+</div>
+</div>
+<div class="text-align-center margin-top margin-xlarge"><a class="button is-secondary" href="/about/story">Read our story</a></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_faq">
+<div class="padding-global">
+<div class="padding-section-large is-flush-top">
+<div class="container-small">
+<div class="section-header">
+<span class="tagline">Good to know</span>
+<h2 class="heading-style-h2">Questions, answered.</h2>
+</div>
+<div class="faq_list">
+<div class="faq_item is-first">
+<button class="faq_trigger" type="button" aria-expanded="false"><div class="faq_question">Do I need prior experience?</div><div class="faq_marker">+</div></button>
+<div class="faq_panel"><p class="faq_answer">No prior mindfulness training is required for most programs. We start from the ground up and build depth as we go. Some advanced tracks have prerequisites, which are listed per program.</p></div>
+</div>
+<div class="faq_item">
+<button class="faq_trigger" type="button" aria-expanded="false"><div class="faq_question">How much time does it take?</div><div class="faq_marker">+</div></button>
+<div class="faq_panel"><p class="faq_answer">It depends on the program — from a focused online course to an in-depth in-person certification. Each program page shows the duration, schedule and time commitment so you can plan around your work.</p></div>
+</div>
+<div class="faq_item">
+<button class="faq_trigger" type="button" aria-expanded="false"><div class="faq_question">Is the certificate recognised?</div><div class="faq_marker">+</div></button>
+<div class="faq_panel"><p class="faq_answer">Yes. AMT is a CRKBO-registered institute and our certification is recognised internationally. You’ll be a certified trainer in the method, qualified to bring it into your own practice.</p></div>
+</div>
+<div class="faq_item">
+<button class="faq_trigger" type="button" aria-expanded="false"><div class="faq_question">Can I do this alongside my job?</div><div class="faq_marker">+</div></button>
+<div class="faq_panel"><p class="faq_answer">Absolutely — most of our trainers are working teachers, therapists and coaches. Online and hybrid formats are designed to fit around a full schedule.</p></div>
+</div>
+<div class="faq_item">
+<button class="faq_trigger" type="button" aria-expanded="false"><div class="faq_question">Which languages can I train in?</div><div class="faq_marker">+</div></button>
+<div class="faq_panel"><p class="faq_answer">We currently offer programs in English, Dutch, French and Spanish, with trainers across more than 25 countries.</p></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_nudge background-color-warm">
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-medium">
+<div class="copy-block is-center">
+<span class="tagline">One small step</span>
+<h2 class="heading-style-h2">Start small. Try one exercise today.</h2>
+<p class="text-size-large text-color-primary">Made it this far? Take one simple exercise into your day — and see what it does.</p>
+<a class="button" href="#free-exercise">Get the free exercise</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_family">
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="section-header">
+<figure class="figure_illustration is-medium"><img src="../brand/illustrations/Moon.png" alt="Hand-brushed crescent moon — rest"></figure>
+<span class="tagline">A parent, not a professional?</span>
+<h2 class="heading-style-h2">Two ways we can help your family.</h2>
+</div>
+<div class="grid_6-6 is-top" style="gap:0;align-items:stretch;border:1px solid var(--color--border--hairline);border-radius:var(--radius--card);overflow:hidden">
+<div class="card" style="border:0;border-radius:0;background:#ccd9e3">
+<h3 class="heading-style-h3 card_title">Find a trainer near you</h3>
+<p class="card_body">Looking for someone to work with your child? Find an AMT-certified trainer in your area.</p>
+<div class="media_frame media_ratio-landscape">
+<svg class="media_map" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 750" width="1200" height="750" role="img" aria-label="Map of Europe showing AMT-certified trainers across twelve countries">
+<title>AMT-certified trainers across Europe</title>
+<desc>Brand-drawn map. Countries with AMT-certified trainers are highlighted; each frog marks a trainer location. Illustrative density — the live Find-a-Trainer map holds the full list.</desc>
+
+
+<defs><image id="amt-frog" width="30" height="30" href="../brand/logo/Favicon.png"></image></defs>
+<rect width="1200" height="750" fill="#f3dfbe"></rect>
+<g id="context-countries" fill="#eae5da" stroke="#fffbf5" stroke-width="1.5" stroke-linejoin="round"><path d="M63.0 936.9L63.0 938.5L62.6 943.3L46.4 950.8L60.1 950.0L59.6 936.9L63.0 936.9Z"></path><path d="M1457.3 546.0L1432.1 552.1L1422.3 561.9L1421.0 554.7L1426.5 542.5L1422.3 532.2L1396.5 522.1L1386.5 495.2L1374.2 487.6L1373.5 477.7L1395.1 480.5L1395.9 458.1L1414.8 453.1L1434.2 457.7L1438.2 427.4L1434.3 407.9L1412.0 409.4L1393.2 401.6L1367.4 415.6L1346.7 422.2L1335.4 417.1L1337.7 400.8L1323.5 379.4L1307.0 380.3L1288.1 358.2L1301.0 333.3L1294.5 326.5L1312.2 289.4L1335.1 309.1L1337.8 284.3L1383.7 246.7L1418.4 245.7Z"></path><path d="M1346.7 422.2L1336.6 440.8L1315.0 445.9L1292.9 477.7L1313.1 506.4L1310.9 526.5L1335.2 561.1L1335.2 561.1L1321.9 572.8L1318.1 580.2L1308.3 578.2L1293.0 560.6L1286.8 559.6L1272.8 552.8L1266.0 540.8L1245.3 534.6L1231.8 539.3L1227.9 533.8L1197.7 519.5L1164.9 514.7L1146.2 509.6L1143.4 513.1L1115.1 487.7L1089.8 476.2L1070.6 458.2L1086.7 453.3L1105.2 427.2L1092.7 414.7L1125.5 401.8L1124.9 394.8L1105.0 399.9L1105.7 385.7L1117.1 376.7L1138.6 374.3L1142.1 363.5L1137.2 345.4L1146.2 328.1L1146.0 318.3L1113.2 307.3L1100.2 307.7L1086.5 291.8L1069.5 297.2L1041.2 285.3L1041.7 278.5L1033.8 263.6L1016.1 261.9L1014.3 251.1L1019.8 244.0L1005.6 224.0L982.6 227.4L975.8 225.6L970.2 233.7L961.9 232.3L961.9 232.3L956.4 209.5L951.2 197.5L955.5 194.1L973.4 195.4L982.1 187.5L975.7 177.7L960.7 171.3L962.0 164.6L953.0 157.9L939.1 133.4L943.8 123.2L941.6 105.3L919.9 96.1L908.3 100.7L905.1 91.1L881.7 81.4L874.6 58.2L872.7 38.9L862.0 29.6L871.5 16.7L864.9 -21.8L880.7 -46.1L877.4 -53.5L877.4 -53.5L902.6 -77.3L879.3 -98.1L879.3 -98.1L926.9 -155.6L947.6 -182.4L955.9 -206.4L923.0 -239.4L932.1 -271.6L912.1 -309.2L927.1 -353.9L1108.5 -364.2L1029.2 -358.9L1030.6 -334.4L1032.1 -282.1L1060.7 -266.8L1078.1 -254.0L1080.9 -278.1L1067.5 -299.8L1081.7 -319.2L1135.4 -287.4L1154.1 -299.8L1139.2 -337.6L1232.2 -367.9L1418.4 245.7L1383.7 246.7L1337.8 284.3L1335.1 309.1L1312.2 289.4L1294.5 326.5L1301.0 333.3L1288.1 358.2L1307.0 380.3L1323.5 379.4L1337.7 400.8L1335.4 417.1L1346.7 422.2ZM760.7 151.5L719.8 152.1L692.5 147.9L697.5 131.4L728.2 119.1L751.5 125.7L761.3 131.7L758.9 142.0L760.7 151.5ZM998.6 435.6L1004.4 427.9L1020.2 434.6L1027.4 435.8L1030.3 442.0L1033.6 442.9L1033.8 445.6L1044.7 453.1L1067.3 451.2L1063.0 462.2L1038.7 467.6L1008.5 485.2L996.1 479.0L1001.0 464.6L976.8 455.6L980.7 449.7L1002.0 439.4L998.6 435.6Z"></path><path d="M591.3 -374.6L556.8 -300.9L564.9 -283.6L557.2 -263.8L535.1 -264.7L520.7 -218.9L522.0 -156.5L536.2 -133.4L528.9 -81.2L510.4 -51.7L500.6 -27.3L485.7 -53.3L441.8 -4.7L412.2 5.0L381.5 -16.1L373.5 -61.6L366.5 -164.4L387.0 -194.4L445.6 -234.6L489.5 -285.7L530.2 -357.8Z"></path><path d="M1049.3 809.9L1045.5 818.0L1037.4 814.5L1032.8 831.5L1038.4 834.4L1032.7 837.9L1031.7 844.6L1042.2 841.2L1042.7 851.1L1031.6 891.3L1029.4 884.8L1017.0 848.0L1017.0 848.0L1017.0 848.0L1023.5 839.6L1022.0 838.2L1027.8 826.3L1032.3 806.8L1035.5 800.3L1036.1 800.0L1043.6 800.1L1045.6 795.5L1051.6 795.2L1051.9 805.8L1048.9 809.7L1049.3 809.9Z"></path><path d="M1051.6 795.2L1045.6 795.5L1043.6 800.1L1036.1 800.0L1044.0 778.8L1055.1 760.3L1055.5 759.4L1065.5 760.7L1069.1 771.1L1057.0 780.9L1051.6 795.2Z"></path><path d="M1042.2 841.2L1031.7 844.6L1032.7 837.9L1038.4 834.4L1032.8 831.5L1037.4 814.5L1045.5 818.0L1045.5 833.7L1042.2 841.2Z"></path><path d="M466.3 871.1L456.8 825.5L443.1 815.1L442.9 808.9L424.7 793.5L422.8 773.8L436.5 759.1L441.7 737.2L438.2 711.7L442.7 697.8L466.9 686.8L482.4 690.1L481.8 703.8L500.6 693.8L502.2 699.0L491.1 712.3L491.0 724.7L498.7 731.4L495.7 754.4L481.1 767.7L485.3 781.9L496.8 782.4L502.4 794.8L510.9 798.8L509.6 818.7L498.8 826.0L491.9 834.2L476.7 844.0L479.0 854.6L477.1 865.2L466.3 871.1Z"></path><path d="M62.6 943.3L63.0 938.5L63.0 936.9L62.8 907.7L98.7 889.3L120.9 885.5L139.1 878.8L147.6 866.2L173.5 856.2L174.5 837.4L187.4 835.2L197.4 825.7L226.5 821.4L230.6 811.4L224.7 805.9L217.0 778.4L215.7 762.5L207.3 745.5L228.7 731.0L252.7 726.3L266.8 715.2L288.2 707.0L325.8 702.2L362.6 700.0L373.8 704.0L394.7 693.3L418.5 693.1L427.5 699.4L442.7 697.8L438.2 711.7L441.7 737.2L436.5 759.1L422.8 773.8L424.7 793.5L442.9 808.9L443.1 815.1L456.8 825.5L466.3 871.1L473.5 893.2L474.7 904.7L470.8 924.9L472.4 936.1L469.5 949.5L62.6 943.3Z"></path><path d="M1045.5 818.0L1049.3 809.9L1074.1 820.1L1117.6 792.6L1126.6 824.0L1122.3 827.9L1077.8 840.7L1100.0 866.0L1092.6 870.3L1089.0 878.7L1072.0 882.2L1066.7 891.2L1057.1 898.8L1032.4 894.9L1031.6 891.3L1042.7 851.1L1042.2 841.2L1045.5 833.7L1045.5 818.0Z"></path><path d="M1321.7 879.4L1326.3 890.4L1324.3 896.1L1331.5 914.8L1315.8 915.5L1310.2 903.7L1290.4 901.3L1306.7 877.3L1321.7 879.4Z"></path><path d="M1126.6 824.0L1117.6 792.6L1166.8 765.3L1175.2 733.3L1173.1 713.7L1185.3 707.0L1196.7 690.1L1206.2 685.8L1232.1 689.3L1239.9 696.3L1250.5 691.7L1264.9 723.9L1279.5 732.0L1281.2 747.5L1270.0 756.7L1264.8 777.2L1280.2 801.9L1307.4 816.1L1318.9 835.6L1315.2 854.0L1322.3 854.0L1322.5 867.4L1334.8 880.6L1321.7 879.4L1306.7 877.3L1290.4 901.3L1249.1 899.3L1186.4 848.8L1153.3 830.9L1126.6 824.0Z"></path><path d="M1422.3 561.9L1432.1 552.1L1457.3 546.0L1453.8 690.9L1449.7 671.5L1452.9 642.6L1435.6 633.1L1441.3 613.8L1426.5 612.1L1431.5 588.1L1452.4 595.1L1455.7 568.6L1449.4 551.9L1431.5 559.4L1429.2 580.6L1422.3 561.9Z"></path><path d="M1334.8 880.6L1322.5 867.4L1322.3 854.0L1315.2 854.0L1318.9 835.6L1307.4 816.1L1280.2 801.9L1264.8 777.2L1270.0 756.7L1281.2 747.5L1279.5 732.0L1264.9 723.9L1250.5 691.7L1250.5 691.7L1238.4 669.7L1242.7 661.2L1235.8 629.2L1251.0 621.2L1254.5 631.8L1265.7 644.7L1281.0 648.4L1289.0 647.6L1315.2 627.0L1323.6 624.9L1330.1 633.1L1322.5 647.0L1336.3 661.5L1341.8 660.1L1348.9 680.4L1370.0 686.1L1385.4 699.8L1417.0 704.5L1451.7 697.3L1453.8 690.9L1421.9 938.7L1400.5 931.7L1385.6 908.3L1369.2 875.1L1357.3 879.1L1343.1 870.8L1334.8 880.6Z"></path><path d="M1049.3 809.9L1048.9 809.7L1051.9 805.8L1051.6 795.2L1057.0 780.9L1069.1 771.1L1065.5 760.7L1055.5 759.4L1053.4 739.1L1058.9 728.1L1064.8 722.2L1070.8 716.4L1072.0 701.3L1079.3 706.5L1103.7 699.0L1115.6 704.1L1133.8 704.0L1159.4 693.8L1171.4 694.3L1196.7 690.1L1185.3 707.0L1173.1 713.7L1175.2 733.3L1166.8 765.3L1117.6 792.6L1074.1 820.1L1049.3 809.9Z"></path><path d="M1289.0 647.6L1281.0 648.4L1271.9 632.3L1272.0 627.9L1262.2 628.0L1255.6 620.4L1251.0 621.2L1242.2 612.9L1225.7 605.9L1227.8 592.0L1224.1 581.9L1254.9 577.4L1259.5 584.9L1268.0 589.9L1263.5 597.1L1275.4 606.9L1269.1 615.9L1278.5 623.6L1288.5 628.2L1289.0 647.6Z"></path><path d="M500.6 -27.3L510.4 -51.7L528.9 -81.2L536.2 -133.4L522.0 -156.5L520.7 -218.9L535.1 -264.7L557.2 -263.8L564.9 -283.6L556.8 -300.9L591.3 -374.6L786.7 -364.6L748.5 -349.5L727.0 -313.2L730.4 -282.0L695.1 -242.2L652.2 -200.8L636.0 -135.6L651.8 -104.0L673.1 -79.7L652.6 -31.4L629.5 -21.6L621.1 47.0L608.4 83.9L581.5 80.1L568.9 110.8L543.2 112.5L536.1 76.0L517.5 30.9L500.6 -27.3Z"></path><path d="M881.7 81.4L905.1 91.1L908.3 100.7L919.9 96.1L941.6 105.3L943.8 123.2L939.1 133.4L953.0 157.9L962.0 164.6L960.7 171.3L975.7 177.7L982.1 187.5L973.4 195.4L955.5 194.1L951.2 197.5L956.4 209.5L961.9 232.3L961.9 232.3L942.8 234.4L936.0 242.1L934.6 259.7L925.7 256.3L905.7 258.0L899.8 249.8L891.5 255.9L883.1 250.9L865.6 250.2L840.8 241.8L818.4 239.0L801.2 239.8L789.0 249.3L778.4 250.6L778.0 235.0L771.1 218.6L784.4 211.3L784.6 196.9L778.4 183.1L777.4 166.9L798.9 167.2L823.0 153.2L828.2 132.1L846.4 120.0L844.3 102.8L857.8 96.4L881.7 81.4Z"></path><path d="M961.9 232.3L970.2 233.7L975.8 225.6L982.6 227.4L1005.6 224.0L1019.8 244.0L1014.3 251.1L1016.1 261.9L1033.8 263.6L1041.7 278.5L1041.2 285.3L1069.5 297.2L1086.5 291.8L1100.2 307.7L1113.2 307.3L1146.0 318.3L1146.2 328.1L1137.2 345.4L1142.1 363.5L1138.6 374.3L1117.1 376.7L1105.7 385.7L1105.0 399.9L1087.2 402.5L1072.4 412.8L1051.6 414.4L1032.5 426.2L1033.6 442.9L1030.3 442.0L1027.4 435.8L1020.2 434.6L1004.4 427.9L998.6 435.6L995.5 432.2L961.0 424.3L959.5 412.5L938.9 416.4L930.6 433.7L913.4 456.7L903.3 451.4L892.9 456.4L883.0 450.7L888.6 447.3L892.4 436.6L898.5 426.6L897.0 421.0L901.6 418.5L903.8 422.8L916.9 423.8L922.8 421.4L918.6 418.2L920.2 413.5L912.4 405.5L909.2 392.1L901.1 386.9L902.7 376.0L892.7 367.2L883.5 366.0L867.2 355.8L852.4 359.1L847.1 363.9L837.7 363.9L832.1 371.5L815.7 374.6L808.1 379.6L797.8 371.7L783.6 371.5L769.8 367.9L760.2 374.9L758.7 366.2L746.3 357.3L750.7 344.1L756.8 335.5L761.7 337.4L756.0 322.4L776.1 294.4L787.2 290.5L789.6 280.9L778.4 250.6L789.0 249.3L801.2 239.8L818.4 239.0L840.8 241.8L865.6 250.2L883.1 250.9L891.5 255.9L899.8 249.8L905.7 258.0L925.7 256.3L934.6 259.7L936.0 242.1L942.8 234.4L961.9 232.3Z"></path><path d="M632.9 367.1L631.2 380.3L618.7 380.4L623.0 387.3L615.6 407.9L611.4 413.2L591.9 414.0L580.7 421.2L562.4 418.7L530.6 410.6L525.6 399.5L503.7 405.1L501.1 411.1L487.6 406.6L476.3 405.7L466.2 399.9L469.6 392.1L468.8 386.4L475.5 384.6L486.7 393.5L489.9 385.1L509.5 386.4L525.4 380.7L536.0 381.7L542.9 388.2L545.0 382.8L541.9 361.7L549.9 357.5L557.7 342.4L574.2 352.9L586.7 339.5L594.5 337.0L611.8 347.1L622.2 345.4L632.5 351.6L630.7 355.7L632.9 367.1Z"></path><path d="M746.3 357.3L758.7 366.2L760.2 374.9L746.7 381.7L736.1 403.4L722.7 424.8L704.9 430.8L691.0 429.4L674.0 437.6L674.0 437.6L665.7 442.2L647.3 436.2L630.7 422.8L623.7 418.9L619.3 408.2L615.6 407.9L623.0 387.3L618.7 380.4L631.2 380.3L632.9 367.1L644.2 375.4L652.4 378.9L671.0 374.9L672.8 368.4L681.7 367.4L692.5 362.4L694.9 364.5L705.3 360.4L710.5 352.7L717.8 350.7L741.6 360.6L746.3 357.3Z"></path><path d="M847.1 363.9L852.4 359.1L867.2 355.8L883.5 366.0L892.7 367.2L902.7 376.0L901.1 386.9L909.2 392.1L912.4 405.5L920.2 413.5L918.6 418.2L922.8 421.4L916.9 423.8L903.8 422.8L901.6 418.5L897.0 421.0L898.5 426.6L892.4 436.6L888.6 447.3L883.0 450.7L879.0 436.5L881.3 423.1L880.6 409.2L867.8 390.3L860.8 376.7L853.9 367.1L847.1 363.9Z"></path><path d="M883.0 450.7L892.9 456.4L903.3 451.4L913.4 456.7L913.9 464.6L903.1 471.2L896.4 468.4L890.2 505.0L877.1 501.8L860.9 490.8L834.8 497.9L823.8 505.5L791.1 504.0L774.1 499.3L765.4 501.5L759.0 489.1L755.0 483.8L760.1 478.6L754.6 474.8L747.7 481.7L734.7 472.8L733.0 460.1L719.4 452.9L716.9 443.0L704.9 430.8L722.7 424.8L736.1 403.4L746.7 381.7L760.2 374.9L769.8 367.9L783.6 371.5L797.8 371.7L808.1 379.6L815.7 374.6L832.1 371.5L837.7 363.9L847.1 363.9L853.9 367.1L860.8 376.7L867.8 390.3L880.6 409.2L881.3 423.1L879.0 436.5L883.0 450.7Z"></path><path d="M844.3 102.8L846.4 120.0L828.2 132.1L823.0 153.2L798.9 167.2L777.4 166.9L772.1 155.5L760.7 151.5L758.9 142.0L761.3 131.7L751.5 125.7L728.2 119.1L723.5 86.8L748.9 74.8L786.2 77.3L808.0 73.4L811.1 81.6L823.0 84.1L844.3 102.8Z"></path><path d="M862.0 29.6L872.7 38.9L874.6 58.2L881.7 81.4L857.8 96.4L844.3 102.8L823.0 84.1L811.1 81.6L808.0 73.4L786.2 77.3L748.9 74.8L723.5 86.8L724.2 57.2L735.2 32.1L756.1 18.3L773.7 48.4L791.6 47.6L795.8 16.7L814.8 9.4L824.5 14.5L843.6 29.5L862.0 29.6Z"></path><path d="M877.4 -53.5L877.4 -53.5L880.7 -46.1L864.9 -21.8L871.5 16.7L862.0 29.6L843.6 29.5L824.5 14.5L814.8 9.4L795.8 16.7L798.4 -7.6L790.2 -2.4L776.1 -17.1L774.2 -41.3L802.3 -53.1L830.3 -59.3L854.4 -52.3L877.4 -53.5L877.4 -53.5Z"></path><path d="M759.0 489.1L765.4 501.5L774.1 499.3L791.1 504.0L823.8 505.5L834.8 497.9L860.9 490.8L877.1 501.8L890.2 505.0L878.6 517.4L870.5 538.6L877.7 555.3L858.6 551.4L835.9 560.6L835.7 575.0L815.5 577.8L799.8 567.7L782.0 575.6L765.6 574.8L764.0 555.6L752.9 546.2L756.6 542.0L754.1 538.5L757.9 529.1L766.4 519.8L755.6 506.9L753.6 495.9L759.0 489.1Z"></path><path d="M839.8 742.0L837.0 749.9L805.0 752.1L805.2 747.7L778.1 742.6L782.2 731.2L794.4 740.2L811.7 738.7L828.2 740.6L827.7 745.2L839.8 742.0ZM765.6 574.8L782.0 575.6L799.8 567.7L815.5 577.8L835.7 575.0L835.9 560.6L846.8 568.3L839.9 586.4L834.6 589.6L821.1 588.8L809.5 586.0L782.6 593.5L798.0 609.5L786.7 614.2L774.3 614.2L762.5 599.5L758.4 605.8L763.3 622.7L774.4 635.9L766.1 642.0L778.4 654.9L789.4 662.9L789.8 678.4L769.2 671.2L775.8 685.1L761.7 688.0L770.1 712.0L755.3 712.3L737.1 700.5L728.8 678.7L724.9 660.4L716.2 647.6L704.8 631.7L703.3 623.7L713.7 610.0L715.0 600.7L722.2 596.6L722.7 589.0L737.2 586.5L745.7 580.2L757.7 580.8L761.4 575.7L765.6 574.8Z"></path><path d="M722.7 589.0L722.2 596.6L715.0 600.7L713.7 610.0L703.3 623.7L699.6 621.7L699.1 615.5L686.8 606.0L684.9 592.4L686.7 572.7L689.8 563.7L686.0 559.1L686.0 559.1L684.5 549.8L694.2 535.3L695.6 540.9L701.6 538.3L706.3 546.2L711.6 549.2L713.1 559.8L713.1 559.8L710.3 569.6L713.4 582.0L722.7 589.0Z"></path><path d="M623.7 418.9L630.7 422.8L647.3 436.2L665.7 442.2L674.0 437.6L679.4 449.6L686.5 458.4L677.9 470.0L667.8 463.2L652.5 463.6L633.4 458.5L623.0 459.2L618.2 465.6L610.2 458.5L605.6 471.3L616.4 485.5L621.3 494.9L631.5 506.2L639.9 512.8L648.3 525.2L668.0 536.4L665.6 541.5L665.6 541.5L644.7 530.5L631.8 519.8L611.5 511.0L592.8 488.8L597.2 486.5L587.1 473.7L586.7 463.4L572.4 458.5L565.6 471.8L559.0 461.5L559.5 450.8L560.3 450.3L575.8 451.3L579.9 446.1L587.4 451.2L596.2 451.8L596.1 443.1L603.8 439.9L606.0 427.3L623.7 418.9Z"></path><path d="M389.8 300.5L394.3 308.2L393.0 322.9L386.6 323.6L381.6 320.7L384.1 301.8L389.8 300.5Z"></path><path d="M117.8 168.6L121.5 194.7L104.7 226.7L65.3 247.5L33.8 242.2L51.9 205.1L40.3 168.1L70.5 138.9L87.3 121.3L91.9 141.5L87.3 161.5L101.0 161.0L117.8 168.6Z"></path><path d="M-72.0 -354.0L-46.9 -318.4L-75.8 -279.6L-139.9 -245.6L-159.0 -236.7L-188.3 -243.9L-250.3 -259.4L-228.4 -281.5L-237.4 -316.2L-238.4 -331.4L-201.7 -350.0L-140.0 -363.9Z"></path><path d="M1286.8 559.6L1293.0 560.6L1308.3 578.2L1318.1 580.2L1321.9 572.8L1335.2 561.1L1346.9 576.4L1358.2 596.8L1368.6 598.1L1375.4 605.8L1357.1 608.1L1353.2 630.0L1349.4 639.8L1341.3 646.4L1341.8 660.1L1336.3 661.5L1322.5 647.0L1330.1 633.1L1323.6 624.9L1315.2 627.0L1289.0 647.6L1288.5 628.2L1278.5 623.6L1269.1 615.9L1275.4 606.9L1263.5 597.1L1268.0 589.9L1259.5 584.9L1254.9 577.4L1260.4 572.7L1276.9 581.0L1288.9 582.7L1292.0 579.3L1281.0 563.6L1286.8 559.6ZM1281.0 648.4L1265.7 644.7L1254.5 631.8L1251.0 621.2L1255.6 620.4L1262.2 628.0L1272.0 627.9L1271.9 632.3L1281.0 648.4Z"></path><path d="M1143.4 513.1L1146.2 509.6L1164.9 514.7L1197.7 519.5L1227.9 533.8L1231.8 539.3L1245.3 534.6L1266.0 540.8L1272.8 552.8L1286.8 559.6L1281.0 563.6L1292.0 579.3L1288.9 582.7L1276.9 581.0L1260.4 572.7L1254.9 577.4L1224.1 581.9L1202.7 567.7L1179.0 569.1L1182.3 556.6L1176.7 536.6L1163.9 525.7L1151.6 522.3L1143.4 513.1Z"></path><path d="M562.4 418.7L580.7 421.2L591.9 414.0L611.4 413.2L615.6 407.9L619.3 408.2L623.7 418.9L606.0 427.3L603.8 439.9L596.1 443.1L596.2 451.8L587.4 451.2L579.9 446.1L575.8 451.3L560.3 450.3L565.3 447.5L560.0 434.2L562.4 418.7Z"></path><path d="M927.1 -353.9L912.1 -309.2L932.1 -271.6L923.0 -239.4L955.9 -206.4L947.6 -182.4L926.9 -155.6L879.3 -98.1L879.3 -98.1L879.3 -98.1L839.0 -94.6L799.9 -78.6L763.8 -69.5L750.9 -93.2L729.4 -107.7L734.3 -152.2L723.5 -194.1L734.1 -221.8L754.3 -252.4L805.1 -306.8L820.0 -317.6L817.6 -339.6L786.7 -364.6Z"></path><path d="M756.8 335.5L750.7 344.1L746.3 357.3L741.6 360.6L717.8 350.7L710.5 352.7L705.3 360.4L694.9 364.5L692.5 362.4L681.7 367.4L672.8 368.4L671.0 374.9L652.4 378.9L644.2 375.4L632.9 367.1L630.7 355.7L632.5 351.6L635.6 344.3L645.4 344.9L653.0 341.5L653.6 338.4L657.9 336.8L659.3 329.3L664.4 327.8L667.9 321.8L674.5 321.8L675.8 323.8L684.9 319.3L696.1 331.1L709.2 324.0L719.7 327.4L735.7 322.7L756.8 335.5Z"></path><path d="M589.3 267.0L599.8 278.1L616.4 281.1L615.0 290.5L627.1 297.6L630.4 288.8L645.7 292.6L647.8 303.2L664.3 305.2L674.5 321.8L667.9 321.8L664.4 327.8L659.3 329.3L657.9 336.8L653.6 338.4L653.0 341.5L645.4 344.9L635.6 344.3L632.5 351.6L622.2 345.4L611.8 347.1L594.5 337.0L586.7 339.5L574.2 352.9L557.7 342.4L545.1 328.1L533.8 320.1L531.4 305.9L527.6 295.8L543.7 288.4L552.0 279.9L567.9 273.3L573.5 266.7L579.3 270.7L589.3 267.0Z"></path><path d="M1032.4 894.9L1057.1 898.8L1066.7 891.2L1072.0 882.2L1089.0 878.7L1092.6 870.3L1100.0 866.0L1077.8 840.7L1122.3 827.9L1126.6 824.0L1153.3 830.9L1186.4 848.8L1249.1 899.3L1290.4 901.3L1310.2 903.7L1315.8 915.5L1331.5 914.8L1340.2 936.1L1351.1 941.6L1354.9 950.2L1047.6 943.7L1036.2 926.9L1025.2 927.0L1028.6 913.5L1029.6 904.8L1032.4 894.9Z"></path><path d="M982.9 746.3L984.5 746.1L987.7 739.7L1003.7 740.1L1023.9 732.1L1008.9 743.5L1010.5 748.4L1008.1 747.5L1003.9 749.5L1000.6 749.0L999.5 750.0L999.0 747.3L997.4 745.7L993.1 745.4L987.1 747.7L982.9 746.3Z"></path><path d="M982.9 746.3L987.1 747.7L993.1 745.4L997.4 745.7L999.0 747.3L999.5 750.0L1000.6 749.0L1003.9 749.5L1008.1 747.5L1010.5 748.4L1011.2 750.6L988.4 761.3L977.6 757.9L972.4 747.3L982.9 746.3Z"></path><path d="M207.3 745.5L215.7 762.5L217.0 778.4L224.7 805.9L230.6 811.4L226.5 821.4L197.4 825.7L187.4 835.2L174.5 837.4L173.5 856.2L147.6 866.2L139.1 878.8L120.9 885.5L98.7 889.3L62.8 907.7L63.0 936.9L59.6 936.9L60.1 950.0L46.4 950.8L-36.4 937.3L-36.0 936.9L-24.9 927.5L-4.2 924.8L13.3 907.9L24.5 901.3L43.0 880.4L37.5 849.1L45.9 827.1L48.9 813.6L63.2 796.2L85.5 784.3L101.9 773.4L116.8 746.1L123.8 729.8L140.1 729.9L153.5 741.2L174.7 739.4L197.7 745.2L207.3 745.5Z"></path><path d="M811.1 897.8L804.4 877.7L810.2 862.1L806.7 851.3L814.8 839.1L844.3 838.7L865.7 845.4L887.8 852.9L898.1 856.9L915.2 848.8L924.3 841.6L943.9 839.5L959.7 842.7L965.8 855.3L970.9 847.0L988.8 853.0L1006.1 854.4L1017.0 848.0L1017.0 848.0L1029.4 884.8L1031.6 891.3L1025.4 901.3L1020.6 920.0L1014.5 932.8L1009.4 937.1L1002.0 929.1L991.9 918.1L976.1 882.5L973.8 884.8L983.0 911.0L996.6 935.8Z"></path><path d="M469.5 949.5L472.4 936.1L470.8 924.9L474.7 904.7L473.5 893.2L466.3 871.1L477.1 865.2L479.0 854.6L476.7 844.0L491.9 834.2L498.8 826.0L509.6 818.7L510.9 798.8L537.0 807.7L546.3 805.5L564.9 809.8L594.3 821.3L604.8 844.0L624.7 849.0L656.0 859.6L679.7 872.1L690.5 865.6L701.2 853.9L696.0 834.5L703.0 822.0L719.0 810.0L734.3 806.4L764.4 811.7L771.9 823.2L780.2 823.3L787.3 827.7L809.4 830.7L814.8 839.1L806.7 851.3L810.2 862.1L804.4 877.7L811.1 897.8Z"></path><path d="M668.0 536.4L648.3 525.2L639.9 512.8L631.5 506.2L621.3 494.9L616.4 485.5L605.6 471.3L610.2 458.5L618.2 465.6L623.0 459.2L633.4 458.5L652.5 463.6L667.8 463.2L677.9 470.0L677.9 470.0L686.0 469.9L680.4 483.3L691.1 495.0L687.9 509.1L682.6 510.5L678.5 513.2L671.3 520.1L668.0 536.4Z"></path><path d="M752.9 546.2L764.0 555.6L765.6 574.8L761.4 575.7L757.7 580.8L745.7 580.2L737.2 586.5L722.7 589.0L713.4 582.0L710.3 569.6L713.1 559.8L713.1 559.8L715.9 560.0L716.9 554.0L730.1 549.5L735.0 548.4L742.6 546.6L752.9 546.2Z"></path><path d="M701.6 538.3L695.6 540.9L694.2 535.3L684.5 549.8L686.0 559.1L681.4 556.8L675.2 547.3L665.6 541.5L668.0 536.4L671.3 520.1L678.5 513.2L682.6 510.5L688.5 515.6L691.8 519.7L699.1 522.9L707.6 529.1L705.7 531.6L701.6 538.3Z"></path><path d="M713.1 559.8L711.6 549.2L706.3 546.2L701.6 538.3L705.7 531.6L711.0 529.5L714.1 519.6L718.1 518.0L721.3 522.2L725.4 524.0L728.3 528.8L732.0 530.2L736.3 535.6L739.4 535.5L737.0 542.7L734.3 546.2L735.0 548.4L730.1 549.5L716.9 554.0L715.9 560.0L713.1 559.8Z"></path></g>
+<g id="trainer-countries" fill="#c2d0b6" stroke="#fffbf5" stroke-width="1.8" stroke-linejoin="round"><path d="M393.0 322.9L403.5 331.6L435.5 337.7L424.3 360.2L421.5 383.3L415.4 388.8L405.3 385.9L406.0 394.0L389.7 411.9L389.4 426.2L400.0 421.3L407.6 435.0L406.7 443.8L413.3 455.5L405.6 464.8L411.3 488.5L423.3 492.3L420.8 505.4L400.6 522.3L356.8 514.2L324.5 523.9L321.9 541.7L296.2 545.5L271.1 532.1L263.1 538.5L222.2 525.1L213.3 513.5L224.8 495.5L229.0 434.3L206.1 401.1L189.7 384.9L155.7 372.5L153.5 348.7L182.3 341.5L219.6 350.0L212.6 312.4L233.6 326.8L285.3 300.6L292.0 272.6L311.4 265.6L314.6 277.7L325.0 278.3L335.3 292.0L350.8 308.0L362.2 305.4L381.6 320.7L386.6 323.6L393.0 322.9ZM449.9 537.1L464.2 525.8L468.0 551.1L460.7 573.6L450.6 567.7L445.4 548.0L449.9 537.1Z"></path><path d="M777.4 166.9L778.4 183.1L784.6 196.9L784.4 211.3L771.1 218.6L778.0 235.0L778.4 250.6L789.6 280.9L787.2 290.5L776.1 294.4L756.0 322.4L761.7 337.4L756.8 335.5L735.7 322.7L719.7 327.4L709.2 324.0L696.1 331.1L684.9 319.3L675.8 323.8L674.5 321.8L664.3 305.2L647.8 303.2L645.7 292.6L630.4 288.8L627.1 297.6L615.0 290.5L616.4 281.1L599.8 278.1L589.3 267.0L580.2 244.8L581.9 232.7L576.4 213.7L568.3 200.9L574.5 191.2L569.3 172.6L584.5 161.8L619.2 144.6L647.2 131.9L669.4 138.3L671.0 147.4L692.5 147.9L719.8 152.1L760.7 151.5L772.1 155.5L777.4 166.9Z"></path><path d="M569.3 172.6L574.5 191.2L568.3 200.9L576.4 213.7L581.9 232.7L580.2 244.8L589.3 267.0L579.3 270.7L573.5 266.7L567.9 273.3L552.0 279.9L543.7 288.4L527.6 295.8L531.4 305.9L533.8 320.1L545.1 328.1L557.7 342.4L549.9 357.5L541.9 361.7L545.0 382.8L542.9 388.2L536.0 381.7L525.4 380.7L509.5 386.4L489.9 385.1L486.7 393.5L475.5 384.6L468.8 386.4L444.9 376.5L440.4 383.6L421.5 383.3L424.3 360.2L435.5 337.7L403.5 331.6L393.0 322.9L394.3 308.2L389.8 300.5L392.4 277.5L388.6 241.1L402.0 241.1L407.6 227.8L413.2 195.0L409.0 182.7L413.3 175.0L431.9 173.0L436.0 181.0L451.1 162.9L446.0 149.0L445.0 127.7L461.8 132.7L476.0 126.9L476.4 141.5L498.9 150.2L498.7 163.4L521.3 156.4L533.7 146.2L558.8 160.9L569.3 172.6Z"></path><path d="M1250.5 691.7L1239.9 696.3L1232.1 689.3L1206.2 685.8L1196.7 690.1L1171.4 694.3L1159.4 693.8L1133.8 704.0L1115.6 704.1L1103.7 699.0L1079.3 706.5L1072.0 701.3L1070.8 716.4L1064.8 722.2L1058.9 728.1L1050.7 715.9L1059.1 705.8L1045.6 708.1L1027.0 701.9L1011.7 717.4L978.0 720.4L960.0 706.0L936.0 705.1L930.9 716.3L915.6 719.5L894.1 705.1L869.8 705.6L856.6 678.5L840.4 663.2L851.2 641.6L837.1 628.2L861.8 601.1L896.0 600.0L905.3 578.2L947.7 582.0L974.4 563.2L1000.3 555.0L1037.1 554.4L1075.8 574.9L1107.7 586.0L1133.6 581.6L1152.7 584.1L1179.0 569.1L1202.7 567.7L1224.1 581.9L1227.8 592.0L1225.7 605.9L1242.2 612.9L1251.0 621.2L1235.8 629.2L1242.7 661.2L1238.4 669.7L1250.5 691.7L1250.5 691.7ZM835.9 560.6L858.6 551.4L877.7 555.3L880.3 566.5L899.7 575.9L895.7 582.9L869.3 584.5L859.8 593.4L841.3 608.8L834.3 595.5L834.6 589.6L839.9 586.4L846.8 568.3L835.9 560.6Z"></path><path d="M468.8 386.4L469.6 392.1L466.2 399.9L476.3 405.7L487.6 406.6L485.9 419.6L476.1 424.9L459.6 420.9L454.8 433.6L444.2 434.6L440.4 429.6L427.9 440.2L417.2 441.7L407.6 435.0L400.0 421.3L389.4 426.2L389.7 411.9L406.0 394.0L405.3 385.9L415.4 388.8L421.5 383.3L440.4 383.6L444.9 376.5L468.8 386.4Z"></path><path d="M392.4 277.5L389.8 300.5L384.1 301.8L381.6 320.7L362.2 305.4L350.8 308.0L335.3 292.0L325.0 278.3L314.6 277.7L311.4 265.6L329.2 258.8L329.2 258.8L329.2 258.8L345.5 261.5L366.1 254.3L380.2 269.4L392.4 277.5Z"></path><path d="M409.0 182.7L413.2 195.0L407.6 227.8L402.0 241.1L388.6 241.1L392.4 277.5L380.2 269.4L366.1 254.3L345.5 261.5L329.2 258.8L329.2 258.8L340.7 249.2L360.1 196.9L390.5 181.7L409.0 182.7Z"></path><path d="M54.8 559.0L62.8 551.6L71.9 547.3L77.5 561.6L90.6 561.6L94.4 557.9L107.4 558.9L113.6 573.5L103.3 581.3L103.0 603.7L99.4 607.8L98.5 621.2L88.9 623.5L97.8 640.4L91.7 658.7L99.3 666.9L96.3 674.4L88.1 684.6L89.9 693.7L81.0 700.7L69.3 696.9L57.8 699.9L61.2 678.5L59.1 661.6L49.2 659.1L43.9 648.5L45.6 630.2L54.5 620.0L56.1 608.6L60.7 591.4L60.2 579.2L55.8 568.8L54.8 559.0Z"></path><path d="M89.9 693.7L88.1 684.6L96.3 674.4L99.3 666.9L91.7 658.7L97.8 640.4L88.9 623.5L98.5 621.2L99.4 607.8L103.0 603.7L103.3 581.3L113.6 573.5L107.4 558.9L94.4 557.9L90.6 561.6L77.5 561.6L71.9 547.3L62.8 551.6L54.8 559.0L55.9 538.1L46.8 525.3L78.3 503.7L105.5 509.2L135.3 509.0L158.9 514.1L177.4 512.5L213.3 513.5L222.2 525.1L263.1 538.5L271.1 532.1L296.2 545.5L321.9 541.7L323.1 558.7L302.0 578.0L273.6 584.1L271.6 593.8L257.9 609.6L249.4 632.5L258.0 648.5L245.2 660.9L240.4 678.8L223.6 684.2L207.9 705.2L179.6 705.6L158.5 705.1L144.6 714.6L136.1 724.8L125.2 722.5L117.0 713.4L110.7 697.9L89.9 693.7Z"></path><path d="M487.6 406.6L501.1 411.1L503.7 405.1L525.6 399.5L530.6 410.6L562.4 418.7L560.0 434.2L565.3 447.5L547.6 443.0L529.5 454.0L530.8 469.2L528.0 477.9L535.3 493.4L556.2 508.6L567.3 533.2L592.1 556.8L609.5 556.7L614.9 563.1L608.7 568.9L628.6 579.4L644.9 588.1L663.9 603.0L666.2 608.3L662.1 618.4L649.7 605.2L630.4 600.5L621.1 618.9L637.1 629.3L634.5 643.9L625.2 645.6L613.4 669.3L604.1 671.5L604.2 663.0L608.7 648.2L613.5 642.2L604.9 626.0L598.1 611.7L588.9 608.2L582.3 595.9L568.0 590.7L558.4 579.1L542.0 577.2L524.6 564.1L504.3 545.1L489.2 528.1L482.2 498.6L471.2 495.1L453.1 485.1L442.9 489.2L430.0 503.2L420.8 505.4L423.3 492.3L411.3 488.5L405.6 464.8L413.3 455.5L406.7 443.8L407.6 435.0L417.2 441.7L427.9 440.2L440.4 429.6L444.2 434.6L454.8 433.6L459.6 420.9L476.1 424.9L485.9 419.6L487.6 406.6ZM583.6 665.0L600.5 662.6L592.4 684.2L595.8 692.7L591.1 706.6L574.1 696.4L562.8 693.5L531.8 679.6L534.9 665.5L560.9 668.0L583.6 665.0ZM449.1 587.4L460.2 578.5L473.6 598.9L470.4 636.3L460.3 634.5L451.3 643.8L442.9 636.4L442.0 602.3L436.9 586.0L449.1 587.4Z"></path><path d="M476.0 126.9L461.8 132.7L445.0 127.7L436.0 106.6L435.3 66.9L439.0 56.2L445.4 44.2L465.0 41.8L472.8 30.7L490.7 19.2L489.9 40.0L483.3 53.0L486.0 64.1L498.0 70.1L492.6 84.8L486.0 80.6L470.0 108.4L476.0 126.9ZM530.5 83.6L537.6 103.0L524.2 133.8L501.0 112.4L497.9 96.5L530.5 83.6Z"></path><path d="M117.8 168.6L101.0 161.0L87.3 161.5L91.9 141.5L87.3 121.3L105.9 119.7L129.7 143.1L117.8 168.6ZM186.8 185.5L186.8 185.5L190.1 164.2L175.2 141.3L174.9 140.8L147.9 134.2L142.6 124.0L150.7 106.9L143.4 96.3L131.4 114.5L130.1 77.2L118.9 57.2L127.0 15.6L144.2 -17.8L162.0 -14.5L188.8 -18.0L165.0 26.4L187.7 20.9L212.0 21.1L206.2 53.8L186.2 89.0L209.2 91.5L211.0 95.5L230.8 140.4L246.0 146.4L259.7 188.4L266.0 202.7L292.9 209.6L290.2 232.3L278.9 242.7L287.8 260.7L267.8 278.8L238.1 278.5L200.2 287.9L189.9 281.2L175.2 297.1L154.6 293.3L139.0 306.2L127.2 299.5L159.8 263.5L179.7 256.0L179.5 255.9L144.8 250.1L138.5 236.2L161.7 225.2L149.6 205.9L153.8 182.2L186.8 185.5Z"></path><path d="M674.0 437.6L674.0 437.6L691.0 429.4L704.9 430.8L716.9 443.0L719.4 452.9L733.0 460.1L734.7 472.8L747.7 481.7L754.6 474.8L760.1 478.6L755.0 483.8L759.0 489.1L753.6 495.9L755.6 506.9L766.4 519.8L757.9 529.1L754.1 538.5L756.6 542.0L752.9 546.2L742.6 546.6L735.0 548.4L734.3 546.2L737.0 542.7L739.4 535.5L736.3 535.6L732.0 530.2L728.3 528.8L725.4 524.0L721.3 522.2L718.1 518.0L714.1 519.6L711.0 529.5L705.7 531.6L707.6 529.1L699.1 522.9L691.8 519.7L688.5 515.6L682.6 510.5L687.9 509.1L691.1 495.0L680.4 483.3L686.0 469.9L677.9 470.0L677.9 470.0L686.5 458.4L679.4 449.6L674.0 437.6Z"></path></g>
+<g id="trainer-pins">
+<g class="pin" style="--d:-7.20s" transform="translate(520.5,72.7)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-1.80s" transform="translate(479.7,155.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-24.60s" transform="translate(481.6,175.3)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-19.20s" transform="translate(408.8,187.1)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-20.40s" transform="translate(347.4,197.4)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-3.00s" transform="translate(384.5,198.6)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-16.80s" transform="translate(739.2,198.8)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-6.00s" transform="translate(663.9,209.3)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-25.80s" transform="translate(372.3,214.0)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-23.40s" transform="translate(543.5,215.9)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-8.40s" transform="translate(404.8,220.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-22.20s" transform="translate(740.6,228.0)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-16.20s" transform="translate(244.6,230.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-4.20s" transform="translate(347.6,230.8)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-18.00s" transform="translate(528.3,233.0)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-11.40s" transform="translate(665.1,233.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-9.60s" transform="translate(372.1,233.9)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-27.60s" transform="translate(723.5,238.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-10.80s" transform="translate(255.9,246.9)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-15.00s" transform="translate(388.9,247.8)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-21.60s" transform="translate(352.0,249.6)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-0.60s" transform="translate(537.3,261.7)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-12.60s" transform="translate(518.8,270.0)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-13.80s" transform="translate(460.6,290.3)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-27.00s" transform="translate(420.1,292.6)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-4.80s" transform="translate(684.2,298.8)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-5.40s" transform="translate(295.4,322.4)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-0.00s" transform="translate(319.7,342.1)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-22.80s" transform="translate(428.6,379.9)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-24.00s" transform="translate(459.8,383.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-6.60s" transform="translate(424.4,404.6)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-17.40s" transform="translate(351.9,426.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-25.20s" transform="translate(474.2,432.9)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-2.40s" transform="translate(448.4,441.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-26.40s" transform="translate(701.3,454.7)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-19.80s" transform="translate(493.1,477.8)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-21.00s" transform="translate(912.3,563.9)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-7.80s" transform="translate(314.7,566.0)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-13.20s" transform="translate(295.6,574.0)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-3.60s" transform="translate(891.8,579.1)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-1.20s" transform="translate(164.2,585.8)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-15.60s" transform="translate(975.0,590.2)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-10.20s" transform="translate(994.3,590.5)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-18.60s" transform="translate(255.3,615.7)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-12.00s" transform="translate(54.4,629.1)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-14.40s" transform="translate(865.5,643.4)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+<g class="pin" style="--d:-9.00s" transform="translate(936.6,691.0)"><circle class="halo" r="15"></circle><circle class="disc" r="15"></circle><use xlink:href="#amt-frog" x="-15" y="-15"></use></g>
+</g>
+</svg>
+</div>
+<div class="card_cta"><a class="button is-secondary" href="https://www.google.com/maps/d/u/0/embed?mid=1kLmPJktf3gkBGuPpc0-2q5rAC3Da6VU">Open the map</a></div>
+</div>
+<div class="card is-cool" style="border:0;border-radius:0">
+<h3 class="heading-style-h3 card_title">Bring it home yourself</h3>
+<p class="card_body">Mindful Kids Academy gives parents simple, practical tools — including the 8-week Mindful Parenting Course.</p>
+<div class="media_frame media_ratio-landscape">
+<img src="../brand/photos/amt-photo-parent-child-sofa.jpg" alt="A parent and young child meditating together on the sofa at home">
+</div>
+<div class="card_cta"><a class="button" href="/mindful-kids-academy">Discover Mindful Kids Academy</a></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+
+</div>
+
+<section class="section_cta is-green-dark background-color-green-dark">
+<div class="padding-global">
+<div class="padding-section-medium">
+<div class="container-xlarge">
+<div class="cta_banner">
+<h2 class="heading-style-h2 is-nowrap">How many children could you reach?</h2>
+<p class="section-header_intro text-size-large">It starts with one professional choosing to carry this further. Train with AMT, and pass it on.</p>
+<div class="button-group">
+<a class="button is-large is-inverse" href="#offer">Find your training</a>
+<a class="button is-large is-secondary is-inverse" href="/about/mission">Read our mission</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer class="footer_component">
+<div class="padding-global">
+<div class="padding-section-medium">
+<div class="container-xlarge">
+<figure class="footer_frog"><img src="../uploads/frog_closedeyes.png" alt="A meditating frog sitting cross-legged with a calm, closed-eyes smile"></figure>
+<div class="footer_motto"><p class="footer_motto-text">Mindfulness is our expertise. Resilience is our mission.</p></div>
+<div class="footer_top is-five">
+<div class="footer_brand">
+<img class="footer_brand-logo" src="../brand/logo/Primary_portrait.png" alt="Academy for Mindful Teaching">
+</div>
+<div class="footer_col">
+<div class="footer_col-heading">Trainings</div>
+<a class="footer_link" href="/trainings/compare">All programs</a>
+<a class="footer_link" href="/for/teachers">For teachers</a>
+<a class="footer_link" href="/for/therapists">For therapists</a>
+<a class="footer_link" href="/schools/why">For schools</a>
+</div>
+<div class="footer_col">
+<div class="footer_col-heading">About</div>
+<a class="footer_link" href="/about/mission">Our mission</a>
+<a class="footer_link" href="/about/story">Our story</a>
+<a class="footer_link" href="/approach/resilience-model">The model</a>
+<a class="footer_link" href="/stories">Experiences</a>
+</div>
+<div class="footer_col">
+<div class="footer_col-heading">Explore</div>
+<a class="footer_link" href="/trainers">Find a trainer</a>
+<a class="footer_link" href="/mindful-kids-academy">For parents</a>
+<a class="footer_link" href="/resources">Free resources</a>
+<a class="footer_link" href="/trainings/application">FAQ</a>
+</div>
+<div class="footer_col">
+<div class="footer_col-heading">Contact</div>
+<a class="footer_link" href="mailto:info@academyformindfulteaching.com">info@academyformindfulteaching.com</a>
+<a class="footer_link" href="tel:+31611586039">+31 (0)611 58 60 39</a>
+<div class="footer_link">Amsterdam, NL</div>
+<a class="footer_link" href="https://www.facebook.com/elinesnelmindfulness">Facebook</a>
+<a class="footer_link" href="https://www.facebook.com/elinesnelmindfulness">Instagram</a>
+</div>
+</div>
+<div class="footer_bottom">
+<div class="footer_legal">© 2026 Academy for Mindful Teaching · Mindful Company B.V.</div>
+<div class="footer_legal">CRKBO-registered · EN · NL · FR · ES</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+
+</div>
+<script>
+(function(){
+var nav=document.querySelector('.nav_component');
+var dim=document.querySelector('.nav_page-dim');
+var items=[].slice.call(nav.querySelectorAll('.nav_menu-item'));
+var mItems=[].slice.call(nav.querySelectorAll('.nav_mobile-item'));
+function desktop(){return window.matchMedia('(min-width: 992px)').matches;}
+var sheet=nav.querySelector('.nav_sheet');
+var navBar=nav.querySelector('.nav_bar');
+function setDesktopSheet(){var p=nav.querySelector('.nav_panel.is-active');if(!p||!sheet)return;sheet.style.overflowY='hidden';sheet.style.height=p.offsetHeight+'px';}
+function setMobileSheet(){var m=nav.querySelector('.nav_mobile');if(!m||!sheet)return;var max=window.innerHeight-navBar.offsetHeight;var h=m.scrollHeight;if(h>max){sheet.style.height=max+'px';sheet.style.overflowY='auto';}else{sheet.style.height=h+'px';sheet.style.overflowY='hidden';}}
+var closeTimer=null;var leaveTimer=null;
+function closeAll(){nav.classList.remove('is-open');document.body.classList.remove('noscroll');dim.classList.remove('is-active');
+items.forEach(function(i){i.classList.remove('is-active');i.classList.remove('is-dimmed');i.querySelector('.nav_menu-trigger').setAttribute('aria-expanded','false');});
+mItems.forEach(function(i){i.classList.remove('is-active');i.classList.remove('is-dimmed');i.querySelector('.nav_mobile-row').setAttribute('aria-expanded','false');});
+clearTimeout(closeTimer);var _op=[].slice.call(nav.querySelectorAll('.nav_panel.is-active'));closeTimer=setTimeout(function(){if(!nav.classList.contains('is-open'))_op.forEach(function(p){p.classList.remove('is-active');});},600);
+nav.querySelector('.nav_expand-btn').setAttribute('aria-expanded','false');if(sheet){sheet.style.height='0px';sheet.style.overflowY='hidden';}}
+function openItem(item){clearTimeout(closeTimer);clearTimeout(leaveTimer);nav.classList.add('is-open');document.body.classList.add('noscroll');dim.classList.add('is-active');
+items.forEach(function(i){var a=i===item;i.classList.toggle('is-active',a);i.classList.toggle('is-dimmed',!a);i.querySelector('.nav_menu-trigger').setAttribute('aria-expanded',a?'true':'false');});
+var id=item.querySelector('.nav_menu-trigger').getAttribute('aria-controls');
+[].slice.call(nav.querySelectorAll('.nav_panel')).forEach(function(p){p.classList.toggle('is-active',p.id===id);});setDesktopSheet();}
+items.forEach(function(item){var t=item.querySelector('.nav_menu-trigger');
+t.addEventListener('click',function(e){e.stopPropagation();if(item.classList.contains('is-active')){closeAll();}else{openItem(item);}});
+item.addEventListener('mouseenter',function(){if(desktop())openItem(item);});});
+var navUtil=nav.querySelector('.nav_utility');var navLogo=nav.querySelector('.nav_logo-link');function closeIfOpenDesktop(){if(desktop()&&nav.classList.contains('is-open'))closeAll();}
+if(navUtil)navUtil.addEventListener('mouseenter',closeIfOpenDesktop);
+if(navLogo)navLogo.addEventListener('mouseenter',closeIfOpenDesktop);
+nav.addEventListener('mouseleave',function(){if(!desktop())return;clearTimeout(leaveTimer);leaveTimer=setTimeout(closeAll,180);});
+nav.addEventListener('mouseenter',function(){clearTimeout(leaveTimer);});
+nav.addEventListener('mouseover',function(){clearTimeout(leaveTimer);});
+window.addEventListener('resize',function(){if(nav.classList.contains('is-open'))closeAll();});
+dim.addEventListener('click',closeAll);
+document.addEventListener('click',function(e){if(!nav.contains(e.target))closeAll();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var b=nav.querySelector('.nav_menu-item.is-active .nav_menu-trigger')||nav.querySelector('.nav_expand-btn');closeAll();if(b)b.focus();}});
+var xb=nav.querySelector('.nav_expand-btn');
+xb.addEventListener('click',function(e){e.stopPropagation();if(nav.classList.contains('is-open')){closeAll();}else{nav.classList.add('is-open');document.body.classList.add('noscroll');dim.classList.add('is-active');xb.setAttribute('aria-expanded','true');setMobileSheet();}});
+mItems.forEach(function(item){var r=item.querySelector('.nav_mobile-row');
+r.addEventListener('click',function(){var was=item.classList.contains('is-active');
+mItems.forEach(function(i){i.classList.remove('is-active');i.classList.toggle('is-dimmed',!was&&i!==item);});
+if(!was)item.classList.add('is-active');
+r.setAttribute('aria-expanded',was?'false':'true');setMobileSheet();});});
+var lastY=window.scrollY,ticking=false,solidThreshold=24;var heroSec=document.querySelector('.section_home-hero');function measureSolid(){solidThreshold=heroSec?Math.max(24,heroSec.offsetHeight-navBar.offsetHeight):24;}measureSolid();window.addEventListener('resize',measureSolid,{passive:true});
+function applyScroll(){var y=window.scrollY;nav.classList.toggle('is-solid',y>solidThreshold);var dy=y-lastY;if(nav.classList.contains('is-open')||y<120){nav.classList.remove('is-hidden');}else if(dy>6){nav.classList.add('is-hidden');}else if(dy<-6){nav.classList.remove('is-hidden');}lastY=y;ticking=false;}
+function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(applyScroll);}}
+window.addEventListener('scroll',onScroll,{passive:true});applyScroll();
+nav.addEventListener('focusin',function(){nav.classList.remove('is-hidden');});
+/* Hero image scroll drift — very slow, very small: drifts left a touch on scroll-down, holds its place,
+   returns right when the user scrolls back up. Scroll-scrubbed only — no timed animation, no transitions. */
+var HERO_SCROLL_DRIFT=true;
+if(HERO_SCROLL_DRIFT){(function(){
+var img=document.querySelector('.section_home-hero .media_arch img');if(!img)return;
+img.style.width='112%';img.style.maxWidth='none';
+var off=0,cur=0,last=window.scrollY;
+function clamp(v){return Math.max(-4,Math.min(4,v));}
+function frame(){var y=window.scrollY;off=clamp(off-(y-last)*0.008);last=y;
+cur+=(off-cur)*0.04;
+img.style.transform='translateX('+(cur-6)+'%)';
+requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+})();}
+/* Path draw — draws once, left→right, as the divider enters the viewport, then STOPS and stays drawn.
+   No undraw, no replay on scroll up or down (designer feedback 2026-07-21). Scroll-scrubbed + smoothed. */
+var PATH_SCROLL_DRAW=true;
+if(PATH_SCROLL_DRAW){(function(){
+var el=document.querySelector('.path-divider img');if(!el)return;
+var maxP=0,cur=-1;
+function progress(){var r=el.getBoundingClientRect();var vh=window.innerHeight;var p=(vh-r.top)/(vh*0.6);return Math.min(1,Math.max(0,p));}
+function frame(){maxP=Math.max(maxP,progress());
+if(Math.abs(maxP-cur)>0.0005){cur=cur<0?maxP:cur+(maxP-cur)*0.08;
+el.style.clipPath='inset(0 '+((1-cur)*100)+'% 0 0)';}
+requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+})();}
+document.querySelectorAll('.faq_trigger').forEach(function(btn){
+btn.addEventListener('click',function(){var it=btn.closest('.faq_item');var open=it.classList.toggle('is-open');btn.setAttribute('aria-expanded',open?'true':'false');var m=btn.querySelector('.faq_marker');if(m)m.textContent=open?'−':'+';});
+});
+})();
+</script>
+<script>
+(function(){var vs=document.querySelectorAll('.reach_viz');if(!vs.length)return;
+function dot(cls,x,y,delay){var d=document.createElement('span');d.className=cls;if(x!=null)d.style.left='calc(50% + '+x+'rem)';if(y!=null)d.style.top='calc(50% + '+y+'rem)';if(delay)d.style.transitionDelay=delay+'ms';return d;}
+vs.forEach(function(v){
+if(v.classList.contains('is-one')){var r1=document.createElement('span');r1.className='reach_ring';var r2=document.createElement('span');r2.className='reach_ring is-2';v.appendChild(r1);v.appendChild(r2);var f=document.createElement('img');f.className='reach_frog';f.src='../uploads/frog_closedeyes.png';f.alt='';f.setAttribute('aria-hidden','true');v.appendChild(f);}
+else if(v.classList.contains('is-hundreds')){v.appendChild(dot('reach_core',0,0,0));var N=9,R=2.5;for(var i=0;i<N;i++){var a=(i/N)*Math.PI*2-Math.PI/2;v.appendChild(dot('reach_dot',(Math.cos(a)*R).toFixed(2),(Math.sin(a)*R).toFixed(2),160+i*70));}}
+else if(v.classList.contains('is-thousands')){v.appendChild(dot('reach_core',0,0,0));var idx=0;[[8,1.75],[15,3.0]].forEach(function(rg){var count=rg[0],R=rg[1];for(var i=0;i<count;i++){var a=(i/count)*Math.PI*2-Math.PI/2;v.appendChild(dot('reach_dot',(Math.cos(a)*R).toFixed(2),(Math.sin(a)*R).toFixed(2),120+idx*45));idx++;}});}
+});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('is-live',e.isIntersecting);});},{threshold:.25});vs.forEach(function(v){io.observe(v);});
+var flow=document.querySelector('.reach_flow'),fgrid=document.querySelector('.section_reach .grid_4-4-4');if(flow&&fgrid){var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){flow.classList.add('is-live');io2.unobserve(fgrid);}});},{threshold:.2});io2.observe(fgrid);}})();
+(function(){var langRoot=document.querySelector('.nav_lang[data-lang]');if(!langRoot)return;var langToggle=langRoot.querySelector('.nav_lang-toggle'),langValue=langRoot.querySelector('.nav_lang-value'),langOpts=[].slice.call(langRoot.querySelectorAll('.nav_lang-option'));
+var langOpen=function(){langRoot.classList.add('is-open');langToggle.setAttribute('aria-expanded','true');},langClose=function(){langRoot.classList.remove('is-open');langToggle.setAttribute('aria-expanded','false');};
+var langHoverT;langRoot.addEventListener('mouseenter',function(){clearTimeout(langHoverT);langOpen();});langRoot.addEventListener('mouseleave',function(){clearTimeout(langHoverT);langHoverT=setTimeout(langClose,250);});var langMenuEl=langRoot.querySelector('.nav_lang-menu');langMenuEl.addEventListener('mouseenter',function(){clearTimeout(langHoverT);});langMenuEl.addEventListener('mouseleave',function(){clearTimeout(langHoverT);langHoverT=setTimeout(langClose,250);});
+langToggle.addEventListener('click',function(e){e.stopPropagation();if(langRoot.classList.contains('is-open')){langClose();}else{langOpen();var a=langRoot.querySelector('.nav_lang-option.is-active')||langOpts[0];if(a)a.focus();}});
+langOpts.forEach(function(opt){opt.addEventListener('click',function(){langOpts.forEach(function(o){var on=o===opt;o.classList.toggle('is-active',on);o.setAttribute('aria-selected',on?'true':'false');});langValue.textContent=opt.getAttribute('data-code');langToggle.setAttribute('aria-label','Change language, current: '+opt.getAttribute('data-name'));langClose();langToggle.focus();});});
+document.addEventListener('click',function(e){if(langRoot.classList.contains('is-open')&&!langRoot.contains(e.target))langClose();});
+langRoot.addEventListener('keydown',function(e){if(e.key==='Escape'&&langRoot.classList.contains('is-open')){langClose();langToggle.focus();}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!langRoot.classList.contains('is-open'))langOpen();var i=langOpts.indexOf(document.activeElement);var n=e.key==='ArrowDown'?(i+1)%langOpts.length:(i-1+langOpts.length)%langOpts.length;if(i<0)n=(e.key==='ArrowDown'?0:langOpts.length-1);langOpts[n].focus();}});})();
+(function(){var tl=document.querySelector('.timeline.is-horizontal');if(!tl)return;var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-live');io.unobserve(e.target);}});},{threshold:.35});io.observe(tl);})();
+(function(){var band=document.querySelector('.parallax_band');if(!band)return;var img=band.querySelector('img');function frame(){var r=band.getBoundingClientRect();var vh=window.innerHeight||1;var p=(r.top+r.height/2-vh/2)/(vh/2+r.height/2);p=Math.max(-1,Math.min(1,p));img.style.transform='translateY('+(p*-8)+'%)';requestAnimationFrame(frame);}requestAnimationFrame(frame);})();
+</script>
+<script>
+(function(){var els=[].slice.call(document.querySelectorAll(".figure_illustration,.pillars_tree"));if(!els.length)return;document.documentElement.classList.add("js-anim");function reveal(el){el.classList.add("is-inview");}function inView(el){var vh=window.innerHeight||document.documentElement.clientHeight;var r=el.getBoundingClientRect();return r.top<vh*.95&&r.bottom>0;}function backup(){els.forEach(function(el){if(!el.classList.contains("is-inview")&&inView(el))reveal(el);});}if("IntersectionObserver"in window){var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0,rootMargin:"0px 0px -8% 0px"});els.forEach(function(e){io.observe(e);});}window.addEventListener("scroll",backup,{passive:true});setTimeout(backup,600);setTimeout(backup,2600);})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+if(window.Swiper){var teamFill=document.querySelector(".team_progress-fill");function teamProg(s){if(teamFill)teamFill.style.width=Math.max(0,Math.min(1,s.progress))*100+"%";}new Swiper(".team_swiper",{slidesPerView:1.2,spaceBetween:16,grabCursor:true,navigation:{prevEl:".team_nav-prev",nextEl:".team_nav-next"},breakpoints:{600:{slidesPerView:2.2,spaceBetween:18},992:{slidesPerView:3,spaceBetween:22},1200:{slidesPerView:4,spaceBetween:24}},on:{init:teamProg,progress:teamProg}});}
+</script>
+<script>
+(function(){if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+var cta=document.querySelector(".section_cta");if(!cta)return;var pad=cta.querySelector(".padding-section-medium");var bn=cta.querySelector(".cta_banner");if(!pad)return;var base=parseFloat(getComputedStyle(pad).paddingTop)||83;var OPEN=base*1.8;var MIN=18;var foot=document.querySelector(".footer_component");var OV=foot?Math.abs(parseFloat(getComputedStyle(foot).marginTop)||0):0;var cur=null;
+function frame(){var vh=window.innerHeight||1;
+var r=cta.getBoundingClientRect();var p=(vh-r.top)/(vh*.75);p=Math.max(0,Math.min(1,p));var t=MIN+(OPEN-MIN)*p;cur=(cur===null)?t:cur+(t-cur)*.09;pad.style.paddingTop=cur.toFixed(1)+"px";pad.style.paddingBottom=(cur+OV).toFixed(1)+"px";if(bn){var n=(cur-MIN)/(OPEN-MIN);var tp=Math.max(0,Math.min(1,(n-.35)/.6));bn.style.opacity=tp.toFixed(3);bn.style.transform="translateY("+((1-tp)*26).toFixed(1)+"px)";}
+requestAnimationFrame(frame);}
+requestAnimationFrame(frame);})();
+</script>
+</body>
+</html>

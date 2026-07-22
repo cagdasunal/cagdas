@@ -1,0 +1,10 @@
+# files.cagd.as — asset host for cagd.as, plus client previews.
+#
+# IMPORTANT: this is NOT a blanket disallow, deliberately.
+# /scripts/ and /data/ are fetched by cagd.as while Googlebot renders the live
+# site. Blocking them would stop Googlebot getting the JS it needs and can hurt
+# cagd.as's own indexing. Only the private client previews are disallowed.
+
+User-agent: *
+Disallow: /amt/
+

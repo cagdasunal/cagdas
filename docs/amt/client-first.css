@@ -1,0 +1,494 @@
+/* ============================================================
+   AMT — client-first.css
+   Finsweet Client-First V2 class layer. The single stylesheet
+   every AMT page links (after colors_and_type.css).
+   Rules honoured: every div classed · no inline styles · zero
+   animation (0 transition / 0 @keyframes / 0 transform-on-hover) ·
+   three radii · brand palette only. Governing: DESIGN-DIRECTION.md
+   ============================================================ */
+
+/* ============ 0. Base / reset ============ */
+html{font-synthesis:none;-webkit-text-size-adjust:100%;scroll-behavior:auto}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font--body);font-weight:400;font-size:1.125rem;line-height:1.7;color:var(--color--text--primary);background:var(--color--surface--page);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;text-wrap:pretty}
+img{max-width:100%;height:auto;display:block}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--color--interactive);outline-offset:3px}
+/* body prose links — components below override */
+a{color:var(--color--interactive);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:var(--color--border--soft);transition:color .18s ease,text-decoration-color .18s ease,text-decoration-thickness .18s ease}
+a:hover{color:var(--color--interactive--hover);text-decoration-color:currentColor}
+
+/* ============ 1. Page skeleton ============ */
+.page-wrapper{overflow:clip}
+.main-wrapper{display:block}
+.padding-global{padding-left:var(--gutter);padding-right:var(--gutter)}
+.padding-section-large{padding-top:var(--section-space);padding-bottom:var(--section-space)}   /* THE section rhythm — every full section, top = bottom (= --section-space, 208) */
+.padding-section-medium{padding-top:var(--section-space-divider);padding-bottom:var(--section-space-divider)}   /* thin same-bg interstitial (press strip) — 0.4× the section rhythm (≈83) */
+.padding-section-small{padding-top:var(--space-m);padding-bottom:var(--space-m)}         /* 40 */
+/* Seam control (design-consistency, 2026-07-22). Two sections that SHARE a background otherwise
+   double their paddings into one oversized void (208+208=416) that reads as far more air than the
+   same 208 sitting either side of a colour band. Fix: give the LOWER of two same-bg sections
+   .is-flush-top so the seam collapses to ONE 208 gap (the upper section's padding). Colour-CHANGE
+   boundaries keep BOTH paddings — a framed 416 chapter break, which reads as generous (not empty)
+   because the colour edge divides it. .is-flush-bottom mirrors it so a self-contained divider
+   (section-mark) or the press strip owns the gap on its underside while its neighbour stays flush. */
+.padding-section-large.is-flush-top,.padding-section-medium.is-flush-top,.padding-section-small.is-flush-top{padding-top:0}
+.padding-section-large.is-flush-bottom,.padding-section-medium.is-flush-bottom,.padding-section-small.is-flush-bottom{padding-bottom:0}
+.container-xlarge{width:100%;max-width:var(--container--xlarge);margin-left:auto;margin-right:auto}
+.container-large{width:100%;max-width:var(--container--large);margin-left:auto;margin-right:auto}
+.container-medium{width:100%;max-width:var(--container--medium);margin-left:auto;margin-right:auto}
+.container-small{width:100%;max-width:var(--container--small);margin-left:auto;margin-right:auto}
+
+/* ============ 2. Spacing utilities (CF pattern: size sets all four, direction keeps one) ============ */
+.margin-0{margin:0}
+.margin-xxsmall{margin:.5rem}.margin-xsmall{margin:1rem}.margin-small{margin:1.5rem}.margin-medium{margin:2.5rem}.margin-large{margin:3rem}.margin-xlarge{margin:4rem}.margin-xxlarge{margin:6rem}.margin-huge{margin:8rem}
+.margin-top{margin-right:0;margin-bottom:0;margin-left:0}
+.margin-bottom{margin-top:0;margin-right:0;margin-left:0}
+.margin-left{margin-top:0;margin-right:0;margin-bottom:0}
+.margin-right{margin-top:0;margin-bottom:0;margin-left:0}
+.padding-0{padding:0}
+.padding-xsmall{padding:1rem}.padding-small{padding:1.5rem}.padding-medium{padding:2.5rem}.padding-large{padding:3rem}
+
+/* ============ 3. Typography — calm register: airier leading, gentler tracking (audit 2026-07-22) ============ */
+.heading-style-h1{font-family:var(--font--display);font-weight:400;font-size:clamp(3rem,5.2vw,4.5rem);line-height:1.1;letter-spacing:-.015em;color:var(--color--text--heading);text-wrap:balance}
+.heading-style-h2{font-family:var(--font--display);font-weight:400;font-size:clamp(2.25rem,3.6vw,3.5rem);line-height:1.12;letter-spacing:-.012em;color:var(--color--text--heading);text-wrap:balance}
+.heading-style-h3{font-family:var(--font--display);font-weight:400;font-size:clamp(1.5rem,2vw,1.75rem);line-height:1.28;letter-spacing:-.006em;color:var(--color--text--heading);text-wrap:balance}
+.heading-style-h4{font-family:var(--font--body);font-weight:700;font-size:1.125rem;line-height:1.4;color:var(--color--text--heading)}
+.heading-style-h5{font-family:var(--font--body);font-weight:700;font-size:1rem;line-height:1.4;color:var(--color--text--heading)}
+.heading-style-h6{font-family:var(--font--body);font-weight:700;font-size:.9375rem;line-height:1.4;color:var(--color--text--heading)}
+.text-size-large{font-size:1.25rem;line-height:1.65}     /* lede — once per section, under h1/h2 */
+.text-size-medium{font-size:1.125rem;line-height:1.7}   /* body (= base) */
+.text-size-regular{font-size:1rem;line-height:1.7}
+.text-size-small{font-size:.9375rem;line-height:1.55}   /* meta / caption / cite */
+.text-size-tiny{font-size:.8125rem;line-height:1.5}
+.text-weight-bold{font-weight:700}
+.text-style-italic{font-style:italic}                    /* Chapaza italic — a scalpel, max once/page */
+.text-style-mono{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;letter-spacing:.02em}
+.text-color-primary{color:var(--color--text--primary)}
+.text-color-secondary{color:var(--color--text--secondary)}
+.text-color-heading{color:var(--color--text--heading)}
+.text-color-on-dark{color:var(--color--text--on-dark)}
+.text-color-on-dark-muted{color:var(--color--text--on-dark-muted)}
+.text-align-center{text-align:center}
+.text-align-left{text-align:left}
+.max-width-body{max-width:38rem}
+.max-width-medium{max-width:44ch}
+.max-width-wide{max-width:68ch}
+/* eyebrow / tagline — TYPE ONLY. No rule, line, dash, bar, border, ::before near it.
+   (Biko Light was trialled here and reverted — its file lacks punctuation glyphs: the & in the hero eyebrow vanished.) */
+.tagline{display:block;font-family:var(--font--body);font-weight:700;font-size:.8125rem;line-height:1.2;letter-spacing:.18em;text-transform:uppercase;color:var(--color--text--primary)}
+
+/* ============ 4. Section header (CENTRED head over symmetrical grid) ============ */
+.section-header{max-width:var(--container--xsmall);margin:0 auto var(--space-2xl);text-align:center;display:flex;flex-direction:column;align-items:center;gap:var(--space-s)}
+.section-header .figure_illustration{margin-bottom:var(--space-s)}
+.section-header_titles{display:flex;flex-direction:column;gap:var(--space-xs)}
+/* the ONE sanctioned decorative heading background — Rose Petal, once per page (offer H2) */
+.heading-highlight{display:inline-block;background:var(--color--surface--rose);color:var(--color--text--heading);border-radius:var(--radius--card);padding:.06em .4em}
+.section-header_intro{max-width:44ch;color:var(--color--text--secondary)}
+.section-header.is-wide{max-width:var(--container--medium)}
+.heading-style-h2.is-nowrap{white-space:nowrap;width:max-content;max-width:none}
+@media(max-width:991px){.heading-style-h2.is-nowrap{white-space:normal;width:auto}}
+.pillars_words{max-width:none;white-space:nowrap}
+.pillars_lede{max-width:56ch;text-wrap:balance}
+/* pillars — the seven qualities on a slowly turning ring; labels counter-rotate to stay upright (client 2026-07-22) */
+.pillars_track{--pillars-d:clamp(18rem,40vw,30rem)/* @kind other */;position:relative;width:var(--pillars-d);height:var(--pillars-d);margin:var(--space-2xl) auto var(--space-xl)}
+.pillars_ring{position:absolute;inset:10%;border-radius:50%;border:1.5px solid var(--color--text--on-dark-muted);opacity:.35}
+.pillars_rotor{position:absolute;inset:0;animation:pillars-spin 120s linear infinite}
+.pillars_step{position:absolute;transform:translate(-50%,-.5rem)}
+.pillars_step:nth-child(1){left:50%;top:10%}
+.pillars_step:nth-child(2){left:81.3%;top:25.1%}
+.pillars_step:nth-child(3){left:89%;top:58.9%}
+.pillars_step:nth-child(4){left:67.4%;top:86%}
+.pillars_step:nth-child(5){left:32.7%;top:86%}
+.pillars_step:nth-child(6){left:11%;top:58.9%}
+.pillars_step:nth-child(7){left:18.7%;top:25.1%}
+.pillars_node{display:flex;flex-direction:column;align-items:center;gap:.5rem;width:6.5rem;text-align:center;transform-origin:50% .5rem;animation:pillars-counter 120s linear infinite}
+.pillars_dot{width:1rem;height:1rem;border-radius:var(--radius--pill);background:var(--color--surface--cool)}
+.pillars_label{font-family:var(--font--body);font-weight:400;font-size:1.0625rem;line-height:1.25;color:var(--color--text--on-dark)}
+@keyframes pillars-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes pillars-counter{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
+@media(prefers-reduced-motion:reduce){.pillars_rotor,.pillars_node{animation:none}}
+@media(max-width:767px){.pillars_label{font-size:.9375rem}.pillars_node{width:5.25rem;gap:.4rem}}
+.team_intro{max-width:72ch;text-wrap:balance}
+@media(max-width:767px){.pillars_words{white-space:normal}}
+/* left variant — used inside splits + for the flex head with a trailing link */
+.section-header.is-left{margin-left:0;margin-right:auto;text-align:left;align-items:flex-start}
+.section-header.is-inline{flex-direction:row;justify-content:space-between;align-items:flex-end;max-width:none;text-align:left;gap:var(--space-m)}
+
+/* ============ 5. Buttons — full pill, Biko 400, sentence case; solid/secondary instant, is-text hover eased (client 2026-07-22) ============ */
+.button{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;height:3rem;padding:0 2rem;border:1.5px solid transparent;border-radius:var(--radius--pill);background:var(--color--interactive);color:var(--color--on-interactive);font-family:var(--font--body);font-weight:400;font-size:.9375rem;line-height:1;text-decoration:none;white-space:nowrap;text-align:center;transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+.button:hover{background:var(--color--interactive--hover);color:var(--color--on-interactive)}
+.button.is-secondary{background:transparent;border-color:var(--color--border--soft);color:var(--color--interactive)}
+.button.is-secondary:hover{background:var(--color--surface--cool);border-color:var(--color--surface--cool);color:var(--color--text--heading)}
+.button.is-large{height:3.5rem;padding:0 2.25rem;font-size:1rem}   /* 56px hero */
+.button.is-small{height:2.75rem;padding:0 1.5rem}                   /* 44px nav Apply */
+.button.is-text{background:transparent;border:0;border-bottom:1.5px solid var(--color--border--soft);border-radius:0;display:inline;height:auto;padding:0 0 3px;color:var(--color--interactive);text-decoration:none;text-transform:uppercase;letter-spacing:.08em;font-size:.875rem;white-space:normal;text-align:left;transition:color .35s cubic-bezier(.33,1,.68,1),border-color .35s cubic-bezier(.33,1,.68,1),border-bottom-width .35s cubic-bezier(.33,1,.68,1)}
+.button.is-text:hover{background:transparent;color:var(--color--interactive--hover);border-bottom-width:2px;border-bottom-color:currentColor}
+.button.is-text .btn_arrow{display:inline-block;will-change:transform;transition:transform .35s cubic-bezier(.33,1,.68,1)}
+.button.is-text:hover .btn_arrow{transform:translateX(.28rem)}
+/* inverse — on dark / green bands */
+.button.is-inverse{background:var(--color--surface--page);color:var(--color--text--heading)}
+.button.is-inverse:hover{background:var(--color--surface--warm);color:var(--color--text--heading)}
+.button.is-secondary.is-inverse{background:transparent;border-color:var(--color--text--on-dark-muted);color:var(--color--text--on-dark)}
+.button.is-secondary.is-inverse:hover{background:transparent;border-color:var(--color--text--on-dark);color:var(--color--text--on-dark)}
+.button.is-text.is-inverse{color:var(--color--text--on-dark);border-bottom-color:var(--color--text--on-dark-muted)}
+.button.is-text.is-inverse:hover{color:var(--color--text--on-dark);border-bottom-color:var(--color--text--on-dark)}
+.button-group{display:flex;flex-wrap:wrap;gap:var(--space-xs);align-items:center}
+.button-group.is-center{justify-content:center}
+.button-group.is-stack{flex-direction:column;align-items:center}
+/* the one sanctioned circular arrow companion for a hero primary CTA */
+.button_circle{display:inline-flex;align-items:center;justify-content:center;width:3.5rem;height:3.5rem;border-radius:var(--radius--pill);background:var(--color--interactive);color:var(--color--on-interactive);text-decoration:none;font-size:1.25rem;flex:none;transition:background-color .18s ease,color .18s ease}
+.button_circle:hover{background:var(--color--interactive--hover);color:var(--color--on-interactive)}
+
+/* ============ 6. Media — the arch mask + framed media + placeholders ============ */
+.media_wrap{position:relative}   /* positioning context so media_seal can overlap a masked photo */
+.media_arch{position:relative;overflow:hidden;border-radius:var(--radius--arch);aspect-ratio:4/5;background:var(--color--surface--warm)}
+.media_frame{position:relative;overflow:hidden;border-radius:var(--radius--card);background:var(--color--surface--warm)}
+.media_arch img,.media_frame img,.media_arch video,.media_frame video{width:100%;height:100%;object-fit:cover}
+.media_frame .media_map{width:100%;height:100%;display:block;border:0}
+.media_arch .media_still{display:none}
+@media (prefers-reduced-motion:reduce){.media_arch .media_video{display:none}.media_arch .media_still{display:block}}
+.media_ratio-portrait{aspect-ratio:4/5}
+.media_ratio-landscape{aspect-ratio:16/10}
+.media_ratio-doc{aspect-ratio:3/4}
+.media_ratio-square{aspect-ratio:1}
+/* warm flat placeholder (NO gradient) — real photography drops in later */
+.media_placeholder{display:flex;align-items:flex-end;width:100%;height:100%;padding:var(--space-s);background:var(--color--surface--warm)}
+.media_placeholder.is-cool{background:var(--color--surface--cool)}
+.media_placeholder.is-green{background:var(--color--surface--green)}
+.media_placeholder.is-rose{background:var(--color--surface--rose)}
+.media_placeholder_label{font-family:ui-monospace,Menlo,monospace;font-size:.75rem;line-height:1.5;letter-spacing:.02em;color:var(--color--text--secondary);max-width:32ch}
+.media_placeholder.is-green .media_placeholder_label{color:var(--color--surface--green-dark)}
+/* certification seal — the Secondary lotus badge, one true circle, no shadow */
+.media_seal{position:absolute;right:-2rem;bottom:-2rem;width:6.5rem;height:6.5rem}
+.media_seal.is-bottom-left{right:auto;left:-2rem}
+.media_seal_disc{position:absolute;top:50%;left:50%;width:66%;height:66%;transform:translate(-50%,-50%);background:var(--color--surface--card);border-radius:50%}
+.media_seal img{position:relative;z-index:1}
+.media_seal img{width:100%;height:100%;object-fit:contain}
+
+/* ============ 7. Brand illustration figure ============ */
+/* Sized by HEIGHT (not width) so every marker renders the SAME height regardless of the artwork's
+   aspect ratio — design-consistency rule. Gap below is the parent's uniform `gap` (var(--space-s)). */
+.figure_illustration{display:block}
+.figure_illustration img{width:auto;height:100%;max-width:100%}
+.figure_illustration.is-xlarge{height:5rem}   /* all section markers share one height */
+.figure_illustration.is-large{height:5rem}
+.figure_illustration.is-medium{height:5rem}
+.figure_illustration.is-small{height:3rem}     /* subordinate only (Note inside the form card) */
+/* illustration tint — recolour a brushed PNG to a brand colour via its own alpha as a mask (client 2026-07-22) */
+.figure_illustration.is-tint{position:relative}
+.figure_illustration.is-tint img{visibility:hidden}
+.figure_illustration.is-tint::before{content:"";position:absolute;inset:0;background:var(--tint-color,var(--color--text--heading-alt));-webkit-mask:var(--tint-src) center/contain no-repeat;mask:var(--tint-src) center/contain no-repeat}
+/* Path brushstroke used as a section connector / divider */
+.path-divider{display:block;width:100%;max-width:26rem;margin:0 auto;padding:var(--space-xl) 0}
+.path-divider img{width:100%;height:auto}
+.path-divider.is-left{margin-left:0}
+/* centred illustration mark used as a quiet divider BETWEEN sections */
+.section-mark{display:flex;justify-content:center;padding:var(--section-space-divider) 0}   /* self-contained divider (≈83/83); its cream neighbours flush their touching side so it owns the gap */
+
+/* ============ 8. Cards (huts treatment: 24px radius · hairline · NO shadow · 48px pad) ============ */
+.card{display:flex;flex-direction:column;height:100%;background:var(--color--surface--card);border:1px solid var(--color--border--hairline);border-radius:var(--radius--card);padding:var(--space-l)}
+.card.is-compact{padding:var(--space-m) 2rem}
+.card.is-warm{background:var(--color--surface--warm);border-color:transparent}
+.card.is-cool{background:var(--color--surface--cool);border-color:transparent}
+.card.is-rose{background:var(--color--surface--rose);border-color:transparent}
+.card.is-plain{background:transparent;border-color:transparent;padding:0}
+.card_tag{display:inline-flex;align-items:center;align-self:flex-start;font-family:var(--font--body);font-weight:700;font-size:.6875rem;letter-spacing:.12em;text-indent:.12em;text-transform:uppercase;color:var(--color--text--heading);background:var(--color--surface--cool);border-radius:var(--radius--card);padding:.375rem .75rem;margin-bottom:var(--space-s)}
+.card_title{margin-bottom:.75rem;text-wrap:pretty}
+.card_meta{color:var(--color--text--secondary);font-size:.9375rem}
+.card_body{color:var(--color--text--secondary);margin-bottom:var(--space-s)}
+.card_cta{margin-top:auto;padding-top:var(--space-s)}
+/* grid seams — the "no card" default for dense lists: 1px pebble bg reads as rules */
+.card-grid_seam{display:grid;gap:1px;background:var(--color--border--rule);border:1px solid var(--color--border--rule);border-radius:var(--radius--card);overflow:hidden}
+.card-grid_seam .seam_cell{background:var(--color--surface--page);padding:var(--space-m)}
+
+/* numbered step (01 / 02 / 03) */
+.step_number{font-family:var(--font--display);font-weight:400;font-size:2rem;line-height:1;color:var(--color--surface--green);letter-spacing:-.01em;margin-bottom:var(--space-s)}
+.step_title{margin-bottom:.5rem}
+.step_body{color:var(--color--text--secondary)}
+/* vertical timeline — numbered nodes joined by a pebble rule (static, no transition) */
+.timeline{display:flex;flex-direction:column;gap:var(--space-m)}
+.timeline_item{position:relative;display:grid;grid-template-columns:2.75rem 1fr;column-gap:var(--space-s);align-items:start}
+.timeline_item:not(:last-child)::before{content:"";position:absolute;left:calc(1.375rem - 1px);top:1.375rem;height:calc(100% + var(--space-m) - 1.375rem);width:2px;background:var(--color--border--rule)}
+.timeline_node{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;flex:none;border-radius:var(--radius--pill);background:var(--color--surface--cool);font-family:var(--font--display);font-weight:400;font-size:1.125rem;line-height:1;color:var(--color--text--heading-alt)}
+.timeline_content{padding-top:.5rem}
+.timeline_title{margin-bottom:.25rem}
+.timeline_body{color:var(--color--text--secondary)}
+/* horizontal variant — nodes in a row on a single rule, labels beneath (static layout; motion is page-scoped) */
+.timeline.is-horizontal{position:relative;width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-m);margin:var(--space-l) 0}
+.timeline.is-horizontal::before{content:"";position:absolute;top:calc(1.375rem - 1px);left:16.6667%;right:16.6667%;height:2px;background:var(--color--border--rule)}
+.timeline.is-horizontal .timeline_item{display:flex;flex-direction:column;align-items:center;text-align:center}
+.timeline.is-horizontal .timeline_item:not(:last-child)::before{content:none}
+.timeline.is-horizontal .timeline_content{padding-top:var(--space-s)}
+.timeline.is-horizontal .timeline_body{max-width:26ch}
+@media(max-width:599px){.timeline.is-horizontal{grid-template-columns:1fr;gap:var(--space-s)}.timeline.is-horizontal::before{display:none}.timeline.is-horizontal .timeline_item{flex-direction:row;grid-template-columns:2.75rem 1fr;gap:var(--space-s);align-items:flex-start;text-align:left}.timeline.is-horizontal .timeline_content{padding-top:.5rem}}
+
+/* stat block */
+.stat_block{display:flex;flex-direction:column;gap:.5rem}
+.stat_block.is-center{align-items:center;text-align:center}
+.stat_block.is-center .stat_label{margin-left:auto;margin-right:auto}
+
+/* impact — four stat cards (off-white surface, hairline, like the cards below) */
+.impact_grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-m)}
+.impact_stat{background:var(--color--surface--card);border:1px solid var(--color--border--hairline);border-radius:var(--radius--card);padding:var(--space-l);text-align:center}
+@media(max-width:991px){
+  .impact_grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:479px){
+  .impact_grid{grid-template-columns:1fr}
+}
+.impact_number{font-family:var(--font--display);font-weight:400;font-size:clamp(2.75rem,4.5vw,4rem);line-height:.95;letter-spacing:-.02em;color:var(--color--text--heading)}
+.impact_label{margin-top:var(--space-2xs);font-size:1.0625rem;line-height:1.5;color:var(--color--text--secondary);max-width:20ch;margin-left:auto;margin-right:auto}
+.stat_number{font-family:var(--font--display);font-weight:400;font-size:clamp(2.5rem,4vw,3.25rem);line-height:1;letter-spacing:-.02em}
+.stat_label{font-size:.9375rem;color:var(--color--text--secondary);max-width:22ch}
+
+/* testimonial */
+.testimonial_card{display:flex;flex-direction:column;height:100%;background:var(--color--surface--card);border:1px solid var(--color--border--hairline);border-radius:var(--radius--card);padding:var(--space-l)}
+.testimonial_quote{font-family:var(--font--display);font-weight:400;font-size:1.25rem;line-height:1.52;letter-spacing:-.005em;color:var(--color--text--heading);margin-bottom:var(--space-m)}
+.testimonial_person{display:flex;align-items:center;gap:.875rem;margin-top:auto}
+.testimonial_avatar{width:2.875rem;height:2.875rem;border-radius:var(--radius--card);overflow:hidden;flex:none;background:var(--color--surface--cool)}
+.testimonial_monogram{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-family:var(--font--display);font-weight:400;font-size:1.25rem;line-height:1;color:var(--color--text--heading)}
+.testimonial_avatar img{width:100%;height:100%;object-fit:cover}
+.testimonial_name{font-weight:700;font-size:.9375rem;color:var(--color--text--heading)}
+.testimonial_role{font-size:.875rem;color:var(--color--text--secondary)}
+
+/* team member */
+.team_card{display:flex;flex-direction:column;align-items:center;gap:.375rem;text-align:center}
+.team_photo{border-radius:var(--radius--arch);overflow:hidden;aspect-ratio:4/5;background:var(--color--surface--cool);margin-bottom:.625rem}
+.team_photo img{width:100%;height:100%;object-fit:cover}
+.team_name{font-family:var(--font--display);font-weight:400;font-size:1rem;line-height:1.2;color:var(--color--text--heading);white-space:nowrap}
+.team_role{font-size:.9375rem;color:var(--color--text--secondary)}
+
+/* ============ 9. Start-dates ledger (typographic timetable, NOT a card) ============ */
+.ledger{width:100%}
+.offer_ledger{max-width:42rem;margin-left:auto;margin-right:auto;margin-top:var(--space-2xl)}
+.ledger_header{display:flex;justify-content:space-between;align-items:center;gap:var(--space-m);margin-bottom:var(--space-s)}
+.ledger_list{display:flex;flex-direction:column}
+.ledger_row{display:grid;grid-template-columns:5.5rem 1fr;align-items:center;gap:var(--space-s);padding:var(--space-s) 0;border-top:1px solid var(--color--border--rule)}
+.ledger_row.is-first{border-top:0}
+.ledger_month{font-family:var(--font--display);font-weight:400;font-size:2rem;line-height:1;letter-spacing:-.01em;color:var(--color--text--heading)}
+.ledger_programme{font-weight:700;font-size:1.125rem;color:var(--color--text--heading);margin-bottom:.25rem}
+.ledger_location{font-size:.9375rem;color:var(--color--text--secondary)}
+
+/* ============ 10. Accreditation strip ============ */
+.accreditation_strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:var(--space-s) var(--space-xl)}
+.accreditation_label{font-family:var(--font--body);font-weight:700;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--color--text--secondary)}
+.accreditation_item{font-family:var(--font--display);font-weight:400;font-size:1.25rem;color:var(--color--text--secondary)}
+
+/* ============ 11. Forms ============ */
+.form_component{display:flex;flex-direction:column;gap:var(--space-s)}
+.form_field-wrapper{display:flex;flex-direction:column;gap:.5rem}
+.form_field-label{font-family:var(--font--body);font-weight:700;font-size:.875rem;color:var(--color--text--heading)}
+.form_input{width:100%;height:3rem;padding:0 1.25rem;font-family:var(--font--body);font-size:1rem;color:var(--color--text--primary);background:var(--color--surface--card);border:1px solid var(--color--border--soft);border-radius:var(--radius--card)}
+.form_input::placeholder{color:var(--color--text--secondary)}
+.form_input:focus{border-color:var(--color--interactive);outline:none}
+.form_input.is-area{height:auto;min-height:8rem;padding:1rem 1.25rem;border-radius:var(--radius--card);resize:vertical}
+.form_fine{font-size:.8125rem;color:var(--color--text--secondary)}
+/* lead-magnet capture card */
+.form_card{background:var(--color--surface--card);border:1px solid var(--color--border--hairline);border-radius:var(--radius--card);padding:var(--space-l)}
+.form_card .button{width:100%}
+.form_card.is-narrow{max-width:42rem;margin-left:auto;margin-right:auto;text-align:center}
+.form_card.is-narrow .text-size-small{white-space:nowrap}
+@media(max-width:599px){.form_card.is-narrow{max-width:26rem}.form_card.is-narrow .text-size-small{white-space:normal}}
+
+/* ============ 12. FAQ (functional accordion — instant, NO transition) ============ */
+.faq_list{display:flex;flex-direction:column}
+.faq_item{border-top:1px solid var(--color--border--rule)}
+.faq_item.is-first{border-top:0}
+.faq_trigger{display:flex;justify-content:space-between;align-items:center;gap:var(--space-s);width:100%;padding:var(--space-s) 0;text-align:left}
+.faq_question{font-family:var(--font--display);font-weight:400;font-size:1.25rem;line-height:1.4;letter-spacing:-.005em;color:var(--color--text--heading)}
+.faq_marker{flex:none;font-family:var(--font--body);font-weight:400;font-size:1.5rem;line-height:1;color:var(--color--text--heading)}
+.faq_panel{display:none;padding:0 0 var(--space-s)}
+.faq_item.is-open .faq_panel{display:block}
+.faq_answer{color:var(--color--text--secondary);max-width:60ch}
+
+/* ============ 13. CTA banner ============ */
+.cta_banner{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--space-s);max-width:34rem;margin:0 auto}
+.cta_banner .button-group{justify-content:center;margin-top:var(--space-xs)}
+
+/* ============ 14. Navbar — huts mechanics, rendered instant (contract: reference/huts-nav/NAV-SPEC.md) ============
+   ONE expanding sheet: bar + panel are a single surface (#fffbf5, radius 0 0 24 24, no border, no shadow).
+   Transparent at page top; .is-solid (scrolled — JS class toggle) and .is-open share the solid sheet look.
+   Background/radius near-instant; scroll hide/reveal is eased & slow (transform .7s) per client 2026-07-22. */
+.nav_component{position:sticky;top:0;z-index:50;background:transparent;transition:background-color .45s ease .3s,border-radius .45s ease .3s,transform .7s cubic-bezier(.4,0,.2,1)}
+.nav_component.is-solid,.nav_component:hover{background:var(--color--surface--card);border-radius:0 0 var(--radius--card) var(--radius--card);transition:background-color .3s ease,border-radius .3s ease,transform .7s cubic-bezier(.4,0,.2,1)}
+.nav_component.is-open{background:var(--color--surface--card);border-radius:0;transition:background-color .3s ease,border-radius .3s ease,transform .7s cubic-bezier(.4,0,.2,1)}   /* bar square; the sheet carries the rounded bottom */
+/* huts scroll hide/reveal (eased, transform .7s — client 2026-07-22) — OFF by default; wire .is-scrolling/.is-shown from JS only if the client asks (NAV-SPEC §4) */
+.nav_component.is-scrolling{transform:translateY(-100%)}
+.nav_component.is-scrolling.is-shown{transform:none}   /* bg follows .is-solid → stays transparent over the hero (client 2026-07-22) */
+/* future transparent-over-dark-hero pages (needs a light logo lockup — not yet supplied) */
+.nav_component.is-inverse .nav_menu-trigger,.nav_component.is-inverse .nav_utility-link{color:var(--color--text--on-dark)}
+.nav_bar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;column-gap:var(--space-s);height:5.5rem;padding:0 var(--gutter);max-width:calc(var(--container--xlarge) + clamp(2.5rem,10vw,8rem));margin-left:auto;margin-right:auto}
+.nav_logo-link{display:inline-flex;align-items:center;flex:none;text-decoration:none}
+.nav_logo{width:12.5rem;height:auto}          /* 200px primary landscape */
+.nav_logo.is-submark{width:5.5rem;display:none}
+.nav_menu{display:flex;justify-content:flex-end;min-width:0}
+.nav_menu-list{display:inline-flex;align-items:center;column-gap:1.25rem}
+.nav_menu-item{display:flex;transition:opacity .35s ease}
+.nav_menu-item.is-dimmed{opacity:.6}          /* sibling dimming while another menu is open — eased (client 2026-07-22) */
+.nav_menu-trigger{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 0;font-family:var(--font--body);font-weight:400;font-size:.9375rem;line-height:1;color:var(--color--text--heading);white-space:nowrap;text-decoration:none;transition:color .18s ease}
+.nav_menu-trigger.is-current{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}
+.nav_plus{width:.625rem;height:.625rem;flex:none;transition:transform .35s ease}
+.nav_menu-trigger .nav_plus{display:none}
+.nav_menu-item.is-active .nav_plus{transform:rotate(45deg)}   /* + flips to × — eased (client 2026-07-22) */
+.nav_utility{display:flex;align-items:center;gap:var(--space-xs);justify-content:flex-end}
+.nav_utility-link{font-family:var(--font--body);font-size:.9375rem;color:var(--color--text--heading);text-decoration:none;transition:color .18s ease}
+.nav_utility-link:hover{text-decoration:underline;text-underline-offset:4px}
+/* the expanding sheet — absolute overlay so it never pushes the page; reveals top→bottom via eased max-height (designer 2026-07-22) */
+.nav_sheet{position:absolute;top:100%;left:0;right:0;z-index:1;height:0;overflow:hidden;opacity:0;background:var(--color--surface--card);border-radius:0 0 var(--radius--card) var(--radius--card);transition:height .55s cubic-bezier(.4,0,.2,1),opacity .45s ease}
+.nav_component.is-open .nav_sheet{opacity:1;transition:height .55s cubic-bezier(.4,0,.2,1) .12s,opacity .45s ease .12s}
+.nav_component.is-static.is-open .nav_sheet{height:auto;overflow:visible}
+@media(prefers-reduced-motion:reduce){.nav_component,.nav_sheet,.nav_page-dim{transition:none}.nav_panel.is-active{animation:none}}
+/* sheet content shares the bar's centred measure so mega-menu items align with the bar + page grid */
+.nav_desktop{max-width:calc(var(--container--xlarge) + clamp(2.5rem,10vw,8rem));margin-left:auto;margin-right:auto}
+@keyframes navPanelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.nav_panel{display:none;padding:var(--space-xl) var(--gutter)}
+.nav_panel.is-active{display:block;animation:navPanelIn .45s cubic-bezier(.33,1,.68,1) .26s both}
+.nav_panel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-m)}
+.nav_panel-grid.is-single{grid-template-columns:minmax(0,20rem);justify-content:center}
+.nav_panel-grid.is-two{grid-template-columns:repeat(2,minmax(0,22rem));justify-content:center;column-gap:var(--space-xl)}
+.nav_panel-grid.is-four{grid-template-columns:repeat(4,1fr)}
+.nav_panel-grid.is-tight{row-gap:0}   /* stacked links sit at the Trainings link gap, not the column gap */   /* huts "two-across" — roomier, shallow sheet */
+/* huts "large-card" option — reserved for a future editorial menu */
+.nav_panel-grid.is-cards{grid-template-columns:repeat(4,1fr)}
+.nav_link.is-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.75rem;background:var(--color--surface--page);border:1px solid var(--color--border--hairline);border-radius:var(--radius--card);padding:2rem}
+.nav_link.is-card .nav_figure{width:5.5rem;height:5.5rem}
+.nav_link.is-card .nav_link-text{align-items:center}
+.nav_link.is-card:hover{background:color-mix(in srgb,var(--color--surface--cool) 22%,var(--color--surface--card))}
+.nav_col-heading{font-family:var(--font--body);font-weight:700;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--color--text--secondary);padding-bottom:.75rem}
+/* menu items — two variants (NAV-SPEC v2 §6). A (default, huts-faithful): 72px illustration figure + Chapaza title + byline.
+   B (client's scannable alternate): the same link without is-figure/figure — plain Chapaza label. */
+.nav_link{display:block;padding:.4375rem 0;text-decoration:none}
+.nav_link.is-figure{display:grid;grid-template-columns:4.5rem 1fr;column-gap:1rem;align-items:center}
+.nav_figure{display:flex;align-items:center;justify-content:center;width:4.5rem;height:4.5rem;background:var(--color--surface--card);border:1px solid var(--color--border--hairline);border-radius:var(--radius--card);transition:background-color .18s ease}
+.nav_figure img{width:60%;height:60%;object-fit:contain}
+.nav_link:hover .nav_figure{background:color-mix(in srgb,var(--color--surface--cool) 22%,var(--color--surface--card))}   /* Mint, instant — softened */
+.nav_link-text{display:flex;flex-direction:column;gap:.125rem}.nav_link-label{font-family:var(--font--display);font-weight:400;font-size:1.125rem;line-height:1.3;letter-spacing:-.006em;color:var(--color--text--heading);transition:color .18s ease}
+.nav_link:hover .nav_link-label{color:var(--color--text--heading-alt)}   /* deep pond, instant */
+.nav_link-sub{font-family:var(--font--body);font-size:.9375rem;line-height:1.4;color:var(--color--text--secondary);margin-top:.125rem}
+.nav_badge{display:inline-block;vertical-align:middle;font-family:var(--font--body);font-weight:700;font-size:.6875rem;line-height:1;letter-spacing:.12em;text-transform:uppercase;color:var(--color--text--heading);background:var(--color--surface--cool);border-radius:var(--radius--card);padding:.25rem .5rem;margin-left:.5rem}
+/* page dim behind the sheet — leads in first, trails out last so it bookends the menu; scroll lock (client 2026-07-22) */
+.nav_page-dim{position:fixed;inset:0;z-index:40;background:var(--color--overlay--dim);opacity:0;visibility:hidden;transition:opacity .6s ease .1s,visibility 0s .7s}
+.nav_page-dim.is-active{opacity:1;visibility:visible;transition:opacity .5s ease,visibility 0s}
+.noscroll{overflow:hidden}
+/* mobile expand button — 48px Mint circle, two navy lines that flip to an × */
+.nav_expand-btn{display:none;position:relative;width:3rem;height:3rem;border-radius:var(--radius--pill);background:var(--color--surface--cool);flex:none}
+.nav_expand-line{position:absolute;left:50%;top:50%;width:1.375rem;height:1.5px;margin-left:-.6875rem;background:var(--color--text--heading)}
+.nav_expand-line.is-a{margin-top:-3px}
+.nav_expand-line.is-b{margin-top:2px}
+.nav_component.is-open .nav_expand-line.is-a{margin-top:-1px;transform:rotate(45deg)}
+.nav_component.is-open .nav_expand-line.is-b{margin-top:-1px;transform:rotate(-45deg)}
+/* mobile full-screen accordion (lives in the sheet, shown ≤991) */
+.nav_mobile{display:none;padding:0 var(--gutter) var(--space-m)}
+.nav_mobile-item.is-dimmed{opacity:.6}
+.nav_mobile-row{display:flex;justify-content:space-between;align-items:center;width:100%;padding:1.5rem 0;border-bottom:1px solid var(--color--border--rule);font-family:var(--font--display);font-weight:400;font-size:1.125rem;color:var(--color--text--heading);text-align:left}
+.nav_mobile-item.is-active .nav_mobile-row .nav_plus{transform:rotate(45deg)}
+.nav_mobile-panel{display:none;padding:.5rem 0 1rem}
+.nav_mobile-item.is-active .nav_mobile-panel{display:block}
+.nav_mobile-cta{display:flex;align-items:center;gap:var(--space-s);padding:1.5rem 0}
+
+/* ============ 15. Footer — warm Golden Honey band (keeps the navy frog mark visible) ============ */
+.footer_component{background:var(--color--surface--warm);color:var(--color--text--secondary)}
+.footer_top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:var(--space-m);padding-bottom:var(--space-xl);border-bottom:1px solid var(--color--border--hairline)}
+.footer_top.is-five{grid-template-columns:1.4fr 1fr 1fr 1fr 1fr}   /* homepage: brand + 4 link columns */
+.footer_brand-logo{width:8rem;height:auto;margin-bottom:var(--space-s)}
+.footer_tagline{font-family:var(--font--display);font-weight:400;font-size:1.125rem;line-height:1.3;color:var(--color--text--heading);max-width:22ch}
+.footer_motto{text-align:center;margin-bottom:var(--space-2xl)}
+.footer_motto-text{font-family:var(--font--display);font-weight:400;font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.2;letter-spacing:-.01em;color:var(--color--text--heading);max-width:26ch;margin:0 auto}
+.footer_col-heading{font-family:var(--font--body);font-weight:700;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--color--text--heading);margin-bottom:.3125rem}
+.footer_link{display:block;padding:.375rem 0;color:var(--color--text--secondary);text-decoration:none;font-size:.9375rem;transition:color .18s ease}
+.footer_link:hover{color:var(--color--text--heading);text-decoration:underline;text-underline-offset:4px}
+.footer_bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--space-s);padding-top:var(--space-s);font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--color--text--secondary)}
+
+/* ============ 16. Section colour combos (bg + text flip) ============ */
+.background-color-page{background:var(--color--surface--page)}
+.background-color-card{background:var(--color--surface--card)}
+.background-color-warm{background:var(--color--surface--warm)}
+.background-color-cool{background:var(--color--surface--cool)}
+.background-color-rose{background:var(--color--surface--rose)}
+.background-color-green{background:var(--color--surface--green)}
+.section_layout.is-dark,.background-color-dark{background:var(--color--surface--dark)}
+.section_layout.is-green-dark,.background-color-green-dark{background:var(--color--surface--green-dark)}
+/* on dark/green-dark bands, flip heading + body to reversed tokens */
+.is-dark .heading-style-h1,.is-dark .heading-style-h2,.is-dark .heading-style-h3,.is-dark .heading-style-h4,.is-green-dark .heading-style-h1,.is-green-dark .heading-style-h2,.is-green-dark .heading-style-h3,.is-green-dark .heading-style-h4{color:var(--color--text--on-dark)}
+.is-dark .tagline,.is-green-dark .tagline{color:var(--color--text--on-dark-muted)}
+.is-dark .text-color-primary,.is-dark .text-color-secondary,.is-dark .section-header_intro,.is-dark .card_body,.is-green-dark .text-color-primary,.is-green-dark .text-color-secondary,.is-green-dark .section-header_intro,.is-green-dark .card_body{color:var(--color--text--on-dark-muted)}
+.is-dark a,.is-green-dark a{color:var(--color--text--on-dark)}
+
+/* layout helpers */
+.grid_6-6{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-2xl);align-items:center}
+.grid_6-6.is-top{align-items:start}
+.grid_6-6.is-single{grid-template-columns:1fr;max-width:var(--container--medium);margin-left:auto;margin-right:auto}
+.grid_4-4-4{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-m)}
+.grid_3-3-3-3{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-m)}
+.copy-block{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-s);text-align:left}
+.copy-block.is-center{align-items:center;text-align:center}
+.copy-block .button-group{margin-top:var(--space-xs)}
+.copy-block:not(.is-center) .text-size-large,.copy-block:not(.is-center) .text-size-medium{max-width:44ch}
+.prose{max-width:38rem}
+.prose p{margin-bottom:var(--space-xs);color:var(--color--text--secondary)}
+.prose .text-size-large{color:var(--color--text--primary)}
+.section_certification .copy-block .text-size-small{max-width:38ch}
+
+/* ============ 17. Responsive (desktop-first: 991 / 767 / 479) ============ */
+@media(max-width:991px){
+  .nav_bar{grid-template-columns:auto auto;justify-content:space-between;height:4rem}
+  .nav_menu{display:none}
+  .nav_utility .nav_utility-link{display:none}
+  .nav_logo{display:none}
+  .nav_logo.is-submark{display:block}
+  .nav_expand-btn{display:inline-flex}
+  .nav_desktop{display:none}
+  .nav_component.is-open .nav_mobile{display:block}
+  .grid_6-6{grid-template-columns:1fr;gap:var(--space-m)}
+  .media_arch,.media_ratio-portrait{aspect-ratio:16/10}
+  .grid_3-3-3-3{grid-template-columns:repeat(2,1fr)}
+  .footer_top{grid-template-columns:1fr 1fr}
+  .footer_top.is-five{grid-template-columns:1fr 1fr}
+}
+@media(max-width:767px){
+  :root{--section-space:8rem}   /* mobile section rhythm 128 — divider + colour break rescale from this one token */
+  .grid_4-4-4{grid-template-columns:1fr}
+  .section-header.is-inline{flex-direction:column;align-items:flex-start;gap:var(--space-xs)}
+  .ledger_row{grid-template-columns:4rem 1fr;gap:var(--space-xs)}
+  .ledger_month{font-size:1.5rem}
+}
+@media(max-width:479px){
+  .grid_3-3-3-3{grid-template-columns:1fr}
+  .footer_top{grid-template-columns:1fr}
+  .footer_top.is-five{grid-template-columns:1fr}
+  .card,.testimonial_card,.form_card{padding:var(--space-m) 1.75rem}
+  .button{width:auto}
+}
+
+
+/* ============ Language switcher — dropdown from the nav bar's bottom edge (client 2026-07-22, RESTORED after external revert) ============ */
+.nav_lang{display:inline-flex;align-items:center;font-family:var(--font--body)}
+.nav_lang-toggle{display:inline-flex;align-items:center;gap:.45em;background:transparent;padding:.4rem .55rem;color:var(--color--text--secondary);font-size:.8125rem;line-height:1;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:color .18s ease}
+.nav_lang-toggle:hover,.nav_lang.is-open .nav_lang-toggle{color:var(--color--text--heading)}
+.nav_lang-caret{width:.42rem;height:.42rem;margin-top:-.14rem;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .2s ease}
+.nav_lang.is-open .nav_lang-caret{margin-top:.14rem;transform:rotate(-135deg)}
+.nav_lang-menu{position:absolute;top:100%;right:var(--gutter);z-index:30;min-width:14rem;margin:0;padding:.5rem;list-style:none;background:var(--color--surface--card);border-radius:0 0 var(--radius--card) var(--radius--card);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .3s ease,transform .38s cubic-bezier(.4,0,.2,1),visibility .3s ease}
+.nav_lang.is-open .nav_lang-menu{opacity:1;visibility:visible;transform:none}
+.nav_lang-option{display:grid;grid-template-columns:2.25rem 1fr;column-gap:.75rem;align-items:center;width:100%;padding:.4375rem .5rem;background:transparent;border-radius:var(--radius--card);text-align:left;cursor:pointer}
+.nav_lang-tile{display:flex;align-items:center;justify-content:center;width:2.25rem;height:2.25rem;background:var(--color--surface--card);border:1px solid var(--color--border--hairline);border-radius:var(--radius--card);font-family:var(--font--body);font-weight:700;font-size:.6875rem;letter-spacing:.08em;color:var(--color--text--secondary);transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+.nav_lang-option .nav_link-label{font-family:var(--font--display);font-weight:400;font-size:1.0625rem;line-height:1.3;letter-spacing:-.006em;color:var(--color--text--heading);transition:color .18s ease}
+.nav_lang-option:hover,.nav_lang-option:focus-visible{outline:none}
+.nav_lang-option:hover .nav_lang-tile,.nav_lang-option:focus-visible .nav_lang-tile{background:color-mix(in srgb,var(--color--surface--cool) 25%,var(--color--surface--card))}
+.nav_lang-option:hover .nav_link-label,.nav_lang-option:focus-visible .nav_link-label{color:var(--color--text--heading-alt)}
+.nav_lang-option.is-active .nav_lang-tile{background:var(--color--surface--cool);border-color:transparent;color:var(--color--text--heading)}
+@media(max-width:991px){.nav_lang{display:none}}
+/* Footer meditating frog — centred at the top of the footer (client 2026-07-22, RESTORED) */
+.footer_frog{width:clamp(6rem,9vw,8.5rem);margin:0 auto var(--space-l)}
+.footer_frog img{display:block;width:100%;height:auto}
+
+
+/* ============ Trainer map (inlined SVG) — 47 pins pulse one at a time; styling lives here because uploaded .svg <style> is sanitised (client 2026-07-22) ============ */
+.media_frame .media_map{width:100%;height:100%;display:block;border:0}
+#trainer-pins{--sig:#859f87}
+.pin .halo{fill:none;stroke:var(--sig);stroke-width:4.5;opacity:0;animation:amt-halo 28.2s linear infinite;animation-delay:var(--d)}
+.pin .disc{fill:#fffbf5;stroke:#183858;stroke-width:1.6;animation:amt-disc 28.2s linear infinite;animation-delay:var(--d)}
+@keyframes amt-halo{0%{r:15;opacity:0}2%{r:17;opacity:.85}14%{r:72;opacity:0}100%{r:72;opacity:0}}
+@keyframes amt-disc{0%{r:15;fill:#fffbf5;stroke:#183858;stroke-width:1.6}3%{r:18;fill:var(--sig);stroke:var(--sig);stroke-width:4}9%{r:18;fill:var(--sig);stroke:var(--sig);stroke-width:4}16%{r:15;fill:#fffbf5;stroke:#183858;stroke-width:1.6}100%{r:15;fill:#fffbf5;stroke:#183858;stroke-width:1.6}}
+@media(prefers-reduced-motion:reduce){.pin .halo,.pin .disc{animation:none}.pin .halo{opacity:0}}
