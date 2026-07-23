@@ -1,0 +1,32 @@
+/* ALTUS design system — tokens (v4 soft system, promoted from approved style sample)
+   Role → hex map:
+   --color--background  #F5F7FA  the one soft field, whole page
+   --color--ink         #22303F  display, headings, strong body
+   --color--muted       #3D4B59  supporting text
+   --color--panel       #D9E6F4  the one soft-blue panel (contact)
+   --color--interactive #315B81  links, filled pill CTA, form focus
+   --color--hairline    #DCE4EC  in-list row rules, field underlines, outline pill, dashboard chrome
+   bloom: radial #BFD6EE → #E4EDF7 → transparent (hero light) */
+@font-face{font-family:'Montserrat';src:url('brand/fonts/montserrat-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('brand/fonts/montserrat-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Montserrat';src:url('brand/fonts/montserrat-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+:root{
+--color--background:#F5F7FA;
+--color--ink:#22303F;
+--color--muted:#3D4B59;
+--color--panel:#D9E6F4;
+--color--interactive:#315B81;
+--color--interactive-hover:#274a69;
+--color--hairline:#DCE4EC;
+--color--outline:rgba(49,91,129,0.35);
+--color--bloom-core:#BFD6EE;
+--color--bloom-mid:#E4EDF7;
+--color--surface:#FDFEFF;
+--radius--pill:999px;
+--radius--panel:1.25rem;
+--font-stack:'Montserrat','Helvetica Neue',Arial,sans-serif;
+--container--large:102.5rem;
+--container--medium:75rem;
+--container--small:42rem;
+--shadow--soft:0 1.5rem 3.5rem rgba(34,48,63,0.08);
+}

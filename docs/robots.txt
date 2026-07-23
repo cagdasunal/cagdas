@@ -7,4 +7,5 @@
 
 User-agent: *
 Disallow: /amt/
+Disallow: /sites/
 
