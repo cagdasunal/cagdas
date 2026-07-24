@@ -88,12 +88,13 @@
 </div>
 </div>
 <details class="navbar_mobile">
-<summary class="navbar_mobile-trigger">Menu</summary>
+<summary class="navbar_mobile-trigger" aria-label="Open menu"><span class="navbar_burger"></span></summary>
 <div class="navbar_mobile-panel">
 <a href="#services" class="navbar_link">Services</a>
 <a href="#industries" class="navbar_link">Industries</a>
 <a href="#technology" class="navbar_link">Technology</a>
 <a href="#about" class="navbar_link">About</a>
+<a href="#contact" class="navbar_link">Contact</a>
 <a href="#" class="navbar_login-link">Make a Payment</a>
 <a href="#" class="navbar_login-link">Place an Account</a>
 <a href="#" class="navbar_login-link">Free credit report</a>
@@ -116,9 +117,9 @@
 </div>
 <div class="padding-global">
 <div class="container-large">
-<div class="hero_content" style="width:964px;height:1195px">
+<div class="hero_content">
 <div class="margin-bottom margin-small"><div class="hero_eyebrow"><div class="hero_eyebrow-mark"></div><div class="hero_eyebrow-text">North America's #1 commercial debt collection agency</div></div></div>
-<div class="hero_heading-wrapper"><h1 class="heading-style-h1" style="width:963px;height:148px"><span class="hero_heading-accent">Recover what you're owed.</span><br>Keep the clients you've earned.</h1></div>
+<div class="hero_heading-wrapper"><h1 class="heading-style-h1"><span class="hero_heading-accent">Recover what you're owed.</span><br>Keep the clients you've earned.</h1></div>
 <div class="hero_support-wrapper"><p class="text-size-large text-color-muted">ALTUS has collected commercial debt across North America for 30 years: 300 specialists, the ARM Strong platform built with Salesforce, and licensing in all 50 states and Canada.</p></div>
 <div class="hero_cta-wrapper">
 <a href="#contact" class="button">Request a Demo</a>
@@ -158,14 +159,17 @@
 <div class="padding-global">
 <div class="padding-section-large">
 <div class="container-large">
+<div class="services_box">
 <div class="platform_layout">
 <div class="platform_text">
+<div class="platform_text-main">
 <div class="platform_header">
 <div class="hero_eyebrow"><div class="hero_eyebrow-mark"></div><div class="hero_eyebrow-text">ARM Strong, the ALTUS platform</div></div>
 <div class="platform_heading-wrapper"><h2 class="heading-style-h2">Every claim, every action, in plain view.</h2></div>
 <div class="platform_intro-wrapper"><p class="text-size-medium text-color-muted">Our collectors work inside ARM Strong, the platform we built with Salesforce. Clients get the same view they do: log in and see where each account stands, what happened today, and what comes next.</p></div>
 </div>
 <div class="platform_actions"><a href="#contact" class="button">Request a Demo</a><a href="#services" class="button is-secondary">Learn more</a></div>
+</div>
 <div class="platform_footnote"><div class="platform_footnote-item"><div class="platform_footnote-body"><span class="platform_footnote-label">Built on Salesforce</span><span class="platform_footnote-text">Developed in partnership with Salesforce.com.</span></div></div><div class="platform_footnote-item"><div class="platform_footnote-body"><span class="platform_footnote-label">Secure by default</span><span class="platform_footnote-text">Client data encrypted, with disaster recovery built in.</span></div></div></div>
 </div>
 <div class="platform_features">
@@ -198,6 +202,7 @@
 <p class="bento_tile-text">Recovery rates, portfolio aging and monthly placement charts in dashboards that need no explanation.</p>
 </div>
 </article>
+</div>
 </div>
 </div>
 </div>
@@ -247,6 +252,7 @@
 <div class="padding-global">
 <div class="padding-section-large">
 <div class="container-large">
+<div class="services_box">
 <div class="industries_header">
 <div class="hero_eyebrow"><div class="hero_eyebrow-mark"></div><div class="hero_eyebrow-text">Industries</div></div>
 <div class="industries_heading-wrapper"><h2 class="heading-style-h2">At home in regulated industries.</h2></div>
@@ -278,6 +284,7 @@
 <button class="industry_swiper-btn industry_swiper-prev" type="button" aria-label="Previous industries"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
 <div class="swiper-pagination industry_swiper-progress"></div>
 <button class="industry_swiper-btn industry_swiper-next" type="button" aria-label="Next industries"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>
 </div>
 </div>
 </div>
@@ -522,7 +529,7 @@
 </footer>
 </div>
 </div>
-<script>document.addEventListener('DOMContentLoaded',function(){if(!window.Swiper)return;new Swiper('.industry_swiper',{slidesPerView:1.1,spaceBetween:16,grabCursor:true,pagination:{el:'.industry_swiper-progress',type:'progressbar'},navigation:{nextEl:'.industry_swiper-next',prevEl:'.industry_swiper-prev'},breakpoints:{640:{slidesPerView:2,spaceBetween:20},992:{slidesPerView:4,spaceBetween:20}}});});</script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(!window.Swiper)return;new Swiper('.industry_swiper',{slidesPerView:1.1,spaceBetween:16,grabCursor:true,pagination:{el:'.industry_swiper-progress',type:'progressbar'},navigation:{nextEl:'.industry_swiper-next',prevEl:'.industry_swiper-prev'},breakpoints:{640:{slidesPerView:2,spaceBetween:20},992:{slidesPerView:3,spaceBetween:20},1440:{slidesPerView:4,spaceBetween:20}}});});</script>
 <script>document.querySelectorAll('.contact_tab').forEach(function(tab){tab.addEventListener('click',function(){var name=tab.dataset.tab;document.querySelectorAll('.contact_tab').forEach(function(t){var on=t===tab;t.classList.toggle('is-active',on);t.setAttribute('aria-selected',on);});document.querySelectorAll('.contact_tabpanel').forEach(function(p){p.classList.toggle('is-active',p.dataset.panel===name);});});});</script>
 <script>(function(){var nav=document.querySelector('.navbar_component');if(!nav)return;var last=window.scrollY||0,ticking=false;function upd(){var y=window.scrollY||window.pageYOffset;if(y>40){nav.classList.add('is-scrolled');}else{nav.classList.remove('is-scrolled');}if(y>last&&y>180){nav.classList.add('is-hidden');}else if(y<last-2||y<80){nav.classList.remove('is-hidden');}last=y;ticking=false;}window.addEventListener('scroll',function(){if(!ticking){window.requestAnimationFrame(upd);ticking=true;}},{passive:true});upd();})();</script>
 <script>(function(){function draw(){var el=document.getElementById('coverage-map');if(!el||!window.d3||!window.topojson){return;}var W=Math.max(320,el.clientWidth||960),H=Math.round(W*0.6);var svg=d3.select(el).append('svg').attr('viewBox','0 0 '+W+' '+H).attr('width','100%').attr('preserveAspectRatio','xMidYMid meet').attr('role','img').attr('aria-label','ALTUS coverage across the United States');d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json').then(function(us){var states=topojson.feature(us,us.objects.states);var proj=d3.geoAlbersUsa().fitSize([W,H],states);var path=d3.geoPath(proj);svg.append('g').selectAll('path').data(states.features).enter().append('path').attr('d',path).attr('fill','#315B81').attr('stroke','#EAF1FA').attr('stroke-width',0.8).attr('stroke-linejoin','round');var offices=[{c:[-90.15,29.98],a:'2121 Airline Drive Suite 520, Metairie, LA 70001',hq:1},{c:[-112.074,33.451],a:'2 N Central Ave, Suite 1800, Phoenix, AZ 85004*'},{c:[-118.253,34.049],a:'633 W Fifth St, 26th & 28th Floors, Los Angeles, CA 90071*'},{c:[-104.951,39.617],a:'5460 S. Quebec Street, Suite 315, Greenwood Village, CO 80111*'},{c:[-81.658,30.328],a:'50 N Laura St, Suite 2500, Jacksonville, FL 32202*'},{c:[-93.711,41.591],a:'2910 Westown Pkwy Suite 102 Des Moines, IA 50266*'},{c:[-85.601,38.249],a:'2007 Lake Point Way, Louisville, KY 40223'},{c:[-74.548,40.263],a:'50 Millstone Road Bldg. 100 #360 East Windsor, NJ 08520*'},{c:[-75.163,39.949],a:'123 S Broad St, 15th Floor, Philadelphia, PA 19109*'},{c:[-95.366,29.758],a:'708 Main St, Floors 4-10, Houston, TX 77002*'}];el.style.position='relative';var tip=document.createElement('div');tip.className='coverage_tip';tip.setAttribute('role','status');el.appendChild(tip);function hideTip(){tip.classList.remove('is-open');}function showTip(px,py,text){tip.textContent=text;tip.style.left=(px/W*100)+'%';tip.style.top=(py/H*100)+'%';tip.classList.add('is-open');}document.addEventListener('click',hideTip);tip.addEventListener('click',function(e){e.stopPropagation();});var g=svg.append('g');offices.forEach(function(o,i){var p=proj(o.c);if(!p){return;}var x=p[0],y=p[1],base=(i%5)*0.5;for(var k=0;k<2;k++){var r=g.append('circle').attr('cx',x).attr('cy',y).attr('fill','none').attr('stroke','#6B9DD2').attr('stroke-width',2.8).attr('opacity',0).style('pointer-events','none');var a1=r.append('animate');a1.attr('attributeName','r').attr('values','4;30').attr('dur','2.9s').attr('begin',(base+k*1.45)+'s').attr('repeatCount','indefinite').attr('calcMode','spline').attr('keySplines','0.2 0 0.3 1').attr('keyTimes','0;1');var a2=r.append('animate');a2.attr('attributeName','opacity').attr('values','0.9;0').attr('dur','2.9s').attr('begin',(base+k*1.45)+'s').attr('repeatCount','indefinite');}var hit=g.append('circle').attr('cx',x).attr('cy',y).attr('r',18).attr('fill','transparent').style('cursor','pointer');var dot=g.append('circle').attr('cx',x).attr('cy',y).attr('r',o.hq?9:7).attr('fill','#fff').attr('stroke','#315B81').attr('stroke-width',1.5).style('cursor','pointer');function open(ev){ev.stopPropagation();showTip(x,y,o.a);}hit.on('click',open);dot.on('click',open);});}).catch(function(){el.setAttribute('data-map-error','1');});}if(document.readyState!=='loading'){draw();}else{document.addEventListener('DOMContentLoaded',draw);}})();</script>
