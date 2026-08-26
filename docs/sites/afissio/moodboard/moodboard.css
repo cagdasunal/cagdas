@@ -1,0 +1,161 @@
+/* moodboard.css — all styling for the client moodboard pages.
+   Client-agnostic: no client name, no client-specific value, no fixed number of references.
+   A standalone static page served from files.cagd.as. Not a Webflow page, so the deploy
+   contract does not reach this file: gap, free breakpoints and pseudo-classes are fair game.
+
+   ROUND 2. Four decisions drive this file.
+
+   1. THREE columns, ONE set. No options, no review labels, no is-wall / is-column modifiers:
+      the set has a single form and this is it. Three columns on the wide layout, two from
+      roughly 1100 down to 768, one below that, because three whole homepages side by side on
+      a phone cannot be read at all.
+   2. What three columns costs, made a decision instead of a surprise: at a 1320 content
+      measure with 40 gaps a column lands near 413 wide, so a 1200-wide homepage renders at
+      about a third of real size and its own body text becomes texture. That is the accepted
+      trade for a moodboard, and it is why .mb-link is treated as the second voice of every
+      placard rather than a small caption. It is the only way these get read properly.
+   3. The screenshots are whole homepages, roughly 1:2.6 to 1:8.1, the tallest three times the
+      shortest. So: no fixed frame, no crop, no cover fit, no letterbox. Full column measure,
+      natural height, top of the page at the top. The columns are INDEPENDENT stacks rather
+      than aligned rows, so a short reference never waits on a tall one beside it; they finish
+      at different heights on purpose and nothing here levels them. Source order stays flat
+      and the columns are filled across it, so the reading order survives every count and the
+      collapse to one. Never the browser's own multi-column flow, which fills column one
+      whole before starting column two and destroys that order.
+   4. FOUR sizes, every rung at least 1.25 from its neighbour, all of them below round 1: the
+      page title, the site names, one reading size carrying every paragraph on the page, and
+      one small size for the eyebrow, the labels and the lines under them. Nothing falls below
+      14 on the wide layout. The names take a rung of their own so a plate reads name first at
+      a third-size screenshot. Where two things share the reading rung they separate by ink
+      rather than by size: the opening block's first paragraph in primary ink against the
+      paragraphs after it. Blocks are set tighter as well as smaller, which is what makes them
+      read as considered at this scale. */
+
+/* Fonts. Two sources per face on purpose: the first resolves in the deployed folder
+   (index.html, moodboard.css and fonts/ sit side by side), the second resolves in this
+   repository, where fonts/ is one level up from this file. */
+@font-face{font-family:"Lyon Text";src:url("fonts/LyonText-400-Regular.woff2") format("woff2"),url("../fonts/LyonText-400-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Sohne";src:url("fonts/Sochne-300-Light.woff2") format("woff2"),url("../fonts/Sochne-300-Light.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"Sohne";src:url("fonts/Sochne-400-Regular.woff2") format("woff2"),url("../fonts/Sochne-400-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Sohne";src:url("fonts/Sochne-600-SemiBold.woff2") format("woff2"),url("../fonts/Sochne-600-SemiBold.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+
+:root{
+  --mb-canvas:#000;
+  --mb-panel:#080808;
+  --mb-panel-line:#0e0e0e;
+  --mb-rule:#1c1c1c;
+  --mb-ink:#ededed;
+  --mb-ink-2:#bdbdbd;
+  --mb-ink-3:#8f8f8f;
+  --mb-hover:#8f8f8f;
+  --mb-accent:#126ef5;
+  --mb-radius:10px;
+  --mb-frame:10px;
+  --mb-display:"Lyon Text",Georgia,serif;
+  --mb-text:"Sohne",Helvetica,Arial,sans-serif;
+  --mb-page-max:1440px;
+  --mb-gutter:3.75rem;
+  --mb-col-gap:2.5rem;
+  --mb-row-gap:5rem;
+  --mb-size-1:2.15rem;
+  --mb-size-2:1.7rem;
+  --mb-size-3:1.1rem;
+  --mb-size-4:.875rem;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--mb-canvas)}
+body{margin:0;background:var(--mb-canvas);color:var(--mb-ink);font-family:var(--mb-text);font-weight:300;font-size:var(--mb-size-3);line-height:1.5;text-wrap:pretty;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+/* The underlined text-link is the only link treatment on the page. Never a filled control. */
+a{color:var(--mb-ink-2);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px;transition:color .25s ease}
+a:hover{color:var(--mb-hover)}
+a:focus-visible{outline:2px solid var(--mb-accent);outline-offset:5px;border-radius:2px}
+
+.mb-page{max-width:var(--mb-page-max);margin:0 auto;padding:7rem var(--mb-gutter) 8rem}
+
+/* ---- The opening block. With the settled block deleted this is the ONLY place the page
+   speaks in its own voice, so it carries the whole argument and takes the weight: the title is
+   the one loud element on the page, and the first paragraph gets a size no other paragraph
+   gets. Prose on one measure, left aligned, no rows and no panels, which is what holds it
+   apart from the framed wall beneath. There is no settled block, summary or recap below. ---- */
+.mb-intro{max-width:44rem;margin:0 0 5.5rem}
+.mb-eyebrow{margin:0 0 2.25rem;color:var(--mb-ink-3);font-size:var(--mb-size-4);font-weight:400;letter-spacing:.5px;text-transform:uppercase}
+.mb-title{margin:0 0 2rem;max-width:36rem;font-family:var(--mb-display);font-weight:400;font-size:var(--mb-size-1);line-height:1.1}
+/* The first paragraph carries the promise, so it takes primary ink. It sits on the reading
+   rung with everything after it: the separation is ink, not another size. */
+.mb-lead{margin:0 0 1.35rem;max-width:34rem;color:var(--mb-ink);font-size:var(--mb-size-3);font-weight:400;line-height:1.4}
+.mb-body{margin:0 0 1.15rem;max-width:32rem;color:var(--mb-ink-2);font-size:var(--mb-size-3);font-weight:400;line-height:1.45}
+.mb-note{margin:2rem 0 0;color:var(--mb-ink-3);font-size:var(--mb-size-4);font-weight:400;line-height:1.5}
+
+/* ---- The set of references. Works with three or thirty: nothing here counts them. The base
+   state is one column in source order, which is also what a page with no script gets. is-split
+   is set once the references have been dealt across column wrappers; each wrapper is its own
+   stack, so a 3195-tall image never has to wait for a 9768-tall one beside it. ---- */
+.mb-set{display:flex;flex-direction:column;gap:var(--mb-row-gap);margin:0;padding-top:4.5rem;border-top:1px solid var(--mb-rule)}
+.mb-set.is-split{flex-direction:row;align-items:flex-start;gap:var(--mb-col-gap)}
+.mb-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:var(--mb-row-gap)}
+
+/* The placard: framed screenshot, plate beneath. */
+.mb-placard{display:flex;flex-direction:column;gap:1.25rem;min-width:0}
+/* The frame is itself the link to the site, so it takes no underline and no link colour. */
+.mb-frame{display:block;padding:var(--mb-frame);background:var(--mb-panel);border:1.5px solid var(--mb-panel-line);border-radius:var(--mb-radius);text-decoration:none;transition:border-color .25s ease}
+.mb-frame:hover{border-color:var(--mb-accent)}
+/* Whole homepages, uncropped: full column measure, natural height, top of the page at the top.
+   No fixed height, no cover fit, no letterbox. The width and height on the image reserve the
+   right box before it loads, so lazy loading cannot collapse a column mid-scroll. */
+.mb-shot{width:100%;height:auto;border-radius:4px;background:var(--mb-panel-line)}
+/* A missing image keeps its reserved box, so the frame stays a dark panel rather than showing
+   a broken-image mark. The min-height covers the case where no dimensions were supplied. */
+.mb-shot.is-missing{visibility:hidden}
+.mb-frame.is-empty{background:var(--mb-panel-line);min-height:18rem}
+
+.mb-plate{display:flex;flex-direction:column;align-items:stretch;gap:.55rem;max-width:34rem}
+/* The name takes the rung above reading, so the plate reads name first; the description drops
+   to the reading rung and the reading grey. */
+.mb-name{margin:0;font-family:var(--mb-display);font-weight:400;font-size:var(--mb-size-2);line-height:1.2;color:var(--mb-ink)}
+.mb-why{margin:0;color:var(--mb-ink-2);font-size:var(--mb-size-3);font-weight:400;line-height:1.4}
+/* The two written labels. Lines, not chips: the label sits on its own line above the lines it
+   introduces, so a long line never has to wrap beside it, and each line reads on from the
+   label that heads it. Set to read as a label written for a reader rather than as decoration.
+   The second label is simply absent where there is nothing to leave behind. */
+.mb-take{margin:.55rem 0 0;display:flex;flex-direction:column;gap:.45rem}
+/* Three distances doing three jobs: a label sits close to the lines it heads, the lines breathe
+   a little from each other, and a second label opens a clear gap so the two groups never read
+   as one list. The negative bottom margin tightens label to first line without a second gap. */
+.mb-take-label{margin:.8rem 0 -.15rem;color:var(--mb-ink-3);font-size:var(--mb-size-4);font-weight:600;line-height:1.45;letter-spacing:.5px;text-transform:uppercase}
+.mb-take-label:first-child{margin-top:0}
+.mb-take-text{margin:0;color:var(--mb-ink-2);font-size:var(--mb-size-4);font-weight:400;line-height:1.45}
+/* Each line reads on from the label that heads it, so it is written lowercase in the content.
+   Lifting only the opening letter keeps the wording exactly as written while the line still
+   opens like a sentence. */
+.mb-take-text::first-letter{text-transform:uppercase}
+/* One text link per reference, and the load-bearing element of the placard: at a third-size
+   screenshot it is the only way this site gets read properly. So it is given the reading rung,
+   primary ink and a rule across the plate above it, rather than caption treatment. */
+.mb-link{display:block;margin:1.35rem 0 0;color:var(--mb-ink);font-size:var(--mb-size-3);font-weight:400}
+
+.mb-closing{margin:6.5rem 0 0;padding-top:2.5rem;border-top:1px solid var(--mb-rule);color:var(--mb-ink-3);font-size:var(--mb-size-3);font-weight:400;line-height:1.45}
+
+/* Two columns. Same sizes, less air: the placards are wider here than at three columns. */
+@media (max-width:1100px){
+  :root{--mb-gutter:3rem;--mb-col-gap:2rem;--mb-row-gap:4.5rem}
+  .mb-page{padding:6rem var(--mb-gutter) 7rem}
+  .mb-intro{margin-bottom:5rem}
+  .mb-set{padding-top:4rem}
+  .mb-closing{margin-top:5.5rem}
+}
+/* One column. The placard is now full measure, so it holds its own reading size: this is the
+   width the small lines have to stay comfortable at. */
+@media (max-width:767px){
+  :root{--mb-gutter:2rem;--mb-row-gap:4.5rem;--mb-size-1:1.9rem;--mb-size-2:1.5rem;--mb-size-3:1.05rem;--mb-size-4:.875rem}
+  .mb-page{padding:5rem var(--mb-gutter) 6rem}
+  .mb-intro{margin-bottom:4.5rem}
+  .mb-title{margin-bottom:1.6rem}
+  .mb-set{padding-top:3.5rem}
+  .mb-closing{margin-top:5rem}
+}
+@media (max-width:479px){
+  :root{--mb-gutter:1.25rem;--mb-frame:8px;--mb-row-gap:4rem}
+  .mb-page{padding:4rem var(--mb-gutter) 5rem}
+}
