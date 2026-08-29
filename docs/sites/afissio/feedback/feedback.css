@@ -1,0 +1,50 @@
+/* feedback.css — the ONLY authored CSS for pages/feedback.html (the promoted /guides/feedback page).
+   Kept out of the page itself (CLAUDE.md §4f: no <style> block, no inline style in an assembled
+   page) and out of _live/*, which is generated and must not be hand-edited.
+
+   Why any CSS at all. Two things the live dictionary does not provide, checked before authoring:
+
+   1. EQUAL COLUMNS. .header_content is display:flex with align-items:start, so the two comparison
+      panels take their natural heights and finish at different points. Nothing live stretches them:
+      the only align-items:stretch rules in the published sheets are .section_hero and .work-bottom,
+      neither of which is a two-column header. Hence .header_content.is-compare.
+   2. THE 480-991 HOLE. The same rule carries grid-template-columns, which is inert on a flex box,
+      and the published sheets only switch .header_content to flex-flow:column at max-width 479.
+      So from 991 down to 480 two 3rem-padded panels sit side by side in a 5% gutter and the 58ch
+      bodies collapse to about 20 characters a line. That is the actual responsiveness bug on this
+      page, and it is fixed by stacking at 991 instead of 479.
+
+   Contract notes. Every rule is one class or one live base + one is- combo (§4a); breakpoints are
+   991 / 767 / 479, all on the allowed max-width set (§4b); no ::before/::after (§4c); no pseudo-
+   classes at all here; no var() introduced, so nothing to fall back (§4e). Colour and surface are
+   untouched — every panel still gets its ink and fill from live .column_info / .faq_* rules. */
+
+/* Left column of the pair sets the height; both stretch to it. */
+.header_content.is-compare { align-items: stretch; }
+
+/* Replaces is-subpage on the two comparison wrappers: same left alignment and same released
+   max-width, plus the flex sizing a two-up row needs (equal share, and min-width:0 so a long
+   heading cannot push the pair wider than the container). */
+.header-wrapper.is-compare { display: flex; flex-flow: column; align-items: flex-start; gap: 1.5rem; flex: 1 1 0; min-width: 0; width: 100%; max-width: none; }
+
+/* The panel fills the stretched wrapper, so both panels are the same height whatever their
+   item counts. Folds in max-width-column's width:100%, which keeps this to two classes. */
+.column_info.is-fill { flex: 1 1 auto; width: 100%; }
+
+/* The page title is the one loud element and the only text above 991 that still carries the
+   published white-space:nowrap, which is what makes it overflow between 992 and 1279. Fluid
+   from the 479 rung up to just past the desktop size, so it never needs a breakpoint again. */
+.hero_title.is-guide { white-space: normal; font-size: clamp(1.563rem, 3.6vw, 2.35rem); }
+
+/* Stack the pair while each panel can still hold a readable measure. */
+@media screen and (max-width: 991px) {
+  .header_content.is-compare { flex-flow: column; }
+  .column_info.is-fill { padding: 2.5rem; }
+}
+@media screen and (max-width: 767px) {
+  .column_info.is-fill { padding: 2rem; }
+  .faq_answer { padding-right: 0; }
+}
+@media screen and (max-width: 479px) {
+  .column_info.is-fill { padding: 1.5rem 1.25rem; }
+}

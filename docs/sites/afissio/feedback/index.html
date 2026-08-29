@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Providing effective feedback on creative work</title>
+<link rel="stylesheet" href="webflow-shared.css">
+<link rel="stylesheet" href="page-process.css">
+<link rel="stylesheet" href="supplement.css">
+<link rel="stylesheet" href="feedback.css">
+</head>
+<body>
+<div class="page-wrapper">
+<div class="main-wrapper">
+<header class="section_process" id="feedback">
+  <div class="padding-global">
+    <div class="container-medium">
+      <div class="padding-section-medium">
+        <div class="header-wrapper is-subpage">
+          <h1 class="hero_title is-guide">Providing effective feedback on creative work</h1>
+          <div class="max-width-header_subpage">
+            <p class="text-size-regular">Your input is important and totally necessary to guide my work. I may not get everything right on the first try. That's not just okay; it's part of the process. Our work together can (and probably will) be iterative.</p>
+          </div>
+          <div class="max-width-header_subpage">
+            <p class="text-size-regular">Here's how you can provide me with effective feedback, so I can really earn the money you're paying me for your site. The magic happens when your hard-earned skills and expertise come together with mine.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- r4.1 review pass: navbar, closing CTA and footer removed. Hero shell (section_hero is-secondary,
+     35vh/25vh padding + the centered container-large is-hero) replaced with section_process +
+     container-medium + the medium section-padding utility, so the intro left-aligns on the same edge
+     as the comparison panels and sits ~200px higher. The comparison section's large section-padding
+     dropped to medium (13rem to 8rem top: the requested ~-100px pull-up). Every class live and
+     reused verbatim; zero CSS authored. -->
+<!-- PICKED: 5A (two panels, column-first). 5B (paired rows) is REJECTED and deleted.
+     Corrections applied on the pick: process_number + process_column-title dropped (the .35fr grid
+     column was the main misalignment); the one-item process_list bodies became faq_answer, so
+     heading and body share ONE left edge instead of 0 / 3rem; text-style-muted removed so both
+     columns' headings are #ededed; container-medium so the 58ch body measure fills the panel.
+     r4.2 responsive pass: the panels are now header-wrapper.is-compare / column_info.is-fill inside
+     header_content.is-compare — equal heights, and stacked at 991 rather than 479, where two
+     3rem-padded panels side by side crushed the bodies to ~20 characters a line. Those four combos
+     and the fluid hero_title.is-guide are the page's only authored CSS; they live in
+     feedback.css, which carries the reasoning and the contract check. -->
+<!-- FILE-SCOPED CSS: pages/feedback.css. Everything else on this page is live and verbatim. -->
+<section class="section_process" id="good-feedback" data-screen-label="comparison">
+  <div class="padding-global">
+    <div class="container-medium">
+      <div class="padding-section-medium">
+        <div class="header_content is-compare">
+          <div class="header-wrapper is-compare">
+            <div class="column_info is-fill">
+              <div class="pricing_content">
+                <h2 class="faq_question">Good feedback</h2>
+                <div class="pricing_top">
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Be honest.</h3>
+                    <p class="faq_answer">If you don't like something, I need to know – now, not three weeks down the road.</p>
+                  </div>
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Be specific.</h3>
+                    <p class="faq_answer">Point out what, exactly, is not working for you, and why it's not working.</p>
+                  </div>
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Ask why.</h3>
+                    <p class="faq_answer">If you aren't sure what I was thinking, I'd love to explain my reasoning. Everything I've done for the project has a purpose.</p>
+                  </div>
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Refer to your goals.</h3>
+                    <p class="faq_answer">Relate every piece of criticism back to your goals.</p>
+                  </div>
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Relate to your audience.</h3>
+                    <p class="faq_answer">Your audience should be top of mind for every decision or critique that you provide. What do they need? What will they love?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="header-wrapper is-compare" id="not-so-good-feedback">
+            <div class="column_info is-fill">
+              <div class="pricing_content">
+                <h2 class="faq_question">Not-so-good feedback</h2>
+                <div class="pricing_top">
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Involve everyone you know in the creative process.</h3>
+                    <p class="faq_answer">I work best when you alone serve as the expert on your company and its audience. Art made by committee is rarely successful.</p>
+                  </div>
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Take things personally.</h3>
+                    <p class="faq_answer">If I missed the mark, we need to figure out why and move closer to our mutual target. If I disagree with you, it's because I'm thinking about your goals and your audience. It's not personal, it's business.</p>
+                  </div>
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Do my work for me.</h3>
+                    <p class="faq_answer">Please give me written or verbal instructions about what isn't working; don't redo my work to illustrate your point.</p>
+                  </div>
+                  <div class="column_content">
+                    <h3 class="heading-style-h4">Prescribe fixes.</h3>
+                    <p class="faq_answer">You're paying me to provide solutions. Explain the problem and I'll pitch potential fixes to you, based on my research, experience and skills.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+</div>
+</body>
+</html>
