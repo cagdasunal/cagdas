@@ -1,4 +1,4 @@
-/* Afissio — Client-First V2 class layer. ROUND-TOKEN: R8-CALM-PASS (rhythm + consistency refinement; no layout/colour change).
+/* Afissio — Client-First V2 class layer. ROUND-TOKEN: R9-RESPONSIVE (full ≤991/767/479 pass + full-screen navbar menu; desktop base unchanged).
    One class per rule; var() always with fallback; breakpoints only 1440/991/767/479. */
 body{margin:0}
 *{box-sizing:border-box}  /* preview-only reset — Webflow's normalize already sets border-box on every element; never deployed as a class */  /* preview-only reset — Webflow normalizes body itself; every deployed property lives on a class */
@@ -237,31 +237,59 @@ a:hover{color:var(--ink,#1A1A1A)}
 @media (min-width:1440px){
   .navbar_links{column-gap:1.75rem}
 }
+
+/* ============================================================
+   R9-RESPONSIVE (2026-08-30) — tablet / landscape / mobile pass.
+   ≤991 styles the OPEN full-screen menu on existing classes; the closed state
+   is widget-owned (Webflow) and, in preview, behaviour-script-owned via inline
+   styles (§4f). No `display` authored on any w-* part. H1 is fluid per tier
+   via clamp() (§4e); every other rung steps in fixed values.
+   ============================================================ */
 @media (max-width:991px){
+  /* — bar — */
+  .navbar_container{padding-top:1rem;padding-bottom:1rem}
+  .navbar_menu-button{width:2.75rem;overflow:visible;padding-top:0.875rem;padding-bottom:0.875rem;padding-left:0.625rem;padding-right:0.625rem;margin-right:-0.625rem;cursor:pointer}
+  .navbar_menu-button:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
+  .navbar_menu-bar{width:1.5rem;margin-left:auto;margin-right:auto;margin-bottom:0.4375rem;transition:transform 450ms cubic-bezier(0.22,1,0.36,1),opacity 250ms ease}
+  .navbar_menu-bar:last-child{margin-bottom:0}
+  /* — full-screen menu (styled OPEN) — */
+  .navbar_menu{flex-grow:0;position:absolute;top:100%;left:0;right:0;height:calc(100svh - 3.75rem);background-color:var(--ink-hero,#000000);overflow:auto}
+  .navbar_menu-inner{flex-direction:column;align-items:stretch;min-height:100%;column-gap:0;row-gap:0;padding-top:2.5rem;padding-bottom:2.5rem;padding-left:5%;padding-right:5%}
+  .navbar_links{flex-direction:column;align-items:stretch;column-gap:0;row-gap:0;margin-left:0;margin-right:0}
+  .navbar_link{font-size:2rem;font-weight:300;letter-spacing:-0.02em;line-height:1.25;padding-top:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--rule-ink-hero,#262626);white-space:normal}
+  .navbar_button-wrapper{margin-top:auto;padding-top:3rem}
+  .button.is-nav{display:block;text-align:center;padding-top:1.0625rem;padding-bottom:1.0625rem;font-size:0.875rem}
+  /* — rhythm — */
+  .padding-section-large{padding-top:9rem;padding-bottom:9rem}
+  .padding-section-medium{padding-top:8rem;padding-bottom:8rem}
+  .padding-section-small{padding-top:6rem;padding-bottom:6rem}
+  .padding-section-medium.is-hero{padding-top:7rem;padding-bottom:4rem}
+  .section_rule{margin-bottom:3.5rem}
+  /* — type: 48→44px fluid across the tier — */
+  .heading-style-h1{font-size:clamp(2.75rem,1.9rem + 1.8vw,3rem)}
+  .heading-style-h2{font-size:1.75rem}
+  .text-lead{font-size:1.375rem}
+  .claim_lede{font-size:1.75rem;line-height:1.4}
+  .method_title{font-size:1.75rem}
+  /* — hero — */
   .section_hero{min-height:100svh}
-  .padding-section-medium.is-hero{padding-top:8rem;padding-bottom:8rem}
-  .heading-style-h1{font-size:3rem}
-  .padding-section-large{padding-top:var(--section-m,14rem);padding-bottom:var(--section-m,14rem)}
-  .navbar_container{flex-wrap:wrap;padding-top:1rem;padding-bottom:1rem}
-  .navbar_menu{flex-grow:0;width:100%;padding-top:0.5rem;order:1}
-  .navbar_menu-inner{flex-direction:column;align-items:flex-start;column-gap:0;row-gap:0.5rem}
-  .navbar_links{flex-wrap:wrap;column-gap:1rem;margin-left:0;margin-right:0}
-  .navbar_link{line-height:2.75rem}
-  .button.is-nav{padding-top:0.75rem;padding-bottom:0.75rem}
+  .hero_stack{margin-top:3rem;margin-bottom:3rem}
+  .hero_cta-row{margin-top:2.5rem}
   .button{padding-top:0.8125rem;padding-bottom:0.8125rem}
-  .navbar_menu-button{width:1.25rem;overflow:visible;margin-left:auto}
+  /* — editorial grids stack — */
   .statement_grid{grid-template-columns:1fr;row-gap:3rem}
   .statement_label-col{padding-top:0}
   .statement_display-col{max-width:100%}
   .statement_body-col{max-width:100%}
-  .hero_stack{margin-left:auto;margin-top:4rem;margin-bottom:4rem}
   .ways_grid{grid-template-columns:1fr;row-gap:3rem}
   .ways_v-rule{display:none}
+  .ways_row{padding-top:2.5rem;padding-bottom:2.5rem}
   .method_grid{grid-template-columns:1fr;row-gap:3rem}
   .method_label-col{padding-top:0}
   .method_item{grid-column:auto}
   .method_rule{grid-column:auto}
   .method_item.is-offset{justify-self:start}
+  /* — rails — */
   .rules_v-col{display:none}
   .rules_v-claim{display:none}
   .rules_v-hero{display:none}
@@ -270,30 +298,66 @@ a:hover{color:var(--ink,#1A1A1A)}
   .rules_v-left{left:-1.5rem}
   .rules_v-right{right:-1.5rem}
   .rules_h-bottom{left:-1.5rem;right:-1.5rem}
-  .footer_ledger{grid-template-columns:1fr 1fr}
+  /* — footer: single-column ledger (2-col misaligns is-brand/is-entity padding
+       without :nth-, which does not deploy) — */
+  .footer_ledger{grid-template-columns:1fr}
+  .footer_cell{padding-top:3.5rem;padding-bottom:3.5rem}
   .footer_cell.is-brand{grid-row:auto}
-  .footer_cell.is-nav{grid-row:auto}
-  .footer_cell.is-legal{grid-column:1/3}
+  .footer_cell.is-nav{grid-row:auto;padding-left:0;padding-right:0}
+  .footer_cell.is-entity{padding-left:0;padding-right:0}
+  .footer_cell.is-legal{grid-column:auto}
+  .footer_mark{height:2rem}
+  .footer_index{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:2rem}
   .footer_index-link{line-height:2.75rem}
   .footer_legal-link{line-height:2.75rem}
 }
 @media (max-width:767px){
-  .heading-style-h1{font-size:2.5rem}
+  .navbar_link{font-size:1.75rem;padding-top:1.125rem;padding-bottom:1.125rem}
+  /* 40→36px fluid across the tier */
+  .heading-style-h1{font-size:clamp(2.25rem,1.55rem + 2.4vw,2.5rem)}
   .heading-style-h2{font-size:1.5rem}
-  .text-lead{font-size:1.125rem}
+  .heading-style-h3{font-size:1.375rem}
+  .text-lead{font-size:1.1875rem}
+  .text-size-regular.is-large{font-size:1.0625rem}
   .claim_lede{font-size:1.5rem}
-  .hero_stack{max-width:100%;margin-top:3rem;margin-bottom:3rem}
-  .padding-section-medium.is-hero{padding-top:4.5rem;padding-bottom:4.5rem}
-  .hero_lead-block{max-width:100%}
-  .hero_sub-block{max-width:100%}
+  .method_title{font-size:1.5rem}
+  .ways_term{font-size:1.375rem}
+  .padding-section-large{padding-top:6.5rem;padding-bottom:6.5rem}
+  .padding-section-medium{padding-top:6rem;padding-bottom:6rem}
+  .padding-section-small{padding-top:5rem;padding-bottom:5rem}
+  .padding-section-medium.is-hero{padding-top:6rem;padding-bottom:3.5rem}
+  .section_rule{margin-bottom:3rem}
+  .hero_stack{max-width:100%;margin-top:2rem;margin-bottom:2rem}
+  .hero_lead-block{max-width:100%;margin-top:1.25rem}
+  .hero_sub-block{max-width:100%;margin-top:1.25rem}
+  .statement_grid{row-gap:2.5rem}
+  .ways_grid{row-gap:2.5rem}
+  .ways_row{padding-top:2.25rem;padding-bottom:2.25rem}
+  .method_grid{row-gap:2.5rem}
+  .footer_cell{padding-top:3rem;padding-bottom:3rem}
 }
 @media (max-width:479px){
+  .navbar_logo{height:1.5rem}
+  .navbar_menu{height:calc(100svh - 3.5rem)}
+  .navbar_link{font-size:1.5rem;padding-top:1rem;padding-bottom:1rem}
+  /* 34→30px fluid across the tier */
+  .heading-style-h1{font-size:clamp(1.875rem,1.4rem + 2.5vw,2.125rem)}
+  .heading-style-h2{font-size:1.375rem}
+  .heading-style-h3{font-size:1.25rem}
+  .text-lead{font-size:1.125rem}
+  .claim_lede{font-size:1.3125rem}
+  .method_title{font-size:1.375rem}
+  .ways_term{font-size:1.25rem}
+  .padding-section-large{padding-top:5rem;padding-bottom:5rem}
+  .padding-section-medium{padding-top:5rem;padding-bottom:5rem}
+  .padding-section-small{padding-top:4rem;padding-bottom:4rem}
+  .padding-section-medium.is-hero{padding-top:5.5rem;padding-bottom:3rem}
+  .hero_cta-row{flex-direction:column;align-items:stretch;row-gap:0.75rem}
+  .button{text-align:center}
   .rules_v-left{display:none}
   .rules_v-right{display:none}
   .rules_h-bottom{left:0;right:0}
-  .navbar_logo{height:1.5rem}
-  .padding-section-large{padding-top:var(--section-s,9rem);padding-bottom:var(--section-s,9rem)}
-  .footer_ledger{grid-template-columns:1fr}
-  .footer_cell{padding-top:1.5rem;padding-bottom:1.5rem}
-  .footer_cell.is-legal{grid-column:auto}
+  .footer_cell{padding-top:2.5rem;padding-bottom:2.5rem}
+  .footer_mark{height:1.75rem}
+  .footer_legal-row{column-gap:1.25rem}
 }
