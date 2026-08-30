@@ -1,0 +1,38 @@
+/* Afissio — tokens + fonts. Role token → brand colour → hex:
+   surface/page      → paper        → #FAF9F6
+   surface/panel     → panel-grey   → #EBE9E2
+   surface/ink       → panel-ink    → #161616
+   text/primary      → ink          → #1A1A1A
+   text/reversed     → reversed     → #EDEDED
+   text/muted        → muted        → #6B6560
+   accent/mark       → orange       → #FF6600 (marks ≥24px, text on ink only)
+   accent/text       → orange-text  → #B34B00 (links + text accents on light)
+   rule/structural   → rule         → #DDDBD4
+   rule/soft         → rule-soft    → #ECEAE3
+   rule/on-ink       → rule-ink     → #3A3A3A
+   rule/accent       → rule-accent  → #B34B00 (2px, at most one per page)
+   ONE typeface: Pluto Sans (client decision 2026-08-28). Display = Light 300, body = Regular 400, UI/H3 = Medium 500, labels = Regular 400 uppercase. */
+/* Pluto Sans — client-supplied HvD TRIAL files (2026-08-28). CANVAS/PREVIEW ONLY:
+   trial licence + reduced 70-glyph set (no : ; " ( ) — ’ $ & @ % ·). The licensed
+   production webfonts must replace these before anything ships. */
+@font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+:root{
+  --paper:#FAF9F6; --panel:#EBE9E2; --panel-ink:#161616;
+  --ink:#1A1A1A; --text-reversed:#EDEDED; --muted:#6B6560;
+  --orange:#FF6600; --orange-text:#B34B00;
+  --rule:#DDDBD4; --rule-soft:#ECEAE3; --rule-ink:#3A3A3A; --rule-accent:#B34B00;
+  --panel-pine:#064D49; --panel-ocean:#16324A; --rule-pine:#33544A; --rule-ocean:#2C4A64;
+  --ink-hero:#000000; --rule-ink-hero:#262626;
+  /* dark-ground reading tone (2026-08-29): #EDEDED for display and leads, this
+     softer step for body on ink — 12.3:1 on #000000, less glare at 400 weight. */
+  --text-reversed-soft:#C9C9C9;
+  /* the one control radius — buttons and inputs only; surfaces stay square */
+  --radius-control:0.375rem;
+  /* rungs RATIFIED 2026-08-29 — H1 set to 3.375rem (54px) so the hero headline
+     holds ONE line in the 54rem stack; ladder 54 → 48 (≤991) → 40 (≤767). */
+  --size-label:0.75rem; --size-body:1rem; --size-lead:1.5625rem; --size-h3:1.5rem; --size-h2:2rem; --size-h1:3.375rem;
+  --section-s:9rem; --section-m:14rem; --section-l:18rem;
+  --container-xl:105rem; --container-l:77.5rem; --container-m:60rem; --container-s:45rem;
+}

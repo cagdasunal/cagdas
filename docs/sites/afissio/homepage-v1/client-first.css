@@ -1,0 +1,299 @@
+/* Afissio — Client-First V2 class layer. ROUND-TOKEN: R8-CALM-PASS (rhythm + consistency refinement; no layout/colour change).
+   One class per rule; var() always with fallback; breakpoints only 1440/991/767/479. */
+body{margin:0}
+*{box-sizing:border-box}  /* preview-only reset — Webflow's normalize already sets border-box on every element; never deployed as a class */  /* preview-only reset — Webflow normalizes body itself; every deployed property lives on a class */
+
+/* text links (inline <a> outside buttons take this class). The bare-element rule
+   is preview-only insurance against the UA stylesheet's #0000EE; .text-link is
+   what deploys. */
+a{color:var(--orange-text,#B34B00);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px}
+a:hover{color:var(--ink,#1A1A1A)}
+.text-link{color:var(--orange-text,#B34B00);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px}
+.text-link:hover{color:var(--ink,#1A1A1A)}
+.text-link:focus-visible{outline:2px solid var(--rule-accent,#B34B00);outline-offset:2px}
+.text-link.is-reversed{color:var(--orange,#FF6600)}
+.text-link.is-reversed:hover{color:var(--text-reversed,#EDEDED)}
+
+/* skeleton */
+.page-wrapper{background:var(--paper,#FAF9F6);color:var(--ink,#1A1A1A);font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.main-wrapper{min-height:100vh}
+.padding-global{padding-left:5%;padding-right:5%}
+.padding-section-large{padding-top:var(--section-l,18rem);padding-bottom:var(--section-l,18rem)}
+.padding-section-medium{padding-top:var(--section-m,14rem);padding-bottom:var(--section-m,14rem)}
+/* hero padding is asymmetric by exactly the 96px bar, so the stack centres in
+   the VISIBLE area (bar seam → section seam), on the same axis as the frame. */
+.padding-section-medium.is-hero{padding-top:11rem;padding-bottom:5rem}
+.padding-section-small{padding-top:var(--section-s,9rem);padding-bottom:var(--section-s,9rem)}
+.padding-section-small.is-no-top{padding-top:0}
+.container-large{max-width:var(--container-l,77.5rem);margin-left:auto;margin-right:auto}
+.container-medium{max-width:var(--container-m,60rem);margin-left:auto;margin-right:auto}
+.container-small{max-width:var(--container-s,45rem);margin-left:auto;margin-right:auto}
+
+/* type rungs — TWO weights only (2026-08-29): Light 300 for display, Regular 400
+   for everything else. On dark grounds display and leads take #EDEDED and body
+   takes the softer #C9C9C9, which reads with less glare at 400 weight. */
+.heading-style-h1{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-h1,3.375rem);line-height:1.03;letter-spacing:-0.025em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
+.heading-style-h2{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-h2,2rem);line-height:1.1;letter-spacing:-0.02em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
+.heading-style-h3{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:var(--size-h3,1.5rem);line-height:1.3;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
+.text-lead{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-lead,1.5625rem);line-height:1.5;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.text-size-regular{font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.text-label{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);font-weight:400;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted,#6B6560)}
+.text-label.is-reversed{color:var(--text-reversed,#EDEDED)}
+.text-color-muted{color:var(--muted,#6B6560)}
+
+/* buttons — three constructions, all with the one control radius. The primary
+   ALWAYS carries a background colour (2026-08-29): ink on light, paper on ink. */
+.button{display:inline-block;padding-top:0.625rem;padding-bottom:0.625rem;padding-left:1.25rem;padding-right:1.25rem;background:var(--ink,#1A1A1A);color:var(--paper,#FAF9F6);font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:0.875rem;line-height:1.5;text-decoration:none;border:1px solid transparent;border-radius:0;transition:background-color 900ms cubic-bezier(0.16,1,0.3,1),color 900ms cubic-bezier(0.16,1,0.3,1),border-color 900ms cubic-bezier(0.16,1,0.3,1)}
+.button:hover{background:var(--ink,#1A1A1A);color:var(--orange,#FF6600)}
+.button:focus-visible{outline:2px solid var(--rule-accent,#B34B00);outline-offset:2px}
+.button.is-ghost{background:transparent;color:var(--ink,#1A1A1A);border-color:var(--rule,#DDDBD4)}
+.button.is-ghost:hover{background:var(--panel,#EBE9E2);color:var(--ink,#1A1A1A)}
+
+/* review scaffolding — deleted at Phase D */
+.review_label{display:inline-block;font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);text-transform:uppercase;letter-spacing:0.08em;background:var(--panel-ink,#161616);padding:0.375rem 0.75rem;margin-bottom:1.5rem}
+.review_label.is-review{color:var(--text-reversed,#EDEDED)}
+
+/* sections — the hero is a full-screen opening plate: a true 100svh, with the
+   fixed bar floating over its top edge. */
+.section_hero{position:relative;display:grid;align-content:center;min-height:100svh;background-color:var(--paper,#FAF9F6)}
+
+/* --- the ink hero (2026-08-28): the page opens dark --- */
+.section_hero.is-ink{background-color:var(--ink-hero,#000000)}
+.container-xlarge{max-width:var(--container-xl,105rem);margin-left:auto;margin-right:auto}
+.heading-style-h1.is-reversed{color:var(--text-reversed,#EDEDED)}
+.text-size-regular.is-reversed{color:var(--text-reversed-soft,#C9C9C9)}
+.text-size-regular.is-fine{font-weight:300;font-size:0.9375rem}
+.text-size-regular.is-large{font-size:1.125rem}
+.text-lead.is-reversed{color:var(--text-reversed,#EDEDED)}
+.hero_rule-edge{height:1px;background-color:var(--rule-ink-hero,#262626)}
+.button.is-reversed{background:var(--paper,#FAF9F6);color:var(--ink,#1A1A1A);font-weight:400}
+.button.is-reversed:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00)}
+.button.is-reversed:focus-visible{outline-color:var(--orange,#FF6600)}
+
+/* ============================================================
+   ROUND 5 — the navbar class layer, with the operator's 2026-08-29 changes:
+   three-column bar (logo | links centred | CTA), 11px Light links, tighter CTA,
+   no hairline under the bar, and a CENTRED hero (overrides BRIEF §4's LEFT axis
+   on operator instruction). No `display` is authored on any w-* widget part
+   (STRUCTURE.md §0a): all row layout lives in navbar_menu-inner / navbar_links,
+   two plain classed divs we own.
+   ============================================================ */
+
+/* fixed bar (operator 2026-08-30): floats over the hero so the hero itself runs
+   a full 100svh from the top of the viewport; the behaviour script slides it out
+   on scroll-down and back on scroll-up via inline transform (§4f). */
+.navbar_component{position:fixed;top:0;left:0;right:0;z-index:100;background-color:var(--ink-hero,#000000);transition:transform 1400ms cubic-bezier(0.25,1,0.5,1),opacity 1600ms cubic-bezier(0.4,0,0.2,1)}
+.navbar_container{display:flex;align-items:center;justify-content:space-between;max-width:var(--container-xl,105rem);margin-left:auto;margin-right:auto;padding-top:1.5rem;padding-bottom:1.5rem}
+.navbar_logo-link{line-height:0}
+.navbar_logo{display:block;height:1.75rem;width:auto}
+.navbar_menu{flex-grow:1}
+.navbar_menu-inner{display:flex;flex-wrap:wrap;align-items:center;column-gap:2.5rem;row-gap:0.5rem}
+.navbar_links{display:flex;align-items:center;column-gap:1.25rem;margin-left:auto;margin-right:auto}
+.navbar_link{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);font-weight:300;line-height:3rem;color:var(--text-reversed,#EDEDED);text-decoration:none;white-space:nowrap;transition:color 350ms cubic-bezier(0.22,1,0.36,1),opacity 350ms cubic-bezier(0.22,1,0.36,1)}
+.navbar_link:hover{color:var(--orange,#FF6600)}
+.navbar_link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
+.navbar_button-wrapper{line-height:0}
+.navbar_menu-button{width:0;overflow:hidden}
+.navbar_menu-bar{width:1.25rem;height:1px;background-color:var(--text-reversed,#EDEDED);margin-bottom:0.3125rem}
+.button.is-nav{background:var(--paper,#FAF9F6);color:var(--ink,#1A1A1A);font-size:var(--size-label,0.75rem);line-height:1.5;padding-top:0.5rem;padding-bottom:0.5rem;padding-left:0.875rem;padding-right:0.875rem;border-radius:0}
+.button.is-nav:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00)}
+.button.is-nav:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
+
+/* the 12px label rung, accented (6.9:1 on ink) */
+.text-label.is-accent{color:var(--orange,#FF6600)}
+.text-label.is-accent-paper{color:var(--orange-text,#B34B00)}
+
+/* hero — stacked, CENTRED (operator instruction 2026-08-29) */
+.hero_cta-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:0.75rem;row-gap:1rem;margin-top:3rem}
+.button.is-text{background:transparent;color:var(--orange-text,#B34B00);font-weight:400;padding-left:0;padding-right:0;padding-top:0.625rem;padding-bottom:0.625rem;border-radius:0;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:0.35em}
+.button.is-text:hover{background:transparent;color:var(--ink,#1A1A1A)}
+.button.is-ghost-reversed{background:transparent;color:var(--text-reversed,#EDEDED);border-color:var(--rule-ink,#3A3A3A);font-weight:400}
+.button.is-ghost-reversed:hover{background:transparent;color:var(--orange,#FF6600)}
+.button.is-ghost-reversed:focus-visible{outline-color:var(--orange,#FF6600)}
+.hero_stack{max-width:54rem;margin-left:auto;margin-right:auto;margin-top:7rem;margin-bottom:7rem;text-align:left}
+.hero_title-block{max-width:100%;margin-left:0;margin-right:0;margin-bottom:0}
+.hero_lead-block{max-width:47rem;margin-left:0;margin-right:0;margin-top:1.5rem;margin-bottom:0}
+.hero_sub-block{max-width:40rem;margin-left:0;margin-right:0;margin-top:1.5rem;margin-bottom:0}
+
+/* statement band — label · display · body, three columns on paper (operator layout 2026-08-29) */
+.section_statement{position:relative;background-color:var(--paper,#FAF9F6)}
+.statement_grid{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,23rem) minmax(0,42rem);column-gap:5rem;justify-content:start;align-items:start}
+.statement_label-col{padding-top:0.5rem}
+.statement_display-col{max-width:23rem}
+.statement_body-col{max-width:42rem}
+.statement_body-item{margin-bottom:1.25rem}
+.statement_body-item:last-child{margin-bottom:0}
+
+/* claim band — centred statement on ink (operator layout 2026-08-30) */
+.section_claim{position:relative;background-color:var(--ink-hero,#000000)}
+.claim_stack{max-width:60rem;margin-left:auto;margin-right:auto;text-align:center}
+.tagline_row{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0.5rem}
+.tagline_row.is-centered{justify-content:center}
+.tagline_mark{height:0.625rem;width:auto}
+.claim_lede-block{max-width:57rem;margin-left:auto;margin-right:auto;margin-top:2.5rem}
+.claim_lede{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-h2,2rem);line-height:1.45;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
+
+/* ways ledger — centred heading over rule-separated term/copy rows on paper (operator layout 2026-08-30) */
+.section_ways{position:relative;background-color:var(--paper,#FAF9F6)}
+.ways_grid{display:grid;grid-template-columns:minmax(0,35rem) 1px minmax(0,32rem) 1px;column-gap:5rem;justify-content:start;align-items:start}
+.ways_v-rule{width:1px;align-self:stretch;background-color:var(--rule,#DDDBD4)}
+.ways_head{max-width:100%;margin-left:0;margin-right:0;text-align:left}
+.ways_list{max-width:100%;margin-left:0;margin-right:0;margin-top:0}
+.ways_row{display:grid;grid-template-columns:minmax(0,32rem);row-gap:1.25rem;align-items:start;padding-top:3rem;padding-bottom:3rem}
+.ways_row:first-child{padding-top:0}
+.ways_rule{height:1px;background-color:var(--rule,#DDDBD4)}
+.ways_term{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:var(--size-h3,1.5rem);line-height:1.3;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0}
+.ways_copy{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--muted,#6B6560);margin-top:0;margin-bottom:0;text-wrap:pretty}
+
+/* method band — two equal columns on ink (operator layout 2026-08-30) */
+.section_method{position:relative;background-color:var(--ink-hero,#000000)}
+.method_grid{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr);column-gap:5rem;row-gap:4rem;align-items:start}
+.method_label-col{padding-top:0.5rem}
+.method_item{grid-column:2;max-width:34rem}
+.method_item.is-offset{justify-self:end}
+.method_rule{grid-column:2;width:100%;height:1px;background-color:var(--rule-ink-hero,#262626)}
+.method_title{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-h2,2rem);line-height:1.15;letter-spacing:-0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:1.25rem;text-wrap:balance}
+.method_copy{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--text-reversed-soft,#C9C9C9);max-width:26rem;margin-top:0;margin-bottom:0;text-wrap:pretty}
+
+/* ============================================================
+   RULING RAILS (operator 2026-08-30, ref primora.xyz) — the static line
+   system: two full-height 1px rails framing the container-xl column through
+   every section, a seam at each section's lower edge (corner-joined to the
+   rails), and ONE soft interior rule at the label-column gap of the two
+   editorial grids. Colours follow the ground: --rule on paper,
+   --rule-ink-hero on ink. Real classed divs (§4c); one class per rule (§4a);
+   rails sit 1.5rem outside the container so type never touches a line.
+   ============================================================ */
+.rules_layer{position:absolute;top:0;bottom:0;left:5%;right:5%;pointer-events:none}
+.rules_inner{position:relative;max-width:var(--container-xl,105rem);height:100%;margin-left:auto;margin-right:auto}
+.rules_v-left{position:absolute;top:0;bottom:0;left:-3rem;width:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-right{position:absolute;top:0;bottom:0;right:-3rem;width:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-col{position:absolute;top:0;bottom:0;left:14.5rem;width:1px;background-color:var(--rule-soft,#ECEAE3)}
+.rules_v-claim{position:absolute;top:0;bottom:0;left:8.5rem;width:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-claim.is-right{left:auto;right:8.5rem}
+.rules_v-claim.is-ink{background-color:var(--rule-ink-hero,#262626)}
+/* hero frame (R8c): two full-width horizontals inset SYMMETRICALLY in the visible
+   area — 5rem below the bar seam, 5rem above the section seam — and an interior
+   vertical pair that runs ONLY between them (corner-joined, never touching the
+   page top/bottom). Same 1px/#262626 vocabulary as every other section. */
+.rules_h-top{position:absolute;top:11rem;left:-3rem;right:-3rem;height:1px;background-color:var(--rule,#DDDBD4)}
+.rules_h-top.is-ink{background-color:var(--rule-ink-hero,#262626)}
+.rules_h-close{position:absolute;bottom:5rem;left:-3rem;right:-3rem;height:1px;background-color:var(--rule,#DDDBD4)}
+.rules_h-close.is-ink{background-color:var(--rule-ink-hero,#262626)}
+.rules_v-hero{position:absolute;top:11rem;bottom:5rem;left:8.5rem;width:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-hero.is-right{left:auto;right:8.5rem}
+.rules_v-hero.is-ink{background-color:var(--rule-ink-hero,#262626)}
+.rules_h-bottom{position:absolute;bottom:0;left:-3rem;right:-3rem;height:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-left.is-ink{background-color:var(--rule-ink-hero,#262626)}
+.rules_v-right.is-ink{background-color:var(--rule-ink-hero,#262626)}
+.rules_v-col.is-ink{background-color:var(--rule-ink-hero,#262626)}
+.rules_h-bottom.is-ink{background-color:var(--rule-ink-hero,#262626)}
+/* section-opener rule — a 1px line at the head of each content block, spanning
+   the section's own container; the third rung of the line system */
+.section_rule{height:1px;background-color:var(--rule,#DDDBD4);margin-bottom:4rem}
+.section_rule.is-ink{background-color:var(--rule-ink-hero,#262626)}
+/* section-closing rule — mirrors the opener; wider gap to the content above */
+.section_rule-close{height:1px;background-color:var(--rule,#DDDBD4);margin-top:7rem}
+.section_rule-close.is-ink{background-color:var(--rule-ink-hero,#262626)}
+.section_rule-close.is-pad-below{margin-bottom:4rem}
+
+
+/* ============================================================
+   ROUND 7 — footer_component (R7-BIG-FOOTER). Ships on every page and template.
+   PICKED 2026-08-30: ledger-footer — panel-grey, four-side-ruled cells via a
+   1px grid gap over a rule-coloured ground. Apex icon only (no lockup) and no
+   placeholder strings, on operator instruction; phones/emails/copyright join
+   the cells when Jerry supplies them (missing-copy list, SYSTEM.md). The two
+   entity blocks are SEPARATE cells — contract §3; never merge them.
+   ============================================================ */
+.footer_component{position:relative}
+.footer_component.is-panel{background-color:var(--panel,#EBE9E2)}
+.footer_component.is-ink-soft{background-color:var(--ink-hero,#000000)}
+.footer_mark{display:block;height:2.5rem;width:auto}
+.footer_ledger{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1.2fr);gap:1px;background-color:var(--rule-ink-hero,#262626)}
+.footer_rule{height:1px;background-color:var(--rule-ink-hero,#262626)}
+.footer_cell{background-color:var(--ink-hero,#000000);padding-top:6rem;padding-bottom:6rem;padding-left:0;padding-right:0}
+.footer_cell.is-brand{grid-row:1/3}
+.footer_cell.is-nav{grid-row:1/3;padding-left:2.5rem;padding-right:2.5rem}
+.footer_cell.is-entity{padding-left:2.5rem;padding-right:2.5rem}
+.footer_cell.is-legal{grid-column:1/4}
+.footer_tagline{font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--text-reversed-soft,#C9C9C9);max-width:20rem;margin-top:1.5rem;margin-bottom:0;text-wrap:pretty}
+.footer_index{display:grid;row-gap:0.25rem}
+.footer_index-link{display:flex;align-items:baseline;text-decoration:none;line-height:2rem;color:var(--text-reversed,#EDEDED);transition:transform 350ms cubic-bezier(0.22,1,0.36,1),color 350ms cubic-bezier(0.22,1,0.36,1)}
+.footer_index-link:hover{color:var(--orange,#FF6600)}
+.footer_index-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+.footer_index-name{font-size:var(--size-body,1rem);font-weight:300}
+/* --- entity blocks --- */
+.footer_entity-name{font-size:var(--size-label,0.75rem);font-weight:400;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-reversed,#EDEDED);margin-bottom:1.25rem}
+.footer_entity-lines{display:grid;row-gap:0.5rem}
+.footer_entity-line{font-size:var(--size-body,1rem);font-weight:400;line-height:1.55;color:var(--text-reversed-soft,#C9C9C9);max-width:18rem;margin-top:0;margin-bottom:0}
+/* --- legal-compliance strip --- */
+.footer_disclaimer-text{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);font-weight:400;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);max-width:60rem;margin-top:0;margin-bottom:0;text-wrap:pretty}
+.footer_legal-row{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:2rem;row-gap:0.5rem;margin-top:1.25rem}
+.footer_legal-link{font-size:var(--size-label,0.75rem);font-weight:400;color:var(--text-reversed-soft,#C9C9C9);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;line-height:2rem;transition:color 350ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 350ms cubic-bezier(0.22,1,0.36,1)}
+.footer_legal-link:hover{color:var(--orange,#FF6600);text-underline-offset:0.3em}
+.footer_legal-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+
+@media (min-width:1440px){
+  .navbar_links{column-gap:1.75rem}
+}
+@media (max-width:991px){
+  .section_hero{min-height:100svh}
+  .padding-section-medium.is-hero{padding-top:8rem;padding-bottom:8rem}
+  .heading-style-h1{font-size:3rem}
+  .padding-section-large{padding-top:var(--section-m,14rem);padding-bottom:var(--section-m,14rem)}
+  .navbar_container{flex-wrap:wrap;padding-top:1rem;padding-bottom:1rem}
+  .navbar_menu{flex-grow:0;width:100%;padding-top:0.5rem;order:1}
+  .navbar_menu-inner{flex-direction:column;align-items:flex-start;column-gap:0;row-gap:0.5rem}
+  .navbar_links{flex-wrap:wrap;column-gap:1rem;margin-left:0;margin-right:0}
+  .navbar_link{line-height:2.75rem}
+  .button.is-nav{padding-top:0.75rem;padding-bottom:0.75rem}
+  .button{padding-top:0.8125rem;padding-bottom:0.8125rem}
+  .navbar_menu-button{width:1.25rem;overflow:visible;margin-left:auto}
+  .statement_grid{grid-template-columns:1fr;row-gap:3rem}
+  .statement_label-col{padding-top:0}
+  .statement_display-col{max-width:100%}
+  .statement_body-col{max-width:100%}
+  .hero_stack{margin-left:auto;margin-top:4rem;margin-bottom:4rem}
+  .ways_grid{grid-template-columns:1fr;row-gap:3rem}
+  .ways_v-rule{display:none}
+  .method_grid{grid-template-columns:1fr;row-gap:3rem}
+  .method_label-col{padding-top:0}
+  .method_item{grid-column:auto}
+  .method_rule{grid-column:auto}
+  .method_item.is-offset{justify-self:start}
+  .rules_v-col{display:none}
+  .rules_v-claim{display:none}
+  .rules_v-hero{display:none}
+  .rules_h-top{display:none}
+  .rules_h-close{display:none}
+  .rules_v-left{left:-1.5rem}
+  .rules_v-right{right:-1.5rem}
+  .rules_h-bottom{left:-1.5rem;right:-1.5rem}
+  .footer_ledger{grid-template-columns:1fr 1fr}
+  .footer_cell.is-brand{grid-row:auto}
+  .footer_cell.is-nav{grid-row:auto}
+  .footer_cell.is-legal{grid-column:1/3}
+  .footer_index-link{line-height:2.75rem}
+  .footer_legal-link{line-height:2.75rem}
+}
+@media (max-width:767px){
+  .heading-style-h1{font-size:2.5rem}
+  .heading-style-h2{font-size:1.5rem}
+  .text-lead{font-size:1.125rem}
+  .claim_lede{font-size:1.5rem}
+  .hero_stack{max-width:100%;margin-top:3rem;margin-bottom:3rem}
+  .padding-section-medium.is-hero{padding-top:4.5rem;padding-bottom:4.5rem}
+  .hero_lead-block{max-width:100%}
+  .hero_sub-block{max-width:100%}
+}
+@media (max-width:479px){
+  .rules_v-left{display:none}
+  .rules_v-right{display:none}
+  .rules_h-bottom{left:0;right:0}
+  .navbar_logo{height:1.5rem}
+  .padding-section-large{padding-top:var(--section-s,9rem);padding-bottom:var(--section-s,9rem)}
+  .footer_ledger{grid-template-columns:1fr}
+  .footer_cell{padding-top:1.5rem;padding-bottom:1.5rem}
+  .footer_cell.is-legal{grid-column:auto}
+}
