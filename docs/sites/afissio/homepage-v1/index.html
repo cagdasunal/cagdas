@@ -209,7 +209,7 @@ var hs=H.map(function(p){return{p:p,s:seg(p,false),ph:Math.random(),auto:!!(p.cl
 var vs=V.map(function(p){var n=Math.max(1,Math.ceil(p.offsetHeight/900));var ss=[];for(var i=0;i<n;i++)ss.push(seg(p,true));
 return{p:p,ss:ss,ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero'))}});
 var cur=window.scrollY||0;
-function frame(now){var tgt=window.scrollY||0;cur+=(tgt-cur)*0.04;var t=(now||0)*0.03;
+function frame(now){var tgt=window.scrollY||0;cur+=(tgt-cur)*0.04;var t=(now||0)*0.013;
 hs.forEach(function(o){var len=o.p.offsetWidth,sl=192,span=len+sl;if(span<=sl)return;
 var d=cur*0.1+(o.auto?t*1.4:t);
 var x=((d+o.ph*span)%span+span)%span-sl;o.s.style.transform='translateX('+x+'px)'});
