@@ -1,5 +1,9 @@
-/* Afissio — Client-First V2 class layer. ROUND-TOKEN: R9-RESPONSIVE (full ≤991/767/479 pass + full-screen navbar menu; desktop base unchanged).
-   One class per rule; var() always with fallback; breakpoints only 1440/991/767/479. */
+/* Afissio — Client-First V2 class layer. ROUND-TOKEN: R10-FLUID-DESKTOP (the 992→1680 desktop base
+   is now fluid: section rhythm, rail offsets, grid tracks, gaps and every display rung ramp by
+   clamp() between a 992 floor and the 1680 design values, so a 1000–1400px window is a designed
+   width and not a squeezed 1680. Sub-992 tiers unchanged except where they were stepping the
+   WRONG way at the boundary. One class per rule; var() always with fallback; breakpoints only
+   1440/991/767/479 — every other width is a clamp, which needs no @media at all. */
 body{margin:0}
 *{box-sizing:border-box}  /* preview-only reset — Webflow's normalize already sets border-box on every element; never deployed as a class */  /* preview-only reset — Webflow normalizes body itself; every deployed property lives on a class */
 
@@ -18,12 +22,12 @@ a:hover{color:var(--ink,#1A1A1A)}
 .page-wrapper{background:var(--paper,#FAF9F6);color:var(--ink,#1A1A1A);font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .main-wrapper{min-height:100vh}
 .padding-global{padding-left:5%;padding-right:5%}
-.padding-section-large{padding-top:var(--section-l,18rem);padding-bottom:var(--section-l,18rem)}
-.padding-section-medium{padding-top:var(--section-m,14rem);padding-bottom:var(--section-m,14rem)}
+.padding-section-large{padding-top:clamp(9rem,20.93vw - 3.975rem,var(--section-l,18rem));padding-bottom:clamp(9rem,20.93vw - 3.975rem,var(--section-l,18rem))}
+.padding-section-medium{padding-top:clamp(8rem,13.95vw - 0.65rem,var(--section-m,14rem));padding-bottom:clamp(8rem,13.95vw - 0.65rem,var(--section-m,14rem))}
 /* hero padding is asymmetric by exactly the 96px bar, so the stack centres in
    the VISIBLE area (bar seam → section seam), on the same axis as the frame. */
-.padding-section-medium.is-hero{padding-top:11rem;padding-bottom:5rem}
-.padding-section-small{padding-top:var(--section-s,9rem);padding-bottom:var(--section-s,9rem)}
+.padding-section-medium.is-hero{padding-top:clamp(7.5rem,8.14vw + 2.456rem,11rem);padding-bottom:clamp(3.5rem,3.49vw + 1.34rem,5rem)}
+.padding-section-small{padding-top:clamp(6rem,6.98vw + 1.675rem,var(--section-s,9rem));padding-bottom:clamp(6rem,6.98vw + 1.675rem,var(--section-s,9rem))}
 .padding-section-small.is-no-top{padding-top:0}
 .container-large{max-width:var(--container-l,77.5rem);margin-left:auto;margin-right:auto}
 .container-medium{max-width:var(--container-m,60rem);margin-left:auto;margin-right:auto}
@@ -32,10 +36,10 @@ a:hover{color:var(--ink,#1A1A1A)}
 /* type rungs — TWO weights only (2026-08-29): Light 300 for display, Regular 400
    for everything else. On dark grounds display and leads take #EDEDED and body
    takes the softer #C9C9C9, which reads with less glare at 400 weight. */
-.heading-style-h1{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-h1,3.375rem);line-height:1.03;letter-spacing:-0.025em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
-.heading-style-h2{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-h2,2rem);line-height:1.1;letter-spacing:-0.02em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
-.heading-style-h3{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:var(--size-h3,1.5rem);line-height:1.3;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
-.text-lead{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-lead,1.5625rem);line-height:1.5;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.heading-style-h1{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(2.875rem,1.163vw + 2.156rem,var(--size-h1,3.375rem));line-height:1.03;letter-spacing:-0.025em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
+.heading-style-h2{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.75rem,0.581vw + 1.396rem,var(--size-h2,2rem));line-height:1.1;letter-spacing:-0.02em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
+.heading-style-h3{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:clamp(1.375rem,0.29vw + 1.194rem,var(--size-h3,1.5rem));line-height:1.3;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:balance}
+.text-lead{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.375rem,0.436vw + 1.106rem,var(--size-lead,1.5625rem));line-height:1.5;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:pretty}
 .text-size-regular{font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0;text-wrap:pretty}
 .text-label{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);font-weight:400;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted,#6B6560)}
 .text-label.is-reversed{color:var(--text-reversed,#EDEDED)}
@@ -44,10 +48,13 @@ a:hover{color:var(--ink,#1A1A1A)}
 /* buttons — three constructions, all with the one control radius. The primary
    ALWAYS carries a background colour (2026-08-29): ink on light, paper on ink. */
 .button{display:inline-block;padding-top:0.625rem;padding-bottom:0.625rem;padding-left:1.25rem;padding-right:1.25rem;background:var(--ink,#1A1A1A);color:var(--paper,#FAF9F6);font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:0.875rem;line-height:1.5;text-decoration:none;border:1px solid transparent;border-radius:0;transition:background-color 900ms cubic-bezier(0.16,1,0.3,1),color 900ms cubic-bezier(0.16,1,0.3,1),border-color 900ms cubic-bezier(0.16,1,0.3,1)}
-.button:hover{background:var(--ink,#1A1A1A);color:var(--orange,#FF6600)}
+/* one hover for the whole family (2026-08-31): paper surface + branding orange
+   --orange-text #B34B00, the accessible text cut of the logo's #FF6600 (5.0:1 on
+   paper; the mark orange is 3.0:1 there and fails at label size). */
+.button:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00)}
 .button:focus-visible{outline:2px solid var(--rule-accent,#B34B00);outline-offset:2px}
 .button.is-ghost{background:transparent;color:var(--ink,#1A1A1A);border-color:var(--rule,#DDDBD4)}
-.button.is-ghost:hover{background:var(--panel,#EBE9E2);color:var(--ink,#1A1A1A)}
+.button.is-ghost:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00)}
 
 /* review scaffolding — deleted at Phase D */
 .review_label{display:inline-block;font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);text-transform:uppercase;letter-spacing:0.08em;background:var(--panel-ink,#161616);padding:0.375rem 0.75rem;margin-bottom:1.5rem}
@@ -83,12 +90,12 @@ a:hover{color:var(--ink,#1A1A1A)}
    a full 100svh from the top of the viewport; the behaviour script slides it out
    on scroll-down and back on scroll-up via inline transform (§4f). */
 .navbar_component{position:fixed;top:0;left:0;right:0;z-index:100;background-color:var(--ink-hero,#000000);transition:transform 1400ms cubic-bezier(0.25,1,0.5,1),opacity 1600ms cubic-bezier(0.4,0,0.2,1)}
-.navbar_container{display:flex;align-items:center;justify-content:space-between;max-width:var(--container-xl,105rem);margin-left:auto;margin-right:auto;padding-top:1.5rem;padding-bottom:1.5rem}
+.navbar_container{display:flex;align-items:center;justify-content:space-between;max-width:var(--container-xl,105rem);margin-left:auto;margin-right:auto;padding-top:clamp(1rem,1.5vw,1.5rem);padding-bottom:clamp(1rem,1.5vw,1.5rem)}
 .navbar_logo-link{line-height:0}
 .navbar_logo{display:block;height:1.75rem;width:auto}
 .navbar_menu{flex-grow:1}
-.navbar_menu-inner{display:flex;flex-wrap:wrap;align-items:center;column-gap:2.5rem;row-gap:0.5rem}
-.navbar_links{display:flex;align-items:center;column-gap:1.25rem;margin-left:auto;margin-right:auto}
+.navbar_menu-inner{display:flex;flex-wrap:wrap;align-items:center;column-gap:clamp(1.25rem,2.5vw,2.5rem);row-gap:0.5rem}
+.navbar_links{display:flex;align-items:center;column-gap:clamp(0.75rem,1.6vw,1.25rem);margin-left:auto;margin-right:auto}
 .navbar_link{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);font-weight:300;line-height:3rem;color:var(--text-reversed,#EDEDED);text-decoration:none;white-space:nowrap;transition:color 350ms cubic-bezier(0.22,1,0.36,1),opacity 350ms cubic-bezier(0.22,1,0.36,1)}
 .navbar_link:hover{color:var(--orange,#FF6600)}
 .navbar_link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
@@ -104,20 +111,23 @@ a:hover{color:var(--ink,#1A1A1A)}
 .text-label.is-accent-paper{color:var(--orange-text,#B34B00)}
 
 /* hero — stacked, CENTRED (operator instruction 2026-08-29) */
-.hero_cta-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:0.75rem;row-gap:1rem;margin-top:3rem}
+.hero_cta-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:0.75rem;row-gap:1rem;margin-top:clamp(2rem,2.326vw + 0.556rem,3rem)}
 .button.is-text{background:transparent;color:var(--orange-text,#B34B00);font-weight:400;padding-left:0;padding-right:0;padding-top:0.625rem;padding-bottom:0.625rem;border-radius:0;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:0.35em}
-.button.is-text:hover{background:transparent;color:var(--ink,#1A1A1A)}
+.button.is-text:hover{background:transparent;color:var(--orange-text,#B34B00);text-decoration-thickness:2px}
 .button.is-ghost-reversed{background:transparent;color:var(--text-reversed,#EDEDED);border-color:var(--rule-ink,#3A3A3A);font-weight:400}
-.button.is-ghost-reversed:hover{background:transparent;color:var(--orange,#FF6600)}
+.button.is-ghost-reversed:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00);border-color:var(--paper,#FAF9F6)}
 .button.is-ghost-reversed:focus-visible{outline-color:var(--orange,#FF6600)}
-.hero_stack{max-width:54rem;margin-left:auto;margin-right:auto;margin-top:7rem;margin-bottom:7rem;text-align:left}
+/* the stack's air ramps on BOTH axes: the vw term is the designed 992→1680 ramp,
+   the svh term keeps a 720/768-tall laptop from pushing the CTA below the fold.
+   Whichever is smaller wins, floored at 2rem. */
+.hero_stack{max-width:clamp(38rem,58vw,54rem);margin-left:auto;margin-right:auto;margin-top:clamp(2rem,min(9.3vw - 2.77rem,44.4svh - 18rem),7rem);margin-bottom:clamp(2rem,min(9.3vw - 2.77rem,44.4svh - 18rem),7rem);text-align:left}
 .hero_title-block{max-width:100%;margin-left:0;margin-right:0;margin-bottom:0}
 .hero_lead-block{max-width:47rem;margin-left:0;margin-right:0;margin-top:1.5rem;margin-bottom:0}
 .hero_sub-block{max-width:40rem;margin-left:0;margin-right:0;margin-top:1.5rem;margin-bottom:0}
 
 /* statement band — label · display · body, three columns on paper (operator layout 2026-08-29) */
 .section_statement{position:relative;background-color:var(--paper,#FAF9F6)}
-.statement_grid{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,23rem) minmax(0,42rem);column-gap:5rem;justify-content:start;align-items:start}
+.statement_grid{display:grid;grid-template-columns:clamp(7rem,12vw,12rem) minmax(0,23fr) minmax(0,42fr);column-gap:clamp(2.5rem,5.81vw - 1.106rem,5rem);max-width:87rem;align-items:start}
 .statement_label-col{padding-top:0.5rem}
 .statement_display-col{max-width:23rem}
 .statement_body-col{max-width:42rem}
@@ -130,29 +140,29 @@ a:hover{color:var(--ink,#1A1A1A)}
 .tagline_row{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0.5rem}
 .tagline_row.is-centered{justify-content:center}
 .tagline_mark{height:0.625rem;width:auto}
-.claim_lede-block{max-width:57rem;margin-left:auto;margin-right:auto;margin-top:2.5rem}
-.claim_lede{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-h2,2rem);line-height:1.45;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
+.claim_lede-block{max-width:clamp(38rem,60vw,57rem);margin-left:auto;margin-right:auto;margin-top:clamp(1.75rem,1.744vw + 0.669rem,2.5rem)}
+.claim_lede{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.75rem,0.581vw + 1.396rem,var(--size-h2,2rem));line-height:1.45;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
 
 /* ways ledger — centred heading over rule-separated term/copy rows on paper (operator layout 2026-08-30) */
 .section_ways{position:relative;background-color:var(--paper,#FAF9F6)}
-.ways_grid{display:grid;grid-template-columns:minmax(0,35rem) 1px minmax(0,32rem) 1px;column-gap:5rem;justify-content:start;align-items:start}
+.ways_grid{display:grid;grid-template-columns:minmax(0,35fr) 1px minmax(0,32fr) 1px;column-gap:clamp(2.5rem,5.81vw - 1.106rem,5rem);max-width:82rem;align-items:start}
 .ways_v-rule{width:1px;align-self:stretch;background-color:var(--rule,#DDDBD4)}
 .ways_head{max-width:100%;margin-left:0;margin-right:0;text-align:left}
 .ways_list{max-width:100%;margin-left:0;margin-right:0;margin-top:0}
-.ways_row{display:grid;grid-template-columns:minmax(0,32rem);row-gap:1.25rem;align-items:start;padding-top:3rem;padding-bottom:3rem}
+.ways_row{display:grid;grid-template-columns:minmax(0,1fr);row-gap:1.25rem;align-items:start;padding-top:clamp(2rem,2.326vw + 0.556rem,3rem);padding-bottom:clamp(2rem,2.326vw + 0.556rem,3rem)}
 .ways_row:first-child{padding-top:0}
 .ways_rule{height:1px;background-color:var(--rule,#DDDBD4)}
-.ways_term{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:var(--size-h3,1.5rem);line-height:1.3;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0}
+.ways_term{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:clamp(1.375rem,0.29vw + 1.194rem,var(--size-h3,1.5rem));line-height:1.3;letter-spacing:-0.01em;color:var(--ink,#1A1A1A);margin-top:0;margin-bottom:0}
 .ways_copy{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--muted,#6B6560);margin-top:0;margin-bottom:0;text-wrap:pretty}
 
 /* method band — two equal columns on ink (operator layout 2026-08-30) */
 .section_method{position:relative;background-color:var(--ink-hero,#000000)}
-.method_grid{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr);column-gap:5rem;row-gap:4rem;align-items:start}
+.method_grid{display:grid;grid-template-columns:clamp(7rem,12vw,12rem) minmax(0,1fr);column-gap:clamp(2.5rem,5.81vw - 1.106rem,5rem);row-gap:clamp(2.5rem,3.49vw + 0.34rem,4rem);align-items:start}
 .method_label-col{padding-top:0.5rem}
 .method_item{grid-column:2;max-width:34rem}
 .method_item.is-offset{justify-self:end}
 .method_rule{grid-column:2;width:100%;height:1px;background-color:var(--rule-ink-hero,#262626)}
-.method_title{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:var(--size-h2,2rem);line-height:1.15;letter-spacing:-0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:1.25rem;text-wrap:balance}
+.method_title{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.75rem,0.581vw + 1.396rem,var(--size-h2,2rem));line-height:1.15;letter-spacing:-0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:1.25rem;text-wrap:balance}
 .method_copy{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--text-reversed-soft,#C9C9C9);max-width:26rem;margin-top:0;margin-bottom:0;text-wrap:pretty}
 
 /* ============================================================
@@ -166,31 +176,31 @@ a:hover{color:var(--ink,#1A1A1A)}
    ============================================================ */
 .rules_layer{position:absolute;top:0;bottom:0;left:5%;right:5%;pointer-events:none}
 .rules_inner{position:relative;max-width:var(--container-xl,105rem);height:100%;margin-left:auto;margin-right:auto}
-.rules_v-left{position:absolute;top:0;bottom:0;left:-3rem;width:1px;background-color:var(--rule,#DDDBD4)}
-.rules_v-right{position:absolute;top:0;bottom:0;right:-3rem;width:1px;background-color:var(--rule,#DDDBD4)}
-.rules_v-col{position:absolute;top:0;bottom:0;left:14.5rem;width:1px;background-color:var(--rule-soft,#ECEAE3)}
-.rules_v-claim{position:absolute;top:0;bottom:0;left:8.5rem;width:1px;background-color:var(--rule,#DDDBD4)}
-.rules_v-claim.is-right{left:auto;right:8.5rem}
+.rules_v-left{position:absolute;top:0;bottom:0;left:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);width:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-right{position:absolute;top:0;bottom:0;right:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);width:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-col{position:absolute;top:0;bottom:0;left:clamp(8.5rem,14.5vw,14.5rem);width:1px;background-color:var(--rule-soft,#ECEAE3)}
+.rules_v-claim{position:absolute;top:0;bottom:0;left:9%;width:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-claim.is-right{left:auto;right:9%}
 .rules_v-claim.is-ink{background-color:var(--rule-ink-hero,#262626)}
 /* hero frame (R8c): two full-width horizontals inset SYMMETRICALLY in the visible
    area — 5rem below the bar seam, 5rem above the section seam — and an interior
    vertical pair that runs ONLY between them (corner-joined, never touching the
    page top/bottom). Same 1px/#262626 vocabulary as every other section. */
-.rules_h-top{position:absolute;top:11rem;left:-3rem;right:-3rem;height:1px;background-color:var(--rule,#DDDBD4)}
+.rules_h-top{position:absolute;top:clamp(7.5rem,8.14vw + 2.456rem,11rem);left:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);right:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);height:1px;background-color:var(--rule,#DDDBD4)}
 .rules_h-top.is-ink{background-color:var(--rule-ink-hero,#262626)}
-.rules_h-close{position:absolute;bottom:5rem;left:-3rem;right:-3rem;height:1px;background-color:var(--rule,#DDDBD4)}
+.rules_h-close{position:absolute;bottom:clamp(3.5rem,3.49vw + 1.34rem,5rem);left:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);right:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);height:1px;background-color:var(--rule,#DDDBD4)}
 .rules_h-close.is-ink{background-color:var(--rule-ink-hero,#262626)}
-.rules_v-hero{position:absolute;top:11rem;bottom:5rem;left:8.5rem;width:1px;background-color:var(--rule,#DDDBD4)}
-.rules_v-hero.is-right{left:auto;right:8.5rem}
+.rules_v-hero{position:absolute;top:clamp(7.5rem,8.14vw + 2.456rem,11rem);bottom:clamp(3.5rem,3.49vw + 1.34rem,5rem);left:9%;width:1px;background-color:var(--rule,#DDDBD4)}
+.rules_v-hero.is-right{left:auto;right:9%}
 .rules_v-hero.is-ink{background-color:var(--rule-ink-hero,#262626)}
-.rules_h-bottom{position:absolute;bottom:0;left:-3rem;right:-3rem;height:1px;background-color:var(--rule,#DDDBD4)}
+.rules_h-bottom{position:absolute;bottom:0;left:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);right:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);height:1px;background-color:var(--rule,#DDDBD4)}
 .rules_v-left.is-ink{background-color:var(--rule-ink-hero,#262626)}
 .rules_v-right.is-ink{background-color:var(--rule-ink-hero,#262626)}
 .rules_v-col.is-ink{background-color:var(--rule-ink-hero,#262626)}
 .rules_h-bottom.is-ink{background-color:var(--rule-ink-hero,#262626)}
 /* section-opener rule — a 1px line at the head of each content block, spanning
    the section's own container; the third rung of the line system */
-.section_rule{height:1px;background-color:var(--rule,#DDDBD4);margin-bottom:4rem}
+.section_rule{height:1px;background-color:var(--rule,#DDDBD4);margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
 .section_rule.is-ink{background-color:var(--rule-ink-hero,#262626)}
 /* section-closing rule — mirrors the opener; wider gap to the content above */
 .section_rule-close{height:1px;background-color:var(--rule,#DDDBD4);margin-top:7rem}
@@ -212,10 +222,10 @@ a:hover{color:var(--ink,#1A1A1A)}
 .footer_mark{display:block;height:2.5rem;width:auto}
 .footer_ledger{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1.2fr);gap:1px;background-color:var(--rule-ink-hero,#262626)}
 .footer_rule{height:1px;background-color:var(--rule-ink-hero,#262626)}
-.footer_cell{background-color:var(--ink-hero,#000000);padding-top:6rem;padding-bottom:6rem;padding-left:0;padding-right:0}
+.footer_cell{background-color:var(--ink-hero,#000000);padding-top:clamp(3.5rem,5.81vw - 0.106rem,6rem);padding-bottom:clamp(3.5rem,5.81vw - 0.106rem,6rem);padding-left:0;padding-right:0}
 .footer_cell.is-brand{grid-row:1/3}
-.footer_cell.is-nav{grid-row:1/3;padding-left:2.5rem;padding-right:2.5rem}
-.footer_cell.is-entity{padding-left:2.5rem;padding-right:2.5rem}
+.footer_cell.is-nav{grid-row:1/3;padding-left:clamp(1.5rem,2.9vw,2.5rem);padding-right:clamp(1.5rem,2.9vw,2.5rem)}
+.footer_cell.is-entity{padding-left:clamp(1.5rem,2.9vw,2.5rem);padding-right:clamp(1.5rem,2.9vw,2.5rem)}
 .footer_cell.is-legal{grid-column:1/4}
 .footer_tagline{font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--text-reversed-soft,#C9C9C9);max-width:20rem;margin-top:1.5rem;margin-bottom:0;text-wrap:pretty}
 .footer_index{display:grid;row-gap:0.25rem}
@@ -263,18 +273,19 @@ a:hover{color:var(--ink,#1A1A1A)}
   .padding-section-large{padding-top:9rem;padding-bottom:9rem}
   .padding-section-medium{padding-top:8rem;padding-bottom:8rem}
   .padding-section-small{padding-top:6rem;padding-bottom:6rem}
-  .padding-section-medium.is-hero{padding-top:7rem;padding-bottom:4rem}
-  .section_rule{margin-bottom:3.5rem}
-  /* — type: 48→44px fluid across the tier — */
-  .heading-style-h1{font-size:clamp(2.75rem,1.9rem + 1.8vw,3rem)}
+  .padding-section-medium.is-hero{padding-top:7.5rem;padding-bottom:3.5rem}
+  .section_rule{margin-bottom:2.5rem}
+  /* — type: meets the base clamp's 992 floor exactly, so nothing steps UP as the
+       window narrows past the breakpoint — */
+  .heading-style-h1{font-size:clamp(2.75rem,1.9rem + 1.8vw,2.875rem)}
   .heading-style-h2{font-size:1.75rem}
   .text-lead{font-size:1.375rem}
   .claim_lede{font-size:1.75rem;line-height:1.4}
   .method_title{font-size:1.75rem}
   /* — hero — */
   .section_hero{min-height:100svh}
-  .hero_stack{margin-top:3rem;margin-bottom:3rem}
-  .hero_cta-row{margin-top:2.5rem}
+  .hero_stack{margin-top:clamp(2rem,44.4svh - 18rem,3rem);margin-bottom:clamp(2rem,44.4svh - 18rem,3rem)}
+  .hero_cta-row{margin-top:2rem}
   .button{padding-top:0.8125rem;padding-bottom:0.8125rem}
   /* — editorial grids stack — */
   .statement_grid{grid-template-columns:1fr;row-gap:3rem}
@@ -283,8 +294,8 @@ a:hover{color:var(--ink,#1A1A1A)}
   .statement_body-col{max-width:100%}
   .ways_grid{grid-template-columns:1fr;row-gap:3rem}
   .ways_v-rule{display:none}
-  .ways_row{padding-top:2.5rem;padding-bottom:2.5rem}
-  .method_grid{grid-template-columns:1fr;row-gap:3rem}
+  .ways_row{padding-top:2rem;padding-bottom:2rem}
+  .method_grid{grid-template-columns:1fr;row-gap:2.5rem}
   .method_label-col{padding-top:0}
   .method_item{grid-column:auto}
   .method_rule{grid-column:auto}
@@ -332,7 +343,7 @@ a:hover{color:var(--ink,#1A1A1A)}
   .hero_sub-block{max-width:100%;margin-top:1.25rem}
   .statement_grid{row-gap:2.5rem}
   .ways_grid{row-gap:2.5rem}
-  .ways_row{padding-top:2.25rem;padding-bottom:2.25rem}
+  .ways_row{padding-top:1.75rem;padding-bottom:1.75rem}
   .method_grid{row-gap:2.5rem}
   .footer_cell{padding-top:3rem;padding-bottom:3rem}
 }
