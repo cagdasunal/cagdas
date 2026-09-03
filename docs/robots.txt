@@ -4,8 +4,28 @@
 # /scripts/ and /data/ are fetched by cagd.as while Googlebot renders the live
 # site. Blocking them would stop Googlebot getting the JS it needs and can hurt
 # cagd.as's own indexing. Only the private client previews are disallowed.
+#
+# HOW THE TWO LAYERS INTERACT (read before changing either) — 2026-09-02:
+# Every HTML page under /sites/ also carries
+#   robots + googlebot = noindex, nofollow, noarchive, nosnippet, noimageindex
+# The Disallow below is the layer that actually does the work today: it stops
+# Googlebot fetching anything under those paths, including the raw assets
+# (moodboard JPGs, fonts, CSS) that a meta tag cannot cover — this host is
+# served straight off GitHub Pages with no proxy, so X-Robots-Tag is not
+# available and a meta tag is the only in-document lever.
+#
+# The trade-off, stated plainly: while a path is Disallow'd, Googlebot never
+# fetches the page and therefore never reads its noindex. A URL blocked this
+# way can still appear in results as a bare link if someone else links to it.
+# noindex is the stronger guarantee, but it only works on a CRAWLABLE page.
+# So: keep the Disallow to protect the raw assets, or delete the /sites/ line
+# to let the noindex become authoritative — but do not expect the meta tags to
+# be doing anything while the Disallow is in place. Do not add a blanket
+# `Disallow: /`; it would break /scripts/ and /data/ as described above.
+
+# /amt/ has no content on this host any more (404); the rule is kept as a
+# harmless guard in case that preview is ever restored.
 
 User-agent: *
 Disallow: /amt/
 Disallow: /sites/
-
