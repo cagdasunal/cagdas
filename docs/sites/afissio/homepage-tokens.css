@@ -1,3 +1,10 @@
+/* LIVE token sheet for pages/homepage.html (font urls pathed for pages/). It began as a
+   2026-09-08 copy of the v1 sheet and its header still said "FROZEN ARCHIVE - DO NOT EDIT" on
+   2026-09-09, which was false and cost the page its bold: the R11 weights (CLAUDE.md §3.5) set
+   display, H2 and H3 to Bold 700 while this sheet declared only 300/400/500, so every heading
+   rendered FAUX bold, synthesized by the browser. The 700 face is declared below.
+   Root ../colors_and_type.css carries the same four faces plus the R11 dark ladder; if this page
+   is ever switched to link it, delete this sheet rather than keeping two. */
 /* Afissio — tokens + fonts. Role token → brand colour → hex:
    surface/page      → paper        → #FAF9F6
    surface/panel     → panel-grey   → #EBE9E2
@@ -18,7 +25,15 @@
 @font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
 @font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
 :root{
+  /* Swiper theme hook: the pagination fill is the widget's own element and cannot carry
+     one of our classes, so it is coloured through this. Declared in :root because a
+     --custom-prop on any other selector is filtered out at deploy. */
+  --swiper-theme-color:#FF6600;
+  /* ADDED 2026-09-08: one hairline colour for a page that is black end to end, and
+     brighter than v1 #262626 (1.39:1 on black) per the operator instruction. 2.14:1. */
+  --rule-plate:#454545;
   --paper:#FAF9F6; --panel:#EBE9E2; --panel-ink:#161616;
   --ink:#1A1A1A; --text-reversed:#EDEDED; --muted:#6B6560;
   --orange:#FF6600; --orange-text:#B34B00;

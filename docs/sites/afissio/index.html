@@ -1,6 +1,11 @@
-<!-- @dsCard group="Pages" name="Homepage" subtitle="Hero, the problem, the claim, three ways to engage, the method, footer" viewport="1680x2400" -->
-<!-- @startingPoint section="Pages" subtitle="The assembled homepage — navbar and footer included; seed new page rounds from this" viewport="1680x2400" -->
-<!-- ROUND-TOKEN: R10-FLUID-DESKTOP · 2026-09-03: the 992→1680 desktop base is now fluid (clamp() rhythm, rail offsets, grid tracks, display rungs); ≤991/767/479 tiers retained, boundary steps aligned to the base floor -->
+<!-- @dsCard group="Pages" name="Homepage" subtitle="The working homepage. v1 as ratified, plus the filled copy and the hero record/threshold diagram moved over from homepage-old2.html, and a two-column hero." viewport="1680x2600" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled homepage - navbar, two-column hero with the record diagram, and footer. Seed new page rounds from this." viewport="1680x2600" -->
+<!-- ROUND-TOKEN: R11-READING-ROOM. Rebuilt 2026-09-08 on operator instruction: this file IS the
+     ratified v1 page. Three things were moved into it from homepage-old2.html and nothing else
+     was redesigned: (a) the copy v1 was still holding as placeholders, (b) the hero
+     record/threshold diagram and its animation, (c) a two-column hero. v1 links its own
+     stylesheets (homepage-old-tokens.css + homepage-old-client-first.css) and still does; the
+     diagram and hero-split rules are appended to the second of those. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,17 +15,20 @@
 <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <title>Homepage</title>
 <meta name="description" content="[COPY REQUESTED — meta description]">
-<link rel="stylesheet" href="colors_and_type.css">
-<link rel="stylesheet" href="client-first.css">
+<link rel="stylesheet" href="homepage-tokens.css">
+<link rel="stylesheet" href="homepage-client-first.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
 <script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
 </head>
 <body>
 <div class="page-wrapper">
 <div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner">
-<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_v-left is-ink"></div><div class="rules_v-right is-ink"></div><div class="rules_h-bottom is-ink"></div></div></div>
-<div class="padding-global">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
 <div class="navbar_container">
-<a href="/" class="navbar_logo-link w-nav-brand"><img src="brand/logo/afissio-lockup-ink.png" alt="[COPY REQUESTED — logo alt text]" class="navbar_logo"></a>
+<a href="/" class="navbar_logo-link w-nav-brand"><img src="brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
 <nav role="navigation" class="navbar_menu w-nav-menu" id="navbar-menu">
 <div class="navbar_menu-inner">
 <div class="navbar_links">
@@ -28,9 +36,19 @@
 <a href="/solutions" class="navbar_link w-nav-link">Solutions</a>
 <a href="/areas-of-review" class="navbar_link w-nav-link">Areas of Review</a>
 <a href="/industries" class="navbar_link w-nav-link">Industries</a>
-<a href="/afissio-law" class="navbar_link w-nav-link">Afissio Law</a>
 <a href="/insights" class="navbar_link w-nav-link">Insights</a>
-<a href="/about" class="navbar_link w-nav-link">About</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<a href="/about" class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about" role="button" aria-haspopup="menu" aria-expanded="false" aria-controls="nav-dd-about-list">
+<div class="navbar_dropdown-trigger"><div class="navbar_dropdown-label">About</div><div class="navbar_dropdown-caret"></div></div>
+</a>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list" aria-labelledby="nav-dd-about">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="/afissio-law" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+<a href="/our-company" class="navbar_dropdown-link w-dropdown-link">Our Company</a>
+</div>
+</nav>
+</div>
 </div>
 <div class="navbar_button-wrapper"><a href="/contact" class="button is-nav">Contact</a></div>
 </div>
@@ -45,105 +63,241 @@
 </div>
 <main class="main-wrapper">
 <section class="section_hero is-ink" id="hero">
-<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_v-left is-ink"></div><div class="rules_v-right is-ink"></div><div class="rules_h-top is-ink"></div><div class="rules_h-close is-ink"></div><div class="rules_v-hero is-ink"></div><div class="rules_v-hero is-right is-ink"></div><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
 <div class="padding-global padding-section-medium is-hero">
 <div class="container-xlarge">
-<div class="hero_stack">
+<div class="hero_split">
+<div class="hero_column">
 <div class="hero_title-block"><h1 class="heading-style-h1 is-reversed">Prepare before diligence begins.</h1></div>
 <div class="hero_lead-block"><p class="text-lead is-reversed">Afissio helps companies identify and resolve diligence friction before it weakens leverage or valuation.</p></div>
-<div class="hero_sub-block"><p class="text-size-regular is-reversed is-fine">Afissio is a transaction-readiness firm serving founder-led companies preparing for a financing, acquisition, strategic partnership, recapitalization, or institutional investment. Through Deal Engineering, Afissio combines AI-assisted analysis with experienced professional judgment to identify and resolve the issues most likely to create friction during institutional diligence.</p></div>
-<div class="hero_cta-row">
-<a href="/contact" class="button is-reversed">Start the conversation</a>
-<a href="/our-approach" class="button is-ghost-reversed">Learn more</a>
+
+<div class="button-row">
+<a href="/contact" class="button is-reversed">Start the Conversation</a>
+<a href="/our-approach" class="button is-ghost-reversed">See how we work</a>
 </div>
+</div>
+<div class="hero_column is-field"><div class="doc-field"><div class="doc-field_grid"><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">cap table</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">employment</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">equity grants</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">IP assignment</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">data</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">commercial</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">customer MSA</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">capitalization</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">governance</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div></div></div></div></div>
 </div>
 </div>
 </div>
 </section>
-<section class="section_statement" id="friction">
-<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_v-left"></div><div class="rules_v-right"></div><div class="rules_v-col"></div><div class="rules_h-bottom"></div></div></div>
+<section class="section_proof" id="proof">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
 <div class="padding-global padding-section-large">
 <div class="container-xlarge">
-<div class="section_rule"></div>
+<div class="proof_head">
+<div class="tagline_row"><img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><div class="text-label">In practice</div></div>
+<div class="proof_title-block"><h2 class="heading-style-h2 is-oneline">What the preparation looks like</h2></div>
+</div>
+<div class="proof_slider swiper">
+<div class="swiper-wrapper">
+<div class="proof_slide swiper-slide">
+<div class="proof_card">
+<div class="proof_lockup"><img src="brand/placeholder/logo-verrado.svg" alt="Verrado Devices" class="proof_logo"></div>
+<p class="proof_quote">We thought the records were in order. Afissio found the questions a buyer asks first, and we had the answers ready before anyone asked them.</p>
+<div class="proof_foot">
+<div class="proof_plate"><img src="https://i.pravatar.cc/320?img=68" alt="" class="proof_photo"></div>
+<div class="proof_attrib"><div class="proof_role">Marcus Bell</div><div class="proof_org">Chief Executive, Verrado Devices</div></div>
+</div>
+</div>
+</div>
+<div class="proof_slide swiper-slide">
+<div class="proof_card">
+<div class="proof_lockup"><img src="brand/placeholder/logo-northfield.svg" alt="Northfield" class="proof_logo"></div>
+<p class="proof_quote">The value was the sequencing. We stopped guessing which problems mattered and worked through them in the order that mattered.</p>
+<div class="proof_foot">
+<div class="proof_plate"><img src="https://i.pravatar.cc/320?img=45" alt="" class="proof_photo"></div>
+<div class="proof_attrib"><div class="proof_role">Priya Raman</div><div class="proof_org">Chief Financial Officer, Northfield</div></div>
+</div>
+</div>
+</div>
+<div class="proof_slide swiper-slide">
+<div class="proof_card">
+<div class="proof_lockup"><img src="brand/placeholder/logo-calderon.svg" alt="Calderon Logistics" class="proof_logo"></div>
+<p class="proof_quote">Our cap table and our customer agreements told slightly different stories. That was reconciled months before it could have become a negotiation.</p>
+<div class="proof_foot">
+<div class="proof_plate"><img src="https://i.pravatar.cc/320?img=52" alt="" class="proof_photo"></div>
+<div class="proof_attrib"><div class="proof_role">Daniel Okafor</div><div class="proof_org">General Counsel, Calderon Logistics</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="proof_controls">
+<div class="proof_arrow is-prev" role="button" tabindex="0" aria-label="Previous"><img src="brand/icons/arrow-prev.svg" alt="" class="proof_arrow-icon"></div>
+<div class="proof_progress"><div class="proof_progress-fill"></div></div>
+<div class="proof_arrow is-next" role="button" tabindex="0" aria-label="Next"><img src="brand/icons/arrow-next.svg" alt="" class="proof_arrow-icon"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section_intro" id="intro">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="intro_art" aria-hidden="true">
+<svg class="intro_art-svg is-ghost" viewBox="0 0 230 192" role="presentation" focusable="false"><g transform="translate(0,192) scale(0.1,-0.1)"><path d="M1103 1898 c-19 -20 -1051 -1727 -1088 -1798 -20 -39 -19 -56 5 -80 l20 -20 405 0 404 0 26 12 25 11 33 71 c19 39 145 323 282 631 137 308 254 567 262 575 l13 15 15 -10 c8 -6 161 -237 340 -515 179 -278 337 -515 351 -527 14 -13 35 -23 48 -23 28 0 56 29 56 58 0 37 -310 1075 -326 1094 l-16 17 -220 3 -220 3 -21 30 c-12 16 -84 124 -160 240 -75 115 -145 216 -154 223 -26 18 -57 15 -80 -10z"></path></g></svg>
+<svg class="intro_art-svg is-ink" viewBox="0 0 230 192" role="presentation" focusable="false"><g transform="translate(0,192) scale(0.1,-0.1)"><path d="M1103 1898 c-19 -20 -1051 -1727 -1088 -1798 -20 -39 -19 -56 5 -80 l20 -20 405 0 404 0 26 12 25 11 33 71 c19 39 145 323 282 631 137 308 254 567 262 575 l13 15 15 -10 c8 -6 161 -237 340 -515 179 -278 337 -515 351 -527 14 -13 35 -23 48 -23 28 0 56 29 56 58 0 37 -310 1075 -326 1094 l-16 17 -220 3 -220 3 -21 30 c-12 16 -84 124 -160 240 -75 115 -145 216 -154 223 -26 18 -57 15 -80 -10z"></path></g></svg>
+</div>
+<div class="padding-global padding-section-large is-layer">
+<div class="container-xlarge">
+<div class="intro_stack"><p class="intro_lede">Afissio is a <strong class="intro_lede-em">transaction-readiness firm</strong> serving founder-led companies preparing for a financing, acquisition, strategic partnership, recapitalization, or institutional investment. Through <strong class="intro_lede-em">Deal Engineering</strong>, Afissio combines AI-assisted analysis with experienced professional judgment to <strong class="intro_lede-em">identify and resolve the issues</strong> most likely to create friction during institutional diligence.</p><div class="button-row"><a href="/contact" class="button is-reversed">Start the Conversation</a><a href="/about" class="button is-ghost-reversed">Learn about Afissio</a></div></div>
+</div>
+</div>
+</section>
+
+<section class="section_statement" id="friction">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom"></div></div></div>
+<div class="padding-global padding-section-large">
+<div class="container-xlarge">
+
 <div class="statement_grid">
 <div class="statement_label-col"><div class="tagline_row"><img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><div class="text-label">The problem</div></div></div>
-<div class="statement_display-col"><h2 class="heading-style-h2">Serious transactions expose unresolved issues</h2></div>
+<div class="statement_display-col"><h2 class="heading-style-h2 is-three-lines">Serious transactions expose unresolved issues</h2></div>
 <div class="statement_body-col">
 <div class="statement_body-item"><p class="text-lead">A strong company can still encounter avoidable friction when its records, governance, contracts, capitalization, financial documentation, or technical practices do not withstand disciplined review.</p></div>
-<div class="statement_body-item"><p class="text-size-regular text-color-muted is-large">That friction can delay a process, distract leadership, and give counterparties leverage.</p></div>
+<div class="statement_body-item"><p class="text-lead">That friction can delay a process, distract leadership, and give counterparties leverage.</p></div>
+<div class="button-row"><a href="/areas-of-review" class="button is-ghost-reversed">See what we review</a></div>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section class="section_claim" id="anticipate">
-<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_v-left is-ink"></div><div class="rules_v-right is-ink"></div><div class="rules_v-claim is-ink"></div><div class="rules_v-claim is-right is-ink"></div><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
 <div class="padding-global padding-section-large">
 <div class="container-xlarge">
-<div class="section_rule is-ink"></div>
+
 <div class="claim_stack">
 <div class="tagline_row is-centered">
 <img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark">
 <div class="text-label is-reversed">See the issues earlier</div>
 </div>
-<div class="claim_lede-block"><p class="claim_lede">Afissio reviews the operative record, identifies likely diligence pressure points, and helps leadership address what matters before a live process becomes urgent. The goal is not to promise that every issue disappears. It is to create clarity, establish priorities, and provide a practical path to resolution.</p></div>
+<div class="claim_lede-block is-last"><p class="claim_lede">Afissio reviews the operative record, identifies likely diligence pressure points, and helps leadership address what matters before a live process becomes urgent. The goal is not to promise that every issue disappears. It is to create clarity, establish priorities, and provide a practical path to resolution.</p></div>
+<div class="button-row is-centered"><a href="/insights" class="button is-ghost-reversed">Read the briefs</a></div>
 </div>
 </div>
 </div>
 </section>
 <section class="section_ways" id="engage">
-<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_v-left"></div><div class="rules_v-right"></div><div class="rules_h-bottom"></div></div></div>
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom"></div></div></div>
 <div class="padding-global padding-section-large">
 <div class="container-xlarge">
-<div class="section_rule"></div>
+
 <div class="ways_grid">
-<div class="ways_head"><h2 class="heading-style-h2">Three ways to engage</h2></div>
-<div class="ways_v-rule"></div>
+<div class="ways_head">
+<h2 class="heading-style-h2">Three ways to engage</h2>
+<div class="ways_lead-block"><p class="text-size-regular">Engagements are scoped to where a company actually is. Most begin with a Review; the work escalates only when the record, or the timeline, calls for it.</p></div>
+<div class="button-row"><a href="/solutions" class="button is-ghost-reversed">Compare the engagements</a></div>
+</div>
 <div class="ways_list">
-<div class="ways_row">
+<div class="ways_box is-step-1">
+<div class="ways_step-num">01</div>
+<img src="brand/icons/offer-review.svg" alt="" class="ways_icon">
 <h3 class="ways_term">Review</h3>
 <p class="ways_copy">Understand where the company stands and what is most likely to create diligence friction.</p>
 </div>
-<div class="ways_rule"></div>
-<div class="ways_row">
+<div class="ways_box is-step-2">
+<div class="ways_step-num">02</div>
+<img src="brand/icons/offer-sprint.svg" alt="" class="ways_icon">
 <h3 class="ways_term">Sprint</h3>
 <p class="ways_copy">Organize and execute the highest-priority remediation and structural decisions.</p>
 </div>
-<div class="ways_rule"></div>
-<div class="ways_row">
+<div class="ways_box is-step-3">
+<div class="ways_step-num">03</div>
+<img src="brand/icons/offer-support.svg" alt="" class="ways_icon">
 <h3 class="ways_term">Support</h3>
 <p class="ways_copy">Maintain transaction readiness as the company and its transaction timeline evolve.</p>
 </div>
-<div class="ways_rule"></div>
 </div>
-<div class="ways_v-rule"></div>
 </div>
 </div>
 </div>
 </section>
 <section class="section_method" id="method">
-<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_v-left is-ink"></div><div class="rules_v-right is-ink"></div><div class="rules_v-col is-ink"></div><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
 <div class="padding-global padding-section-large">
 <div class="container-xlarge">
-<div class="section_rule is-ink"></div>
-<div class="method_grid">
-<div class="method_label-col"><div class="tagline_row"><img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><div class="text-label is-reversed">The method</div></div></div>
-<div class="method_item">
-<h3 class="method_title">A disciplined approach</h3>
-<p class="method_copy">Deal Engineering is Afissio's method for reviewing, identifying, organizing, prioritizing, and helping resolve the issues that matter most before consequential diligence begins.</p>
+<div class="method_head">
+<div class="tagline_row is-centered"><img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><div class="text-label is-reversed">The method</div></div>
+<div class="method_title-block"><h2 class="heading-style-h2">One method, and the judgment that applies it.</h2></div>
 </div>
-<div class="method_rule"></div>
-<div class="method_item is-offset">
-<h3 class="method_title">Direct, experienced involvement</h3>
-<p class="method_copy">AI-assisted analysis supports careful review and issue-spotting. Experienced professionals remain responsible for interpretation, prioritization, judgment, and client-facing conclusions.</p>
+<div class="method_stem" aria-hidden="true"></div>
+<div class="method_pair">
+<div class="method_card">
+<img src="brand/logo/afissio-icon-orange.png" alt="" class="method_card-mark">
+<div class="method_card-title"><h3 class="heading-style-h3 is-card">A disciplined approach</h3></div>
+<div class="method_card-body"><p class="text-size-regular">Deal Engineering is Afissio's method for reviewing, identifying, organizing, prioritizing, and helping resolve the issues that matter most before consequential diligence begins.</p></div>
 </div>
+<div class="method_card">
+<img src="brand/logo/afissio-icon-orange.png" alt="" class="method_card-mark">
+<div class="method_card-title"><h3 class="heading-style-h3 is-card">Direct, experienced involvement</h3></div>
+<div class="method_card-body"><p class="text-size-regular">AI-assisted analysis supports careful review and issue-spotting. Experienced professionals remain responsible for interpretation, prioritization, judgment, and client-facing conclusions.</p></div>
+</div>
+</div>
+<div class="method_stem is-last" aria-hidden="true"></div>
+<div class="button-row is-centered"><a href="/our-approach" class="button is-ghost-reversed">Inside Deal Engineering</a></div>
+</div>
+</div>
+</section>
+<section class="section_insights" id="insights">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global padding-section-large">
+<div class="container-xlarge">
+<div class="insights_head">
+<div class="tagline_row"><img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><div class="text-label">In writing</div></div>
+<div class="insights_title-block"><h2 class="heading-style-h2">Latest insights</h2></div>
+</div>
+<div class="insights_grid">
+<a href="/insights" class="insights_card">
+<div class="insights_mark" aria-hidden="true"><div class="insights_line"></div><div class="insights_line is-mid"></div><div class="insights_line is-accent"></div></div>
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">The four questions a buyer’s counsel asks first</h3></div>
+<div class="insights_action">Read the brief</div>
+</a>
+<a href="/insights" class="insights_card">
+<div class="insights_mark" aria-hidden="true"><div class="insights_line is-mid"></div><div class="insights_line is-accent"></div><div class="insights_line is-short"></div></div>
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Where capitalization drift begins</h3></div>
+<div class="insights_action">Read the brief</div>
+</a>
+<a href="/insights" class="insights_card">
+<div class="insights_mark" aria-hidden="true"><div class="insights_line is-accent"></div><div class="insights_line"></div><div class="insights_line is-mid"></div></div>
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Reading the record before a timeline exists</h3></div>
+<div class="insights_action">Read the brief</div>
+</a>
+<a href="/insights" class="insights_card">
+<div class="insights_mark" aria-hidden="true"><div class="insights_line is-short"></div><div class="insights_line is-mid"></div><div class="insights_line is-accent"></div></div>
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">What a data room says about a company</h3></div>
+<div class="insights_action">Read the brief</div>
+</a>
+<a href="/insights" class="insights_card">
+<div class="insights_mark" aria-hidden="true"><div class="insights_line is-mid"></div><div class="insights_line is-short"></div><div class="insights_line is-accent"></div></div>
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Employment records, and the questions they raise</h3></div>
+<div class="insights_action">Read the brief</div>
+</a>
+<a href="/insights" class="insights_card">
+<div class="insights_mark" aria-hidden="true"><div class="insights_line is-accent"></div><div class="insights_line is-mid"></div><div class="insights_line is-short"></div></div>
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Governance minutes as a diligence document</h3></div>
+<div class="insights_action">Read the brief</div>
+</a>
 </div>
 </div>
 </div>
 </section>
 </main>
+<section class="section_close" id="contact">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global padding-section-large">
+<div class="container-xlarge">
+<div class="close_stack is-box">
+<div class="tagline_row is-centered"><img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><div class="text-label">Before a process begins</div></div>
+<div class="close_title-block"><h2 class="heading-style-h2">There is still time to prepare deliberately.</h2></div>
+<div class="close_lead-block"><p class="text-size-regular">Afissio reads the operative record early, so the questions that matter arrive with answers already attached.</p></div>
+<div class="button-row is-centered"><a href="/contact" class="button is-reversed">Start the Conversation</a></div>
+</div>
+</div>
+</div>
+</section>
+
 <footer class="footer_component is-ink-soft" id="footer" data-screen-label="Footer">
-<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_v-left is-ink"></div><div class="rules_v-right is-ink"></div><div class="rules_h-bottom is-ink"></div></div></div>
 <div class="padding-global padding-section-small is-no-top">
 <div class="container-xlarge">
 <div class="footer_ledger">
@@ -168,14 +322,20 @@
 <div class="footer_entity-name">Afissio LLC</div>
 <div class="footer_entity-lines">
 <p class="footer_entity-line">520 Broadway, Suite 200, Santa Monica, CA 90401</p>
+<p class="footer_entity-line">+1 (310) 555-0182</p>
+<p class="footer_entity-line">info@afissio.com</p>
 </div>
 </div>
 <div class="footer_cell is-entity">
 <div class="footer_entity-name">Afissio Law LLC</div>
 <div class="footer_entity-lines">
 <p class="footer_entity-line">1438 W Broadway Road, Suite 101, Tempe, AZ 85282</p>
+<p class="footer_entity-line">+1 (480) 555-0119</p>
+<p class="footer_entity-line">info@afissiolaw.com</p>
 </div>
 </div>
+</div>
+<div class="footer_rule"></div>
 <div class="footer_cell is-legal">
 <p class="footer_disclaimer-text">Non-legal transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
 <div class="footer_legal-row">
@@ -183,49 +343,358 @@
 <a href="/terms-of-use" class="footer_legal-link">Terms of Use</a>
 <a href="/cookie-policy" class="footer_legal-link">Cookie Policy</a>
 <a href="/do-not-sell-or-share" class="footer_legal-link">Do Not Sell or Share My Personal Information</a>
+<div class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</div>
 </div>
 </div>
-</div>
-<div class="footer_rule"></div>
 </div>
 </div>
 </footer>
 </div>
 <script>
-/* PREVIEW BEHAVIOUR — scroll-driven line animation (operator request 2026-08-30).
-   Softened R8-CALM-PASS: slower drift, longer/quieter segments, fewer per rail.
-   Deploy note: this ships as the site's behaviour script (Webflow custom code),
-   never as page CSS — @keyframes/scroll effects do not survive the style pipeline.
-   The script only sets inline transforms at runtime; honours prefers-reduced-motion. */
+/* ============================================================================
+   HERO ANIMATION — GATHER AND FILE (rebuilt 2026-09-09 on client instruction: the field
+   should show the files being ORGANIZED into cases, not just presented).
+
+   The metaphor is now literal. Each beat assembles one case:
+     t=0     the outgoing case settles back into the field
+     t=300   three unrelated filings around the field WARM - picked up for review
+             (inline border/face set by this script; the tile's own 2200ms curve does the ease)
+     t=1500  one at a time, a paper GHOST lifts off each warmed filing and travels to the
+             incoming case tile, shrinking as it is filed into it (1150ms per flight,
+             400ms apart); the target warms as the documents land
+     t=4000  the case ignites (is-hot), its marker surfaces, then its name and leader line
+     t=4400  the source filings cool back to rest
+   then nothing moves until the next beat, one beat every 11s, three cases out at any time.
+
+   Ghosts are decorative runtime elements this script creates and removes (§4f: behaviour
+   scripts set inline state at runtime). No keyframes - only transitions on inline styles.
+   Every fade is ≥350ms on one curve; nothing blinks, nothing rests at opacity:0 in CSS.
+
+   The OPENING stays fast, by request: 63 filings fade up 13ms apart, once, never again.
+
+   Ships as the site's behaviour script. Reduced motion returns and the CSS rest state is the
+   finished one: the field open with the deck's three documents named.
+   ============================================================================ */
+(function(){
+var grid=document.querySelector('.doc-field_grid');if(!grid)return;
+var rows=[].slice.call(grid.querySelectorAll('.doc-row'));if(!rows.length)return;
+var kids=rows.map(function(r){return [].slice.call(r.children)});
+function fit(){
+  var field=grid.parentNode?grid.parentNode.getBoundingClientRect().width:0;
+  var probe=kids[0][kids[0].length-1],tw=probe?probe.getBoundingClientRect().width:0;
+  if(!field||!tw)return;
+  var gap=parseFloat(getComputedStyle(rows[0]).columnGap)||8;
+  var hold=Math.max(4,Math.floor((field+gap)/(tw+gap)));
+  var vw=window.innerWidth||1280,deep=vw<=767?4:(vw<=991?5:rows.length);
+  rows.forEach(function(r,ri){
+    r.style.display=ri<deep?'':'none';
+    var k=kids[ri],keep=Math.max(3,hold-ri),n=k.length;
+    k.forEach(function(t){t.style.display=''});
+    for(var i=0;i<k.length&&n>keep;i++){
+      if(k[i].classList.contains('is-slot'))continue;
+      k[i].style.display='none';n--;
+    }
+  });
+}
+fit();
+var ft;window.addEventListener('resize',function(){clearTimeout(ft);ft=setTimeout(fit,140)});
+})();
+(function(){
+if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+function watch(el, fn){
+  var r = el.getBoundingClientRect(), vh = window.innerHeight || 0;
+  if(r.top < vh && r.bottom > 0){ fn(el); return }
+  if(!('IntersectionObserver' in window)){ fn(el); return }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ io.disconnect(); fn(el) } });
+  }, { threshold: 0.12 });
+  io.observe(el);
+}
+/* DOM order of the nine slots is 5, 11, 22, 28, 34, 44, 49, 53, 60; SEQ is the reading order
+   expressed as positions in that array - it jumps row and side every beat. */
+var SEQ=[0,3,6,2,5,8,1,4,7], HELD=3, EVERY=11000;
+function start(g){
+  if(g.getAttribute('data-run'))return;g.setAttribute('data-run','1');
+  var field=(g.parentNode&&(' '+g.parentNode.className+' ').indexOf(' doc-field ')>-1)?g.parentNode:g;
+  field.style.position='relative';
+  var tiles=[].slice.call(g.querySelectorAll('.doc-tile'));
+  var slots=[].slice.call(g.querySelectorAll('.doc-tile.is-slot'));
+  var plain=tiles.filter(function(t){return !t.classList.contains('is-slot')});
+  if(slots.length<SEQ.length)return;
+  function dim(s){var m=s.querySelector('.doc-tile_mark'),cp=s.querySelector('.doc-tile_cap');
+    if(m)m.classList.add('is-dim');if(cp)cp.classList.add('is-dim');
+    s.classList.remove('is-hot')}
+  function lite(s){var m=s.querySelector('.doc-tile_mark'),cp=s.querySelector('.doc-tile_cap');
+    s.style.borderColor='';s.style.backgroundColor='';
+    s.classList.add('is-hot');
+    setTimeout(function(){if(m)m.classList.remove('is-dim')},1200);
+    setTimeout(function(){if(cp)cp.classList.remove('is-dim')},1900)}
+  /* three plain filings from three different rows, none already in use */
+  function pick3(){var c=plain.slice(),out=[],rows=[];
+    for(var i=c.length-1;i>0;i--){var j=(Math.random()*(i+1))|0,tmp=c[i];c[i]=c[j];c[j]=tmp}
+    for(var k=0;k<c.length&&out.length<3;k++){
+      if(c[k].getAttribute('data-busy'))continue;
+      if(!c[k].offsetParent)continue;
+      if(rows.indexOf(c[k].parentNode)>-1)continue;
+      out.push(c[k]);rows.push(c[k].parentNode)}
+    return out}
+  /* one document filed: a paper ghost lifts off the source, travels to the case, shrinks in */
+  function fly(src,dst){
+    var fr=field.getBoundingClientRect(),a=src.getBoundingClientRect(),b=dst.getBoundingClientRect();
+    var gh=document.createElement('div');gh.setAttribute('aria-hidden','true');
+    gh.style.position='absolute';gh.style.left=(a.left-fr.left)+'px';gh.style.top=(a.top-fr.top)+'px';
+    gh.style.width=a.width+'px';gh.style.height=a.height+'px';
+    gh.style.border='1px solid #93490A';gh.style.backgroundColor='#140A02';
+    gh.style.opacity='0';gh.style.pointerEvents='none';gh.style.zIndex='2';gh.style.willChange='transform,opacity';
+    var ln=document.createElement('div');
+    ln.style.position='absolute';ln.style.left='0.5rem';ln.style.right='0.5rem';ln.style.top='0.75rem';ln.style.height='1px';ln.style.backgroundColor='#93490A';
+    gh.appendChild(ln);field.appendChild(gh);
+    var dx=(b.left-a.left),dy=(b.top-a.top);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){
+      gh.style.transition='opacity 350ms cubic-bezier(0.33,0,0.2,1)';gh.style.opacity='0.9';
+      setTimeout(function(){
+        gh.style.transition='transform 1150ms cubic-bezier(0.45,0,0.15,1),opacity 1150ms cubic-bezier(0.7,0,0.9,0.6)';
+        gh.style.transform='translate('+dx+'px,'+dy+'px) scale(0.45)';gh.style.opacity='0';
+        setTimeout(function(){if(gh.parentNode)gh.parentNode.removeChild(gh)},1300);
+      },380);
+    })});
+  }
+  /* the opening: fast, once */
+  tiles.forEach(function(t){t.style.opacity='0'});
+  tiles.forEach(function(t,i){setTimeout(function(){t.style.opacity=''},60+i*13)});
+  var settled=60+tiles.length*13+600;
+  var p=HELD;
+  function live(){return slots.filter(function(s){return !!s.offsetParent})}
+  function beat(){
+    var v=live();if(v.length<4)return;
+    var sq=SEQ.filter(function(i){return i<v.length});
+    dim(v[sq[(p-HELD)%sq.length]]);
+    var next=v[sq[p%sq.length]];
+    var srcs=pick3();
+    srcs.forEach(function(s,i){s.setAttribute('data-busy','1');
+      setTimeout(function(){s.style.borderColor='#4A2E14';s.style.backgroundColor='#120A03'},300+i*250)});
+    srcs.forEach(function(s,i){setTimeout(function(){fly(s,next)},1500+i*400)});
+    setTimeout(function(){next.style.borderColor='#7A4008';next.style.backgroundColor='#1C0D00'},2400);
+    setTimeout(function(){lite(next)},4000);
+    setTimeout(function(){srcs.forEach(function(s){s.style.borderColor='';s.style.backgroundColor='';s.removeAttribute('data-busy')})},4400);
+    p++;
+  }
+  setTimeout(function(){beat();setInterval(beat,EVERY)},settled+1200);
+}
+[].slice.call(document.querySelectorAll('.doc-field_grid')).forEach(function(g){watch(g,start)});
+})();
+
+/* ============================================================================
+   THE ABOUT DROPDOWN. Real w-dropdown / w-dropdown-toggle / w-dropdown-list / w-dropdown-link
+   markup, so it converts to a native Webflow Dropdown on import. No `display` is authored on
+   any w-* part: the toggle's row lives in navbar_dropdown-trigger and the panel's stack in
+   navbar_dropdown-inner, two plain classed divs we own.
+
+   IT OPENS ON HOVER AND CLOSES ON LEAVE, and the opening is drawn rather than faded: a 1px
+   orange rule draws across the panel's top edge, the panel unrolls from that edge on a
+   clip-path wipe, and the three items rise 8px in sequence 70ms apart. Closing is a straight
+   140ms fade - a menu should leave faster than it arrives. Keyboard gets the same states:
+   focus opens, ArrowDown enters, Escape closes and returns focus.
+   ============================================================================ */
+(function(){
+var mqM=window.matchMedia('(max-width: 991px)');
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var dds=[].slice.call(document.querySelectorAll('.navbar_dropdown'));
+if(!dds.length)return;
+var open=null,ct=null;
+function L(d){return d.querySelector('.navbar_dropdown-list')}
+function T(d){return d.querySelector('.navbar_dropdown-toggle')}
+function K(d){return d.querySelector('.navbar_dropdown-caret')}
+function E(d){return d.querySelector('.navbar_dropdown-edge')}
+function I(d){return [].slice.call(d.querySelectorAll('.navbar_dropdown-link'))}
+function shut(d){if(!d)return;
+ var l=L(d),t=T(d),k=K(d),e=E(d);
+ if(t)t.setAttribute('aria-expanded','false');
+ if(k)k.style.transform='';
+ d.classList.remove('w--open');
+ if(open===d)open=null;
+ if(!l)return;
+ if(reduce||mqM.matches){l.style.display='none';return}
+ l.style.transition='opacity 140ms linear';l.style.opacity='0';
+ if(e)e.style.transform='scaleX(0)';
+ setTimeout(function(){if(open!==d){l.style.display='none';l.style.clipPath='inset(0 0 100% 0)';
+  I(d).forEach(function(a){a.style.opacity='0';a.style.transform='translateY(8px)'})}},150)}
+function show(d){if(open===d)return;if(open&&open!==d)shut(open);
+ var l=L(d),t=T(d),k=K(d),e=E(d);open=d;
+ if(t)t.setAttribute('aria-expanded','true');
+ d.classList.add('w--open');
+ if(k&&!mqM.matches)k.style.transform='rotate(225deg) translateY(-0.0625rem)';
+ if(!l)return;
+ l.style.display='block';
+ if(reduce||mqM.matches){l.style.opacity='1';l.style.clipPath='none';
+  I(d).forEach(function(a){a.style.opacity='1';a.style.transform='none'});return}
+ l.style.transition='none';l.style.opacity='1';l.style.clipPath='inset(0 0 100% 0)';
+ if(e)e.style.transform='scaleX(0)';
+ I(d).forEach(function(a){a.style.transition='none';a.style.opacity='0';a.style.transform='translateY(8px)'});
+ requestAnimationFrame(function(){requestAnimationFrame(function(){
+  if(e){e.style.transition='transform 420ms cubic-bezier(0.22,1,0.36,1)';e.style.transform='scaleX(1)'}
+  l.style.transition='clip-path 420ms cubic-bezier(0.22,1,0.36,1)';l.style.clipPath='inset(0 0 0 0)';
+  I(d).forEach(function(a,i){var dl=(90+i*70)+'ms';
+   a.style.transition='opacity 380ms cubic-bezier(0.22,1,0.36,1) '+dl+',transform 460ms cubic-bezier(0.22,1,0.36,1) '+dl+',color 420ms cubic-bezier(0.22,1,0.36,1)';
+   a.style.opacity='1';a.style.transform='translateY(0)'})})})}
+dds.forEach(function(d){
+ d.addEventListener('mouseenter',function(){if(!mqM.matches){clearTimeout(ct);show(d)}});
+ d.addEventListener('mouseleave',function(){if(!mqM.matches){clearTimeout(ct);ct=setTimeout(function(){shut(d)},260)}});
+ d.addEventListener('focusin',function(){if(!mqM.matches)show(d)});
+ d.addEventListener('focusout',function(e){if(!mqM.matches&&!d.contains(e.relatedTarget))shut(d)});
+ var t=T(d);
+ t.addEventListener('click',function(e){if(mqM.matches){e.preventDefault();(open===d)?shut(d):show(d)}});
+ t.addEventListener('keydown',function(e){
+  if(e.key==='ArrowDown'){e.preventDefault();show(d);var f=d.querySelector('.navbar_dropdown-link');if(f)f.focus()}
+  if(e.key==='Enter'&&mqM.matches){e.preventDefault();(open===d)?shut(d):show(d)}});
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&open){var t=T(open);shut(open);if(t)t.focus()}});
+function reset(){open=null;dds.forEach(function(d){var l=L(d);
+ if(l){l.style.transition='none';l.style.display='none';l.style.opacity='0';l.style.clipPath='inset(0 0 100% 0)'}
+ var e=E(d);if(e)e.style.transform='scaleX(0)';
+ I(d).forEach(function(a){a.style.transition='none';a.style.opacity='0';a.style.transform='translateY(8px)'});
+ var t=T(d);if(t)t.setAttribute('aria-expanded','false');
+ var k=K(d);if(k)k.style.transform='';d.classList.remove('w--open')})}
+if(mqM.addEventListener)mqM.addEventListener('change',reset);
+reset();
+})();
+
+/* ============================================================================
+   THE INTRO ILLUSTRATION — the mark, always present, with a slow LIGHT PASS across it
+   (rebuilt 2026-09-09 on client instruction: the strata/reading-line version hid the shape
+   and asked the reader to wait; the mark must be visible at every instant).
+
+   The GHOST and the INK are both unclipped at all times - the full apex is on the page from
+   the first frame. What animates is a third copy of the same solid path, cloned by this
+   script, sitting over the ink at a slightly higher opacity and MASKED to a soft vertical
+   band ~55% of the mark's width. That band travels left -> right -> left on a cosine, 16s per
+   direction, so the mark reads as slowly lit from one side and then the other. No clip-path,
+   no line, no stroke - the logo has none. Smooth at both ends, no seam, nothing blinks.
+
+   Ships as the site's behaviour script (the pass layer is a runtime element this script
+   creates, §4f). Reduced motion returns; the CSS rest state IS the finished mark.
+   ============================================================================ */
+(function(){
+if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var arts=[].slice.call(document.querySelectorAll('.intro_art'));
+if(!arts.length)return;
+var PERIOD=26000, DRIFT=12, BAND=60, OVER=12;
+arts.forEach(function(art){
+  var ink=art.querySelector('.intro_art-svg.is-ink');if(!ink)return;
+  ink.style.clipPath='none';
+  var pass=ink.cloneNode(true);
+  pass.setAttribute('aria-hidden','true');pass.classList.remove('is-ink');
+  pass.style.position='absolute';pass.style.top='0';pass.style.left='0';pass.style.width='100%';pass.style.height='auto';
+  pass.style.opacity='0.42';pass.style.pointerEvents='none';pass.style.willChange='mask-image';
+  ink.parentNode.appendChild(pass);
+  art.__pass=pass;
+});
+function frame(now){
+  var t=now||0;
+  var p=(1-Math.cos((t/PERIOD)*Math.PI*2))/2;                 /* 0..1..0, eased at both ends */
+  var c=-OVER+p*(100+2*OVER);                                   /* band centre, % of width - never fully off the mark */
+  var m='linear-gradient(90deg, rgba(0,0,0,0) '+(c-BAND/2).toFixed(2)+'%, rgba(0,0,0,1) '+c.toFixed(2)+'%, rgba(0,0,0,0) '+(c+BAND/2).toFixed(2)+'%)';
+  arts.forEach(function(art){
+    var pass=art.__pass;
+    if(pass){pass.style.webkitMaskImage=m;pass.style.maskImage=m}
+    var s=art.parentNode;
+    if(s){var r=s.getBoundingClientRect(),vh=window.innerHeight||1;
+      var q=Math.max(0,Math.min(1,(vh-r.top)/(vh+r.height)))-0.5;
+      art.style.transform='translateY(-50%) translate3d(0,'+(q*DRIFT).toFixed(2)+'px,0)'}
+  });
+  requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+})();
+
+/* THE OFFER BOXES carry no motion (client 2026-09-09): three static treads, hover/is-active states only. */
+
+/* PROOF CARD HOVER — photo and logo come up to full colour while the pointer (or keyboard
+   focus) is on the card, and drop back to greyscale on leave. Set inline at runtime because
+   a descendant :hover rule cannot deploy (§4a / §4f). */
+(function(){
+var cards=[].slice.call(document.querySelectorAll('.proof_card'));
+cards.forEach(function(c){
+  var ph=c.querySelector('.proof_photo'),lg=c.querySelector('.proof_logo');
+  function lit(on){
+    if(ph)ph.style.filter=on?'grayscale(0%) contrast(1) brightness(1)':'';
+    if(lg){lg.style.filter=on?'grayscale(0%)':'';lg.style.opacity=on?'1':''}
+  }
+  c.addEventListener('mouseenter',function(){lit(true)});
+  c.addEventListener('mouseleave',function(){lit(false)});
+  c.addEventListener('focusin',function(){lit(true)});
+  c.addEventListener('focusout',function(){lit(false)});
+});
+})();
+
+/* ============================================================================
+   THE TESTIMONIAL SLIDER. Swiper is the native carousel (STRUCTURE.md 0a), so the markup is
+   real swiper / swiper-wrapper / swiper-slide and only the dressing classes are ours. Two
+   cards full and the third cut by the page edge, drag and swipe, a progress bar between two
+   drawn arrows. No CSS depends on the script having run - the card carries min-height, not a
+   computed height.
+   ============================================================================ */
+(function(){
+function init(){
+  var el=document.querySelector('.proof_slider');
+  if(!el||!window.Swiper)return;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sw=new Swiper(el,{
+    slidesPerView:1.15,
+    spaceBetween:20,
+    grabCursor:true,
+    autoHeight:false,
+    speed:reduce?0:620,
+    resistanceRatio:0.72,
+    a11y:{enabled:true},
+    keyboard:{enabled:true},
+    breakpoints:{768:{slidesPerView:2.2,spaceBetween:24},992:{slidesPerView:2.5,spaceBetween:32}}
+  });
+  /* our own progress bar rather than Swiper's: the widget's pagination fill is its own
+     element and cannot carry one of our classes, and its colour comes from a variable Swiper
+     declares itself. The script sets the width inline, which is the sanctioned pattern for a
+     state the Designer never sees. */
+  var fill=document.querySelector('.proof_progress-fill');
+  function prog(){
+    if(!fill)return;
+    var n=sw.slides.length-(sw.params.slidesPerView||1);
+    var v=n>0?(sw.activeIndex/n):1;
+    fill.style.width=(Math.max(0,Math.min(1,v))*100)+'%';
+  }
+  sw.on('slideChange',prog);sw.on('resize',prog);prog();
+  var p=document.querySelector('.proof_arrow.is-prev'),n=document.querySelector('.proof_arrow.is-next');
+  function bind(b,fn){if(!b)return;b.addEventListener('click',fn);
+    b.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fn()}})}
+  bind(p,function(){sw.slidePrev()});
+  bind(n,function(){sw.slideNext()});
+}
+if(window.Swiper)init();else window.addEventListener('load',init);
+})();
+
+/* ============================================================================
+   THE RULE SYSTEM DRIFTS. Every section divider carries the orange sweep, and each carries
+   TWO segments half a span apart so there is always motion on every one rather than only on
+   the ones whose single segment happens to be in view.
+   ============================================================================ */
 (function(){
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-var H=[].slice.call(document.querySelectorAll('.rules_h-bottom,.rules_h-top,.rules_h-close,.section_rule,.section_rule-close,.method_rule,.ways_rule,.footer_rule'));
-var V=[].slice.call(document.querySelectorAll('.rules_v-left,.rules_v-right,.rules_v-col,.rules_v-hero,.rules_v-claim,.ways_v-rule'));
-function seg(p,vert){var s=document.createElement('div');s.setAttribute('aria-hidden','true');
-s.style.position='absolute';s.style.willChange='transform';s.style.opacity='0.25';
-if(vert){s.style.width='1px';s.style.height='12rem';s.style.left='0';s.style.top='0';
-s.style.background='linear-gradient(180deg, transparent 0%, #8A4A1F 50%, transparent 100%)'}
-else{s.style.height='1px';s.style.width='12rem';s.style.top='0';s.style.left='0';
-s.style.background='linear-gradient(90deg, transparent 0%, #8A4A1F 50%, transparent 100%)'}
+var H=[].slice.call(document.querySelectorAll('.rules_h-bottom,.footer_rule'));
+function seg(p){var s=document.createElement('div');s.setAttribute('aria-hidden','true');
+s.style.position='absolute';s.style.willChange='transform';s.style.opacity='0.85';
+s.style.height='1px';s.style.width='16rem';s.style.top='0';s.style.left='0';
+s.style.background='linear-gradient(90deg, transparent 0%, #FF6600 50%, transparent 100%)';
 if(getComputedStyle(p).position==='static')p.style.position='relative';
 p.style.overflow='hidden';p.appendChild(s);return s}
-var hs=H.map(function(p){return{p:p,s:seg(p,false),ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero'))}});
-var vs=V.map(function(p){var n=Math.max(1,Math.ceil(p.offsetHeight/900));var ss=[];for(var i=0;i<n;i++)ss.push(seg(p,true));
-return{p:p,ss:ss,ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero'))}});
+var hs=H.map(function(p){return{p:p,ss:[seg(p),seg(p)],ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero'))}});
 var cur=window.scrollY||0;
-function frame(now){var tgt=window.scrollY||0;cur+=(tgt-cur)*0.04;var t=(now||0)*0.013;
-hs.forEach(function(o){var len=o.p.offsetWidth,sl=192,span=len+sl;if(span<=sl)return;
-var d=cur*0.1+(o.auto?t*1.4:t);
-var x=((d+o.ph*span)%span+span)%span-sl;o.s.style.transform='translateX('+x+'px)'});
-vs.forEach(function(o){var len=o.p.offsetHeight,sl=192,span=len+sl;if(span<=sl)return;
-var d=cur*0.1+(o.auto?t*1.4:t);
-o.ss.forEach(function(s,i){var y=((d+(o.ph+i/o.ss.length)*span)%span+span)%span-sl;s.style.transform='translateY('+y+'px)'})});
+function frame(now){var tgt=window.scrollY||0;cur+=(tgt-cur)*0.05;var t=(now||0)*0.0105;
+hs.forEach(function(o){var len=o.p.offsetWidth,sl=256,span=len+sl;if(span<=sl)return;
+var d=cur*0.1+(o.auto?t*1.5:t);
+o.ss.forEach(function(s,i){var x=((d+(o.ph+i/o.ss.length)*span)%span+span)%span-sl;s.style.transform='translateX('+x+'px)'})});
 requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
 })();
-/* PREVIEW BEHAVIOUR — sticky bar: hidden on scroll-down, revealed on scroll-up
-   (operator request 2026-08-30). Ships as site behaviour script; sets transform
-   inline at runtime because Webflow prunes combos the Designer never sees. */
+
+/* --- STICKY BAR: hidden on scroll-down, revealed on scroll-up (frozen from v1). --- */
 (function(){
 var bar=document.querySelector('.navbar_component');if(!bar)return;
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)bar.style.transition='none';
@@ -241,16 +710,16 @@ if(acc>120)hide();
 else if(acc<-64)show()}
 window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
 })();
-/* PREVIEW BEHAVIOUR — full-screen navbar menu at ≤991 (R9-RESPONSIVE 2026-08-30).
-   On the live site this is the native Webflow Navbar open/close; the CSS styles
-   the OPEN menu and this script only mimics the widget in preview by setting
-   inline styles at runtime (§4f). Honours prefers-reduced-motion. */
+
+/* --- FULL-SCREEN NAVBAR MENU at <=991 (frozen from v1). On the live site this is the native
+       Webflow Navbar open/close; the CSS styles the OPEN menu and this only mimics the widget
+       in preview by setting inline styles at runtime. --- */
 (function(){
 var mq=window.matchMedia('(max-width: 991px)');
 var menu=document.querySelector('.navbar_menu'),btn=document.querySelector('.navbar_menu-button');
 if(!menu||!btn)return;
 var bars=btn.querySelectorAll('.navbar_menu-bar');
-var items=[].slice.call(menu.querySelectorAll('.navbar_link'));
+var items=[].slice.call(menu.querySelectorAll('.navbar_link,.navbar_dropdown'));
 var bw=menu.querySelector('.navbar_button-wrapper');if(bw)items.push(bw);
 var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var open=false,ct=null;
@@ -281,10 +750,118 @@ menu.style.display='';menu.style.opacity='';menu.style.transition='';
 items.forEach(function(el){el.style.opacity='';el.style.transform='';el.style.transition=''})}}
 btn.addEventListener('click',function(){open?closeM():openM()});
 btn.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open?closeM():openM()}});
-menu.addEventListener('click',function(e){var t=e.target;while(t&&t!==menu){if(t.tagName==='A'){closeM();break}t=t.parentNode}});
+menu.addEventListener('click',function(e){var t=e.target;while(t&&t!==menu){if(t.tagName==='A'&&!t.classList.contains('navbar_dropdown-toggle')){closeM();break}t=t.parentNode}});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeM()});
 if(mq.addEventListener)mq.addEventListener('change',apply);else mq.addListener(apply);
 apply();
+})();
+
+/* INSIGHT CARD HOVER — the action line's underline drops away from the text and thickens while
+   the pointer (or keyboard focus) is on the card. Set inline at runtime because a descendant
+   :hover rule cannot deploy (§4a / §4f); the transition itself lives on .insights_action, so
+   reduced motion is honoured by the browser and the rest state is the finished underline. */
+(function(){
+[].slice.call(document.querySelectorAll('.insights_card')).forEach(function(c){
+  var a=c.querySelector('.insights_action');if(!a)return;
+  function lit(on){
+    a.style.textUnderlineOffset=on?'0.8em':'';
+    a.style.textDecorationThickness=on?'2px':'';
+  }
+  c.addEventListener('mouseenter',function(){lit(true)});
+  c.addEventListener('mouseleave',function(){lit(false)});
+  c.addEventListener('focusin',function(){lit(true)});
+  c.addEventListener('focusout',function(){lit(false)});
+});
+})();
+
+/* ============================================================================
+   THE SETTLE. The page arrives rather than assembles: as each section comes into view its
+   blocks come up to full opacity over 1.6s, an eighth of a second apart, and NOTHING
+   MOVES - no rise, no slide, no scale. Opacity is the only property that changes.
+
+   Why it is built this way rather than as CSS:
+   · nothing rests at opacity:0 in the stylesheet (§4c-bis). The script sets the start state
+     inline, so a reader with JS off, a print, or a crawler gets the finished page - the fade
+     can only ADD to something that already renders.
+   · @keyframes do not survive the style pipeline, so the fade is a transition on an inline
+     value, set and then cleared - the element ends with NO inline transition, which is what
+     lets the hover transitions on .ways_box / .insights_card / .proof_card keep their own
+     timing afterwards.
+   · reduced motion returns before anything is touched, and prefers-reduced-motion is honoured
+     here rather than in a stylesheet the pipeline would drop whole.
+   · it is driven by RECT MATH on scroll, not by IntersectionObserver. Measured 2026-09-09 in
+     this project's own preview: the frame loads while it is not yet visible, an observer in a
+     hidden frame reports nothing intersecting, and the whole page had already been revealed by
+     the failsafe before the reader could scroll a pixel. A rect is valid whether or not the
+     frame is on screen, so the reveal survives being loaded in the background.
+   · if an element cannot be measured at all (a display:none ancestor returns a zero rect) it is
+     revealed unconditionally rather than left hidden, and printing reveals everything first.
+   The hero is deliberately NOT in the set: it carries the opening of the document field and
+   must be whole the moment the page paints. The footer is out too (client 2026-09-09): it is
+   the page's ground, and ground does not arrive.
+   ============================================================================ */
+(function(){
+if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var SEL=['#intro .intro_stack',
+ '#friction .statement_label-col','#friction .statement_display-col','#friction .statement_body-col',
+ '#anticipate .tagline_row','#anticipate .claim_lede-block',
+ '#engage .ways_head','#engage .ways_box',
+ '#method .method_head','#method .method_card',
+ '#proof .proof_head','#proof .proof_slider','#proof .proof_controls',
+ '#insights .insights_head','#insights .insights_card',
+ '#contact .close_stack'].join(',');
+var els=[].slice.call(document.querySelectorAll(SEL));
+if(!els.length)return;
+var EASE='cubic-bezier(0.33,0,0.2,1)',DUR=1600,STEP=130;
+/* the stagger runs WITHIN a section, so every section settles the same way wherever the
+   reader enters the page */
+var hosts=[],groups=[];
+els.forEach(function(el){
+  var s=el.closest?el.closest('section,.footer_component,footer'):null;
+  var i=hosts.indexOf(s);
+  if(i<0){hosts.push(s);groups.push([el])}else{groups[i].push(el)}
+});
+groups.forEach(function(g){g.forEach(function(el,k){el.setAttribute('data-settle',k)})});
+function clear(el){el.style.transition='';el.style.opacity=''}
+function show(el){
+  var k=parseInt(el.getAttribute('data-settle'),10)||0,d=k*STEP;
+  el.style.transition='opacity '+DUR+'ms '+EASE+' '+d+'ms';
+  el.style.opacity='1';
+  setTimeout(function(){clear(el);el.removeAttribute('data-settle')},DUR+d+140);
+}
+els.forEach(function(el){el.style.opacity='0'});
+var waiting=els.slice(),tick=false;
+function pass(){
+  tick=false;
+  var vh=window.innerHeight||document.documentElement.clientHeight||0;
+  waiting=waiting.filter(function(el){
+    var r=el.getBoundingClientRect();
+    if(!r.height&&!r.top&&!r.bottom){show(el);return false}      /* unmeasurable: never hide it */
+    /* one-way: crossing the line reveals, and anything ALREADY past it (a jump, a restored
+       scroll position, a fast fling that skipped a pass) reveals too - a block must never be
+       left blank because the reader arrived from below or too quickly. */
+    if(r.top<vh){show(el);return false}
+    return true;
+  });
+  if(!waiting.length)detach();
+}
+/* rAF is the fast path for a smooth scroll, but it is PAUSED in a frame that is not on screen -
+   measured 2026-09-09: with the reveal scheduled on rAF alone, a frame scrolled while hidden
+   never ran a pass and the page stayed blank. The interval is the floor: timers fire in a
+   background frame, so the reveal always catches up. */
+function onScroll(){if(tick)return;tick=true;requestAnimationFrame(pass)}
+var poll=setInterval(function(){tick=false;pass()},400);
+function detach(){
+  clearInterval(poll);
+  window.removeEventListener('scroll',onScroll);
+  window.removeEventListener('resize',onScroll);
+  document.removeEventListener('visibilitychange',onScroll);
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',onScroll);
+document.addEventListener('visibilitychange',onScroll);
+window.addEventListener('beforeprint',function(){detach();waiting.forEach(clear)});
+pass();
 })();
 </script>
 </body>

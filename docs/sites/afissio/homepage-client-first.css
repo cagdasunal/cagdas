@@ -1,0 +1,795 @@
+/* LIVE layout sheet for pages/homepage.html - THE ONE this page's every rule comes from.
+   Header corrected 2026-09-09. It previously read "FROZEN ARCHIVE ... DO NOT EDIT, and do not
+   link it from any page but homepage-old.html", and all of that is false:
+     · pages/homepage.html links this sheet (see its <head>), so editing it edits the live page;
+     · pages/homepage-old.html no longer exists - pages/ holds homepage.html and these two sheets;
+     · it has been edited many times since (hover transitions, the flight of steps, the tread
+       square and its floor, the doc-tile basis, the <=991 overrides, touch-target sizes).
+   The same false "archive" note on the token sheet cost the page its Bold 700 face for a day -
+   a comment nobody can trust is worse than no comment. FILENAME kept as-is only because the
+   page links it; it is not an archive.
+   STILL FROZEN, per BRIEF.md section 3 - change these only on an explicit instruction: the
+   container and rails, the whitespace rungs, the line system, and the buttons. */
+/* Afissio — Client-First V2 class layer. ROUND-TOKEN: R10-FLUID-DESKTOP (the 992→1680 desktop base
+   is now fluid: section rhythm, rail offsets, grid tracks, gaps and every display rung ramp by
+   clamp() between a 992 floor and the 1680 design values, so a 1000–1400px window is a designed
+   width and not a squeezed 1680. Sub-992 tiers unchanged except where they were stepping the
+   WRONG way at the boundary. One class per rule; var() always with fallback; breakpoints only
+   1440/991/767/479 — every other width is a clamp, which needs no @media at all. */
+body{margin:0}
+*{box-sizing:border-box}  /* preview-only reset — Webflow's normalize already sets border-box on every element; never deployed as a class */  /* preview-only reset — Webflow normalizes body itself; every deployed property lives on a class */
+
+/* text links (inline <a> outside buttons take this class). The bare-element rule
+   is preview-only insurance against the UA stylesheet's #0000EE; .text-link is
+   what deploys. */
+a{color:var(--orange,#FF6600);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;transition:color 260ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 260ms cubic-bezier(0.22,1,0.36,1)}
+a:hover{color:var(--text-reversed,#EDEDED)}
+.text-link{color:var(--orange,#FF6600);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;transition:color 260ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 260ms cubic-bezier(0.22,1,0.36,1)}
+.text-link:hover{color:var(--text-reversed,#EDEDED)}
+.text-link:focus-visible{outline:2px solid var(--rule-accent,#B34B00);outline-offset:2px}
+.text-link.is-reversed{color:var(--orange,#FF6600)}
+.text-link.is-reversed:hover{color:var(--text-reversed,#EDEDED)}
+
+/* skeleton */
+.page-wrapper{background:var(--ink-hero,#000000);color:var(--text-reversed-soft,#C9C9C9);font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.main-wrapper{min-height:100vh}
+.padding-global{padding-left:5%;padding-right:5%}
+.padding-section-large{padding-top:clamp(9rem,20.93vw - 3.975rem,var(--section-l,18rem));padding-bottom:clamp(9rem,20.93vw - 3.975rem,var(--section-l,18rem))}
+.padding-section-medium{padding-top:clamp(8rem,13.95vw - 0.65rem,var(--section-m,14rem));padding-bottom:clamp(8rem,13.95vw - 0.65rem,var(--section-m,14rem))}
+/* hero padding is asymmetric by exactly the 96px bar, so the stack centres in
+   the VISIBLE area (bar seam → section seam), on the same axis as the frame. */
+.padding-section-medium.is-hero{padding-top:clamp(7.5rem,8.14vw + 2.456rem,11rem);padding-bottom:clamp(3.5rem,3.49vw + 1.34rem,5rem)}
+.padding-section-small{padding-top:clamp(6rem,6.98vw + 1.675rem,var(--section-s,9rem));padding-bottom:clamp(6rem,6.98vw + 1.675rem,var(--section-s,9rem))}
+.padding-section-small.is-no-top{padding-top:0}
+.container-large{max-width:var(--container-l,77.5rem);margin-left:auto;margin-right:auto}
+.container-medium{max-width:var(--container-m,60rem);margin-left:auto;margin-right:auto}
+.container-small{max-width:var(--container-s,45rem);margin-left:auto;margin-right:auto}
+
+/* type rungs — TWO weights only (2026-08-29): Light 300 for display, Regular 400
+   for everything else. On dark grounds display and leads take #EDEDED and body
+   takes the softer #C9C9C9, which reads with less glare at 400 weight. */
+.heading-style-h1{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(2.75rem,1.45vw + 2.03rem,3.375rem);line-height:1.04;letter-spacing:-0.03em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
+.heading-style-h2{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(2.25rem,1.16vw + 1.53rem,2.75rem);line-height:1.08;letter-spacing:-0.026em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
+.heading-style-h3{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(1.5rem,0.58vw + 1.15rem,1.75rem);line-height:1.24;letter-spacing:-0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
+.text-lead{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.375rem,0.436vw + 1.106rem,var(--size-lead,1.5625rem));line-height:1.5;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.text-size-regular{font-weight:400;font-size:1.1875rem;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.text-label{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;text-transform:uppercase;letter-spacing:0.14em;line-height:1.4;color:var(--text-reversed-soft,#C9C9C9)}
+.text-label.is-reversed{color:var(--text-reversed,#EDEDED)}
+.text-color-muted{color:#8E8E8E}
+
+/* buttons — three constructions, all with the one control radius. The primary
+   ALWAYS carries a background colour (2026-08-29): ink on light, paper on ink. */
+.button{display:inline-block;padding-top:1rem;padding-bottom:1rem;padding-left:1.9375rem;padding-right:1.9375rem;background:var(--ink,#1A1A1A);color:var(--paper,#FAF9F6);font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:1rem;line-height:1.5;text-decoration:none;border:1px solid transparent;border-radius:0;transition:background-color 900ms cubic-bezier(0.16,1,0.3,1),color 900ms cubic-bezier(0.16,1,0.3,1),border-color 900ms cubic-bezier(0.16,1,0.3,1)}
+/* one hover for the whole family (2026-08-31): paper surface + branding orange
+   --orange-text #B34B00, the accessible text cut of the logo's #FF6600 (5.0:1 on
+   paper; the mark orange is 3.0:1 there and fails at label size). */
+.button:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00)}
+.button:focus-visible{outline:2px solid var(--rule-accent,#B34B00);outline-offset:2px}
+.button.is-ghost{background:transparent;color:var(--ink,#1A1A1A);border-color:var(--rule,#DDDBD4)}
+.button.is-ghost:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00)}
+
+/* review scaffolding — deleted at Phase D */
+.review_label{display:inline-block;font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);text-transform:uppercase;letter-spacing:0.08em;background:var(--panel-ink,#161616);padding:0.375rem 0.75rem;margin-bottom:1.5rem}
+.review_label.is-review{color:var(--text-reversed,#EDEDED)}
+
+/* sections — the hero is a full-screen opening plate: a true 100svh, with the
+   fixed bar floating over its top edge. */
+.section_hero{position:relative;overflow:hidden;display:grid;align-content:center;min-height:100svh;background-color:var(--ink-hero,#000000)}
+
+/* --- the ink hero (2026-08-28): the page opens dark --- */
+.section_hero.is-ink{background-color:var(--ink-hero,#000000)}
+.container-xlarge{max-width:var(--container-xl,105rem);margin-left:auto;margin-right:auto}
+.heading-style-h1.is-reversed{color:var(--text-reversed,#EDEDED)}
+.text-size-regular.is-reversed{color:var(--text-reversed-soft,#C9C9C9)}
+.text-size-regular.is-fine{font-weight:300;font-size:0.9375rem}
+.text-size-regular.is-large{font-size:1.125rem}
+.text-lead.is-reversed{color:var(--text-reversed,#EDEDED)}
+.hero_rule-edge{height:1px;background-color:var(--rule-plate,#454545)}
+/* every CTA takes the logo's dark orange with white type (operator, 2026-09-09).
+   Measured: #FFFFFF on #B34B00 = 5.40:1, AA pass; hover #8F3C00 = 7.36:1. */
+.button.is-reversed{background:var(--orange-text,#B34B00);color:#FFFFFF;font-weight:400}
+.button.is-reversed:hover{background:#8F3C00;color:#FFFFFF}
+.button.is-reversed:focus-visible{outline-color:#FFFFFF}
+
+/* ============================================================
+   ROUND 5 — the navbar class layer, with the operator's 2026-08-29 changes:
+   three-column bar (logo | links centred | CTA), 11px Light links, tighter CTA,
+   no hairline under the bar, and a CENTRED hero (overrides BRIEF §4's LEFT axis
+   on operator instruction). No `display` is authored on any w-* widget part
+   (STRUCTURE.md §0a): all row layout lives in navbar_menu-inner / navbar_links,
+   two plain classed divs we own.
+   ============================================================ */
+
+/* fixed bar (operator 2026-08-30): floats over the hero so the hero itself runs
+   a full 100svh from the top of the viewport; the behaviour script slides it out
+   on scroll-down and back on scroll-up via inline transform (§4f). */
+.navbar_component{position:fixed;top:0;left:0;right:0;z-index:100;background-color:var(--ink-hero,#000000);transition:transform 1400ms cubic-bezier(0.25,1,0.5,1),opacity 1600ms cubic-bezier(0.4,0,0.2,1)}
+/* the bar runs the FULL width of the page, not the container width: a 2rem gutter instead of
+   the 5% page gutter, and no max-width cap. Measured 2026-09-09: at 1452px the bar and the
+   sections were identical (72.6..1379.4), which is what "full width" changes. */
+.padding-global.is-bar{padding-left:2rem;padding-right:2rem}
+.navbar_container{display:flex;align-items:center;justify-content:space-between;max-width:none;margin-left:auto;margin-right:auto;padding-top:clamp(1rem,1.5vw,1.5rem);padding-bottom:clamp(1rem,1.5vw,1.5rem)}
+.navbar_logo-link{line-height:0;opacity:1;transition:opacity 350ms cubic-bezier(0.22,1,0.36,1)}
+.navbar_logo-link:hover{opacity:0.68}
+.navbar_logo-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.375rem}
+.navbar_logo{display:block;height:1.75rem;width:auto}
+.navbar_menu{flex-grow:1}
+.navbar_menu-inner{display:flex;flex-wrap:wrap;align-items:center;column-gap:clamp(1.25rem,2.5vw,2.5rem);row-gap:0.5rem}
+.navbar_links{display:flex;align-items:center;column-gap:clamp(0.75rem,1.6vw,1.25rem);margin-left:auto;margin-right:auto}
+.navbar_link{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:3rem;color:var(--text-reversed,#EDEDED);text-decoration:none;white-space:nowrap;transition:color 350ms cubic-bezier(0.22,1,0.36,1),opacity 350ms cubic-bezier(0.22,1,0.36,1)}
+.navbar_link:hover{color:var(--orange,#FF6600)}
+.navbar_link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
+.navbar_button-wrapper{line-height:0}
+.navbar_menu-button{width:0;overflow:hidden}
+.navbar_menu-bar{width:1.25rem;height:1px;background-color:var(--text-reversed,#EDEDED);margin-bottom:0.3125rem}
+.button.is-nav{background:var(--orange-text,#B34B00);color:#FFFFFF;font-size:0.9375rem;line-height:1.5;padding-top:0.75rem;padding-bottom:0.75rem;padding-left:1.375rem;padding-right:1.375rem;border-radius:0}
+.button.is-nav:hover{background:#8F3C00;color:#FFFFFF}
+.button.is-nav:focus-visible{outline:2px solid #FFFFFF;outline-offset:0.25rem}
+
+/* the 12px label rung, accented (6.9:1 on ink) */
+.text-label.is-accent{color:var(--orange,#FF6600)}
+.text-label.is-accent-paper{color:var(--orange-text,#B34B00)}
+
+/* hero — stacked, CENTRED (operator instruction 2026-08-29) */
+/* ONE button-row utility for every section pair (operator, 2026-09-09: each section carries
+   Start the Conversation plus one related page from the top navigation).
+   NOTE: the brief allowed exactly TWO CTA moments - the hero and the closing box - on the
+   grounds that this audience has already met the principal and persuasion machinery reads as
+   a downgrade. There are now eight. That is his call, and reversing it is a matter of deleting
+   the rows; the constraint is recorded here so it is not lost. */
+/* THE GAP SCALE (unified 2026-09-09 on client instruction: the page must read symmetrical).
+   FIVE rungs and nothing else — 1.25rem inside a group (paragraph to paragraph, heading to
+   copy in a card) · 1.5rem between roles (label→heading, heading→lead) · 2rem from a measure
+   to its button row · 4rem from a section head to its content · 6.5rem between two bands.
+   The 3.5rem button gap was the thing he could see: every CTA row now sits 2rem under its
+   paragraph, in every section including the hero. */
+.button-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:0.75rem;row-gap:1rem;margin-top:2rem}
+.button-row.is-centered{justify-content:center}
+.button.is-text{background:transparent;color:var(--orange-text,#B34B00);font-weight:400;padding-left:0;padding-right:0;padding-top:1rem;padding-bottom:1rem;border-radius:0;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:0.35em;transition:background-color 420ms cubic-bezier(0.16,1,0.3,1),color 420ms cubic-bezier(0.16,1,0.3,1),text-decoration-thickness 420ms cubic-bezier(0.16,1,0.3,1),text-underline-offset 420ms cubic-bezier(0.16,1,0.3,1)}
+.button.is-text:hover{background:transparent;color:var(--orange-text,#B34B00);text-decoration-thickness:2px}
+.button.is-ghost-reversed{background:transparent;color:var(--text-reversed,#EDEDED);border-color:var(--rule-plate,#454545);font-weight:400}
+.button.is-ghost-reversed:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00);border-color:var(--paper,#FAF9F6)}
+.button.is-ghost-reversed:focus-visible{outline-color:var(--orange,#FF6600)}
+/* the stack's air ramps on BOTH axes: the vw term is the designed 992→1680 ramp,
+   the svh term keeps a 720/768-tall laptop from pushing the CTA below the fold.
+   Whichever is smaller wins, floored at 2rem. */
+.hero_stack{max-width:clamp(38rem,58vw,54rem);margin-left:auto;margin-right:auto;margin-top:clamp(2rem,min(9.3vw - 2.77rem,44.4svh - 18rem),7rem);margin-bottom:clamp(2rem,min(9.3vw - 2.77rem,44.4svh - 18rem),7rem);text-align:left}
+.hero_title-block{max-width:100%;margin-left:0;margin-right:0;margin-bottom:0}
+.hero_lead-block{max-width:34rem;margin-left:0;margin-right:0;margin-top:1.5rem;margin-bottom:0}
+
+/* statement band — label · display · body, three columns on paper (operator layout 2026-08-29) */
+.section_statement{position:relative;background-color:var(--ink-hero,#000000)}
+/* ROOT CAUSE of "the gap will not shrink" (fixed 2026-09-09): the middle track was 46fr while
+   its content is capped at 23rem, so ~13rem of EMPTY TRACK sat between heading and body at
+   desktop widths - column-gap edits never touched it. The heading track is now sized to its
+   own cap and the slack is gone; column-gap below is the only gap between the three columns. */
+.statement_grid{display:grid;grid-template-columns:clamp(7rem,12vw,12rem) minmax(0,1fr) minmax(0,1fr);column-gap:clamp(2rem,2.326vw + 0.556rem,3rem);max-width:none;align-items:start}
+.statement_label-col{padding-top:0.5rem}
+.statement_display-col{max-width:100%}
+.heading-style-h2.is-three-lines{max-width:15ch;text-wrap:balance}
+.statement_body-col{max-width:100%}
+.statement_body-item{margin-bottom:1.25rem}
+.statement_body-item:last-child{margin-bottom:0}
+.text-lead.is-muted{color:#8E8E8E}
+
+/* claim band — centred statement on ink (operator layout 2026-08-30) */
+.section_claim{position:relative;background-color:var(--ink-hero,#000000)}
+.claim_stack{max-width:72rem;margin-left:auto;margin-right:auto;text-align:center}
+.tagline_row{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0.5rem}
+.tagline_row.is-centered{justify-content:center}
+.tagline_mark{height:0.8125rem;width:auto}
+.claim_lede-block{max-width:clamp(38rem,62vw,64rem);margin-left:auto;margin-right:auto;margin-top:1.5rem}
+.claim_lede{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.5rem,0.58vw + 1.25rem,1.75rem);line-height:1.42;letter-spacing:-0.014em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
+
+/* ways ledger — centred heading over rule-separated term/copy rows on paper (operator layout 2026-08-30) */
+.section_ways{position:relative;background-color:var(--ink-hero,#000000)}
+.ways_grid{display:grid;grid-template-columns:minmax(0,35fr) minmax(0,32fr);column-gap:clamp(2.5rem,5.81vw - 1.106rem,5rem);max-width:82rem;align-items:start}
+.ways_head{max-width:100%;margin-left:0;margin-right:0;text-align:left}
+.ways_list{max-width:100%;margin-left:0;margin-right:0;margin-top:0}
+.ways_row{display:grid;grid-template-columns:minmax(0,1fr);row-gap:1.25rem;align-items:start;padding-top:clamp(2rem,2.326vw + 0.556rem,3rem);padding-bottom:clamp(2rem,2.326vw + 0.556rem,3rem)}
+.ways_row:first-child{padding-top:0}
+.ways_term{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(1.5rem,0.58vw + 1.15rem,1.75rem);line-height:1.24;letter-spacing:-0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:1rem}
+.ways_copy{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:1.0625rem;line-height:1.55;color:var(--text-reversed-soft,#C9C9C9);margin-top:auto;margin-bottom:0;text-wrap:pretty}
+
+/* ============================================================================
+   METHOD — A CENTRED PAIR (rebuilt 2026-09-09 on the frame the operator attached: "use a similar
+   layout for the method and the judgement sections, considering design consistency").
+   TAKEN: the centred label, one centred heading carrying both halves, a 1px stem dropping out of
+   it, two equal cards side by side each opening with a mark and centring its title over its
+   copy, a second stem, and one centred action closing the section.
+   NOT TAKEN: the bracket tree (the line system is section dividers plus these two stems, and a
+   six-piece connector would be a new line vocabulary), the serif, the mono button.
+   The cards are the SAME construction as the testimonial and insight cards - #080808, one
+   #242424 hairline, square corners, the .proof_card padding ramp and its 64px internal rungs.
+   Both client statements ship VERBATIM as the two card bodies; nothing was cut.
+   ============================================================================ */
+.section_method{position:relative;background-color:var(--ink-hero,#000000)}
+.method_head{max-width:56rem;margin-left:auto;margin-right:auto;text-align:center}
+.method_title-block{max-width:none;margin-top:1.5rem}
+/* the stem: the reference's spine, reduced to one hairline. Never touches type. */
+.method_stem{width:1px;height:clamp(4rem,4.65vw - 0.615rem,6rem);background-color:var(--rule-plate,#454545);margin-top:2rem;margin-bottom:2rem;margin-left:auto;margin-right:auto}
+.method_stem.is-last{margin-bottom:0}
+.method_pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,1.163vw + 0.278rem,1.5rem);max-width:64rem;margin-left:auto;margin-right:auto}
+.method_card{display:flex;flex-direction:column;align-items:center;background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);text-align:center;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
+.method_card:hover{background-color:#0E0E0E;border-color:#3A3A3A}
+.method_card-mark{display:block;height:1.75rem;width:auto;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+.method_card-title{max-width:20rem;margin-bottom:1.5rem}
+.method_card-body{max-width:24rem}
+@media (max-width:991px){
+  .method_pair{max-width:none}
+  .method_card-title{max-width:100%}
+  .method_card-body{max-width:100%}
+}
+@media (max-width:767px){
+  .method_pair{grid-template-columns:minmax(0,1fr)}
+  .method_card{padding:2.5rem}
+  .method_card-mark{margin-bottom:2.25rem}
+}
+
+/* ============================================================
+   RULING RAILS (operator 2026-08-30, ref primora.xyz) — the static line
+   system: two full-height 1px rails framing the container-xl column through
+   every section, a seam at each section's lower edge (corner-joined to the
+   rails), and ONE soft interior rule at the label-column gap of the two
+   editorial grids. Colours follow the ground: --rule on paper,
+   --rule-ink-hero on ink. Real classed divs (§4c); one class per rule (§4a);
+   rails sit 1.5rem outside the container so type never touches a line.
+   ============================================================ */
+.rules_layer{position:absolute;top:0;bottom:0;left:5%;right:5%;pointer-events:none}
+.rules_inner{position:relative;max-width:var(--container-xl,105rem);height:100%;margin-left:auto;margin-right:auto}
+/* hero frame (R8c): two full-width horizontals inset SYMMETRICALLY in the visible
+   area — 5rem below the bar seam, 5rem above the section seam — and an interior
+   vertical pair that runs ONLY between them (corner-joined, never touching the
+   page top/bottom). Same 1px/#262626 vocabulary as every other section. */
+.rules_h-bottom{position:absolute;bottom:0;left:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);right:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);height:1px;background-color:var(--rule-plate,#454545)}
+.rules_h-bottom.is-ink{background-color:var(--rule-plate,#454545)}
+/* section-opener rule — a 1px line at the head of each content block, spanning
+   the section's own container; the third rung of the line system */
+/* section-closing rule — mirrors the opener; wider gap to the content above */
+
+
+/* ============================================================
+   ROUND 7 — footer_component (R7-BIG-FOOTER). Ships on every page and template.
+   PICKED 2026-08-30: ledger-footer — panel-grey, four-side-ruled cells via a
+   1px grid gap over a rule-coloured ground. Apex icon only (no lockup) and no
+   placeholder strings, on operator instruction; phones/emails/copyright join
+   the cells when Jerry supplies them (missing-copy list, SYSTEM.md). The two
+   entity blocks are SEPARATE cells — contract §3; never merge them.
+   ============================================================ */
+.footer_component{position:relative}
+.footer_component.is-panel{background-color:var(--panel,#EBE9E2)}
+.footer_component.is-ink-soft{background-color:var(--ink-hero,#000000)}
+.footer_mark{display:block;height:2.5rem;width:auto}
+/* LINES: VERTICALS only (client 2026-09-09, in two steps - the horizontals came out, the
+   verticals came back). The ledger is one row of four cells over a rule-coloured ground with a
+   1px column gap, so the three lines it draws are all vertical and full cell height; row-gap is
+   0 and the legal strip sits outside the grid, so no horizontal can appear. Each cell carries
+   side padding so type never touches a line - flush at the container's own left edge only. */
+.footer_ledger{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:1px;background-color:var(--rule-plate,#454545)}
+/* the legal strip's opening line, brought back at SEAM WIDTH (client 2026-09-09: it must match
+   the line at the top of the footer, not the container). Same clamp the rails use, as negative
+   margins, so it lands on exactly the same pixels as every section seam - container +48px a
+   side at 1680, +24px at the ramp's floor. The drift script sweeps it like the rest. */
+.footer_rule{height:1px;background-color:var(--rule-plate,#454545);margin-left:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);margin-right:clamp(-3rem,0.65rem - 3.5vw,-1.5rem)}
+.footer_cell{background-color:var(--ink-hero,#000000);padding-top:clamp(3.5rem,5.81vw - 0.106rem,6rem);padding-bottom:clamp(3.5rem,5.81vw - 0.106rem,6rem);padding-left:0;padding-right:0}
+.footer_cell.is-brand{padding-right:clamp(2rem,4.65vw - 0.881rem,4rem)}
+.footer_cell.is-nav{padding-left:clamp(2rem,4.65vw - 0.881rem,4rem);padding-right:clamp(2rem,4.65vw - 0.881rem,4rem)}
+.footer_cell.is-entity{padding-left:clamp(2rem,4.65vw - 0.881rem,4rem);padding-right:clamp(2rem,4.65vw - 0.881rem,4rem)}
+.footer_tagline{font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--text-reversed-soft,#C9C9C9);max-width:20rem;margin-top:1.5rem;margin-bottom:0;text-wrap:pretty}
+.footer_index{display:grid;row-gap:0.25rem}
+.footer_index-link{display:flex;align-items:baseline;text-decoration:none;line-height:2rem;color:var(--text-reversed,#EDEDED);transition:transform 350ms cubic-bezier(0.22,1,0.36,1),color 350ms cubic-bezier(0.22,1,0.36,1)}
+.footer_index-link:hover{color:var(--orange,#FF6600)}
+.footer_index-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+.footer_index-name{font-size:var(--size-body,1rem);font-weight:300}
+/* --- entity blocks --- */
+.footer_entity-name{font-size:var(--size-label,0.75rem);font-weight:400;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-reversed,#EDEDED);margin-bottom:1.25rem}
+.footer_entity-lines{display:grid;row-gap:0.5rem}
+.footer_entity-line{font-size:var(--size-body,1rem);font-weight:400;line-height:1.55;color:var(--text-reversed-soft,#C9C9C9);max-width:18rem;margin-top:0;margin-bottom:0}
+/* --- legal-compliance strip --- */
+.footer_disclaimer-text{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);font-weight:400;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);max-width:60rem;margin-top:0;margin-bottom:0;text-wrap:pretty}
+.footer_legal-row{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:2rem;row-gap:0.5rem;margin-top:1.25rem}
+.footer_legal-link{font-size:var(--size-label,0.75rem);font-weight:400;color:var(--text-reversed-soft,#C9C9C9);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;line-height:2rem;transition:color 350ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 350ms cubic-bezier(0.22,1,0.36,1)}
+.footer_legal-link:hover{color:var(--orange,#FF6600);text-underline-offset:0.3em}
+.footer_legal-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+
+@media (min-width:1440px){
+  .navbar_links{column-gap:1.75rem}
+}
+
+/* ============================================================
+   R9-RESPONSIVE (2026-08-30) — tablet / landscape / mobile pass.
+   ≤991 styles the OPEN full-screen menu on existing classes; the closed state
+   is widget-owned (Webflow) and, in preview, behaviour-script-owned via inline
+   styles (§4f). No `display` authored on any w-* part. H1 is fluid per tier
+   via clamp() (§4e); every other rung steps in fixed values.
+   ============================================================ */
+@media (max-width:991px){
+  /* — bar — */
+  .navbar_container{padding-top:1rem;padding-bottom:1rem}
+  .navbar_logo-link{padding-top:0.625rem;padding-bottom:0.625rem;margin-top:-0.625rem;margin-bottom:-0.625rem}
+  .navbar_menu-button{width:2.75rem;overflow:visible;padding-top:0.875rem;padding-bottom:0.875rem;padding-left:0.625rem;padding-right:0.625rem;margin-right:-0.625rem;cursor:pointer}
+  .navbar_menu-button:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
+  .navbar_menu-bar{width:1.5rem;margin-left:auto;margin-right:auto;margin-bottom:0.4375rem;transition:transform 450ms cubic-bezier(0.22,1,0.36,1),opacity 250ms ease}
+  .navbar_menu-bar:last-child{margin-bottom:0}
+  /* — full-screen menu (styled OPEN) — */
+  .navbar_menu{flex-grow:0;position:absolute;top:100%;left:0;right:0;height:calc(100svh - 3.75rem);background-color:var(--ink-hero,#000000);overflow:auto}
+  .navbar_menu-inner{flex-direction:column;align-items:stretch;min-height:100%;column-gap:0;row-gap:0;padding-top:2.5rem;padding-bottom:2.5rem;padding-left:5%;padding-right:5%}
+  .navbar_links{flex-direction:column;align-items:stretch;column-gap:0;row-gap:0;margin-left:0;margin-right:0}
+  .navbar_link{font-size:2rem;font-weight:300;letter-spacing:-0.02em;line-height:1.25;padding-top:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--rule-plate,#454545);white-space:normal}
+  .navbar_button-wrapper{margin-top:auto;padding-top:3rem}
+  .button.is-nav{display:block;text-align:center;padding-top:1.125rem;padding-bottom:1.125rem;font-size:1.0625rem}
+  /* — rhythm — */
+  .padding-section-large{padding-top:9rem;padding-bottom:9rem}
+  .padding-section-medium{padding-top:8rem;padding-bottom:8rem}
+  .padding-section-small{padding-top:6rem;padding-bottom:6rem}
+  .padding-section-medium.is-hero{padding-top:7.5rem;padding-bottom:3.5rem}
+    /* — type: meets the base clamp's 992 floor exactly, so nothing steps UP as the
+       window narrows past the breakpoint — */
+  .heading-style-h1{font-size:clamp(2.375rem,1.5rem + 2.2vw,2.75rem)}
+  .heading-style-h2{font-size:2.25rem}
+  .text-lead{font-size:1.375rem}
+  .claim_lede{font-size:2rem;line-height:1.34}
+  /* — hero — */
+  .section_hero{min-height:100svh}
+  .hero_stack{margin-top:clamp(2rem,44.4svh - 18rem,3rem);margin-bottom:clamp(2rem,44.4svh - 18rem,3rem)}
+  .button{padding-top:1.0625rem;padding-bottom:1.0625rem}
+  /* — editorial grids stack on the SAME gap scale the bands use — */
+  .statement_grid{grid-template-columns:1fr;row-gap:1.5rem}
+  .statement_label-col{padding-top:0}
+  .statement_display-col{max-width:100%}
+.heading-style-h2.is-three-lines{max-width:15ch;text-wrap:balance}
+  .statement_body-col{max-width:100%}
+  .ways_grid{grid-template-columns:1fr;row-gap:4rem}
+    .ways_row{padding-top:2rem;padding-bottom:2rem}
+  /* — rails — */
+                .rules_h-bottom{left:-1.5rem;right:-1.5rem}
+  .footer_rule{margin-left:-1.5rem;margin-right:-1.5rem}
+  /* — footer: two columns of the four-cell band, then the legal strip — */
+  .footer_ledger{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .footer_cell{padding-top:3.5rem;padding-bottom:3.5rem}
+  .footer_mark{height:2rem}
+  .footer_index{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:2rem}
+  .footer_index-link{line-height:2.75rem}
+  .footer_legal-link{line-height:2.75rem}
+}
+@media (max-width:767px){
+  .heading-style-h1{font-size:clamp(2rem,1.2rem + 2.6vw,2.375rem)}
+  .heading-style-h2{font-size:1.9375rem}
+  .heading-style-h3{font-size:1.4375rem}
+  .ways_term{font-size:1.4375rem}
+  .claim_lede{font-size:1.75rem}
+  .navbar_link{font-size:1.75rem;padding-top:1.125rem;padding-bottom:1.125rem}
+  /* 40→36px fluid across the tier */
+  .heading-style-h1{font-size:clamp(2.25rem,1.55rem + 2.4vw,2.5rem)}
+  .heading-style-h2{font-size:1.5rem}
+  .heading-style-h3{font-size:1.5rem}
+  .text-lead{font-size:1.1875rem}
+  .text-size-regular.is-large{font-size:1.0625rem}
+  .claim_lede{font-size:1.5rem}
+  .ways_term{font-size:1.375rem}
+  .padding-section-large{padding-top:6.5rem;padding-bottom:6.5rem}
+  .padding-section-medium{padding-top:6rem;padding-bottom:6rem}
+  .padding-section-small{padding-top:5rem;padding-bottom:5rem}
+  .padding-section-medium.is-hero{padding-top:6rem;padding-bottom:3.5rem}
+    .hero_stack{max-width:100%;margin-top:2rem;margin-bottom:2rem}
+  .hero_lead-block{max-width:100%;margin-top:1.75rem}
+  .statement_grid{row-gap:1.5rem}
+  .ways_grid{row-gap:4rem}
+  .ways_row{padding-top:1.75rem;padding-bottom:1.75rem}
+  .footer_cell{padding-top:3rem;padding-bottom:3rem}
+  .close_stack.is-box{aspect-ratio:auto;padding:2.5rem}
+}
+@media (max-width:479px){
+  .heading-style-h1{font-size:clamp(1.75rem,1rem + 2.6vw,2rem)}
+  .heading-style-h2{font-size:1.6875rem}
+  .heading-style-h3{font-size:1.375rem}
+  .ways_term{font-size:1.375rem}
+  .claim_lede{font-size:1.5625rem}
+  .footer_ledger{grid-template-columns:minmax(0,1fr)}
+  .footer_cell.is-brand{padding-right:0}
+  .footer_cell.is-nav{padding-left:0;padding-right:0}
+  .footer_cell.is-entity{padding-left:0;padding-right:0}
+  .navbar_logo{height:1.5rem}
+  .navbar_menu{height:calc(100svh - 3.5rem)}
+  .navbar_link{font-size:1.5rem;padding-top:1rem;padding-bottom:1rem}
+  /* 34→30px fluid across the tier */
+  .heading-style-h1{font-size:clamp(1.875rem,1.4rem + 2.5vw,2.125rem)}
+  .heading-style-h2{font-size:1.375rem}
+  .heading-style-h3{font-size:1.25rem}
+  .text-lead{font-size:1.125rem}
+  .claim_lede{font-size:1.3125rem}
+  .ways_term{font-size:1.25rem}
+  .padding-section-large{padding-top:5rem;padding-bottom:5rem}
+  .padding-section-medium{padding-top:5rem;padding-bottom:5rem}
+  .padding-section-small{padding-top:4rem;padding-bottom:4rem}
+  .padding-section-medium.is-hero{padding-top:5.5rem;padding-bottom:3rem}
+  .button-row{flex-direction:column;align-items:stretch;row-gap:0.75rem}
+  .button{text-align:center}
+      .rules_h-bottom{left:0;right:0}
+  .footer_rule{margin-left:0;margin-right:0}
+  .footer_cell{padding-top:2.5rem;padding-bottom:2.5rem}
+  .footer_mark{height:1.75rem}
+  .footer_legal-row{column-gap:1.25rem}
+}
+
+
+/* ============================================================================
+   ADDED on operator instruction: (a) a TWO-COLUMN hero, (b) THE DOCUMENT FIELD in the second
+   column, animated. Nothing above this line was touched.
+
+   THE FIELD: a ruled well holding sixty paper-proportioned tiles (1 : 1.31, US Letter) of
+   which SIX are lit and THREE name themselves. The hot columns are HAND-PLACED at
+   7 - 5 - 4 - 9 - 2 - 3: no two share a column, none touch, the order is non-monotonic. No
+   random function produces that, and the positions are not generated.
+   The three ruled lines per tile are one ::before plus two zero-blur box-shadow clones, and
+   the lit face is #2A1200 - orange at ~8% over black - so a hot tile is lit from WITHIN
+   rather than outlined. Self-contained literal hex values; this sheet needs no new tokens.
+   ============================================================================ */
+.hero_split{display:grid;grid-template-columns:minmax(0,40fr) minmax(0,60fr);column-gap:clamp(2rem,4.65vw - 1.11rem,3.5rem);align-items:start}
+@media (min-width:1440px){.hero_split{align-items:center}}
+.hero_column{min-width:0}
+/* THE FIELD BREAKS THE CONTAINER on the right, which is the one place on the page anything
+   does. No box, no border, no fill: it is the tiles on the black ground, so the only greys
+   in the hero are the documents themselves. The hero clips the overflow so the page never
+   gains a horizontal scrollbar. */
+.hero_column.is-field{display:block}
+.doc-field{width:calc(100% + 5vw + 8rem);margin-left:-8rem;max-width:none}
+/* A DESCENDING STAIRCASE: thirteen filings in the top row and one fewer in every row below.
+   The rows are RIGHT-aligned, so the stack falls away to the left and the longest row reaches
+   back past its own column into the type column's upper air - the one place on the page
+   anything crosses the grid. Tile width is fixed, which is what makes the rows unequal without
+   any per-row arithmetic. */
+.doc-field_grid{display:grid;row-gap:1.375rem}
+.doc-row{display:flex;justify-content:flex-end;column-gap:0.5rem}
+.doc-tile{flex-grow:0;flex-shrink:0;flex-basis:4rem}
+/* the tile: paper-proportioned (1 : 1.31, US Letter), one hairline edge, and THREE ruled
+   lines of UNEQUAL length - two full and one short, the way a real paragraph ends. That
+   raggedness is the whole difference between a document and a placeholder rectangle. */
+/* ONE duration for the whole tile: face and edge move together on the same curve, so a
+   document surfaces as a single object instead of snapping its edge and then filling. */
+.doc-tile{position:relative;aspect-ratio:1 / 1.31;background-color:#080808;border:1px solid #242424;transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1),border-color 2200ms cubic-bezier(0.33,0,0.2,1),opacity 520ms cubic-bezier(0.16,1,0.3,1)}
+.doc-tile::before{content:"";position:absolute;left:0.5rem;top:0.75rem;right:0.5rem;height:1px;background-color:#3A3A3A;box-shadow:0 6px 0 #242424;transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1)}
+.doc-tile::after{content:"";position:absolute;left:0.5rem;top:1.5rem;width:52%;height:1px;background-color:#262626}
+.doc-tile.is-hot{background-color:#2A1200;border-color:#FF6600}
+.doc-tile.is-hot::before{background-color:#C0600B;box-shadow:0 6px 0 #93490A;transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1)}
+.doc-tile.is-hot::after{background-color:#6B3504}
+.doc-tile_mark{position:absolute;right:0.25rem;bottom:0.25rem;width:0.5625rem;height:auto;display:block;opacity:1;transition:opacity 1500ms cubic-bezier(0.33,0,0.2,1)}
+.doc-tile_mark.is-dim{opacity:0}
+/* the caption is CLIENT copy (cap table / IP assignment / customer MSA) so it is a real
+   classed element, never pseudo content. Its 14px leader line is decorative, so it is a pseudo. */
+.doc-tile_cap{position:absolute;left:0;top:calc(100% + 0.4375rem);font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;color:#FF6600;white-space:nowrap;opacity:1;transition:opacity 1500ms cubic-bezier(0.33,0,0.2,1)}
+.doc-tile_cap.is-dim{opacity:0}
+.doc-tile_cap::before{content:"";position:absolute;left:0;top:-0.375rem;width:0.875rem;height:1px;background-color:#FF6600}
+@media (max-width:991px){
+  .hero_split{grid-template-columns:1fr;row-gap:3.5rem}
+  .doc-field{width:calc(100% + 5vw);margin-left:0}
+  .doc-field_grid{row-gap:1.25rem}
+  .doc-tile{flex-basis:3.25rem}
+}
+@media (max-width:767px){
+  .heading-style-h1{font-size:clamp(2rem,1.2rem + 2.6vw,2.375rem)}
+  .heading-style-h2{font-size:1.9375rem}
+  .heading-style-h3{font-size:1.4375rem}
+  .ways_term{font-size:1.4375rem}
+  .claim_lede{font-size:1.75rem}
+  .doc-tile{flex-basis:3rem}
+  .doc-field_grid{row-gap:1.125rem}
+  .doc-tile_cap{font-size:0.75rem;letter-spacing:0.02em}
+}
+@media (max-width:479px){
+  .heading-style-h1{font-size:clamp(1.75rem,1rem + 2.6vw,2rem)}
+  .heading-style-h2{font-size:1.6875rem}
+  .heading-style-h3{font-size:1.375rem}
+  .ways_term{font-size:1.375rem}
+  .claim_lede{font-size:1.5625rem}
+  .doc-tile{flex-basis:3rem}
+  .doc-field_grid{row-gap:1rem}
+  .doc-tile::after{top:1.25rem}
+  .doc-tile_cap{font-size:0.75rem;letter-spacing:0}
+}
+
+
+/* ============================================================================
+   THE LINE SYSTEM, REDUCED on operator instruction: a line is now a SECTION DIVIDER and
+   nothing else. Every vertical rail is gone, and so is every horizontal that was not
+   separating two sections - the section-opener rule, the ways row rules and the method rule.
+   What survives is the seam at each section's lower edge, plus the footer's own rule, and the
+   orange drift still runs along them - brighter (0.85, was 0.55).
+   ============================================================================ */
+.rules_h-bottom{background-color:var(--rule-plate,#454545)}
+.footer_rule{background-color:var(--rule-plate,#454545)}
+
+
+/* ============================================================================
+   ADDED: section_intro (the paragraph moved out of the hero) and the About dropdown.
+   ============================================================================ */
+.section_intro{position:relative;overflow:hidden;background-color:var(--ink-hero,#000000)}
+/* the illustration bleeds off the right edge and sits BEHIND the measure; the content wrapper
+   is promoted so the paragraph always paints over it. */
+.padding-global.is-layer{position:relative;z-index:1}
+.intro_art{position:absolute;top:50%;right:-8vw;left:auto;width:clamp(30rem,50vw,60rem);pointer-events:none;transform:translateY(-50%);will-change:transform}
+.intro_art-svg{position:absolute;top:0;left:0;display:block;width:100%;height:auto;overflow:visible;fill:var(--orange,#FF6600)}
+/* the ghost is the rest state and is never clipped, so the mark is present before a single
+   frame runs. The ink is the same solid path, swept. No stroke anywhere - the logo has none. */
+.intro_art-svg.is-ghost{position:relative;opacity:0.05}
+.intro_art-svg.is-ink{opacity:0.17;clip-path:inset(0 0 0 0);will-change:clip-path}
+.intro_stack{max-width:56rem}
+/* the moved paragraph is the section's whole content, so it takes a display measure rather
+   than the body lead rung: 26px at the 992 floor rising to 34px. The three emphasised phrases
+   are the client's own words at Bold 700 - what the firm is, what it does, and when. */
+.intro_lede{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:clamp(1.625rem,1.16vw + 0.9rem,2.125rem);line-height:1.42;letter-spacing:-0.015em;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.intro_lede-em{font-weight:700;color:var(--text-reversed,#EDEDED)}
+.navbar_dropdown{position:relative}
+.navbar_dropdown::after{content:"";position:absolute;top:100%;left:-1.75rem;width:19.5rem;height:calc(clamp(1rem,1.5vw,1.5rem) + 2px);pointer-events:none}
+.navbar_dropdown.w--open::after{pointer-events:auto}
+.navbar_dropdown-toggle{padding:0;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:3rem;color:var(--text-reversed,#EDEDED);text-decoration:none;white-space:nowrap;cursor:pointer;transition:color 350ms cubic-bezier(0.22,1,0.36,1)}
+.navbar_dropdown-toggle:hover{color:var(--orange,#FF6600)}
+.navbar_dropdown-toggle:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
+.navbar_dropdown-trigger{display:flex;align-items:center;column-gap:0.4375rem}
+.navbar_dropdown-label{white-space:nowrap}
+.navbar_dropdown-caret{width:0.375rem;height:0.375rem;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg) translateY(-0.0625rem);transition:transform 280ms cubic-bezier(0.22,1,0.36,1)}
+/* the panel: one step off black, one hairline, square, and generous - the premium signal here
+   is precision and air, not ornament. */
+/* the panel: one step off black so it reads as a surface rather than a hole, one hairline,
+   square, and GENEROUS - the premium signal in a menu is air and precision, not ornament. */
+/* the panel hangs off the BAR, not off the toggle: its top sits exactly on the navbar's own
+   bottom hairline, so the two read as one edge. The offset is the navbar container's own
+   padding-bottom, which is what puts it there at every width. It carries no top border of its
+   own - the orange rule that draws on opening is the panel's top edge. */
+.navbar_dropdown-list{position:absolute;top:calc(100% + clamp(1rem,1.5vw,1.5rem));left:-1.75rem;min-width:19.5rem;background-color:#080808;border:1px solid #242424;border-top-width:0;padding-top:1.375rem;padding-bottom:1.375rem;opacity:0;clip-path:inset(0 0 100% 0)}
+/* the drawn top edge: the panel's opening signature, and the one orange element in the bar */
+.navbar_dropdown-edge{position:absolute;top:0;left:-1px;right:-1px;height:1px;background-color:var(--orange,#FF6600);transform:scaleX(0);transform-origin:left center}
+.navbar_dropdown-inner{display:grid;row-gap:0.125rem}
+/* no hover slab: that is the generic move and it makes a menu read as a table. The item takes
+   the page's own leader-line device instead - a 12px orange hairline drawing in beside it in
+   the panel's left gutter - and the ink steps up. Nothing jumps, nothing highlights. */
+.navbar_dropdown-link{position:relative;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.5;letter-spacing:0.005em;color:#A8A8A8;text-decoration:none;padding:1rem 2rem 1rem 3.5rem;transition:color 420ms cubic-bezier(0.22,1,0.36,1)}
+.navbar_dropdown-link::before{content:"";position:absolute;left:1.5rem;top:1.5625rem;width:0;height:1px;background-color:var(--orange,#FF6600);transition:width 420ms cubic-bezier(0.22,1,0.36,1)}
+.navbar_dropdown-link:hover{color:var(--text-reversed,#EDEDED)}
+.navbar_dropdown-link:hover::before{width:0.875rem}
+.navbar_dropdown-link:focus-visible::before{width:0.875rem}
+.navbar_dropdown-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:-2px}
+@media (max-width:991px){
+  .navbar_dropdown-toggle{font-size:2rem;font-weight:400;letter-spacing:-0.02em;line-height:1.25;padding-top:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--rule-plate,#454545);white-space:normal}
+  .navbar_dropdown-trigger{justify-content:space-between}
+  .navbar_dropdown-caret{width:0.5rem;height:0.5rem}
+  .navbar_dropdown-list{position:static;top:auto;left:auto;min-width:0;background-color:transparent;border-width:0;padding-top:0.75rem;padding-bottom:1.25rem}
+  .navbar_dropdown-link{font-size:1.25rem;padding:0.875rem 0 0.875rem 1.75rem}
+  .navbar_dropdown-link::before{left:0;top:1.4375rem;width:0.75rem}
+}
+@media (max-width:767px){
+  .heading-style-h1{font-size:clamp(2rem,1.2rem + 2.6vw,2.375rem)}
+  .heading-style-h2{font-size:1.9375rem}
+  .heading-style-h3{font-size:1.4375rem}
+  .ways_term{font-size:1.4375rem}
+  .claim_lede{font-size:1.75rem} .navbar_dropdown-toggle{font-size:1.75rem;padding-top:1.125rem;padding-bottom:1.125rem} }
+@media (max-width:479px){
+  .heading-style-h1{font-size:clamp(1.75rem,1rem + 2.6vw,2rem)}
+  .heading-style-h2{font-size:1.6875rem}
+  .heading-style-h3{font-size:1.375rem}
+  .ways_term{font-size:1.375rem}
+  .claim_lede{font-size:1.5625rem} .navbar_dropdown-toggle{font-size:1.5rem;padding-top:1rem;padding-bottom:1rem} }
+
+
+/* ============================================================================
+   section_close - THE CTA SECTION ABOVE THE FOOTER. The second and last CTA moment on the
+   page; the hero carries the first, and there is no third. Left-aligned like every other
+   section, one measure, and the button is the frozen .button.is-reversed - the mockup's
+   solid-orange CTA is not adopted.
+   ============================================================================ */
+.section_close{position:relative;background-color:var(--ink-hero,#000000)}
+/* NO BOX became A BOX again (client 2026-09-09): the closing statement sits in the same panel
+   construction the testimonial cards use - #080808 on one #242424 hairline, square corners, the
+   .proof_card padding ramp - at a 1:1 ratio, centred in the container, with its stack optically
+   centred inside it. Design consistency: the numbers are the card's, not new ones. */
+.close_stack{max-width:56rem;margin-left:auto;margin-right:auto;text-align:center}
+.close_stack.is-box{display:flex;flex-direction:column;justify-content:center;aspect-ratio:1 / 1;width:100%;max-width:44rem;background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem)}
+.close_title-block{max-width:44rem;margin-left:auto;margin-right:auto;margin-top:1.5rem}
+/* 26rem + balance sets the closing lead as THREE even lines at desktop (measured: the string
+   is 1055px on one line at 19px, so a 416px measure balances to 3) */
+.close_lead-block{max-width:26rem;margin-left:auto;margin-right:auto;margin-top:1.5rem;text-wrap:balance}
+.text-note{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.5;color:#8E8E8E;margin-top:2.5rem;margin-bottom:0}
+@media (max-width:479px){
+  .heading-style-h1{font-size:clamp(1.75rem,1rem + 2.6vw,2rem)}
+  .heading-style-h2{font-size:1.6875rem}
+  .heading-style-h3{font-size:1.375rem}
+  .ways_term{font-size:1.375rem}
+  .claim_lede{font-size:1.5625rem}  }
+
+
+/* ============================================================================
+   section_proof - TESTIMONIALS, from the frame the operator attached. Taken: wide cards in
+   ONE row, the mark top-left, the statement large, the name and role bottom-left, a square
+   plate bottom-right, and the row cropped by the container edge so it reads as a strip rather
+   than a closed set of three. Not taken: the serif, the centred heading, the rounded corners,
+   the quote marks.
+   On our ladder: black section, one dark-grey card, one hairline, square corners, Pluto Sans,
+   heading LEFT. The plate is OUR ruled field at 6 x 6 with one cell lit - which is why this
+   layout suits us at all. Never a portrait, never a stock headshot, no stars, no carousel.
+   ============================================================================ */
+.section_proof{position:relative;overflow:hidden;background-color:var(--ink-hero,#000000)}
+.proof_head{max-width:none;margin-bottom:clamp(3rem,2.326vw + 1.556rem,4rem)}
+.proof_title-block{max-width:none;margin-top:1.5rem}
+/* the slider: the next card stays cropped at the container edge, which is what makes it read
+   as a strip you can pull rather than a closed set of three. */
+.proof_slider{width:calc(100% + 5vw + 1.5rem);overflow:hidden}
+.proof_slide{height:auto;display:flex;align-items:stretch}
+/* one row: the previous arrow at the container's left edge, the bar running the whole span
+   between them, the next arrow at the right edge. The arrows are siblings of the bar rather
+   than a nested pair, which is what puts the bar BETWEEN them instead of under them. */
+.proof_controls{display:flex;align-items:center;column-gap:clamp(1.25rem,2.5vw,2rem);margin-top:clamp(3rem,2.326vw + 1.556rem,4rem)}
+.proof_progress{position:relative;flex-grow:1;height:1px;background-color:#1C1C1C}
+.proof_progress-fill{position:absolute;top:0;left:0;height:1px;width:0;background-color:var(--orange,#FF6600);transition:width 620ms cubic-bezier(0.22,1,0.36,1)}
+.proof_arrow{display:flex;align-items:center;justify-content:center;width:3.25rem;height:2.75rem;border:1px solid #242424;cursor:pointer;opacity:0.8;transition:opacity 420ms cubic-bezier(0.22,1,0.36,1),border-color 420ms cubic-bezier(0.22,1,0.36,1)}
+.proof_arrow:hover{opacity:1;border-color:#565656}
+.proof_arrow:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+.proof_arrow-icon{display:block;width:1.5rem;height:auto}
+.proof_card{display:flex;flex-direction:column;flex-grow:1;width:100%;min-height:clamp(21rem,20.9vw + 1.65rem,27rem);background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);transition:background-color 520ms cubic-bezier(0.16,1,0.3,1),border-color 520ms cubic-bezier(0.16,1,0.3,1)}
+.proof_card:hover{background-color:#0E0E0E;border-color:#565656}
+/* align-self is load-bearing: the card is a column flex container, so the default stretch
+   would override width:auto and the SVG would centre itself across the whole card. */
+/* each client logo is ONE svg carrying its own mark and its own typography, so the three read
+   as three brands rather than three icons beside the same typeface. They are invented marks -
+   no real company is named, which keeps a fabricated testimonial from becoming a false
+   endorsement claim on a law firm's site. */
+.proof_lockup{display:flex;align-items:center;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+/* rest: greyscale, dimmed. On card hover the behaviour script lifts logo and photo to full colour (a descendant :hover selector cannot ship - §4a - so the state is set inline at runtime, §4f). */
+.proof_logo{display:block;align-self:flex-start;height:1.625rem;width:auto;opacity:0.78;filter:grayscale(100%);transition:opacity 520ms cubic-bezier(0.16,1,0.3,1),filter 520ms cubic-bezier(0.16,1,0.3,1)}
+
+.proof_quote{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:1.125rem;line-height:1.5;letter-spacing:-0.01em;min-height:6.75rem;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem);text-wrap:pretty}
+.proof_foot{display:flex;align-items:center;column-gap:1.25rem;margin-top:auto}
+.proof_attrib{display:grid;row-gap:0.375rem;max-width:18rem}
+.proof_role{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1rem;font-weight:400;line-height:1.4;color:var(--text-reversed,#EDEDED)}
+.proof_org{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.4;color:#8E8E8E}
+.proof_plate{flex-grow:0;flex-shrink:0;width:4.5rem;background-color:#080808;border:1px solid #242424;overflow:hidden}
+/* free stock, greyscale and low-contrast so the whole set reads as one commission rather than
+   three photographs. Placeholder imagery - client photography replaces it. */
+.proof_photo{display:block;width:100%;aspect-ratio:1 / 1;object-fit:cover;object-position:50% 26%;filter:grayscale(100%) contrast(1.02) brightness(0.94);transition:filter 520ms cubic-bezier(0.16,1,0.3,1)}
+@media (max-width:991px){
+  .proof_card{min-height:0}
+  .proof_quote{min-height:0}
+  .proof_slider{width:calc(100% + 5vw)}
+  .proof_lockup{margin-bottom:2.25rem}
+  .proof_quote{margin-bottom:2.5rem}
+  .proof_foot{flex-wrap:wrap;row-gap:1.5rem}
+  .proof_attrib{max-width:100%}
+}
+@media (max-width:479px){
+  .heading-style-h1{font-size:clamp(1.75rem,1rem + 2.6vw,2rem)}
+  .heading-style-h2{font-size:1.6875rem}
+  .heading-style-h3{font-size:1.375rem}
+  .ways_term{font-size:1.375rem}
+  .claim_lede{font-size:1.5625rem} .proof_plate{width:4rem} .proof_arrow{width:2.75rem;height:2.75rem} }
+
+
+/* ============================================================================
+   section_ways - THE FLIGHT OF STEPS (rebuilt 2026-09-09 on client instruction: the old
+   staircase overflowed the container to the RIGHT, could not reach the empty air in the
+   LEFT column, and three floating boxes with no connection did not read as steps).
+   What changed:
+   · the three boxes TOUCH - column-gap 0, shared 1px edges - so the overlapped hairlines
+     draw the staircase silhouette themselves; no separate riser element needed
+   · the flight bleeds LEFT into the air under the heading column (negative margin-left) and
+     ends flush at the container's right edge (margin-right 0) - nothing overflows the page
+   · each tread opens with its step number at the caption rung, orange, with the same 14px
+     leader line the hero captions use; DOM order is now the reading order
+     Review 01 -> Sprint 02 -> Support 03, climbing bottom-left to top-right with the copy's
+     "most begin with a Review" escalation
+   Icons unchanged - one family, 1px grey structure, ONE 1.5px orange element each.
+   ============================================================================ */
+.ways_grid{display:grid;grid-template-columns:minmax(0,1fr);column-gap:clamp(2rem,2.326vw + 0.556rem,3rem);row-gap:clamp(3rem,4.5vw - 0.6rem,4.5rem);max-width:none;align-items:start}
+.ways_head{max-width:100%;margin-left:0;margin-right:0;text-align:left}
+.ways_list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1.5rem,2.326vw + 0.056rem,2.5rem);align-items:start;margin-top:calc(-4.5 * clamp(3rem,5vw - 1.75rem,5.5rem));margin-left:0;margin-right:0;max-width:none;justify-self:end;width:80%}
+.ways_box.is-step-1{margin-top:calc(6 * clamp(3rem,5vw - 1.75rem,5.5rem))}
+.ways_box.is-step-2{margin-top:calc(3 * clamp(3rem,5vw - 1.75rem,5.5rem))}
+.ways_box.is-step-3{margin-top:0}
+.ways_box{position:relative;display:flex;flex-direction:column;aspect-ratio:1 / 1;width:100%;min-width:0;min-height:clamp(19rem,19vw,23rem);background-color:#080808;border:1px solid #242424;padding:clamp(2rem,2.9vw - 0.2rem,3.25rem);transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
+.ways_box:hover{background-color:#0E0E0E;border-color:#3A3A3A;z-index:1}
+/* is-active is the reading pass: one box at a time takes a lighter edge and a step up in
+   ground, then hands it on. Set by the behaviour script; the rest state is all three equal,
+   which is a finished state. z-index 1 so the lit edge wins the shared border. */
+.ways_box.is-active{background-color:#0E0E0E;border-color:#565656;z-index:1}
+/* the step number is a small ruled TAB on the tread's top-right corner - a real classed element (client copy-adjacent, never pseudo content), boxed in the same hairline as the tread, orange figure. The icon sits directly above its heading, where it belongs. */
+.ways_step-num{position:absolute;top:-1px;right:-1px;min-width:2.75rem;padding:0.5rem 0.75rem;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;text-align:center;color:#FF6600;background-color:#000000;border:1px solid #242424}
+.ways_icon{will-change:transform,opacity}
+.ways_icon{display:block;height:2.5rem;width:auto;align-self:flex-start;margin-left:0;margin-right:auto;margin-top:0;margin-bottom:clamp(1.5rem,2.4vw - 0.5rem,2.5rem)}
+.ways_lead-block{max-width:26rem;margin-top:1.5rem}
+@media (max-width:991px){
+  .ways_grid{grid-template-columns:1fr;row-gap:3rem}
+  .ways_list{grid-template-columns:1fr;row-gap:1.25rem;margin-top:0;margin-left:0;margin-right:0;width:100%}
+  .ways_box{aspect-ratio:auto;min-height:0}
+  .ways_box.is-step-1{margin-top:0}
+  .ways_box.is-step-2{margin-top:0}
+  .ways_icon{margin-top:0}
+}
+
+
+@media (max-width:991px){
+  .intro_art{right:-14vw;width:clamp(22rem,64vw,34rem)}
+}
+@media (max-width:767px){
+  .heading-style-h1{font-size:clamp(2rem,1.2rem + 2.6vw,2.375rem)}
+  .heading-style-h2{font-size:1.9375rem}
+  .heading-style-h3{font-size:1.4375rem}
+  .ways_term{font-size:1.4375rem}
+  .claim_lede{font-size:1.75rem}
+  .intro_art{left:18%}
+}
+
+@media (max-width:991px){ .padding-global.is-bar{padding-left:5%;padding-right:5%} }
+
+@media (max-width:991px){
+  .navbar_dropdown-list{opacity:1;clip-path:none}
+  .navbar_dropdown-edge{display:none}
+}
+
+@media (max-width:767px){
+  .heading-style-h1{font-size:clamp(2rem,1.2rem + 2.6vw,2.375rem)}
+  .heading-style-h2{font-size:1.9375rem}
+  .heading-style-h3{font-size:1.4375rem}
+  .ways_term{font-size:1.4375rem}
+  .claim_lede{font-size:1.75rem} .intro_lede{font-size:1.4375rem;line-height:1.45} }
+@media (max-width:479px){
+  .heading-style-h1{font-size:clamp(1.75rem,1rem + 2.6vw,2rem)}
+  .heading-style-h2{font-size:1.6875rem}
+  .heading-style-h3{font-size:1.375rem}
+  .ways_term{font-size:1.375rem}
+  .claim_lede{font-size:1.5625rem} .intro_lede{font-size:1.3125rem} }
+
+@media (max-width:479px){
+  .heading-style-h1{font-size:clamp(1.75rem,1rem + 2.6vw,2rem)}
+  .heading-style-h2{font-size:1.6875rem}
+  .heading-style-h3{font-size:1.375rem}
+  .ways_term{font-size:1.375rem}
+  .claim_lede{font-size:1.5625rem}  }
+
+/* the testimonials heading is short enough to hold one line at every desktop width; balance
+   is off and wrapping is prevented so it never breaks into two. */
+.heading-style-h2.is-oneline{white-space:nowrap;text-wrap:nowrap}
+@media (max-width:767px){ .heading-style-h2.is-oneline{white-space:normal;text-wrap:pretty} }
+
+
+/* ============================================================================
+   section_insights - LATEST INSIGHTS, redesigned on the second frame the operator attached
+   ("get inspired with the layout attached"). TAKEN: the label over a large heading on the left
+   with a short supporting paragraph set beside it on the right, then a 3 x 2 grid of equal link
+   cards, each opening with a small mark, holding a two-line title, and closing with one action
+   line pinned to its bottom edge. NOT TAKEN: the teal colour field (the ladder does the
+   sectioning - §10's tie-breaker says one pine panel or none), the rounded corners, the icon
+   library.
+   The card mark is OUR OWN ruling at mark scale - three hairlines, exactly one orange - which is
+   the same device the section's earlier plate used, shrunk into the reference's icon slot.
+   The grid uses ONE gap value on both axes, so the lattice is symmetrical by construction.
+   ============================================================================ */
+.section_insights{position:relative;background-color:var(--ink-hero,#000000)}
+/* head: label over the heading, left, on the same 4rem head-to-content rung the proof uses. */
+.insights_head{max-width:none;margin-bottom:clamp(3rem,2.326vw + 1.556rem,4rem)}
+.insights_title-block{max-width:none;margin-top:1.5rem}
+.insights_grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1rem,1.163vw + 0.278rem,1.5rem)}
+.insights_card{display:flex;flex-direction:column;aspect-ratio:1 / 1;background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);text-decoration:none;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
+.insights_card:hover{background-color:#0E0E0E;border-color:#3A3A3A}
+.insights_card:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+/* the mark: the document abstraction at 28px, one orange rung. Never an icon-library glyph. */
+.insights_mark{display:grid;row-gap:0.3125rem;width:1.75rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+.insights_line{height:1px;background-color:#3A3A3A}
+.insights_line.is-short{width:52%}
+.insights_line.is-mid{width:76%}
+.insights_line.is-accent{width:38%;background-color:var(--orange,#FF6600)}
+/* ONE card-title rung for every card on the page - insights and method alike (client
+   2026-09-09: smaller font, bolder weight). 22px is the brief's own h3 rung and Medium 500 is
+   in the brand's own specimen, so this adds a rung the system already names rather than a
+   one-off. */
+.heading-style-h3.is-card{font-size:1.375rem;font-weight:500;letter-spacing:-0.015em}
+.insights_card-title{max-width:22rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+/* the action line closes every card on the same baseline, underlined on the page's own link
+   vocabulary (client 2026-09-09: the orange leader came off, the underline went on). */
+.insights_action{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.4;color:var(--text-reversed,#EDEDED);text-decoration:underline;text-underline-offset:0.5em;text-decoration-thickness:1px;margin-top:auto;transition:text-underline-offset 420ms cubic-bezier(0.22,1,0.36,1),text-decoration-thickness 420ms cubic-bezier(0.22,1,0.36,1)}
+@media (max-width:991px){
+  .insights_grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .insights_card{aspect-ratio:auto;padding:2.5rem}
+  .insights_mark{margin-bottom:2.25rem}
+  .insights_card-title{max-width:100%;margin-bottom:2.5rem}
+}
+@media (max-width:479px){
+  .insights_grid{grid-template-columns:minmax(0,1fr)}
+}
