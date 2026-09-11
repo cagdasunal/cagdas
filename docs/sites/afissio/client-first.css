@@ -8,7 +8,7 @@
    WHAT R13 CHANGED, AND NOTHING ELSE: (a) every selector is now a chain some element wears, with
    at most two classes and never a global used as a combo; (b) the nine Webflow widget-part
    classes carry no display / position / gap / flex-direction / justify-content / align-items -
-   Webflow's own base (_live/webflow-base.css) or a plain classed element we own carries those;
+   Webflow's own base (live/webflow-base.css) or a plain classed element we own carries those;
    (c) stacked pseudos (:hover::before) are gone, rebuilt as single-state rules on one class;
    (d) the preview-only rules moved out to pages/preview-reset.css; (e) repeated literal colours
    became tokens at the same hex. NO token value, type rung, spacing value, container, radius,
@@ -790,8 +790,14 @@
    so this sheet and the markup are unchanged by that pin.
    ============================================================================ */
 .ways_grid{display:grid;grid-template-columns:minmax(0,1fr);column-gap:clamp(2rem,2.326vw + 0.556rem,3rem);row-gap:clamp(3rem,4.5vw - 0.6rem,4.5rem);max-width:none;align-items:start}
-.ways_head{max-width:100%;margin-left:0;margin-right:0;text-align:left}
-.ways_list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1.5rem,2.326vw + 0.056rem,2.5rem);align-items:start;margin-top:0;margin-left:0;margin-right:0;max-width:none;width:100%}
+/* client 2026-09-11: the engage head is CENTRED (tagline, heading, lead, CTA). text-align lives on
+   the head alone - never on .ways_grid - so the three boxes keep their left-aligned text. */
+.ways_head{max-width:100%;margin-left:auto;margin-right:auto;text-align:center}
+/* the tagline-to-heading gap is ONE rung system-wide: .method_title-block, .proof_title-block,
+   .insights_title-block and .close_title-block all carry margin-top:1.5rem. The engage head wore
+   a bare h2, so its tagline sat tight against the heading - it gets the same wrapper (client 2026-09-11). */
+.ways_title-block{max-width:none;margin-top:1.5rem}
+.ways_list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1.5rem,2.326vw + 0.056rem,2.5rem);align-items:start;margin-top:0;margin-left:auto;margin-right:auto;max-width:78rem;width:100%}
 .ways_box{position:relative;display:flex;flex-direction:column;aspect-ratio:1 / 1;width:100%;min-width:0;min-height:clamp(19rem,19vw,23rem);background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2rem,2.9vw - 0.2rem,3.25rem);transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
 .ways_box:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:var(--rule-ink,#3A3A3A);z-index:1}
 /* WP3.5 - `.ways_box.is-active` DELETED: a runtime state class, and no script has set it since
@@ -801,7 +807,7 @@
 .ways_step-num{position:absolute;top:-1px;right:-1px;min-width:2.75rem;padding:0.5rem 0.75rem;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;text-align:center;color:var(--orange,#FF6600);background-color:var(--ink-hero,#000000);border:1px solid var(--edge-card,#242424);margin-top:0;margin-bottom:0}
 .ways_icon{will-change:transform,opacity}
 .ways_icon{display:block;height:2.5rem;width:auto;align-self:flex-start;margin-left:0;margin-right:auto;margin-top:0;margin-bottom:clamp(1.5rem,2.4vw - 0.5rem,2.5rem)}
-.ways_lead-block{max-width:26rem;margin-top:1.5rem}
+.ways_lead-block{max-width:44rem;margin-left:auto;margin-right:auto;margin-top:1.5rem}
 @media (max-width:991px){
   .ways_grid{grid-template-columns:1fr;row-gap:3rem}
   .ways_list{grid-template-columns:1fr;row-gap:1.25rem;margin-top:0;margin-left:0;margin-right:0;width:100%}
@@ -892,7 +898,7 @@
 .insights_card:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:var(--rule-ink,#3A3A3A)}
 .insights_card:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
 /* the drawing: the article's own chart at the offer icons' weight. Never an icon-library glyph. */
-.insights_plate{display:block;align-self:flex-start;width:auto;height:4.5rem;margin-top:0;margin-bottom:clamp(1.25rem,2.33vw - 0.15rem,2.5rem)}
+.insights_plate{display:block;align-self:flex-start;width:auto;height:3rem;margin-top:0;margin-left:0;margin-right:auto;margin-bottom:clamp(1.25rem,2.33vw - 0.15rem,2.5rem)}
 /* ONE card-title rung for every card on the page - insights and method alike (client
    2026-09-09: smaller font, bolder weight). 22px is the brief's own h3 rung and Medium 500 is
    in the brand's own specimen, so this adds a rung the system already names rather than a

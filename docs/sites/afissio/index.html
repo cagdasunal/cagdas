@@ -1,13 +1,12 @@
-<!-- HANDOFF COPY. This is the export bundle, not the project source, so it carries none of the
-     source project's workspace markers - the Design System card and the seed page are
-     pages/homepage.html over there. Every path here is bundle-relative, and none of them climbs out of the bundle. -->
+<!-- @dsCard group="Pages" name="Homepage" subtitle="The working homepage, made buildable in Webflow: worn class chains, native Navbar and Dropdown, decorator scripts, the apex as an image. Nothing visible changed." viewport="1680x2600" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled homepage - navbar shell, two-column hero with the document field, and footer. Seed new page rounds from this." viewport="1680x2600" -->
 <!-- ROUND-TOKEN: R13-WEBFLOW-READY (the Webflow-readiness round, 2026-09-11). Previous token
      R12-BUGHERD-01. NOTHING VISIBLE CHANGED. What changed is what would have been lost silently
      on the way into Webflow:
-       WP1  one system - the page links ONE token sheet and ONE class sheet (homepage-tokens.css +
-            homepage-client-first.css), which are the live R12 sheets moved to the root. The two rival
+       WP1  one system - the page links the ROOT sheets now (../colors_and_type.css +
+            ../client-first.css), which are the live R12 sheets moved to the root. The two rival
             stacks are in _archive/.
-       WP2  live/webflow-base.css is linked FIRST - 85 rules copied verbatim from a live
+       WP2  ../live/webflow-base.css is linked FIRST - 85 rules copied verbatim from a live
             Webflow site, the layer the real page will really have. jQuery is the exact build
             every Webflow site loads.
        WP3  every section wrapper is now TWO nested divs (padding-global outside,
@@ -36,8 +35,8 @@
 <title>Homepage</title>
 <meta name="description" content="[COPY REQUESTED — meta description]">
 <link rel="stylesheet" href="live/webflow-base.css">
-<link rel="stylesheet" href="homepage-tokens.css">
-<link rel="stylesheet" href="homepage-client-first.css">
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="client-first.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <link rel="stylesheet" href="preview-reset.css">
 <script src="live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
@@ -223,9 +222,11 @@
 
 <div class="ways_grid">
 <div class="ways_head">
-<h2 class="heading-style-h2">Three ways to engage</h2>
+<!-- tagline: brand guide p2, client-sourced but flagged "currently" - confirm with Jerry -->
+<div class="tagline_row is-centered"><img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label is-reversed">Deal engineering before the due diligence begins.</p></div>
+<div class="ways_title-block"><h2 class="heading-style-h2">Three ways to engage</h2></div>
 <div class="ways_lead-block"><p class="text-size-regular">Engagements are scoped to where a company actually is. Most begin with a Review; the work escalates only when the record, or the timeline, calls for it.</p></div>
-<div class="button-row"><a href="/solutions" class="button is-ghost-reversed">Compare the engagements</a></div>
+<div class="button-row is-centered"><a href="/solutions" class="button is-ghost-reversed">Compare the engagements</a></div>
 </div>
 <div class="ways_list">
 <div class="ways_box">

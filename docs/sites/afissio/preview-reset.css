@@ -2,12 +2,12 @@
 
    Four rules and two properties that our deploy pipeline cannot carry, fenced off here so the
    class sheet no longer claims a cascade the real site will not have. Linked LAST, after
-   _live/webflow-base.css · colors_and_type.css · client-first.css.
+   live/webflow-base.css · colors_and_type.css · client-first.css.
 
    · `*{box-sizing:border-box}` and `body{margin:0}` — element selectors, dropped silently at
      deploy (F5). On the real site Webflow's own normalize supplies both: `html{box-sizing:
      border-box}` + `*,:before,:after{box-sizing:inherit}`, and `body{margin:0}` twice over. Those
-     two box-sizing lines are NOT among the 85 rules staged in _live/webflow-base.css, which is
+     two box-sizing lines are NOT among the 85 rules staged in live/webflow-base.css, which is
      why this file still has to carry them for the preview to lay out at all. They are a
      Webflow-provided default, NOT a manual deploy step.
    · `a` and `a:hover` — element selectors, dropped. They were preview-only insurance against the
@@ -15,7 +15,7 @@
      its own `color` and `text-decoration` (navbar_logo-link · navbar_link · navbar_dropdown-link ·
      button and its four variants · footer_index-link · footer_legal-link · insights_card), and
      `.text-link` is what deploys for an inline link. Verified with this file unlinked and
-     _live/webflow-base.css linked: every link renders identically.
+     live/webflow-base.css linked: every link renders identically.
    · font smoothing — both properties are blocked outright by the property filter. They go to the
      operator's site-wide custom code: MANUAL DEPLOY STEP #2. */
 *{box-sizing:border-box}

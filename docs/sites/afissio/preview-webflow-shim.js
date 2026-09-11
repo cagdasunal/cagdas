@@ -3,7 +3,7 @@
    ROUND-TOKEN: R13-WEBFLOW-READY (2026-09-11 · WP5)
 
    On the published site, webflow.js owns the Navbar and the Dropdown. The design preview has
-   Webflow's stylesheet (_live/webflow-base.css) but not its JavaScript, so without this file the
+   Webflow's stylesheet (live/webflow-base.css) but not its JavaScript, so without this file the
    widgets would never open and the preview would show a page the site does not have.
 
    This file does ONE thing: it emulates exactly the state changes webflow.js makes (F7), so
