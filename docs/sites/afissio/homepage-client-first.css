@@ -10,6 +10,11 @@
    page links it; it is not an archive.
    STILL FROZEN, per BRIEF.md section 3 - change these only on an explicit instruction: the
    container and rails, the whitespace rungs, the line system, and the buttons. */
+/* ROUND-TOKEN: R12-BUGHERD-01 — the client's eight BugHerd pins (2026-09-10). What this sheet
+   carries from that round: the hero document field is FLAT (no step, no left bleed), the three
+   offer boxes sit in ONE horizontal row at full container width, and Insights is three cards
+   whose mark is the article's own drawing. Nothing else in this sheet changed: no token, no type
+   rung, no section padding, no container, no radius, no button. */
 /* Afissio — Client-First V2 class layer. ROUND-TOKEN: R10-FLUID-DESKTOP (the 992→1680 desktop base
    is now fluid: section rhythm, rail offsets, grid tracks, gaps and every display rung ramp by
    clamp() between a 992 floor and the 1680 design values, so a 1000–1400px window is a designed
@@ -433,12 +438,19 @@ a:hover{color:var(--text-reversed,#EDEDED)}
    in the hero are the documents themselves. The hero clips the overflow so the page never
    gains a horizontal scrollbar. */
 .hero_column.is-field{display:block}
-.doc-field{width:calc(100% + 5vw + 8rem);margin-left:-8rem;max-width:none}
-/* A DESCENDING STAIRCASE: thirteen filings in the top row and one fewer in every row below.
-   The rows are RIGHT-aligned, so the stack falls away to the left and the longest row reaches
-   back past its own column into the type column's upper air - the one place on the page
-   anything crosses the grid. Tile width is fixed, which is what makes the rows unequal without
-   any per-row arithmetic. */
+/* THE FIELD IS FLAT (client pin #5, 2026-09-10): it no longer bleeds LEFT past its own column.
+   Its left edge now IS the field column's left edge, which is the whole reason a flat edge can
+   clear the type column - the staircase used to step away from the text exactly where the lead
+   and the button row are widest, and a straight edge cannot step, so it starts outside the text
+   instead. It still bleeds RIGHT into the page gutter and the hero still clips it, so the page
+   never gains a horizontal scrollbar. */
+.doc-field{width:calc(100% + 5vw);margin-left:0;max-width:none}
+/* A FLAT RECTANGLE, as in the client's own mockup: every row holds the SAME number of filings,
+   so the field's left edge is one straight vertical line. The rows stay RIGHT-aligned and the
+   tile width stays fixed; the behaviour script computes one column count for the whole field and
+   trims that same count from every row (from the left, never a named case), which is what keeps
+   the edge straight at every width. The nine named cases are placed by their distance from the
+   RIGHT edge - columns 2 to 6 - so no trim can ever reach one. */
 .doc-field_grid{display:grid;row-gap:1.375rem}
 .doc-row{display:flex;justify-content:flex-end;column-gap:0.5rem}
 .doc-tile{flex-grow:0;flex-shrink:0;flex-basis:4rem}
@@ -462,7 +474,6 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .doc-tile_cap::before{content:"";position:absolute;left:0;top:-0.375rem;width:0.875rem;height:1px;background-color:#FF6600}
 @media (max-width:991px){
   .hero_split{grid-template-columns:1fr;row-gap:3.5rem}
-  .doc-field{width:calc(100% + 5vw);margin-left:0}
   .doc-field_grid{row-gap:1.25rem}
   .doc-tile{flex-basis:3.25rem}
 }
@@ -663,26 +674,26 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 
 
 /* ============================================================================
-   section_ways - THE FLIGHT OF STEPS (rebuilt 2026-09-09 on client instruction: the old
-   staircase overflowed the container to the RIGHT, could not reach the empty air in the
-   LEFT column, and three floating boxes with no connection did not read as steps).
-   What changed:
-   · the three boxes TOUCH - column-gap 0, shared 1px edges - so the overlapped hairlines
-     draw the staircase silhouette themselves; no separate riser element needed
-   · the flight bleeds LEFT into the air under the heading column (negative margin-left) and
-     ends flush at the container's right edge (margin-right 0) - nothing overflows the page
-   · each tread opens with its step number at the caption rung, orange, with the same 14px
-     leader line the hero captions use; DOM order is now the reading order
-     Review 01 -> Sprint 02 -> Support 03, climbing bottom-left to top-right with the copy's
-     "most begin with a Review" escalation
-   Icons unchanged - one family, 1px grey structure, ONE 1.5px orange element each.
+   section_ways - ONE HORIZONTAL ROW (client pin #8, 2026-09-10: "please re-arrange these three
+   boxes in a horizontal line, not stepped"). Every step offset is gone AND so is the negative
+   pull that only worked because the boxes stepped away from the heading - flat boxes pulled up
+   would have sat on the heading and the lead, which breaks the never-cross-text rule.
+   The row therefore takes its own place in the section: BENEATH the heading block, at FULL
+   container width, as in the client's own mockup. Full width rather than the old flush-right
+   80% because at full width both of the row's edges are anchored on the same container rails
+   the heading sits on - which is what makes the new air under the heading deliberate instead of
+   left over - and because a flush-right 80% row hangs an unanchored hole under the heading.
+   The three boxes share one top edge and one bottom edge; they stay identical in size, square
+   where they were square, with the 19rem floor below that.
+   The 01/02/03 tabs stay: they are NUMBERING, not steps. .is-step-1/-2/-3 stay in the markup as
+   numbering hooks and carry no offset - hence no rule for them here.
+   Icons: all three boxes now carry the client's own bar glyph, lit cumulatively from the top
+   (Review 1 bar, Sprint 2, Support 3). Redrawn in brand/icons/ under the same three filenames,
+   so this sheet and the markup are unchanged by that pin.
    ============================================================================ */
 .ways_grid{display:grid;grid-template-columns:minmax(0,1fr);column-gap:clamp(2rem,2.326vw + 0.556rem,3rem);row-gap:clamp(3rem,4.5vw - 0.6rem,4.5rem);max-width:none;align-items:start}
 .ways_head{max-width:100%;margin-left:0;margin-right:0;text-align:left}
-.ways_list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1.5rem,2.326vw + 0.056rem,2.5rem);align-items:start;margin-top:calc(-4.5 * clamp(3rem,5vw - 1.75rem,5.5rem));margin-left:0;margin-right:0;max-width:none;justify-self:end;width:80%}
-.ways_box.is-step-1{margin-top:calc(6 * clamp(3rem,5vw - 1.75rem,5.5rem))}
-.ways_box.is-step-2{margin-top:calc(3 * clamp(3rem,5vw - 1.75rem,5.5rem))}
-.ways_box.is-step-3{margin-top:0}
+.ways_list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1.5rem,2.326vw + 0.056rem,2.5rem);align-items:start;margin-top:0;margin-left:0;margin-right:0;max-width:none;width:100%}
 .ways_box{position:relative;display:flex;flex-direction:column;aspect-ratio:1 / 1;width:100%;min-width:0;min-height:clamp(19rem,19vw,23rem);background-color:#080808;border:1px solid #242424;padding:clamp(2rem,2.9vw - 0.2rem,3.25rem);transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
 .ways_box:hover{background-color:#0E0E0E;border-color:#3A3A3A;z-index:1}
 /* is-active is the reading pass: one box at a time takes a lighter edge and a step up in
@@ -698,8 +709,6 @@ a:hover{color:var(--text-reversed,#EDEDED)}
   .ways_grid{grid-template-columns:1fr;row-gap:3rem}
   .ways_list{grid-template-columns:1fr;row-gap:1.25rem;margin-top:0;margin-left:0;margin-right:0;width:100%}
   .ways_box{aspect-ratio:auto;min-height:0}
-  .ways_box.is-step-1{margin-top:0}
-  .ways_box.is-step-2{margin-top:0}
   .ways_icon{margin-top:0}
 }
 
@@ -757,8 +766,18 @@ a:hover{color:var(--text-reversed,#EDEDED)}
    line pinned to its bottom edge. NOT TAKEN: the teal colour field (the ladder does the
    sectioning - §10's tie-breaker says one pine panel or none), the rounded corners, the icon
    library.
-   The card mark is OUR OWN ruling at mark scale - three hairlines, exactly one orange - which is
-   the same device the section's earlier plate used, shrunk into the reference's icon slot.
+   THREE CARDS, not six (client pin #10, 2026-09-10): his own three-part series, and each card's
+   mark is now THAT ARTICLE'S OWN DRAWING from his mockup - a bar chart, three concentric rings
+   with one orange wedge, and a line chart - redrawn onto one shared 120x52 box in our greys and
+   our #FF6600, and shipped as an SVG file behind an <img> (never inline <svg>). Circles and a
+   diagonal trend line are HIS geometry and override the offer family's orthogonal-only rule.
+   It is a MARK, not a full-bleed plate: the card is square above 992 and its content box is only
+   ~221px tall at 1024 with his longest title on three lines, so a plate across the card top
+   cannot fit without re-cutting the card itself, which this round may not do. The drawing sits
+   at 4.5rem (72px) on its own tighter margin rung - the largest the square card can carry at 992
+   and still close its action line inside itself (17px spare, measured). Its STROKE weight is the
+   offer icons' weight (1.4-2.4 units on a 52-unit box renders 2-3.3px); at 3rem the rings and the
+   trend line stopped reading as drawings at all.
    The grid uses ONE gap value on both axes, so the lattice is symmetrical by construction.
    ============================================================================ */
 .section_insights{position:relative;background-color:var(--ink-hero,#000000)}
@@ -766,15 +785,18 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .insights_head{max-width:none;margin-bottom:clamp(3rem,2.326vw + 1.556rem,4rem)}
 .insights_title-block{max-width:none;margin-top:1.5rem}
 .insights_grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1rem,1.163vw + 0.278rem,1.5rem)}
-.insights_card{display:flex;flex-direction:column;aspect-ratio:1 / 1;background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);text-decoration:none;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
+/* SQUARE AS A FLOOR, not as a cap (client pin #10): the card stays a true 1:1 from ~1075 up,
+   but his longest title runs five lines against the 213px measure the square leaves at 1024, so
+   the square cannot hold there. `align-self:stretch` makes the grid ROW size the three cards
+   together - so where the square cannot hold they are all exactly as tall as the tallest, never
+   three ragged bottoms - and `max-width:100%` stops the aspect ratio from widening the box past
+   its own grid column when that happens. Measured: 488 square at 1680, 371 at 1280, 296x353 at
+   1024, and no horizontal scroll at any width. */
+.insights_card{display:flex;flex-direction:column;aspect-ratio:1 / 1;align-self:stretch;max-width:100%;background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);text-decoration:none;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
 .insights_card:hover{background-color:#0E0E0E;border-color:#3A3A3A}
 .insights_card:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
-/* the mark: the document abstraction at 28px, one orange rung. Never an icon-library glyph. */
-.insights_mark{display:grid;row-gap:0.3125rem;width:1.75rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
-.insights_line{height:1px;background-color:#3A3A3A}
-.insights_line.is-short{width:52%}
-.insights_line.is-mid{width:76%}
-.insights_line.is-accent{width:38%;background-color:var(--orange,#FF6600)}
+/* the drawing: the article's own chart at the offer icons' weight. Never an icon-library glyph. */
+.insights_plate{display:block;align-self:flex-start;width:auto;height:4.5rem;margin-top:0;margin-bottom:clamp(1.25rem,2.33vw - 0.15rem,2.5rem)}
 /* ONE card-title rung for every card on the page - insights and method alike (client
    2026-09-09: smaller font, bolder weight). 22px is the brief's own h3 rung and Medium 500 is
    in the brand's own specimen, so this adds a rung the system already names rather than a
@@ -784,12 +806,13 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 /* the action line closes every card on the same baseline, underlined on the page's own link
    vocabulary (client 2026-09-09: the orange leader came off, the underline went on). */
 .insights_action{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.4;color:var(--text-reversed,#EDEDED);text-decoration:underline;text-underline-offset:0.5em;text-decoration-thickness:1px;margin-top:auto;transition:text-underline-offset 420ms cubic-bezier(0.22,1,0.36,1),text-decoration-thickness 420ms cubic-bezier(0.22,1,0.36,1)}
+/* ONE card per row at <=991 (client pin #10): with three cards a 2-up grid leaves the third
+   alone on its own row, and this is the tier where the card already releases its square aspect
+   and takes content height - which is the measure his longest title needs. The <=479 rule that
+   used to step this to 1-up is therefore gone: it would now be identical. */
 @media (max-width:991px){
-  .insights_grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .insights_card{aspect-ratio:auto;padding:2.5rem}
-  .insights_mark{margin-bottom:2.25rem}
-  .insights_card-title{max-width:100%;margin-bottom:2.5rem}
-}
-@media (max-width:479px){
   .insights_grid{grid-template-columns:minmax(0,1fr)}
+  .insights_card{aspect-ratio:auto;padding:2.5rem}
+  .insights_plate{margin-bottom:1.5rem}
+  .insights_card-title{max-width:100%;margin-bottom:2.5rem}
 }

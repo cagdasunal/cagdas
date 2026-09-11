@@ -1,10 +1,14 @@
 <!-- @dsCard group="Pages" name="Homepage" subtitle="The working homepage. v1 as ratified, plus the filled copy and the hero record/threshold diagram moved over from homepage-old2.html, and a two-column hero." viewport="1680x2600" -->
 <!-- @startingPoint section="Pages" subtitle="The assembled homepage - navbar, two-column hero with the record diagram, and footer. Seed new page rounds from this." viewport="1680x2600" -->
-<!-- ROUND-TOKEN: R11-READING-ROOM. Rebuilt 2026-09-08 on operator instruction: this file IS the
+<!-- ROUND-TOKEN: R12-BUGHERD-01 (the client's eight BugHerd pins, 2026-09-10: the two
+     dropdown labels, the testimonials heading, the intro's last words, the entity disclaimer, the
+     hero field flattened to a rectangle, the offer row flattened to one line, his bar icon in all
+     three offers, and Insights cut to his three articles with his own drawings).
+     Previous token R11-READING-ROOM. Rebuilt 2026-09-08 on operator instruction: this file IS the
      ratified v1 page. Three things were moved into it from homepage-old2.html and nothing else
      was redesigned: (a) the copy v1 was still holding as placeholders, (b) the hero
      record/threshold diagram and its animation, (c) a two-column hero. v1 links its own
-     stylesheets (homepage-old-tokens.css + homepage-old-client-first.css) and still does; the
+     stylesheets (homepage-tokens.css + homepage-client-first.css in this bundle) and still does; the
      diagram and hero-split rules are appended to the second of those. -->
 <!DOCTYPE html>
 <html lang="en">
@@ -44,8 +48,8 @@
 <nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list" aria-labelledby="nav-dd-about">
 <div class="navbar_dropdown-edge"></div>
 <div class="navbar_dropdown-inner">
+<a href="/our-company" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
 <a href="/afissio-law" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
-<a href="/our-company" class="navbar_dropdown-link w-dropdown-link">Our Company</a>
 </div>
 </nav>
 </div>
@@ -76,7 +80,7 @@
 <a href="/our-approach" class="button is-ghost-reversed">See how we work</a>
 </div>
 </div>
-<div class="hero_column is-field"><div class="doc-field"><div class="doc-field_grid"><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">cap table</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">employment</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">equity grants</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">IP assignment</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">data</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">commercial</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">customer MSA</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">capitalization</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">governance</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div></div></div></div></div>
+<div class="hero_column is-field"><div class="doc-field"><div class="doc-field_grid"><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">cap table</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">employment</div></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">equity grants</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">IP assignment</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">data</div></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">commercial</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot is-hot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"><div class="doc-tile_cap">customer MSA</div></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">capitalization</div></div><div class="doc-tile"></div></div><div class="doc-row"><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile is-slot"><img src="brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark is-dim"><div class="doc-tile_cap is-dim">governance</div></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div><div class="doc-tile"></div></div></div></div></div>
 </div>
 </div>
 </div>
@@ -87,7 +91,7 @@
 <div class="container-xlarge">
 <div class="proof_head">
 <div class="tagline_row"><img src="brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><div class="text-label">In practice</div></div>
-<div class="proof_title-block"><h2 class="heading-style-h2 is-oneline">What the preparation looks like</h2></div>
+<div class="proof_title-block"><h2 class="heading-style-h2 is-oneline">What clients say about our services</h2></div>
 </div>
 <div class="proof_slider swiper">
 <div class="swiper-wrapper">
@@ -140,7 +144,7 @@
 </div>
 <div class="padding-global padding-section-large is-layer">
 <div class="container-xlarge">
-<div class="intro_stack"><p class="intro_lede">Afissio is a <strong class="intro_lede-em">transaction-readiness firm</strong> serving founder-led companies preparing for a financing, acquisition, strategic partnership, recapitalization, or institutional investment. Through <strong class="intro_lede-em">Deal Engineering</strong>, Afissio combines AI-assisted analysis with experienced professional judgment to <strong class="intro_lede-em">identify and resolve the issues</strong> most likely to create friction during institutional diligence.</p><div class="button-row"><a href="/contact" class="button is-reversed">Start the Conversation</a><a href="/about" class="button is-ghost-reversed">Learn about Afissio</a></div></div>
+<div class="intro_stack"><p class="intro_lede">Afissio is a <strong class="intro_lede-em">transaction-readiness firm</strong> serving founder-led companies preparing for a financing, acquisition, strategic partnership, recapitalization, or institutional investment. Through <strong class="intro_lede-em">Deal Engineering</strong>, Afissio combines AI-assisted analysis with experienced professional judgment to <strong class="intro_lede-em">identify and resolve the issues</strong> most likely to create friction during due diligence.</p><div class="button-row"><a href="/contact" class="button is-reversed">Start the Conversation</a><a href="/about" class="button is-ghost-reversed">Learn about Afissio</a></div></div>
 </div>
 </div>
 </section>
@@ -249,33 +253,18 @@
 </div>
 <div class="insights_grid">
 <a href="/insights" class="insights_card">
-<div class="insights_mark" aria-hidden="true"><div class="insights_line"></div><div class="insights_line is-mid"></div><div class="insights_line is-accent"></div></div>
-<div class="insights_card-title"><h3 class="heading-style-h3 is-card">The four questions a buyer’s counsel asks first</h3></div>
+<img src="brand/icons/insight-part-one.svg" alt="" class="insights_plate">
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">The Patchwork: How U.S. Privacy Law Actually Works</h3></div>
 <div class="insights_action">Read the brief</div>
 </a>
 <a href="/insights" class="insights_card">
-<div class="insights_mark" aria-hidden="true"><div class="insights_line is-mid"></div><div class="insights_line is-accent"></div><div class="insights_line is-short"></div></div>
-<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Where capitalization drift begins</h3></div>
+<img src="brand/icons/insight-part-two.svg" alt="" class="insights_plate">
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">What Companies Actually Do With Data</h3></div>
 <div class="insights_action">Read the brief</div>
 </a>
 <a href="/insights" class="insights_card">
-<div class="insights_mark" aria-hidden="true"><div class="insights_line is-accent"></div><div class="insights_line"></div><div class="insights_line is-mid"></div></div>
-<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Reading the record before a timeline exists</h3></div>
-<div class="insights_action">Read the brief</div>
-</a>
-<a href="/insights" class="insights_card">
-<div class="insights_mark" aria-hidden="true"><div class="insights_line is-short"></div><div class="insights_line is-mid"></div><div class="insights_line is-accent"></div></div>
-<div class="insights_card-title"><h3 class="heading-style-h3 is-card">What a data room says about a company</h3></div>
-<div class="insights_action">Read the brief</div>
-</a>
-<a href="/insights" class="insights_card">
-<div class="insights_mark" aria-hidden="true"><div class="insights_line is-mid"></div><div class="insights_line is-short"></div><div class="insights_line is-accent"></div></div>
-<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Employment records, and the questions they raise</h3></div>
-<div class="insights_action">Read the brief</div>
-</a>
-<a href="/insights" class="insights_card">
-<div class="insights_mark" aria-hidden="true"><div class="insights_line is-accent"></div><div class="insights_line is-mid"></div><div class="insights_line is-short"></div></div>
-<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Governance minutes as a diligence document</h3></div>
+<img src="brand/icons/insight-part-three.svg" alt="" class="insights_plate">
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Privacy as a Competitive Asset, Not a Compliance Checklist</h3></div>
 <div class="insights_action">Read the brief</div>
 </a>
 </div>
@@ -337,7 +326,7 @@
 </div>
 <div class="footer_rule"></div>
 <div class="footer_cell is-legal">
-<p class="footer_disclaimer-text">Non-legal transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
 <div class="footer_legal-row">
 <a href="/privacy-policy" class="footer_legal-link">Privacy Policy</a>
 <a href="/terms-of-use" class="footer_legal-link">Terms of Use</a>
@@ -384,11 +373,11 @@ function fit(){
   var probe=kids[0][kids[0].length-1],tw=probe?probe.getBoundingClientRect().width:0;
   if(!field||!tw)return;
   var gap=parseFloat(getComputedStyle(rows[0]).columnGap)||8;
-  var hold=Math.max(4,Math.floor((field+gap)/(tw+gap)));
+  var hold=Math.max(6,Math.floor((field+gap)/(tw+gap)));
   var vw=window.innerWidth||1280,deep=vw<=767?4:(vw<=991?5:rows.length);
   rows.forEach(function(r,ri){
     r.style.display=ri<deep?'':'none';
-    var k=kids[ri],keep=Math.max(3,hold-ri),n=k.length;
+    var k=kids[ri],keep=Math.min(k.length,hold),n=k.length;
     k.forEach(function(t){t.style.display=''});
     for(var i=0;i<k.length&&n>keep;i++){
       if(k[i].classList.contains('is-slot'))continue;
@@ -410,8 +399,9 @@ function watch(el, fn){
   }, { threshold: 0.12 });
   io.observe(el);
 }
-/* DOM order of the nine slots is 5, 11, 22, 28, 34, 44, 49, 53, 60; SEQ is the reading order
-   expressed as positions in that array - it jumps row and side every beat. */
+/* SEQ is the reading order expressed as positions in the slot array (DOM order: cap table ·
+   employment · equity grants · IP assignment · data · commercial · customer MSA ·
+   capitalization · governance) - it jumps row and side every beat. */
 var SEQ=[0,3,6,2,5,8,1,4,7], HELD=3, EVERY=11000;
 function start(g){
   if(g.getAttribute('data-run'))return;g.setAttribute('data-run','1');
