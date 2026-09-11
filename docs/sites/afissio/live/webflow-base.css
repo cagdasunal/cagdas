@@ -1,0 +1,103 @@
+/* WEBFLOW'S OWN BASE STYLESHEET — PREVIEW COPY OF WEBFLOW'S BASE LAYER. DO NOT EDIT. NEVER DEPLOY.
+   ROUND-TOKEN: R13-WEBFLOW-READY (staged by the operator, 2026-09-11)
+
+   What this is: 85 rules copied VERBATIM, in source order, from `webflow.css` as published on a
+   live Webflow site (the normalize layer, Webflow's element defaults, and every Navbar / Dropdown
+   rule). On the real Afissio site Webflow serves these itself, BEFORE our class sheet, on every
+   page. The design preview never had them, so it could not show the places where a Webflow default
+   leaks into our design (padding:20px on nav links and dropdown items, colour #222, a #ddd / #c8c8c8
+   ground on open menus, h1-h6 and p margins, Arial 14px body, text-align:center in the open mobile
+   menu, the display:none that Webflow uses to close a dropdown list).
+
+   How to use it: link it FIRST, before colors_and_type.css and client-first.css, in every page and
+   in the handoff bundle. Then every rule we author is tested against the cascade Webflow will really
+   apply. If a Webflow default changes how the page looks, the fix goes in OUR class sheet (set the
+   property explicitly on our class) — never in this file.
+
+   What it cannot do: webflow.js is not here. Opening and closing the Navbar menu and the Dropdown is
+   Webflow's JavaScript, not CSS — see BRIEF round R13, WP5 (the preview shim, and the jQuery build beside this file). */
+html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-family:sans-serif}
+body{margin:0}
+article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}
+audio,canvas,progress,video{vertical-align:baseline;display:inline-block}
+audio:not([controls]){height:0;display:none}
+a{background-color:#0000}
+a:active,a:hover{outline:0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:700}
+dfn{font-style:italic}
+h1{margin:.67em 0;font-size:2em}
+mark{color:#000;background:#ff0}
+small{font-size:80%}
+sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+hr{box-sizing:content-box;height:0}
+button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}
+button{overflow:visible}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+input{line-height:normal}
+input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}
+input[type=search]{-webkit-appearance:none}
+input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}
+html{height:100%}
+body{color:#333;background-color:#fff;min-height:100%;margin:0;font-family:Arial,sans-serif;font-size:14px;line-height:20px}
+img{vertical-align:middle;max-width:100%;display:inline-block}
+h1,h2,h3,h4,h5,h6{margin-bottom:10px;font-weight:700}
+h1{margin-top:20px;font-size:38px;line-height:44px}
+h2{margin-top:20px;font-size:32px;line-height:36px}
+h3{margin-top:20px;font-size:24px;line-height:30px}
+h4{margin-top:10px;font-size:18px;line-height:24px}
+h5{margin-top:10px;font-size:14px;line-height:20px}
+h6{margin-top:10px;font-size:12px;line-height:18px}
+p{margin-top:0;margin-bottom:10px}
+blockquote{border-left:5px solid #e2e2e2;margin:0 0 10px;padding:10px 20px;font-size:18px;line-height:22px}
+figure{margin:0 0 10px}
+figcaption{text-align:center;margin-top:5px}
+ul,ol{margin-top:0;margin-bottom:10px;padding-left:40px}
+button,[type=button],[type=reset]{cursor:pointer;-webkit-appearance:button;border:0}
+label{margin-bottom:5px;font-weight:700;display:block}
+.w-dropdown{text-align:left;z-index:900;margin-left:auto;margin-right:auto;display:inline-block;position:relative}
+.w-dropdown-btn,.w-dropdown-toggle,.w-dropdown-link{vertical-align:top;color:#222;text-align:left;white-space:nowrap;margin-left:auto;margin-right:auto;padding:20px;text-decoration:none;position:relative}
+.w-dropdown-toggle{-webkit-user-select:none;user-select:none;cursor:pointer;padding-right:40px;display:inline-block}
+.w-dropdown-toggle:focus{outline:0}
+.w-dropdown-list{background:#ddd;min-width:100%;display:none;position:absolute}
+.w-dropdown-list.w--open{display:block}
+.w-dropdown-link{color:#222;padding:10px 20px;display:block}
+.w-dropdown-link.w--current{color:#0082f3}
+.w-dropdown-link:focus{outline:0}
+@media screen and (max-width:767px){.w-nav-brand{padding-left:10px}}
+.w-nav{z-index:1000;background:#ddd;position:relative}
+.w-nav:before,.w-nav:after{content:" ";grid-area:1/1/2/2;display:table}
+.w-nav:after{clear:both}
+.w-nav-brand{float:left;color:#333;text-decoration:none;position:relative}
+.w-nav-link{vertical-align:top;color:#222;text-align:left;margin-left:auto;margin-right:auto;padding:20px;text-decoration:none;display:inline-block;position:relative}
+.w-nav-link.w--current{color:#0082f3}
+.w-nav-menu{float:right;position:relative}
+[data-nav-menu-open]{text-align:center;background:#c8c8c8;min-width:200px;position:absolute;top:100%;left:0;right:0;overflow:visible;display:block!important}
+.w--nav-link-open{display:block;position:relative}
+.w-nav-overlay{width:100%;display:none;position:absolute;top:100%;left:0;right:0;overflow:hidden}
+.w-nav-overlay [data-nav-menu-open]{top:0}
+.w-nav[data-animation=over-left] .w-nav-overlay{width:auto}
+.w-nav[data-animation=over-left] .w-nav-overlay,.w-nav[data-animation=over-left] [data-nav-menu-open]{z-index:1;top:0;right:auto}
+.w-nav[data-animation=over-right] .w-nav-overlay{width:auto}
+.w-nav[data-animation=over-right] .w-nav-overlay,.w-nav[data-animation=over-right] [data-nav-menu-open]{z-index:1;top:0;left:auto}
+.w-nav-button{float:right;cursor:pointer;-webkit-tap-highlight-color:#0000;tap-highlight-color:#0000;-webkit-user-select:none;user-select:none;padding:18px;font-size:24px;display:none;position:relative}
+.w-nav-button:focus{outline:0}
+.w-nav-button.w--open{color:#fff;background-color:#c8c8c8}
+.w-nav[data-collapse=all] .w-nav-menu{display:none}
+.w-nav[data-collapse=all] .w-nav-button,.w--nav-dropdown-open,.w--nav-dropdown-toggle-open{display:block}
+.w--nav-dropdown-list-open{position:static}
+@media screen and (max-width:991px){.w-nav[data-collapse=medium] .w-nav-menu{display:none}}
+@media screen and (max-width:991px){.w-nav[data-collapse=medium] .w-nav-button{display:block}}
+@media screen and (max-width:767px){.w-nav[data-collapse=small] .w-nav-menu{display:none}}
+@media screen and (max-width:767px){.w-nav[data-collapse=small] .w-nav-button{display:block}}
+@media screen and (max-width:767px){.w-nav-brand{padding-left:10px}}
+@media screen and (max-width:479px){.w-nav[data-collapse=tiny] .w-nav-menu{display:none}}
+@media screen and (max-width:479px){.w-nav[data-collapse=tiny] .w-nav-button{display:block}}

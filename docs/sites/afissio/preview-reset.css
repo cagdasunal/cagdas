@@ -1,0 +1,25 @@
+/* PREVIEW ONLY — NEVER DEPLOYED. ROUND-TOKEN: R13-WEBFLOW-READY (2026-09-11, WP6.4)
+
+   Four rules and two properties that our deploy pipeline cannot carry, fenced off here so the
+   class sheet no longer claims a cascade the real site will not have. Linked LAST, after
+   _live/webflow-base.css · colors_and_type.css · client-first.css.
+
+   · `*{box-sizing:border-box}` and `body{margin:0}` — element selectors, dropped silently at
+     deploy (F5). On the real site Webflow's own normalize supplies both: `html{box-sizing:
+     border-box}` + `*,:before,:after{box-sizing:inherit}`, and `body{margin:0}` twice over. Those
+     two box-sizing lines are NOT among the 85 rules staged in _live/webflow-base.css, which is
+     why this file still has to carry them for the preview to lay out at all. They are a
+     Webflow-provided default, NOT a manual deploy step.
+   · `a` and `a:hover` — element selectors, dropped. They were preview-only insurance against the
+     UA stylesheet's #0000EE. Nothing depends on them any more: every `<a>` class on the page sets
+     its own `color` and `text-decoration` (navbar_logo-link · navbar_link · navbar_dropdown-link ·
+     button and its four variants · footer_index-link · footer_legal-link · insights_card), and
+     `.text-link` is what deploys for an inline link. Verified with this file unlinked and
+     _live/webflow-base.css linked: every link renders identically.
+   · font smoothing — both properties are blocked outright by the property filter. They go to the
+     operator's site-wide custom code: MANUAL DEPLOY STEP #2. */
+*{box-sizing:border-box}
+body{margin:0}
+a{color:var(--orange,#FF6600);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;transition:color 260ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 260ms cubic-bezier(0.22,1,0.36,1)}
+a:hover{color:var(--text-reversed,#EDEDED)}
+.page-wrapper{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}

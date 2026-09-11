@@ -1,4 +1,21 @@
-/* LIVE layout sheet for pages/homepage.html - THE ONE this page's every rule comes from.
+/* Afissio — THE Client-First V2 class layer. ROUND-TOKEN: R13-WEBFLOW-READY (2026-09-11).
+
+   WP1: this file is the system's class layer. It was pages/homepage-old-client-first.css - the
+   sheet the page and the client actually see - moved to the project root byte for byte, then
+   given this round's fixes. The abandoned R11-revision-2 root sheet is in _archive/. There is now
+   ONE class stack, because Webflow has one class namespace per site.
+
+   WHAT R13 CHANGED, AND NOTHING ELSE: (a) every selector is now a chain some element wears, with
+   at most two classes and never a global used as a combo; (b) the nine Webflow widget-part
+   classes carry no display / position / gap / flex-direction / justify-content / align-items -
+   Webflow's own base (_live/webflow-base.css) or a plain classed element we own carries those;
+   (c) stacked pseudos (:hover::before) are gone, rebuilt as single-state rules on one class;
+   (d) the preview-only rules moved out to pages/preview-reset.css; (e) repeated literal colours
+   became tokens at the same hex. NO token value, type rung, spacing value, container, radius,
+   button, colour or breakpoint moved. The page looks identical at every width - measured.
+
+   PREVIOUS HEADER, kept because its correction still matters:
+   "LIVE layout sheet for pages/homepage.html - THE ONE this page's every rule comes from.
    Header corrected 2026-09-09. It previously read "FROZEN ARCHIVE ... DO NOT EDIT, and do not
    link it from any page but homepage-old.html", and all of that is false:
      · pages/homepage.html links this sheet (see its <head>), so editing it edits the live page;
@@ -9,7 +26,7 @@
    a comment nobody can trust is worse than no comment. FILENAME kept as-is only because the
    page links it; it is not an archive.
    STILL FROZEN, per BRIEF.md section 3 - change these only on an explicit instruction: the
-   container and rails, the whitespace rungs, the line system, and the buttons. */
+   container and rails, the whitespace rungs, the line system, and the buttons." */
 /* ROUND-TOKEN: R12-BUGHERD-01 — the client's eight BugHerd pins (2026-09-10). What this sheet
    carries from that round: the hero document field is FLAT (no step, no left bleed), the three
    offer boxes sit in ONE horizontal row at full container width, and Insights is three cards
@@ -21,14 +38,11 @@
    width and not a squeezed 1680. Sub-992 tiers unchanged except where they were stepping the
    WRONG way at the boundary. One class per rule; var() always with fallback; breakpoints only
    1440/991/767/479 — every other width is a clamp, which needs no @media at all. */
-body{margin:0}
-*{box-sizing:border-box}  /* preview-only reset — Webflow's normalize already sets border-box on every element; never deployed as a class */  /* preview-only reset — Webflow normalizes body itself; every deployed property lives on a class */
-
-/* text links (inline <a> outside buttons take this class). The bare-element rule
-   is preview-only insurance against the UA stylesheet's #0000EE; .text-link is
-   what deploys. */
-a{color:var(--orange,#FF6600);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;transition:color 260ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 260ms cubic-bezier(0.22,1,0.36,1)}
-a:hover{color:var(--text-reversed,#EDEDED)}
+/* WP6.4 - the element selectors that used to open this sheet (`body{margin:0}`,
+   `*{box-sizing:border-box}`, `a` and `a:hover`) are GONE from here. An element selector is
+   dropped silently at deploy (F5), so keeping them here made the sheet claim a cascade the site
+   will not have. They live in pages/preview-reset.css, fenced and linked last, and every `<a>`
+   class below now sets its own `color` and `text-decoration` so nothing depends on them. */
 .text-link{color:var(--orange,#FF6600);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;transition:color 260ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 260ms cubic-bezier(0.22,1,0.36,1)}
 .text-link:hover{color:var(--text-reversed,#EDEDED)}
 .text-link:focus-visible{outline:2px solid var(--rule-accent,#B34B00);outline-offset:2px}
@@ -36,7 +50,7 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .text-link.is-reversed:hover{color:var(--text-reversed,#EDEDED)}
 
 /* skeleton */
-.page-wrapper{background:var(--ink-hero,#000000);color:var(--text-reversed-soft,#C9C9C9);font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.page-wrapper{background:var(--ink-hero,#000000);color:var(--text-reversed-soft,#C9C9C9);font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);line-height:1.55}  /* font smoothing moved to preview-reset.css: both properties are blocked outright and are manual deploy step #2 */
 .main-wrapper{min-height:100vh}
 .padding-global{padding-left:5%;padding-right:5%}
 .padding-section-large{padding-top:clamp(9rem,20.93vw - 3.975rem,var(--section-l,18rem));padding-bottom:clamp(9rem,20.93vw - 3.975rem,var(--section-l,18rem))}
@@ -58,9 +72,9 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .heading-style-h3{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(1.5rem,0.58vw + 1.15rem,1.75rem);line-height:1.24;letter-spacing:-0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
 .text-lead{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.375rem,0.436vw + 1.106rem,var(--size-lead,1.5625rem));line-height:1.5;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:pretty}
 .text-size-regular{font-weight:400;font-size:1.1875rem;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
-.text-label{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;text-transform:uppercase;letter-spacing:0.14em;line-height:1.4;color:var(--text-reversed-soft,#C9C9C9)}
+.text-label{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;text-transform:uppercase;letter-spacing:0.14em;line-height:1.4;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0}
 .text-label.is-reversed{color:var(--text-reversed,#EDEDED)}
-.text-color-muted{color:#8E8E8E}
+.text-color-muted{color:var(--text-muted-ink,#8E8E8E)}
 
 /* buttons — three constructions, all with the one control radius. The primary
    ALWAYS carries a background colour (2026-08-29): ink on light, paper on ink. */
@@ -73,9 +87,8 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .button.is-ghost{background:transparent;color:var(--ink,#1A1A1A);border-color:var(--rule,#DDDBD4)}
 .button.is-ghost:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00)}
 
-/* review scaffolding — deleted at Phase D */
-.review_label{display:inline-block;font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-label,0.75rem);text-transform:uppercase;letter-spacing:0.08em;background:var(--panel-ink,#161616);padding:0.375rem 0.75rem;margin-bottom:1.5rem}
-.review_label.is-review{color:var(--text-reversed,#EDEDED)}
+/* WP3.5 - `.review_label` / `.review_label.is-review` DELETED: review scaffolding from a dead
+   round, worn by no element, and the only user of --panel-ink (also dropped, WP7). */
 
 /* sections — the hero is a full-screen opening plate: a true 100svh, with the
    fixed bar floating over its top edge. */
@@ -89,12 +102,13 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .text-size-regular.is-fine{font-weight:300;font-size:0.9375rem}
 .text-size-regular.is-large{font-size:1.125rem}
 .text-lead.is-reversed{color:var(--text-reversed,#EDEDED)}
-.hero_rule-edge{height:1px;background-color:var(--rule-plate,#454545)}
+/* WP3.5 - `.hero_rule-edge` DELETED: v1's full-bleed hero edge, worn by no element since the
+   two-column hero replaced the stacked one. The line system is section seams only. */
 /* every CTA takes the logo's dark orange with white type (operator, 2026-09-09).
    Measured: #FFFFFF on #B34B00 = 5.40:1, AA pass; hover #8F3C00 = 7.36:1. */
-.button.is-reversed{background:var(--orange-text,#B34B00);color:#FFFFFF;font-weight:400}
-.button.is-reversed:hover{background:#8F3C00;color:#FFFFFF}
-.button.is-reversed:focus-visible{outline-color:#FFFFFF}
+.button.is-reversed{background:var(--orange-text,#B34B00);color:var(--on-accent,#FFFFFF);font-weight:400}
+.button.is-reversed:hover{background:#8F3C00;color:var(--on-accent,#FFFFFF)}
+.button.is-reversed:focus-visible{outline-color:var(--on-accent,#FFFFFF)}
 
 /* ============================================================
    ROUND 5 — the navbar class layer, with the operator's 2026-08-29 changes:
@@ -105,31 +119,55 @@ a:hover{color:var(--text-reversed,#EDEDED)}
    two plain classed divs we own.
    ============================================================ */
 
-/* fixed bar (operator 2026-08-30): floats over the hero so the hero itself runs
-   a full 100svh from the top of the viewport; the behaviour script slides it out
-   on scroll-down and back on scroll-up via inline transform (§4f). */
-.navbar_component{position:fixed;top:0;left:0;right:0;z-index:100;background-color:var(--ink-hero,#000000);transition:transform 1400ms cubic-bezier(0.25,1,0.5,1),opacity 1600ms cubic-bezier(0.4,0,0.2,1)}
+/* WP4.1 - THE FIXED BAR IS CARRIED BY A WRAPPER WE OWN. `.navbar_component` is the Webflow
+   Navbar itself (`w-nav`), and our preflight blocks `position` on a widget-part class because
+   Webflow's own stylesheet owns it (`.w-nav{position:relative}`). So `position:fixed` and the
+   hide/show transition move to `.navbar_shell`, one plain classed div wrapping the Navbar - the
+   smallest answer: one element, no widget part touched. The behaviour script transforms the
+   shell. The bar still floats over the hero, so the hero runs a full 100svh from the top.
+   `.navbar_component` keeps only its ground, which is what beats Webflow's `.w-nav{background:#ddd}`
+   on source order. */
+.navbar_shell{position:fixed;top:0;left:0;right:0;z-index:100;background-color:var(--ink-hero,#000000);transition:transform 1400ms cubic-bezier(0.25,1,0.5,1),opacity 1600ms cubic-bezier(0.4,0,0.2,1)}
+.navbar_component{background-color:var(--ink-hero,#000000)}
+/* WP2 - Webflow's `.w-nav:before/:after` clearfix are `display:table` boxes holding a space, so
+   they add two line-boxes of height inside the bar. `display` is blocked on a widget-part class,
+   so they are collapsed with type metrics instead, which are not blocked. */
+.navbar_component::before{font-size:0;line-height:0}
+.navbar_component::after{font-size:0;line-height:0}
 /* the bar runs the FULL width of the page, not the container width: a 2rem gutter instead of
    the 5% page gutter, and no max-width cap. Measured 2026-09-09: at 1452px the bar and the
    sections were identical (72.6..1379.4), which is what "full width" changes. */
 .padding-global.is-bar{padding-left:2rem;padding-right:2rem}
 .navbar_container{display:flex;align-items:center;justify-content:space-between;max-width:none;margin-left:auto;margin-right:auto;padding-top:clamp(1rem,1.5vw,1.5rem);padding-bottom:clamp(1rem,1.5vw,1.5rem)}
-.navbar_logo-link{line-height:0;opacity:1;transition:opacity 350ms cubic-bezier(0.22,1,0.36,1)}
+/* WP2 - explicit against `.w-nav-brand{float:left;color:#333;text-decoration:none}` and its
+   `@media(max-width:767px){padding-left:10px}`. */
+.navbar_logo-link{line-height:0;opacity:1;color:var(--text-reversed,#EDEDED);text-decoration:none;padding-left:0;padding-right:0;transition:opacity 350ms cubic-bezier(0.22,1,0.36,1)}
 .navbar_logo-link:hover{opacity:0.68}
 .navbar_logo-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.375rem}
 .navbar_logo{display:block;height:1.75rem;width:auto}
-.navbar_menu{flex-grow:1}
+/* WP2 - `text-align` is explicit because Webflow's `[data-nav-menu-open]` sets
+   `text-align:center` on the OPEN menu at the collapse width, and it would inherit. */
+.navbar_menu{flex-grow:1;text-align:left}
 .navbar_menu-inner{display:flex;flex-wrap:wrap;align-items:center;column-gap:clamp(1.25rem,2.5vw,2.5rem);row-gap:0.5rem}
 .navbar_links{display:flex;align-items:center;column-gap:clamp(0.75rem,1.6vw,1.25rem);margin-left:auto;margin-right:auto}
-.navbar_link{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:3rem;color:var(--text-reversed,#EDEDED);text-decoration:none;white-space:nowrap;transition:color 350ms cubic-bezier(0.22,1,0.36,1),opacity 350ms cubic-bezier(0.22,1,0.36,1)}
+/* WP2 - `.w-nav-link` supplies `padding:20px`, `margin-left:auto`, `margin-right:auto`,
+   `color:#222`, `vertical-align:top` and `text-align:left`. The two auto margins are the
+   dangerous ones: these are flex items in `.navbar_links`, so auto margins would absorb all the
+   free space and blow the link row apart. All six are set explicitly here. */
+.navbar_link{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:3rem;color:var(--text-reversed,#EDEDED);text-decoration:none;white-space:nowrap;padding:0;margin-left:0;margin-right:0;vertical-align:top;text-align:left;transition:color 350ms cubic-bezier(0.22,1,0.36,1),opacity 350ms cubic-bezier(0.22,1,0.36,1)}
 .navbar_link:hover{color:var(--orange,#FF6600)}
 .navbar_link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
 .navbar_button-wrapper{line-height:0}
-.navbar_menu-button{width:0;overflow:hidden}
+/* WP2 - `.w-nav-button` supplies `padding:18px`, `font-size:24px` and `float:right`; the padding
+   alone would add 36px to the bar row. Webflow's own display pair hides it above 992 and shows it
+   below, which is why this class sizes itself instead of authoring `display` (F6). Its
+   `w--open` ground (#c8c8c8) cannot be beaten by an authorable chain - `w--open` has no style
+   object (F7) - so the burger decorator clears it inline at runtime. */
+.navbar_menu-button{width:0;overflow:hidden;padding:0;font-size:0;background-color:transparent}
 .navbar_menu-bar{width:1.25rem;height:1px;background-color:var(--text-reversed,#EDEDED);margin-bottom:0.3125rem}
-.button.is-nav{background:var(--orange-text,#B34B00);color:#FFFFFF;font-size:0.9375rem;line-height:1.5;padding-top:0.75rem;padding-bottom:0.75rem;padding-left:1.375rem;padding-right:1.375rem;border-radius:0}
-.button.is-nav:hover{background:#8F3C00;color:#FFFFFF}
-.button.is-nav:focus-visible{outline:2px solid #FFFFFF;outline-offset:0.25rem}
+.button.is-nav{background:var(--orange-text,#B34B00);color:var(--on-accent,#FFFFFF);font-size:0.9375rem;line-height:1.5;padding-top:0.75rem;padding-bottom:0.75rem;padding-left:1.375rem;padding-right:1.375rem;border-radius:0}
+.button.is-nav:hover{background:#8F3C00;color:var(--on-accent,#FFFFFF)}
+.button.is-nav:focus-visible{outline:2px solid var(--on-accent,#FFFFFF);outline-offset:0.25rem}
 
 /* the 12px label rung, accented (6.9:1 on ink) */
 .text-label.is-accent{color:var(--orange,#FF6600)}
@@ -155,10 +193,9 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .button.is-ghost-reversed{background:transparent;color:var(--text-reversed,#EDEDED);border-color:var(--rule-plate,#454545);font-weight:400}
 .button.is-ghost-reversed:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00);border-color:var(--paper,#FAF9F6)}
 .button.is-ghost-reversed:focus-visible{outline-color:var(--orange,#FF6600)}
-/* the stack's air ramps on BOTH axes: the vw term is the designed 992→1680 ramp,
-   the svh term keeps a 720/768-tall laptop from pushing the CTA below the fold.
-   Whichever is smaller wins, floored at 2rem. */
-.hero_stack{max-width:clamp(38rem,58vw,54rem);margin-left:auto;margin-right:auto;margin-top:clamp(2rem,min(9.3vw - 2.77rem,44.4svh - 18rem),7rem);margin-bottom:clamp(2rem,min(9.3vw - 2.77rem,44.4svh - 18rem),7rem);text-align:left}
+/* WP3.5 - `.hero_stack` DELETED (base rule and both tier overrides): the centred single-column
+   hero it sized has not existed since the two-column hero; `.hero_split` + `.hero_column` are
+   what the page wears. The 54rem measure survives in `.hero_title-block` / `.hero_lead-block`. */
 .hero_title-block{max-width:100%;margin-left:0;margin-right:0;margin-bottom:0}
 .hero_lead-block{max-width:34rem;margin-left:0;margin-right:0;margin-top:1.5rem;margin-bottom:0}
 
@@ -175,7 +212,7 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .statement_body-col{max-width:100%}
 .statement_body-item{margin-bottom:1.25rem}
 .statement_body-item:last-child{margin-bottom:0}
-.text-lead.is-muted{color:#8E8E8E}
+.text-lead.is-muted{color:var(--text-muted-ink,#8E8E8E)}
 
 /* claim band — centred statement on ink (operator layout 2026-08-30) */
 .section_claim{position:relative;background-color:var(--ink-hero,#000000)}
@@ -191,8 +228,8 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .ways_grid{display:grid;grid-template-columns:minmax(0,35fr) minmax(0,32fr);column-gap:clamp(2.5rem,5.81vw - 1.106rem,5rem);max-width:82rem;align-items:start}
 .ways_head{max-width:100%;margin-left:0;margin-right:0;text-align:left}
 .ways_list{max-width:100%;margin-left:0;margin-right:0;margin-top:0}
-.ways_row{display:grid;grid-template-columns:minmax(0,1fr);row-gap:1.25rem;align-items:start;padding-top:clamp(2rem,2.326vw + 0.556rem,3rem);padding-bottom:clamp(2rem,2.326vw + 0.556rem,3rem)}
-.ways_row:first-child{padding-top:0}
+/* WP3.5 - `.ways_row` DELETED (base, `:first-child`, and both tier overrides): the rule-separated
+   term/copy ledger it built was replaced by `.ways_box` in R11 and worn by nothing since. */
 .ways_term{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(1.5rem,0.58vw + 1.15rem,1.75rem);line-height:1.24;letter-spacing:-0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:1rem}
 .ways_copy{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:1.0625rem;line-height:1.55;color:var(--text-reversed-soft,#C9C9C9);margin-top:auto;margin-bottom:0;text-wrap:pretty}
 
@@ -215,8 +252,8 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .method_stem{width:1px;height:clamp(4rem,4.65vw - 0.615rem,6rem);background-color:var(--rule-plate,#454545);margin-top:2rem;margin-bottom:2rem;margin-left:auto;margin-right:auto}
 .method_stem.is-last{margin-bottom:0}
 .method_pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,1.163vw + 0.278rem,1.5rem);max-width:64rem;margin-left:auto;margin-right:auto}
-.method_card{display:flex;flex-direction:column;align-items:center;background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);text-align:center;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
-.method_card:hover{background-color:#0E0E0E;border-color:#3A3A3A}
+.method_card{display:flex;flex-direction:column;align-items:center;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);text-align:center;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
+.method_card:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:var(--rule-ink,#3A3A3A)}
 .method_card-mark{display:block;height:1.75rem;width:auto;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
 .method_card-title{max-width:20rem;margin-bottom:1.5rem}
 .method_card-body{max-width:24rem}
@@ -285,15 +322,15 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .footer_index-link{display:flex;align-items:baseline;text-decoration:none;line-height:2rem;color:var(--text-reversed,#EDEDED);transition:transform 350ms cubic-bezier(0.22,1,0.36,1),color 350ms cubic-bezier(0.22,1,0.36,1)}
 .footer_index-link:hover{color:var(--orange,#FF6600)}
 .footer_index-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
-.footer_index-name{font-size:var(--size-body,1rem);font-weight:300}
+.footer_index-name{font-size:var(--size-body,1rem);font-weight:300;margin-top:0;margin-bottom:0}
 /* --- entity blocks --- */
-.footer_entity-name{font-size:var(--size-label,0.75rem);font-weight:400;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-reversed,#EDEDED);margin-bottom:1.25rem}
+.footer_entity-name{font-size:var(--size-label,0.75rem);font-weight:400;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:1.25rem}
 .footer_entity-lines{display:grid;row-gap:0.5rem}
 .footer_entity-line{font-size:var(--size-body,1rem);font-weight:400;line-height:1.55;color:var(--text-reversed-soft,#C9C9C9);max-width:18rem;margin-top:0;margin-bottom:0}
 /* --- legal-compliance strip --- */
 .footer_disclaimer-text{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);font-weight:400;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);max-width:60rem;margin-top:0;margin-bottom:0;text-wrap:pretty}
 .footer_legal-row{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:2rem;row-gap:0.5rem;margin-top:1.25rem}
-.footer_legal-link{font-size:var(--size-label,0.75rem);font-weight:400;color:var(--text-reversed-soft,#C9C9C9);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;line-height:2rem;transition:color 350ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 350ms cubic-bezier(0.22,1,0.36,1)}
+.footer_legal-link{font-size:var(--size-label,0.75rem);font-weight:400;color:var(--text-reversed-soft,#C9C9C9);text-decoration:underline;text-underline-offset:0.15em;text-decoration-thickness:1px;line-height:2rem;margin-top:0;margin-bottom:0;transition:color 350ms cubic-bezier(0.22,1,0.36,1),text-underline-offset 350ms cubic-bezier(0.22,1,0.36,1)}
 .footer_legal-link:hover{color:var(--orange,#FF6600);text-underline-offset:0.3em}
 .footer_legal-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
 
@@ -317,7 +354,13 @@ a:hover{color:var(--text-reversed,#EDEDED)}
   .navbar_menu-bar{width:1.5rem;margin-left:auto;margin-right:auto;margin-bottom:0.4375rem;transition:transform 450ms cubic-bezier(0.22,1,0.36,1),opacity 250ms ease}
   .navbar_menu-bar:last-child{margin-bottom:0}
   /* — full-screen menu (styled OPEN) — */
-  .navbar_menu{flex-grow:0;position:absolute;top:100%;left:0;right:0;height:calc(100svh - 3.75rem);background-color:var(--ink-hero,#000000);overflow:auto}
+  /* WP4.1 - `position/top/left/right` DELETED: `.navbar_menu` is the Navbar's own menu part
+     (`w-nav-menu`). Webflow positions the OPEN menu itself - `[data-nav-menu-open]` is
+     `absolute; top:100%; left:0; right:0`, and inside the generated `.w-nav-overlay` (itself at
+     `top:100%`) it is `top:0` - which lands on the same pixels either way. The closed state is
+     Webflow's `.w-nav[data-collapse=medium] .w-nav-menu{display:none}`. Height, ground and
+     scrolling are ours and are not blocked. */
+  .navbar_menu{flex-grow:0;height:calc(100svh - 3.75rem);background-color:var(--ink-hero,#000000);overflow:auto}
   .navbar_menu-inner{flex-direction:column;align-items:stretch;min-height:100%;column-gap:0;row-gap:0;padding-top:2.5rem;padding-bottom:2.5rem;padding-left:5%;padding-right:5%}
   .navbar_links{flex-direction:column;align-items:stretch;column-gap:0;row-gap:0;margin-left:0;margin-right:0}
   .navbar_link{font-size:2rem;font-weight:300;letter-spacing:-0.02em;line-height:1.25;padding-top:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--rule-plate,#454545);white-space:normal}
@@ -336,7 +379,6 @@ a:hover{color:var(--text-reversed,#EDEDED)}
   .claim_lede{font-size:2rem;line-height:1.34}
   /* — hero — */
   .section_hero{min-height:100svh}
-  .hero_stack{margin-top:clamp(2rem,44.4svh - 18rem,3rem);margin-bottom:clamp(2rem,44.4svh - 18rem,3rem)}
   .button{padding-top:1.0625rem;padding-bottom:1.0625rem}
   /* — editorial grids stack on the SAME gap scale the bands use — */
   .statement_grid{grid-template-columns:1fr;row-gap:1.5rem}
@@ -345,7 +387,6 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .heading-style-h2.is-three-lines{max-width:15ch;text-wrap:balance}
   .statement_body-col{max-width:100%}
   .ways_grid{grid-template-columns:1fr;row-gap:4rem}
-    .ways_row{padding-top:2rem;padding-bottom:2rem}
   /* — rails — */
                 .rules_h-bottom{left:-1.5rem;right:-1.5rem}
   .footer_rule{margin-left:-1.5rem;margin-right:-1.5rem}
@@ -376,11 +417,9 @@ a:hover{color:var(--text-reversed,#EDEDED)}
   .padding-section-medium{padding-top:6rem;padding-bottom:6rem}
   .padding-section-small{padding-top:5rem;padding-bottom:5rem}
   .padding-section-medium.is-hero{padding-top:6rem;padding-bottom:3.5rem}
-    .hero_stack{max-width:100%;margin-top:2rem;margin-bottom:2rem}
   .hero_lead-block{max-width:100%;margin-top:1.75rem}
   .statement_grid{row-gap:1.5rem}
   .ways_grid{row-gap:4rem}
-  .ways_row{padding-top:1.75rem;padding-bottom:1.75rem}
   .footer_cell{padding-top:3rem;padding-bottom:3rem}
   .close_stack.is-box{aspect-ratio:auto;padding:2.5rem}
 }
@@ -453,29 +492,44 @@ a:hover{color:var(--text-reversed,#EDEDED)}
    RIGHT edge - columns 2 to 6 - so no trim can ever reach one. */
 .doc-field_grid{display:grid;row-gap:1.375rem}
 .doc-row{display:flex;justify-content:flex-end;column-gap:0.5rem}
+/* WP3.2 - THE NAMED CASES ARE `doc-slot`, NOT `doc-tile is-slot`. `.doc-tile.is-slot` carried no
+   declaration, so `is-slot` would never have become a style object and the element would have
+   arrived in Webflow without it (F4) - and the field script finds its cases BY that class. Worse,
+   every lit rule was written `.doc-tile.is-hot`, a chain no element wore at rest, so Webflow
+   would have tree-shaken the whole lit state out (F1) and the three named cases would never have
+   lit. A named case now wears `doc-slot` at rest and `doc-slot is-hot` when lit: both are chains
+   an element really wears, the script toggles `is-hot` on `doc-slot`, and `doc-slot` is a name
+   that exists nowhere else in the system, so it can never be a global used as a combo (F3).
+   `doc-slot` repeats `doc-tile`'s construction verbatim - same face, same edge, same three ruled
+   lines, same 2200ms curve - because they are the same object with two roles. */
 .doc-tile{flex-grow:0;flex-shrink:0;flex-basis:4rem}
+.doc-slot{flex-grow:0;flex-shrink:0;flex-basis:4rem}
 /* the tile: paper-proportioned (1 : 1.31, US Letter), one hairline edge, and THREE ruled
    lines of UNEQUAL length - two full and one short, the way a real paragraph ends. That
    raggedness is the whole difference between a document and a placeholder rectangle. */
 /* ONE duration for the whole tile: face and edge move together on the same curve, so a
    document surfaces as a single object instead of snapping its edge and then filling. */
-.doc-tile{position:relative;aspect-ratio:1 / 1.31;background-color:#080808;border:1px solid #242424;transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1),border-color 2200ms cubic-bezier(0.33,0,0.2,1),opacity 520ms cubic-bezier(0.16,1,0.3,1)}
-.doc-tile::before{content:"";position:absolute;left:0.5rem;top:0.75rem;right:0.5rem;height:1px;background-color:#3A3A3A;box-shadow:0 6px 0 #242424;transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1)}
+.doc-tile{position:relative;aspect-ratio:1 / 1.31;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1),border-color 2200ms cubic-bezier(0.33,0,0.2,1),opacity 520ms cubic-bezier(0.16,1,0.3,1)}
+.doc-tile::before{content:"";position:absolute;left:0.5rem;top:0.75rem;right:0.5rem;height:1px;background-color:var(--rule-ink,#3A3A3A);box-shadow:0 6px 0 var(--edge-card,#242424);transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1)}
 .doc-tile::after{content:"";position:absolute;left:0.5rem;top:1.5rem;width:52%;height:1px;background-color:#262626}
-.doc-tile.is-hot{background-color:#2A1200;border-color:#FF6600}
-.doc-tile.is-hot::before{background-color:#C0600B;box-shadow:0 6px 0 #93490A;transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1)}
-.doc-tile.is-hot::after{background-color:#6B3504}
+.doc-slot{position:relative;aspect-ratio:1 / 1.31;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1),border-color 2200ms cubic-bezier(0.33,0,0.2,1),opacity 520ms cubic-bezier(0.16,1,0.3,1)}
+.doc-slot::before{content:"";position:absolute;left:0.5rem;top:0.75rem;right:0.5rem;height:1px;background-color:var(--rule-ink,#3A3A3A);box-shadow:0 6px 0 var(--edge-card,#242424);transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1)}
+.doc-slot::after{content:"";position:absolute;left:0.5rem;top:1.5rem;width:52%;height:1px;background-color:#262626}
+.doc-slot.is-hot{background-color:#2A1200;border-color:var(--orange,#FF6600)}
+.doc-slot.is-hot::before{background-color:#C0600B;box-shadow:0 6px 0 #93490A;transition:background-color 2200ms cubic-bezier(0.33,0,0.2,1)}
+.doc-slot.is-hot::after{background-color:#6B3504}
 .doc-tile_mark{position:absolute;right:0.25rem;bottom:0.25rem;width:0.5625rem;height:auto;display:block;opacity:1;transition:opacity 1500ms cubic-bezier(0.33,0,0.2,1)}
 .doc-tile_mark.is-dim{opacity:0}
 /* the caption is CLIENT copy (cap table / IP assignment / customer MSA) so it is a real
    classed element, never pseudo content. Its 14px leader line is decorative, so it is a pseudo. */
-.doc-tile_cap{position:absolute;left:0;top:calc(100% + 0.4375rem);font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;color:#FF6600;white-space:nowrap;opacity:1;transition:opacity 1500ms cubic-bezier(0.33,0,0.2,1)}
+.doc-tile_cap{position:absolute;left:0;top:calc(100% + 0.4375rem);font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;color:var(--orange,#FF6600);white-space:nowrap;opacity:1;margin-top:0;margin-bottom:0;transition:opacity 1500ms cubic-bezier(0.33,0,0.2,1)}
 .doc-tile_cap.is-dim{opacity:0}
-.doc-tile_cap::before{content:"";position:absolute;left:0;top:-0.375rem;width:0.875rem;height:1px;background-color:#FF6600}
+.doc-tile_cap::before{content:"";position:absolute;left:0;top:-0.375rem;width:0.875rem;height:1px;background-color:var(--orange,#FF6600)}
 @media (max-width:991px){
   .hero_split{grid-template-columns:1fr;row-gap:3.5rem}
   .doc-field_grid{row-gap:1.25rem}
   .doc-tile{flex-basis:3.25rem}
+  .doc-slot{flex-basis:3.25rem}
 }
 @media (max-width:767px){
   .heading-style-h1{font-size:clamp(2rem,1.2rem + 2.6vw,2.375rem)}
@@ -484,6 +538,7 @@ a:hover{color:var(--text-reversed,#EDEDED)}
   .ways_term{font-size:1.4375rem}
   .claim_lede{font-size:1.75rem}
   .doc-tile{flex-basis:3rem}
+  .doc-slot{flex-basis:3rem}
   .doc-field_grid{row-gap:1.125rem}
   .doc-tile_cap{font-size:0.75rem;letter-spacing:0.02em}
 }
@@ -494,8 +549,10 @@ a:hover{color:var(--text-reversed,#EDEDED)}
   .ways_term{font-size:1.375rem}
   .claim_lede{font-size:1.5625rem}
   .doc-tile{flex-basis:3rem}
+  .doc-slot{flex-basis:3rem}
   .doc-field_grid{row-gap:1rem}
   .doc-tile::after{top:1.25rem}
+  .doc-slot::after{top:1.25rem}
   .doc-tile_cap{font-size:0.75rem;letter-spacing:0}
 }
 
@@ -519,25 +576,48 @@ a:hover{color:var(--text-reversed,#EDEDED)}
    is promoted so the paragraph always paints over it. */
 .padding-global.is-layer{position:relative;z-index:1}
 .intro_art{position:absolute;top:50%;right:-8vw;left:auto;width:clamp(30rem,50vw,60rem);pointer-events:none;transform:translateY(-50%);will-change:transform}
-.intro_art-svg{position:absolute;top:0;left:0;display:block;width:100%;height:auto;overflow:visible;fill:var(--orange,#FF6600)}
-/* the ghost is the rest state and is never clipped, so the mark is present before a single
-   frame runs. The ink is the same solid path, swept. No stroke anywhere - the logo has none. */
+/* WP6.1 - THESE ARE `<img>` ELEMENTS NOW, not inline `<svg>`. Inline SVG is skipped by the plan
+   generator and becomes hand work at deploy (F9); an SVG file behind `<img>` is uploaded and
+   bound. The consequence is that `fill` is gone from this rule - an `<img>` cannot take colour
+   from CSS - so the `#FF6600` lives in brand/logo/afissio-apex-solid-orange.svg itself. Size,
+   crop, bleed and the two opacities are unchanged, and the light-pass script clones the ink
+   `<img>` and masks it exactly as before.
+   The ghost is the rest state and is never clipped, so the mark is present before a single frame
+   runs. The ink is the same solid path, swept. No stroke anywhere - the logo has none. */
+.intro_art-svg{position:absolute;top:0;left:0;display:block;width:100%;height:auto}
 .intro_art-svg.is-ghost{position:relative;opacity:0.05}
-.intro_art-svg.is-ink{opacity:0.17;clip-path:inset(0 0 0 0);will-change:clip-path}
+.intro_art-svg.is-ink{opacity:0.17}
 .intro_stack{max-width:56rem}
 /* the moved paragraph is the section's whole content, so it takes a display measure rather
    than the body lead rung: 26px at the 992 floor rising to 34px. The three emphasised phrases
    are the client's own words at Bold 700 - what the firm is, what it does, and when. */
 .intro_lede{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:clamp(1.625rem,1.16vw + 0.9rem,2.125rem);line-height:1.42;letter-spacing:-0.015em;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
 .intro_lede-em{font-weight:700;color:var(--text-reversed,#EDEDED)}
-.navbar_dropdown{position:relative}
-.navbar_dropdown::after{content:"";position:absolute;top:100%;left:-1.75rem;width:19.5rem;height:calc(clamp(1rem,1.5vw,1.5rem) + 2px);pointer-events:none}
-.navbar_dropdown.w--open::after{pointer-events:auto}
-.navbar_dropdown-toggle{padding:0;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:3rem;color:var(--text-reversed,#EDEDED);text-decoration:none;white-space:nowrap;cursor:pointer;transition:color 350ms cubic-bezier(0.22,1,0.36,1)}
+/* WP4.1 - `position:relative` DELETED: `.navbar_dropdown` is the Webflow Dropdown itself
+   (`w-dropdown`) and Webflow's own base already sets it. What this class must say instead is
+   `margin-left/right:0`: `.w-dropdown` supplies `margin-left:auto;margin-right:auto`, and this
+   element is a flex item in `.navbar_links`, where auto margins would eat all the free space. */
+.navbar_dropdown{margin-left:0;margin-right:0;text-align:left}
+/* WP4.3 - THE HOVER BRIDGE. It used to be an invisible `::after` strip switched on by
+   `.navbar_dropdown.w--open`, and on Webflow the wrapper NEVER gets `w--open` (F7 - webflow.js
+   puts it on the toggle and the list), so the bridge was dead and the pointer fell through the
+   gap between toggle and panel. Both rules are deleted. The gap is now CLOSED rather than
+   spanned: the toggle extends its own box down to the panel's top edge with a padding-bottom of
+   exactly the navbar container's own padding-bottom - which IS the whole gap - and an equal
+   negative margin-bottom, so the flex row, the wrapper height and the label do not move by a
+   pixel. The pointer therefore never leaves the `.w-dropdown` subtree, no wrapper state is
+   needed, and Webflow's `data-delay="120"` still forgives the seam. Reset at <=991, where the
+   list is static and there is no gap.
+   WP4.2 - this element is now a `<div>`, as Webflow builds a Dropdown Toggle (F8). It cannot
+   carry a link; `/about` stays reachable from the footer index and the intro's
+   "Learn about Afissio" button.
+   WP2 - `.w-dropdown-toggle` supplies `padding:20px`, `padding-right:40px`, `color:#222`,
+   `vertical-align:top`, `text-align:left` and the two auto margins; all are set here. */
+.navbar_dropdown-toggle{padding:0;padding-bottom:clamp(1rem,1.5vw,1.5rem);margin-top:0;margin-bottom:calc(0rem - clamp(1rem,1.5vw,1.5rem));margin-left:0;margin-right:0;vertical-align:top;text-align:left;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:3rem;color:var(--text-reversed,#EDEDED);text-decoration:none;white-space:nowrap;cursor:pointer;transition:color 350ms cubic-bezier(0.22,1,0.36,1)}
 .navbar_dropdown-toggle:hover{color:var(--orange,#FF6600)}
 .navbar_dropdown-toggle:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:0.25rem}
 .navbar_dropdown-trigger{display:flex;align-items:center;column-gap:0.4375rem}
-.navbar_dropdown-label{white-space:nowrap}
+.navbar_dropdown-label{white-space:nowrap;margin-top:0;margin-bottom:0}
 .navbar_dropdown-caret{width:0.375rem;height:0.375rem;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg) translateY(-0.0625rem);transition:transform 280ms cubic-bezier(0.22,1,0.36,1)}
 /* the panel: one step off black, one hairline, square, and generous - the premium signal here
    is precision and air, not ornament. */
@@ -547,26 +627,44 @@ a:hover{color:var(--text-reversed,#EDEDED)}
    bottom hairline, so the two read as one edge. The offset is the navbar container's own
    padding-bottom, which is what puts it there at every width. It carries no top border of its
    own - the orange rule that draws on opening is the panel's top edge. */
-.navbar_dropdown-list{position:absolute;top:calc(100% + clamp(1rem,1.5vw,1.5rem));left:-1.75rem;min-width:19.5rem;background-color:#080808;border:1px solid #242424;border-top-width:0;padding-top:1.375rem;padding-bottom:1.375rem;opacity:0;clip-path:inset(0 0 100% 0)}
+/* WP4.1 - `position:absolute` DELETED: Webflow's `.w-dropdown-list` supplies it, and `position`
+   is blocked on a widget-part class. `top` and `left` are NOT blocked, so the panel keeps its own
+   offsets and still hangs off the bar's bottom hairline.
+   §4c-bis - `opacity:0` and `clip-path` DELETED from the rest state. Webflow's own base closes
+   this panel with `display:none` and opens it with `.w-dropdown-list.w--open{display:block}`, so
+   an authored `opacity:0` was a second, JS-dependent hiding mechanism: if the decorator did not
+   run, the panel would open invisible. Nothing rests at `opacity:0` in this sheet now - the
+   decorator sets the wipe inline at the instant `w--open` appears, and the finished panel is the
+   CSS rest state. */
+.navbar_dropdown-list{top:calc(100% + clamp(1rem,1.5vw,1.5rem));left:-1.75rem;min-width:19.5rem;text-align:left;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);border-top-width:0;padding-top:1.375rem;padding-bottom:1.375rem}
 /* the drawn top edge: the panel's opening signature, and the one orange element in the bar */
 .navbar_dropdown-edge{position:absolute;top:0;left:-1px;right:-1px;height:1px;background-color:var(--orange,#FF6600);transform:scaleX(0);transform-origin:left center}
 .navbar_dropdown-inner{display:grid;row-gap:0.125rem}
 /* no hover slab: that is the generic move and it makes a menu read as a table. The item takes
-   the page's own leader-line device instead - a 12px orange hairline drawing in beside it in
-   the panel's left gutter - and the ink steps up. Nothing jumps, nothing highlights. */
-.navbar_dropdown-link{position:relative;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.5;letter-spacing:0.005em;color:#A8A8A8;text-decoration:none;padding:1rem 2rem 1rem 3.5rem;transition:color 420ms cubic-bezier(0.22,1,0.36,1)}
-.navbar_dropdown-link::before{content:"";position:absolute;left:1.5rem;top:1.5625rem;width:0;height:1px;background-color:var(--orange,#FF6600);transition:width 420ms cubic-bezier(0.22,1,0.36,1)}
-.navbar_dropdown-link:hover{color:var(--text-reversed,#EDEDED)}
-.navbar_dropdown-link:hover::before{width:0.875rem}
-.navbar_dropdown-link:focus-visible::before{width:0.875rem}
-.navbar_dropdown-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:-2px}
+   the page's own leader-line device instead - a 14px orange hairline drawing in beside it in
+   the panel's left gutter - and the ink steps up. Nothing jumps, nothing highlights.
+   WP4.4 - THE LEADER IS NOW PAINTED BY THE LINK'S OWN BACKGROUND, not by a pseudo. It used to be
+   `::before` grown by `:hover::before` and `:focus-visible::before`, and a STACKED pseudo is
+   dropped by the parser (F5), so on Webflow the leader would never have grown at all. A 1px
+   gradient at the same origin (`background-origin` is the padding box, which is exactly what the
+   absolute `::before` measured from) drawn from 0 to 0.875rem by `background-size` gives the same
+   14px rule, the same `--orange`, the same 420ms and the same easing, from three single-state
+   rules on one class. `position:relative` is also gone - `.w-dropdown-link` supplies it (F6).
+   WP2 - the two auto margins, `color:#222`, `vertical-align` and `text-align` set explicitly. */
+.navbar_dropdown-link{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.5;letter-spacing:0.005em;color:#A8A8A8;text-decoration:none;white-space:normal;padding:1rem 2rem 1rem 3.5rem;margin-left:0;margin-right:0;vertical-align:top;text-align:left;background-image:linear-gradient(90deg,var(--orange,#FF6600),var(--orange,#FF6600));background-repeat:no-repeat;background-position:1.5rem 1.5625rem;background-size:0 1px;transition:color 420ms cubic-bezier(0.22,1,0.36,1),background-size 420ms cubic-bezier(0.22,1,0.36,1)}
+.navbar_dropdown-link:hover{color:var(--text-reversed,#EDEDED);background-size:0.875rem 1px}
+.navbar_dropdown-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:-2px;background-size:0.875rem 1px}
 @media (max-width:991px){
-  .navbar_dropdown-toggle{font-size:2rem;font-weight:400;letter-spacing:-0.02em;line-height:1.25;padding-top:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--rule-plate,#454545);white-space:normal}
+  .navbar_dropdown-toggle{font-size:2rem;font-weight:400;letter-spacing:-0.02em;line-height:1.25;padding-top:1.25rem;padding-bottom:1.25rem;margin-bottom:0;border-bottom:1px solid var(--rule-plate,#454545);white-space:normal}
+  .navbar_dropdown-toggle{width:100%}
   .navbar_dropdown-trigger{justify-content:space-between}
   .navbar_dropdown-caret{width:0.5rem;height:0.5rem}
-  .navbar_dropdown-list{position:static;top:auto;left:auto;min-width:0;background-color:transparent;border-width:0;padding-top:0.75rem;padding-bottom:1.25rem}
-  .navbar_dropdown-link{font-size:1.25rem;padding:0.875rem 0 0.875rem 1.75rem}
-  .navbar_dropdown-link::before{left:0;top:1.4375rem;width:0.75rem}
+  /* WP4.1 - `position:static` DELETED: webflow.js puts `w--nav-dropdown-list-open` on the list at
+     the collapse width and Webflow's base makes THAT static, so the widget already does this. The
+     closed state below 992 is Webflow's `display:none`, so top/left never apply. */
+  .navbar_dropdown-list{min-width:0;background-color:transparent;border-width:0;padding-top:0.75rem;padding-bottom:1.25rem}
+  /* the leader is always on in the sheet, at its full 12px - same as the old `::before` here */
+  .navbar_dropdown-link{font-size:1.25rem;padding:0.875rem 0 0.875rem 1.75rem;background-position:0 1.4375rem;background-size:0.75rem 1px}
 }
 @media (max-width:767px){
   .heading-style-h1{font-size:clamp(2rem,1.2rem + 2.6vw,2.375rem)}
@@ -594,12 +692,12 @@ a:hover{color:var(--text-reversed,#EDEDED)}
    .proof_card padding ramp - at a 1:1 ratio, centred in the container, with its stack optically
    centred inside it. Design consistency: the numbers are the card's, not new ones. */
 .close_stack{max-width:56rem;margin-left:auto;margin-right:auto;text-align:center}
-.close_stack.is-box{display:flex;flex-direction:column;justify-content:center;aspect-ratio:1 / 1;width:100%;max-width:44rem;background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem)}
+.close_stack.is-box{display:flex;flex-direction:column;justify-content:center;aspect-ratio:1 / 1;width:100%;max-width:44rem;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2.5rem,4.65vw - 0.39rem,4rem)}
 .close_title-block{max-width:44rem;margin-left:auto;margin-right:auto;margin-top:1.5rem}
 /* 26rem + balance sets the closing lead as THREE even lines at desktop (measured: the string
    is 1055px on one line at 19px, so a 416px measure balances to 3) */
 .close_lead-block{max-width:26rem;margin-left:auto;margin-right:auto;margin-top:1.5rem;text-wrap:balance}
-.text-note{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.5;color:#8E8E8E;margin-top:2.5rem;margin-bottom:0}
+.text-note{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.5;color:var(--text-muted-ink,#8E8E8E);margin-top:2.5rem;margin-bottom:0}
 @media (max-width:479px){
   .heading-style-h1{font-size:clamp(1.75rem,1rem + 2.6vw,2rem)}
   .heading-style-h2{font-size:1.6875rem}
@@ -631,12 +729,12 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .proof_controls{display:flex;align-items:center;column-gap:clamp(1.25rem,2.5vw,2rem);margin-top:clamp(3rem,2.326vw + 1.556rem,4rem)}
 .proof_progress{position:relative;flex-grow:1;height:1px;background-color:#1C1C1C}
 .proof_progress-fill{position:absolute;top:0;left:0;height:1px;width:0;background-color:var(--orange,#FF6600);transition:width 620ms cubic-bezier(0.22,1,0.36,1)}
-.proof_arrow{display:flex;align-items:center;justify-content:center;width:3.25rem;height:2.75rem;border:1px solid #242424;cursor:pointer;opacity:0.8;transition:opacity 420ms cubic-bezier(0.22,1,0.36,1),border-color 420ms cubic-bezier(0.22,1,0.36,1)}
+.proof_arrow{display:flex;align-items:center;justify-content:center;width:3.25rem;height:2.75rem;border:1px solid var(--edge-card,#242424);cursor:pointer;opacity:0.8;transition:opacity 420ms cubic-bezier(0.22,1,0.36,1),border-color 420ms cubic-bezier(0.22,1,0.36,1)}
 .proof_arrow:hover{opacity:1;border-color:#565656}
 .proof_arrow:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
 .proof_arrow-icon{display:block;width:1.5rem;height:auto}
-.proof_card{display:flex;flex-direction:column;flex-grow:1;width:100%;min-height:clamp(21rem,20.9vw + 1.65rem,27rem);background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);transition:background-color 520ms cubic-bezier(0.16,1,0.3,1),border-color 520ms cubic-bezier(0.16,1,0.3,1)}
-.proof_card:hover{background-color:#0E0E0E;border-color:#565656}
+.proof_card{display:flex;flex-direction:column;flex-grow:1;width:100%;min-height:clamp(21rem,20.9vw + 1.65rem,27rem);background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);transition:background-color 520ms cubic-bezier(0.16,1,0.3,1),border-color 520ms cubic-bezier(0.16,1,0.3,1)}
+.proof_card:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:#565656}
 /* align-self is load-bearing: the card is a column flex container, so the default stretch
    would override width:auto and the SVG would centre itself across the whole card. */
 /* each client logo is ONE svg carrying its own mark and its own typography, so the three read
@@ -650,9 +748,9 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .proof_quote{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:1.125rem;line-height:1.5;letter-spacing:-0.01em;min-height:6.75rem;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem);text-wrap:pretty}
 .proof_foot{display:flex;align-items:center;column-gap:1.25rem;margin-top:auto}
 .proof_attrib{display:grid;row-gap:0.375rem;max-width:18rem}
-.proof_role{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1rem;font-weight:400;line-height:1.4;color:var(--text-reversed,#EDEDED)}
-.proof_org{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.4;color:#8E8E8E}
-.proof_plate{flex-grow:0;flex-shrink:0;width:4.5rem;background-color:#080808;border:1px solid #242424;overflow:hidden}
+.proof_role{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1rem;font-weight:400;line-height:1.4;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0}
+.proof_org{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.4;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
+.proof_plate{flex-grow:0;flex-shrink:0;width:4.5rem;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);overflow:hidden}
 /* free stock, greyscale and low-contrast so the whole set reads as one commission rather than
    three photographs. Placeholder imagery - client photography replaces it. */
 .proof_photo{display:block;width:100%;aspect-ratio:1 / 1;object-fit:cover;object-position:50% 26%;filter:grayscale(100%) contrast(1.02) brightness(0.94);transition:filter 520ms cubic-bezier(0.16,1,0.3,1)}
@@ -694,14 +792,13 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .ways_grid{display:grid;grid-template-columns:minmax(0,1fr);column-gap:clamp(2rem,2.326vw + 0.556rem,3rem);row-gap:clamp(3rem,4.5vw - 0.6rem,4.5rem);max-width:none;align-items:start}
 .ways_head{max-width:100%;margin-left:0;margin-right:0;text-align:left}
 .ways_list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1.5rem,2.326vw + 0.056rem,2.5rem);align-items:start;margin-top:0;margin-left:0;margin-right:0;max-width:none;width:100%}
-.ways_box{position:relative;display:flex;flex-direction:column;aspect-ratio:1 / 1;width:100%;min-width:0;min-height:clamp(19rem,19vw,23rem);background-color:#080808;border:1px solid #242424;padding:clamp(2rem,2.9vw - 0.2rem,3.25rem);transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
-.ways_box:hover{background-color:#0E0E0E;border-color:#3A3A3A;z-index:1}
-/* is-active is the reading pass: one box at a time takes a lighter edge and a step up in
-   ground, then hands it on. Set by the behaviour script; the rest state is all three equal,
-   which is a finished state. z-index 1 so the lit edge wins the shared border. */
-.ways_box.is-active{background-color:#0E0E0E;border-color:#565656;z-index:1}
+.ways_box{position:relative;display:flex;flex-direction:column;aspect-ratio:1 / 1;width:100%;min-width:0;min-height:clamp(19rem,19vw,23rem);background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2rem,2.9vw - 0.2rem,3.25rem);transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
+.ways_box:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:var(--rule-ink,#3A3A3A);z-index:1}
+/* WP3.5 - `.ways_box.is-active` DELETED: a runtime state class, and no script has set it since
+   the client took the motion off the offer boxes (2026-09-09). STRUCTURE.md §0 corollary 2 -
+   never hand-author a JS-added class; there is no JS adding this one. */
 /* the step number is a small ruled TAB on the tread's top-right corner - a real classed element (client copy-adjacent, never pseudo content), boxed in the same hairline as the tread, orange figure. The icon sits directly above its heading, where it belongs. */
-.ways_step-num{position:absolute;top:-1px;right:-1px;min-width:2.75rem;padding:0.5rem 0.75rem;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;text-align:center;color:#FF6600;background-color:#000000;border:1px solid #242424}
+.ways_step-num{position:absolute;top:-1px;right:-1px;min-width:2.75rem;padding:0.5rem 0.75rem;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;text-align:center;color:var(--orange,#FF6600);background-color:var(--ink-hero,#000000);border:1px solid var(--edge-card,#242424);margin-top:0;margin-bottom:0}
 .ways_icon{will-change:transform,opacity}
 .ways_icon{display:block;height:2.5rem;width:auto;align-self:flex-start;margin-left:0;margin-right:auto;margin-top:0;margin-bottom:clamp(1.5rem,2.4vw - 0.5rem,2.5rem)}
 .ways_lead-block{max-width:26rem;margin-top:1.5rem}
@@ -728,7 +825,6 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 @media (max-width:991px){ .padding-global.is-bar{padding-left:5%;padding-right:5%} }
 
 @media (max-width:991px){
-  .navbar_dropdown-list{opacity:1;clip-path:none}
   .navbar_dropdown-edge{display:none}
 }
 
@@ -792,8 +888,8 @@ a:hover{color:var(--text-reversed,#EDEDED)}
    three ragged bottoms - and `max-width:100%` stops the aspect ratio from widening the box past
    its own grid column when that happens. Measured: 488 square at 1680, 371 at 1280, 296x353 at
    1024, and no horizontal scroll at any width. */
-.insights_card{display:flex;flex-direction:column;aspect-ratio:1 / 1;align-self:stretch;max-width:100%;background-color:#080808;border:1px solid #242424;padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);text-decoration:none;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
-.insights_card:hover{background-color:#0E0E0E;border-color:#3A3A3A}
+.insights_card{display:flex;flex-direction:column;aspect-ratio:1 / 1;align-self:stretch;max-width:100%;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);color:var(--text-reversed,#EDEDED);text-decoration:none;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
+.insights_card:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:var(--rule-ink,#3A3A3A)}
 .insights_card:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
 /* the drawing: the article's own chart at the offer icons' weight. Never an icon-library glyph. */
 .insights_plate{display:block;align-self:flex-start;width:auto;height:4.5rem;margin-top:0;margin-bottom:clamp(1.25rem,2.33vw - 0.15rem,2.5rem)}
@@ -805,7 +901,7 @@ a:hover{color:var(--text-reversed,#EDEDED)}
 .insights_card-title{max-width:22rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
 /* the action line closes every card on the same baseline, underlined on the page's own link
    vocabulary (client 2026-09-09: the orange leader came off, the underline went on). */
-.insights_action{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.4;color:var(--text-reversed,#EDEDED);text-decoration:underline;text-underline-offset:0.5em;text-decoration-thickness:1px;margin-top:auto;transition:text-underline-offset 420ms cubic-bezier(0.22,1,0.36,1),text-decoration-thickness 420ms cubic-bezier(0.22,1,0.36,1)}
+.insights_action{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.4;color:var(--text-reversed,#EDEDED);text-decoration:underline;text-underline-offset:0.5em;text-decoration-thickness:1px;margin-top:auto;margin-bottom:0;transition:text-underline-offset 420ms cubic-bezier(0.22,1,0.36,1),text-decoration-thickness 420ms cubic-bezier(0.22,1,0.36,1)}
 /* ONE card per row at <=991 (client pin #10): with three cards a 2-up grid leaves the third
    alone on its own row, and this is the tier where the card already releases its square aspect
    and takes content height - which is the measure his longest title needs. The <=479 rule that
@@ -815,4 +911,53 @@ a:hover{color:var(--text-reversed,#EDEDED)}
   .insights_card{aspect-ratio:auto;padding:2.5rem}
   .insights_plate{margin-bottom:1.5rem}
   .insights_card-title{max-width:100%;margin-bottom:2.5rem}
+}
+
+
+/* ============================================================================
+   THE STYLE GUIDE LAYER — worn ONLY by pages/style-guide.html (WP3.6).
+   The style guide becomes the site's Webflow "Style Guide" page: built in the Designer, never
+   published. Its job is F1 insurance. Webflow publishes a rule only if some Designer element
+   wears that exact chain, so every system variant the homepage does not wear at rest would be
+   tree-shaken out of the site's stylesheet and be missing the day a later page needs it. Wearing
+   each one here keeps it alive.
+   The guide is built from the system's own parts wherever it can be - its bands are real
+   sections, its grids are .insights_grid and .method_pair, its heads are .tagline_row +
+   .text-label + .heading-style-h2. These few classes are the ones it genuinely cannot borrow:
+   a colour swatch and a light band have no equivalent on a page that is black end to end.
+   One class per rule; a variant is the base plus one is- combo; every var() with a fallback.
+   ============================================================================ */
+.sg_band{background-color:var(--ink-hero,#000000)}
+.sg_band.is-light{background-color:var(--paper,#FAF9F6)}
+.sg_stack{display:grid;row-gap:clamp(2rem,2.326vw + 0.556rem,3rem)}
+.sg_row{display:flex;flex-wrap:wrap;align-items:center;column-gap:0.75rem;row-gap:1rem}
+.sg_rule{height:1px;background-color:var(--rule-plate,#454545)}
+.sg_swatch-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1rem}
+.sg_swatch{display:block;height:4.5rem;border:1px solid var(--edge-card,#242424)}
+.sg_swatch.is-ink-hero{background-color:var(--ink-hero,#000000)}
+.sg_swatch.is-surface-card{background-color:var(--surface-card,#080808)}
+.sg_swatch.is-surface-card-hover{background-color:var(--surface-card-hover,#0E0E0E)}
+.sg_swatch.is-paper{background-color:var(--paper,#FAF9F6)}
+.sg_swatch.is-panel{background-color:var(--panel,#EBE9E2)}
+.sg_swatch.is-ink{background-color:var(--ink,#1A1A1A)}
+.sg_swatch.is-text-reversed{background-color:var(--text-reversed,#EDEDED)}
+.sg_swatch.is-text-reversed-soft{background-color:var(--text-reversed-soft,#C9C9C9)}
+.sg_swatch.is-text-muted-ink{background-color:var(--text-muted-ink,#8E8E8E)}
+.sg_swatch.is-on-accent{background-color:var(--on-accent,#FFFFFF)}
+.sg_swatch.is-orange{background-color:var(--orange,#FF6600)}
+.sg_swatch.is-orange-text{background-color:var(--orange-text,#B34B00)}
+.sg_swatch.is-rule-plate{background-color:var(--rule-plate,#454545)}
+.sg_swatch.is-rule-ink{background-color:var(--rule-ink,#3A3A3A)}
+.sg_swatch.is-edge-card{background-color:var(--edge-card,#242424)}
+.sg_swatch.is-rule{background-color:var(--rule,#DDDBD4)}
+.sg_swatch.is-rule-accent{background-color:var(--rule-accent,#B34B00)}
+.sg_swatch-name{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.04em;line-height:1.3;color:var(--text-reversed-soft,#C9C9C9);margin-top:0.5rem;margin-bottom:0}
+.sg_swatch-name.is-on-light{color:var(--ink,#1A1A1A)}
+.sg_note{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.04em;line-height:1.4;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
+.sg_demo-box{background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:1.5rem}
+@media (max-width:991px){
+  .sg_swatch-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:479px){
+  .sg_swatch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }

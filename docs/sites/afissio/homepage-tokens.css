@@ -1,24 +1,45 @@
-/* LIVE token sheet for pages/homepage.html (font urls pathed for pages/). It began as a
-   2026-09-08 copy of the v1 sheet and its header still said "FROZEN ARCHIVE - DO NOT EDIT" on
-   2026-09-09, which was false and cost the page its bold: the R11 weights (CLAUDE.md §3.5) set
-   display, H2 and H3 to Bold 700 while this sheet declared only 300/400/500, so every heading
-   rendered FAUX bold, synthesized by the browser. The 700 face is declared below.
-   Root ../colors_and_type.css carries the same four faces plus the R11 dark ladder; if this page
-   is ever switched to link it, delete this sheet rather than keeping two. */
-/* Afissio — tokens + fonts. Role token → brand colour → hex:
-   surface/page      → paper        → #FAF9F6
-   surface/panel     → panel-grey   → #EBE9E2
-   surface/ink       → panel-ink    → #161616
-   text/primary      → ink          → #1A1A1A
-   text/reversed     → reversed     → #EDEDED
-   text/muted        → muted        → #6B6560
-   accent/mark       → orange       → #FF6600 (marks ≥24px, text on ink only)
-   accent/text       → orange-text  → #B34B00 (links + text accents on light)
-   rule/structural   → rule         → #DDDBD4
-   rule/soft         → rule-soft    → #ECEAE3
-   rule/on-ink       → rule-ink     → #3A3A3A
-   rule/accent       → rule-accent  → #B34B00 (2px, at most one per page)
-   ONE typeface: Pluto Sans (client decision 2026-08-28). Display = Light 300, body = Regular 400, UI/H3 = Medium 500, labels = Regular 400 uppercase. */
+/* Afissio — THE token sheet. ROUND-TOKEN: R13-WEBFLOW-READY (2026-09-11)
+
+   WP1: this file IS the system's token layer. It was `pages/homepage-old-tokens.css` — the sheet
+   the page and the client actually see — moved here byte for byte and then reduced per WP7. The
+   two sheets it replaces are in `_archive/` (`r11-rev2-colors_and_type.css` from an abandoned R11
+   revision, and `styles.css`, the pre-R11 light system). There is now ONE token stack, because
+   Webflow has one variable map per site.
+
+   WP7: the block below is THE TRUTH. The operator regenerates the deploy variable map from it
+   (F13), so a token that is not here does not exist at deploy, and a `var()` whose fallback
+   disagrees with its value is a rule that renders two different ways. Therefore:
+     · exactly the tokens the sheets use, plus the ones the style guide shows — 0 unused;
+     · every literal colour used by three or more rules is a named token at the SAME hex;
+     · every var() in every sheet carries a fallback EQUAL to the value here;
+     · no --custom-prop is declared outside :root (a declaration on any other selector is
+       filtered out at deploy, so it silently does not exist).
+   The hero field's warm animation states stay literal, as do #565656, #8F3C00, #A8A8A8,
+   #1C1C1C and #262626 — each under three uses.
+
+   ROLE → TOKEN → HEX
+   surface/page            → --ink-hero            → #000000   the whole page is black
+   surface/card            → --surface-card        → #080808   every card, tile, panel and the menu
+   surface/card hover      → --surface-card-hover  → #0E0E0E   the one step up on hover
+   surface/light           → --paper               → #FAF9F6   button hover ground
+   surface/panel           → --panel               → #EBE9E2   the light footer variant
+   text/on light           → --ink                 → #1A1A1A   the primary button ground
+   text/display+lead       → --text-reversed       → #EDEDED   display and leads on black
+   text/body               → --text-reversed-soft  → #C9C9C9   body on black, 12.3:1, less glare
+   text/muted              → --text-muted-ink      → #8E8E8E   meta and captions on black
+   text/on accent          → --on-accent           → #FFFFFF   label on the orange CTA, 5.40:1
+   accent/mark             → --orange              → #FF6600   the apex, marks, rules on ink
+   accent/text            → --orange-text          → #B34B00   CTA ground and text accents, 5.0:1
+   rule/hairline on black  → --rule-plate          → #454545   section seams, ghost button edge
+   rule/softer             → --rule-ink            → #3A3A3A   card hover edge, tile ruled line
+   rule/card edge          → --edge-card           → #242424   every card and tile edge
+   rule/on light           → --rule                → #DDDBD4   the light ghost button edge
+   rule/accent             → --rule-accent         → #B34B00   2px focus ring
+
+   ONE typeface: Pluto Sans (client decision 2026-08-28). WEIGHTS: display, H2 and H3 are Bold 700
+   (CLAUDE.md §3.5); body, leads and labels are Regular 400; Medium 500 is used once, on
+   `.heading-style-h3.is-card`; Light 300 carries the leads and the claim lede. @font-face never
+   deploys — the operator installs all four faces in Webflow (manual deploy step). */
 /* Pluto Sans — client-supplied HvD TRIAL files (2026-08-28). CANVAS/PREVIEW ONLY:
    trial licence + reduced 70-glyph set (no : ; " ( ) — ’ $ & @ % ·). The licensed
    production webfonts must replace these before anything ships. */
@@ -27,27 +48,18 @@
 @font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
 @font-face{font-family:"Pluto Sans";src:url('fonts/pluto-sans-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
 :root{
-  /* Swiper theme hook: the pagination fill is the widget's own element and cannot carry
-     one of our classes, so it is coloured through this. Declared in :root because a
-     --custom-prop on any other selector is filtered out at deploy. */
-  --swiper-theme-color:#FF6600;
-  /* ADDED 2026-09-08: one hairline colour for a page that is black end to end, and
-     brighter than v1 #262626 (1.39:1 on black) per the operator instruction. 2.14:1. */
-  --rule-plate:#454545;
-  --paper:#FAF9F6; --panel:#EBE9E2; --panel-ink:#161616;
-  --ink:#1A1A1A; --text-reversed:#EDEDED; --muted:#6B6560;
+  /* surfaces */
+  --ink-hero:#000000; --surface-card:#080808; --surface-card-hover:#0E0E0E;
+  --paper:#FAF9F6; --panel:#EBE9E2; --ink:#1A1A1A;
+  /* text */
+  --text-reversed:#EDEDED; --text-reversed-soft:#C9C9C9; --text-muted-ink:#8E8E8E; --on-accent:#FFFFFF;
+  /* accent */
   --orange:#FF6600; --orange-text:#B34B00;
-  --rule:#DDDBD4; --rule-soft:#ECEAE3; --rule-ink:#3A3A3A; --rule-accent:#B34B00;
-  --panel-pine:#064D49; --panel-ocean:#16324A; --rule-pine:#33544A; --rule-ocean:#2C4A64;
-  --ink-hero:#000000; --rule-ink-hero:#262626;
-  /* dark-ground reading tone (2026-08-29): #EDEDED for display and leads, this
-     softer step for body on ink — 12.3:1 on #000000, less glare at 400 weight. */
-  --text-reversed-soft:#C9C9C9;
-  /* the one control radius — buttons and inputs only; surfaces stay square */
-  --radius-control:0.375rem;
-  /* rungs RATIFIED 2026-08-29 — H1 set to 3.375rem (54px) so the hero headline
-     holds ONE line in the 54rem stack; ladder 54 → 48 (≤991) → 40 (≤767). */
-  --size-label:0.75rem; --size-body:1rem; --size-lead:1.5625rem; --size-h3:1.5rem; --size-h2:2rem; --size-h1:3.375rem;
+  /* rules */
+  --rule-plate:#454545; --rule-ink:#3A3A3A; --edge-card:#242424; --rule:#DDDBD4; --rule-accent:#B34B00;
+  /* type rungs — H1 3.375rem (54px) so the hero headline holds ONE line in the 54rem stack */
+  --size-label:0.75rem; --size-body:1rem; --size-lead:1.5625rem;
+  /* whitespace rungs and containers — FROZEN (BRIEF.md §3) */
   --section-s:9rem; --section-m:14rem; --section-l:18rem;
   --container-xl:105rem; --container-l:77.5rem; --container-m:60rem; --container-s:45rem;
 }
