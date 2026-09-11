@@ -790,8 +790,9 @@
    so this sheet and the markup are unchanged by that pin.
    ============================================================================ */
 .ways_grid{display:grid;grid-template-columns:minmax(0,1fr);column-gap:clamp(2rem,2.326vw + 0.556rem,3rem);row-gap:clamp(3rem,4.5vw - 0.6rem,4.5rem);max-width:none;align-items:start}
-/* client 2026-09-11: the engage head is CENTRED (tagline, heading, lead, CTA). text-align lives on
-   the head alone - never on .ways_grid - so the three boxes keep their left-aligned text. */
+/* client 2026-09-11 (third call, back to the centred version): the engage head is CENTRED -
+   tagline, heading, lead, CTA. text-align lives on the head alone, never on .ways_grid, so the
+   three boxes keep their left-aligned text. */
 .ways_head{max-width:100%;margin-left:auto;margin-right:auto;text-align:center}
 /* the tagline-to-heading gap is ONE rung system-wide: .method_title-block, .proof_title-block,
    .insights_title-block and .close_title-block all carry margin-top:1.5rem. The engage head wore
@@ -807,7 +808,10 @@
 .ways_step-num{position:absolute;top:-1px;right:-1px;min-width:2.75rem;padding:0.5rem 0.75rem;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;text-align:center;color:var(--orange,#FF6600);background-color:var(--ink-hero,#000000);border:1px solid var(--edge-card,#242424);margin-top:0;margin-bottom:0}
 .ways_icon{will-change:transform,opacity}
 .ways_icon{display:block;height:2.5rem;width:auto;align-self:flex-start;margin-left:0;margin-right:auto;margin-top:0;margin-bottom:clamp(1.5rem,2.4vw - 0.5rem,2.5rem)}
-.ways_lead-block{max-width:44rem;margin-left:auto;margin-right:auto;margin-top:1.5rem}
+/* 52rem + balance sets the engage lead as TWO even lines (client 2026-09-11): the string is 1500px
+   on one line at 19px, so a measure over 750px takes it to two and balance evens them at ~750px.
+   Under 750px it would fall back to three. */
+.ways_lead-block{max-width:52rem;margin-left:auto;margin-right:auto;margin-top:1.5rem;text-wrap:balance}
 @media (max-width:991px){
   .ways_grid{grid-template-columns:1fr;row-gap:3rem}
   .ways_list{grid-template-columns:1fr;row-gap:1.25rem;margin-top:0;margin-left:0;margin-right:0;width:100%}
