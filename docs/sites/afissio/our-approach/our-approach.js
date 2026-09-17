@@ -33,6 +33,8 @@
 
    R17: the sequence's host is `sequence_aside` now, not `sequence_head` - the sticky head, its
    description and its CTA settle as ONE block, and the six steps stagger past it afterwards.
+   R35: #voice settles as ONE block too - `quote_panel`, the bracketed panel that replaced the
+   centred `quote_stack` (portrait, mark, words and foot arrive together, as a panel should).
 
    The list is keyed on CLASSES, not ids: at review both option blocks of every section had to
    settle and only the A block carried an id, and after Phase D it stays that way so the next
@@ -52,7 +54,7 @@ if(window.__afissioApproachSettleV1)return;window.__afissioApproachSettleV1=1;
 if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 var SEL=['.sequence_aside','.sequence_step',
  '.band_stack',
- '.quote_stack',
+ '.quote_panel',
  '.faq_head','.faq_row',
  '.close_stack'].join(',');
 var els=[].slice.call(document.querySelectorAll(SEL));
@@ -279,6 +281,20 @@ function size(){
    ceiling - red clipping at 255 while green sat at 102 was the other half of why the last pass
    went red. The ember's radius is 0.22 of the long edge, so this is a small bright heart in a
    dark field, not a brighter field. */
+/* R38 - RESPONSIVE GEOMETRY (client note 2026-09-17: "make the page extremely responsive ...
+   also the animations must be responsive too"). Every number in this field was already a FRACTION
+   of the section box, so radius, travel and the mark scale by construction. Two things were not,
+   and both broke on a narrow box:
+     · THE LEFT VEIL was tuned for a 3:2 desktop hero - opaque to 17% of the width and clear by
+       56%. On a 390px phone that is 218px of forced black out of 390, and the ember lived in the
+       remaining sliver, so the field read as a flat black box with a smudge in the corner. The
+       veil is now a function of the box: on a narrow hero it holds to 4% and clears by 30%,
+       because there is no left column to protect - the type is full width and sits above it.
+     · THE BLOOM CENTRES sat at x 0.74-0.92, which is correct when 0.56 of the width is veiled and
+       wrong when 0.30 is. narrow() pulls them in toward 0.60-0.78 on the same curve, so the ember
+       stays inside the visible field at every width instead of hiding off the right edge.
+   Measured at 1920 / 1440 / 1280 / 1024 / 991 / 768 / 479 / 390 and at 844x390 landscape. */
+function narrow(){return W<820?(820-Math.max(360,W))/460:0}   /* 0 at >=820px, 1 at <=360px */
 var BLOOMS=[
   {x:0.74,y:0.58,r:0.44,a:0.22,c:'255,102,0',dx:0.18,dy:0.14,s:0.000368,rw:0.26,rs:0.000254},
   {x:0.92,y:0.70,r:0.34,a:0.13,c:'179,75,0',dx:0.15,dy:0.13,s:0.000489,rw:0.30,rs:0.000339},
@@ -309,8 +325,9 @@ function paint(t){
        here is TWO sines at unrelated periods (the second at 0.43x amplitude, 1.7x and 0.6x the
        rate), so the centre wanders a soft open path that never retraces itself - it rises, sways
        past, and comes back around. The radius breathes on a third period again. */
-    var p1=t*bl.s,p2=t*bl.s*1.7,p3=t*bl.s*0.6;
-    var cx=(bl.x+(Math.sin(p1)*0.78+Math.sin(p2)*0.34)*bl.dx)*W;
+    var p1=t*bl.s,p2=t*bl.s*1.7,p3=t*bl.s*0.6,nb=narrow();
+    var bxf=bl.x-0.16*nb;                                  /* R38: pulled in on a narrow box */
+    var cx=(bxf+(Math.sin(p1)*0.78+Math.sin(p2)*0.34)*bl.dx)*W;
     var cy=(bl.y+(Math.cos(p1*0.78)*0.78+Math.sin(p3)*0.34)*bl.dy)*H;
     var rr=bl.r*d*(1+Math.sin(t*bl.rs)*bl.rw*0.72+Math.sin(t*bl.rs*1.9)*bl.rw*0.28);
     var g=ctx.createRadialGradient(cx,cy,0,cx,cy,rr);
@@ -332,9 +349,10 @@ function paint(t){
      62%, so the warmth lives entirely on the right and the left-aligned stack sits on the page's
      own surface token with nothing behind it. This is a gradient too - no edge anywhere. */
   var hg=ctx.createLinearGradient(0,0,W,0);
+  var nv=narrow(),vSolid=0.17-0.13*nv,vClear=0.56-0.26*nv;   /* R38: box-aware veil */
   for(var k=0;k<=10;k++){
-    var uk=k/10,vk=uk<0.17?1:Math.pow((1+Math.cos(Math.PI*((uk-0.17)/0.39)))/2,1.15);
-    if(uk>0.56)vk=0;
+    var uk=k/10,vk=uk<vSolid?1:Math.pow((1+Math.cos(Math.PI*((uk-vSolid)/(vClear-vSolid))))/2,1.15);
+    if(uk>vClear)vk=0;
     hg.addColorStop(uk,'rgba(0,0,0,'+vk.toFixed(4)+')');
   }
   ctx.fillStyle=hg;ctx.fillRect(0,0,W,H);
@@ -431,9 +449,13 @@ start();
    than punching a circle in it. The type sits on plain black; the computation happens top,
    bottom, left and right of it - exactly the brief.
 
-   DARK AND SOFT, both asked for: peak dot alpha is 0.40 of #B34B00, which lands a bright dot at
-   about #48 1E 00 against a black ground, and 2px dots on a 20px pitch cover 1% of the area - so
-   the field reads as texture, never as a surface. No glow, no blur, no second hue.
+   DARK AND SOFT, both asked for - but RECOGNISABLE, which the client asked for twice (R29c, then
+   R32 2026-09-17: "a little brighter, it is very difficult to recognize it now"). Peak dot alpha
+   is 0.62 and the crest rides from #B34B00 up to #FF6600, which lands a bright dot at about
+   #9E3F00 against a black ground; the floor stays 0.045, so the gaps still nearly leave and the
+   bands are what gained. 2px dots on a 20px pitch cover 1% of the area - so the field reads as
+   texture, never as a surface. No glow, no blur, no second hue: both oranges are hue 24-25
+   degrees, so the crest is this one hue lifted in lightness, not a new colour.
 
    HOW IT SHIPS (§4c-bis): a <canvas>, so custom code in the site's script bundle. REDUCED MOTION
    PAINTS ONE STILL FRAME and stops. Nothing paints while #judgment is off screen or the tab is
@@ -452,7 +474,22 @@ function size(){
   cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
   ctx.setTransform(dpr,0,0,dpr,0,0);
 }
-var PITCH=20,DOT=2,FLOOR=0.045,PEAK=0.42,HOLE_IN=0.34,HOLE_OUT=0.74;
+/* R38 - THE LATTICE SCALES WITH ITS BOX (client note 2026-09-17: "the animations must be
+   responsive too"). PITCH, DOT and the spatial frequency k were absolute pixel values, so the
+   field was a different design at every width: at 1920 a dense 96-column texture, at 390 a coarse
+   19-column grid whose interference bands were twice the width of the box - which is why no
+   structure was visible on a phone. All three are now derived from the box's diagonal each frame:
+     PITCH = clamp(13, d/64, 22)        so the column count stays ~55-70 at every width
+     DOT   = 2 above a 16px pitch, else 1.5
+     k     = the authored rad/px * (1180 / d)   so a band is the same FRACTION of the box
+   The hole, the sources' orbits and the temporal rates are already fractions and are untouched. */
+var PITCH=20,DOT=2,KSCALE=1,FLOOR=0.045,PEAK=0.62,HOLE_IN=0.34,HOLE_OUT=0.74;
+function scale(){
+  var d=Math.sqrt(W*W+H*H);
+  PITCH=Math.max(13,Math.min(22,Math.round(d/64)));
+  DOT=PITCH>=16?2:1.5;
+  KSCALE=1180/d;
+}
 /* the clear zone follows the TYPE, not the box: the stack is left-aligned on the container rail
    (R29b), so the hole is centred at 32% of the width rather than 50% - the computation is then
    heaviest to the right of the copy, where there is nothing to read. */
@@ -491,6 +528,7 @@ function paint(t){
     sx.push((s.x+Math.cos(t*s.s)*s.o)*W);
     sy.push((s.y+Math.sin(t*s.s*1.31)*s.o*0.7)*H);
   }
+  scale();
   var hx=W*HOLE_CX,hy=H*HOLE_CY;
   var off=(PITCH-DOT)/2,b;
   for(b=0;b<BUCKETS;b++)bins[b]=bins[b]||[],bins[b].length=0;
@@ -506,7 +544,7 @@ function paint(t){
       var v=0;
       for(i=0;i<SRC.length;i++){
         var dx=x-sx[i],dy=y-sy[i],dist=Math.sqrt(dx*dx+dy*dy);
-        v+=(1+Math.sin(dist*SRC[i].k-t*SRC[i].w))/2;
+        v+=(1+Math.sin(dist*SRC[i].k*KSCALE-t*SRC[i].w))/2;
       }
       v/=SRC.length;
       v=v*v*(3-2*v);v=v*v*(3-2*v);          /* two smoothsteps: the mean is pushed to the extremes */
@@ -517,7 +555,16 @@ function paint(t){
   }
   for(b=0;b<BUCKETS;b++){
     var bin=bins[b];if(!bin.length)continue;
-    ctx.fillStyle='rgba(179,75,0,'+(((b+0.5)/BUCKETS)*PEAK).toFixed(3)+')';
+    /* R32 (client note 2026-09-17: "the animation in this section can be a little brighter, it is
+       very difficult to recognize it now"). PEAK 0.42 -> 0.62 AND the crest climbs the brand's own
+       two oranges: a dim dot stays #B34B00 and a crest dot rides up to #FF6600, so the bright
+       bands gain lightness AND saturation while the gaps stay where they were. Both oranges sit at
+       hue 24-25 degrees, so this is one hue ramped, not a second colour (same reasoning as the
+       hero field's R29b - scaling one hex toward black is what drains a colour). A crest dot now
+       measures about #9E3F00 against black, up from #48 1E 00; the floor is untouched at 0.045,
+       so the modulation depth the client asked for at R29c is preserved, not flattened. */
+    var bu=(b+0.5)/BUCKETS;
+    ctx.fillStyle='rgba('+Math.round(179+76*bu)+','+Math.round(75+27*bu)+',0,'+(bu*PEAK).toFixed(3)+')';
     for(i=0;i<bin.length;i+=2)ctx.fillRect(bin[i],bin[i+1],DOT,DOT);
   }
 }
@@ -628,7 +675,12 @@ function measure(){
 }
 function paint(){
   var vh=window.innerHeight||document.documentElement.clientHeight||1;
-  var line=vh*0.52,sigma=vh*0.075,sy=window.scrollY||0;
+  /* R38: a PX FLOOR under sigma. 7.5% of the viewport is 81px on a 1080 desktop and 29px on a
+     844x390 landscape phone, where the plates are ~110px apart - the gaussian then collapsed to
+     nothing between two plates and the section read as having no lit step at all for most of the
+     scroll. 56px is the smallest sigma that keeps the current step legible at any height, and on
+     a desktop the vh term still wins, so nothing changes there. */
+  var line=vh*0.52,sigma=Math.max(vh*0.075,56),sy=window.scrollY||0;
   /* WINNER TAKES ALL (client note 2026-09-17: "i only want to see one color change. now during
      the transition i see 3 item border colors changing"). The gaussian alone left each
      neighbour at about 0.14 - faint, but three borders were visibly in motion at once. So the
@@ -756,47 +808,39 @@ window.addEventListener("beforeprint",function(){items.forEach(function(it){setO
 })();
 
 /* ============================================================================
-   6 · #voice — THE GLINT CROSSES THE HAIRLINE (client note 2026-09-17: "I don't like the quote
-   icon and it's animation. It must be more premium").
+   6 · #voice — THE MARK IS AN EMBER (client note 2026-09-17: "animate the icon", on the display
+   quote glyph the client kept at R36: "i like the quote icon etc").
 
-   WHAT WAS WRONG. The previous mark was two 4px bars raked 14 degrees, each scaling to 1.14 and
-   back on a 5.2s loop. Two faults, and the second is the one that made it read cheap: it was the
-   only WEIGHTED device on a page drawn entirely in hairlines, so it looked imported; and a shape
-   pumping in place is the most generic motion in the set - a breathing icon, which is what every
-   template does.
+   Two moving marks were rejected here before it: the raked bars that breathed to 1.14 on a 5.2s
+   loop (R26) and the hairline with a segment travelling it (R32). Both moved a SHAPE. This moves
+   only WARMTH, which is the motion vocabulary the hero field set for the page: the glyph's colour
+   rides a 5.6s cosine from the stylesheet's #FF6600 up to #FFA347 - the hero's own ember tint, a
+   lighter step of the same 24-27 degree hue, not a second colour - and back, and the glyph lifts
+   3px with it. Nothing scales, nothing rotates, nothing travels.
 
-   WHAT IT IS NOW. One 1px rule in the card-edge grey with a short #FF6600 segment 26% of its
-   width, and the segment TRAVELS: position is (1 - cos(2*pi*p)) / 2 across the free span, so it
-   crosses in 3.8s, eases to a full stop, and comes back - one 7.6s ping-pong with zero velocity
-   at both ends, so there is no snap, no seam and nothing to count. Transform only; the colour,
-   the length and the track are the stylesheet's.
-
-   ADDITIVE, and it stops when nobody is looking: rest is the dim rule with the glint parked at
-   its left edge, the loop only ever moves it along a track that is already drawn, and the rAF is
-   skipped whenever #voice is off screen or the tab is hidden. With no script, reduced motion on,
-   printing or in a crawler the mark is the finished rule the stylesheet draws. Ships as custom
-   code in the site's script bundle - @keyframes do not survive the style pipeline and
-   prefers-reduced-motion is dropped by it (§4c-bis).
+   ADDITIVE, and it stops when nobody is looking: rest is the stylesheet's apex orange at rest
+   position, the loop only ever lifts and lightens from there, and the rAF is skipped whenever
+   #voice is off screen or the tab is hidden. With no script, reduced motion on, printing or in a
+   crawler the mark is the finished glyph the stylesheet sets. Ships as custom code in the site's
+   script bundle - @keyframes do not survive the style pipeline and prefers-reduced-motion is
+   dropped by it (§4c-bis).
    ============================================================================ */
 (function(){
-if(window.__afissioQuoteMarkV1)return;window.__afissioQuoteMarkV1=1;
-var host=document.querySelector('.quote_mark');if(!host)return;
-var glint=host.querySelector('.quote_mark-rule.is-glint');if(!glint)return;
+if(window.__afissioQuoteMarkV2)return;window.__afissioQuoteMarkV2=1;
+var glyph=document.querySelector('.quote_glyph');if(!glyph)return;
+var host=glyph.closest?glyph.closest('.quote_panel')||glyph:glyph;
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-var PERIOD=7600;
-function rest(){glint.style.transform=''}
+var PERIOD=5600,LIFT=3,A=[255,102,0],B=[255,163,71];
+function rest(){glyph.style.color='';glyph.style.transform=''}
 var raf=0,t0=0;
 function frame(now){
   if(!t0)t0=now;
   if(document.visibilityState==='hidden'){rest();raf=0;return}
   var r=host.getBoundingClientRect(),vh=window.innerHeight||0;
   if(r.bottom<-40||r.top>vh+40){raf=requestAnimationFrame(frame);return}
-  /* AN UNMEASURABLE TRACK IS LEFT ALONE: a frame that is not being rendered reports 0 for both
-     widths, and translating by a span of 0 would park the glint and look broken. */
-  var span=(host.clientWidth||r.width||0)-(glint.offsetWidth||0);
-  if(span<=0){rest();raf=requestAnimationFrame(frame);return}
-  var p=((now-t0)/PERIOD)%1;
-  glint.style.transform='translateX('+(((1-Math.cos(p*Math.PI*2))/2)*span).toFixed(2)+'px)';
+  var e=(1-Math.cos(((now-t0)/PERIOD)*Math.PI*2))/2;   /* 0 -> 1 -> 0, zero velocity at both ends */
+  glyph.style.color='rgb('+Math.round(A[0]+(B[0]-A[0])*e)+','+Math.round(A[1]+(B[1]-A[1])*e)+','+Math.round(A[2]+(B[2]-A[2])*e)+')';
+  glyph.style.transform='translateY('+(-LIFT*e).toFixed(2)+'px)';
   raf=requestAnimationFrame(frame);
 }
 function start(){if(!raf){t0=0;raf=requestAnimationFrame(frame)}}

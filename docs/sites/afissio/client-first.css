@@ -192,11 +192,11 @@
    The 3.5rem button gap was the thing he could see: every CTA row now sits 2rem under its
    paragraph, in every section including the hero. */
 .button-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:0.75rem;row-gap:1rem;margin-top:2rem}
-/* RESTORED BY THE PREVIEW DEPLOY 2026-09-17 - not authored here. R16 deleted these two
+/* RESTORED BY THE PREVIEW DEPLOY - not authored here. The round deleted these two
    modifiers from the shared sheet as "worn by zero elements"; they are worn by EIGHT
    elements on the approved homepage (4 button-row, 4 tagline_row), which left-aligned
-   without them. Byte-identical to the rules in the approved sheet. Delete this block the
-   moment Claude Design restores them upstream. our-approach wears neither class. */
+   without them. Byte-identical to the rules in the approved sheet. The build drops this
+   block by itself the moment Claude Design ships them again. */
 .button-row.is-centered{justify-content:center}
 .button.is-text{background:transparent;color:var(--orange-text,#B34B00);font-weight:400;padding-left:0;padding-right:0;padding-top:1rem;padding-bottom:1rem;border-radius:0;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:0.35em;transition:background-color 420ms cubic-bezier(0.16,1,0.3,1),color 420ms cubic-bezier(0.16,1,0.3,1),text-decoration-thickness 420ms cubic-bezier(0.16,1,0.3,1),text-underline-offset 420ms cubic-bezier(0.16,1,0.3,1)}
 .button.is-text:hover{background:transparent;color:var(--orange-text,#B34B00);text-decoration-thickness:2px}
@@ -1186,18 +1186,61 @@
               it deploys (section 4d).
    ============================================================================ */
 .section_quote{position:relative;background-color:var(--ink-hero,#000000)}
-/* ONE COLUMN, CENTRED, in the order the client's reference sets: plate, statement, attribution.
-   The statement wears the INTERIOR DISPLAY RUNG (heading-style-h2) because with no section
-   heading above it the statement IS this section's display moment - no new type size, and law 2's
-   ratio to the H1 is unchanged. The plate is the page's one round corner: a circular portrait is
-   the single deliberate exception in a square-edged system, not a global radius. */
-.quote_stack{display:grid;justify-items:center;text-align:center;max-width:52rem;margin-left:auto;margin-right:auto}
-.quote_plate{width:clamp(4.5rem,6.98vw - 0.3rem,6rem);margin-top:clamp(2.5rem,3.49vw + 0.34rem,4rem);border-radius:100%;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);overflow:hidden}
+/* R35: THE BRACKETED PANEL (client note 2026-09-17: "It does not look good. But I also don't want
+   it look very generic and boring. be creative"). Five passes at a centred column with a small
+   round avatar were each a version of the default testimonial, and the client rejected each.
+   This is a different construction, built from three things the brand already owns:
+     · THE DIAGONAL CORNER BRACKETS from the client's own site source (reference/MOCKUP-DEVICES.md:
+       16px, 2px orange, top-left and bottom-right only, offset -1px so they thicken the panel's
+       own edge). They are the section's device. The name is in the apex orange too (client note
+       2026-09-17: "make it orange") - the same hue as the brackets and the glyph, so the panel's
+       three accents are one colour, spent on one device family. ::before/::after
+       with content:"" ship (section 4c); a pseudo carrying no text is the correct build here.
+     · THE PORTRAIT AS ARCHITECTURE, not an avatar: the colour photograph fills the panel's left
+       cell edge to edge, one hairline between it and the words - an offset-media block, which
+       law 3 lists and this page did not yet have. It is the first time the client's "make the
+       photo colorful" has been given enough photo to matter.
+     · THE HOUSE PANEL: #080808, one #242424 hairline, square corners, the .proof_card padding
+       ramp on the text cell. Square throughout - the round plate, the page's one exception, is
+       retired with the avatar it framed.
+   LOUD / QUIET: the glyph is the committed moment (~4.3x the statement's size, in the apex
+   orange); the statement is h3 Regular; the credit and the client logo are the quiet foot,
+   held under one hairline. LEFT-ALIGNED, which takes this page back down to three centred
+   sections. Reading order: who -> the mark -> the words -> the credit -> the client. */
+/* R36 (client note 2026-09-17: "The photo is too big. i like the borders etc. make it aligned
+   center. align everything symmetrical and well. photo must be the same size as in the homepage.
+   i like the quote icon etc. keep the general concept"). The brackets, the panel and the glyph
+   stay; the offset-media block goes. ONE CENTRED COLUMN on the panel's own axis, in the order the
+   client's reference set at R24 - the mark, the statement, the plate, the credit - closed by one
+   hairline with the client logo under it. The panel takes the 52rem measure so its edges line up
+   with the ledger below it, and the .proof_card padding ramp. Every element is centred on the
+   same axis, and the two diagonal brackets are the one deliberate asymmetry - which is what keeps
+   a symmetric panel from reading as a form.
+   R37 (client note 2026-09-17: "better and more symmetrical padding"). ONE internal rung, R =
+   clamp(2rem, 2.33vw + 1.1rem, 2.75rem), carries every vertical gap - mark to statement,
+   statement to plate, credit to rule, rule to logo - and the panel's padding is one larger
+   number on all four sides, clamp(3rem, 4.65vw + 0.1rem, 4.5rem). The one correction that makes
+   the top read equal to the bottom: at line-height 0.62 the quote glyph's ink sits in the upper
+   part of its line box and leaves ~0.41em of empty box beneath it, so the mark's margin is
+   NEGATIVE by that amount less R - the gap you see under the mark is R, not R plus the glyph's
+   own dead space. COST, stated: a fourth centred section (law 4 allows
+   two), on the client's explicit instruction. */
+.quote_panel{position:relative;display:grid;justify-items:center;text-align:center;max-width:52rem;margin-left:auto;margin-right:auto;padding:clamp(3rem,4.65vw + 0.1rem,4.5rem);background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);transition:background-color 520ms cubic-bezier(0.16,1,0.3,1),border-color 520ms cubic-bezier(0.16,1,0.3,1)}
+.quote_panel:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:#565656}
+.quote_panel::before{content:"";position:absolute;top:-1px;left:-1px;width:16px;height:16px;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
+.quote_panel::after{content:"";position:absolute;right:-1px;bottom:-1px;width:16px;height:16px;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
+/* THE PLATE IS THE HOMEPAGE'S (client: "photo must be the same size as in the homepage"):
+   .proof_plate's 4.5rem square, #080808 on one #242424 hairline - the same construction and the
+   same number, so the two pages show one portrait system - but ROUND (client note 2026-09-17:
+   "circled"): the plate is the page's one round corner again, a circular portrait being the single
+   deliberate exception in a square-edged system, not a global radius. The photograph is
+   absolute inside it and the aspect-ratio sets the height, so the plate can never be stretched. */
+.quote_media{position:relative;width:4.5rem;aspect-ratio:1 / 1;margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);border-radius:100%;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);overflow:hidden}
 /* R24: IN COLOUR (client note 2026-09-17: "make the photo colorful too"). The grayscale(100%)
    is dropped; the light contrast and brightness trim stays, which is what keeps a colour
-   portrait from blowing out against a #080808 plate on a black page. */
-.quote_photo{display:block;width:100%;aspect-ratio:1 / 1;object-fit:cover;object-position:50% 26%;filter:contrast(1.04) saturate(1.02) brightness(0.97)}
-.quote_statement-block{max-width:52rem;margin-top:0}
+   portrait from blowing out against a #080808 panel on a black page. */
+.quote_photo{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:50% 26%;filter:contrast(1.04) saturate(1.02) brightness(0.97)}
+.quote_statement-block{max-width:100%;margin-top:0}
 .quote_statement{margin-top:0;margin-bottom:0}
 /* A STATEMENT IS NOT A HEADING (client note 2026-09-17: "only the important h2 h3 etc must be bold
    and big"), and as of the same day's second note it also steps DOWN a rung: the h3 size at
@@ -1205,6 +1248,10 @@
    One is- combo on the base rung (section 4a), no new type size. */
 .heading-style-h3.is-quote{font-weight:400;letter-spacing:-0.01em;line-height:1.38}
 .quote_attrib{display:grid;row-gap:0.375rem;max-width:26rem;margin-top:1.25rem}
+/* THE FOOT: one hairline the full width of the panel's content box, the client logo centred under
+   it. width:100% is load-bearing - the panel is a grid with justify-items:center, which would
+   otherwise shrink the rule to the logo's width. */
+.quote_foot{display:flex;justify-content:center;width:100%;margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);padding-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);border-top:1px solid var(--edge-card,#242424)}
 .quote_name{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1rem;font-weight:400;line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;color:var(--orange,#FF6600);margin-top:0;margin-bottom:0}
 .quote_org{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.4;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
 /* R31: TRANSPARENT, so #next's gradient can bleed up into it (client note: "it can be overflow
@@ -1257,8 +1304,6 @@
 .faq_panel{overflow:hidden;transition:height 460ms cubic-bezier(0.16,1,0.3,1)}
 .faq_a{max-width:44rem;padding-left:clamp(1rem,1.86vw + 0.28rem,1.5rem);padding-right:clamp(1rem,1.86vw + 0.28rem,1.5rem);padding-bottom:clamp(1.75rem,2.33vw + 0.85rem,2.375rem)}
 @media (max-width:991px){
-  .quote_stack{max-width:100%}
-  .quote_statement-block{max-width:100%}
   .faq_head{max-width:100%}
   .faq_list{max-width:100%}
   .faq_q{max-width:100%}
@@ -1379,32 +1424,37 @@
    SAME transform — no :nth-child (dropped at deploy, §4d), no pseudo content, no descendant
    selector. It sits above the statement, which is the top of the stack.
    ============================================================================ */
-/* R32: THE MARK IS A HAIRLINE, NOT AN ICON (client note 2026-09-17: "I don't like the quote icon
-   and it's animation. It must be more premium"). The two raked 4px bars and their breathing scale
-   are both gone: a pumping glyph is the cheapest motion available, and a weighted raked bar was
-   the one heavy device on a page built entirely from hairlines - which is what made it read as an
-   icon dropped in from somewhere else. What replaces it is this page's own ruling system at its
-   quietest: ONE centred 1px rule in the card-edge grey, with a single short orange GLINT that
-   crosses it and comes back on a 7.6s ping-pong (our-approach.js §6), easing to a stop at both
-   ends so there is no snap and no loop seam anywhere.
-   ADDITIVE ONLY - rest is the full dim rule with the glint parked at its left, which is exactly
-   what shows with no script, under reduced motion, in print and in a crawler. */
-.quote_mark{position:relative;width:clamp(4.5rem,8.14vw - 0.35rem,7rem);height:1px;margin-left:auto;margin-right:auto;margin-bottom:clamp(1.75rem,2.33vw + 0.85rem,2.5rem);overflow:hidden}
-.quote_mark-rule{display:block;position:absolute;top:0;left:0;width:100%;height:1px;background-color:var(--edge-card,#242424)}
-/* the travelling segment: base class + ONE is- combo (§4a), no third class, no descendant. */
-.quote_mark-rule.is-glint{width:26%;background-color:var(--orange,#FF6600)}
+/* THE MARK IS THE TYPOGRAPHIC QUOTE, AT DISPLAY SCALE (client note 2026-09-17: "the icon must
+   represent quote"). A real classed element carrying the character - section 4c blocks exactly one
+   shape, a pseudo whose content is author-visible text, and this is that shape. Pluto Sans Bold
+   in the apex orange, line-height 0.62 so the glyph's own top whitespace leaves the rhythm, and
+   centred over the statement on the panel's axis. ANIMATED (client note 2026-09-17: "animate the
+   icon") by our-approach.js §6 as an EMBER: the colour breathes from the apex orange up to the
+   hero field's own #FFA347 tint and back on a 5.6s cosine, riding 3px with it - additive only,
+   rest is the stylesheet's #FF6600, and that is what shows with no script or under reduced
+   motion. Two moving marks were rejected here before (R26 bars, R32 glint); this one moves
+   nothing but its warmth, which is the motion vocabulary the hero already set. */
+.quote_mark{display:flex;justify-content:center;margin-bottom:clamp(-0.5rem,-0.7vw + 0.4rem,0rem)}
+.quote_glyph{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(5rem,4.65vw + 2.6rem,7.5rem);line-height:0.62;letter-spacing:-0.02em;color:var(--orange,#FF6600)}
 
-/* R32: THE CLIENT LOGO, IN FULL COLOUR (client note 2026-09-17: "add company logo to the bottom
-   (colorful)"). The homepage's proof cards grey their logos and lift them to colour on card hover;
-   there is one testimonial here and no hover target, so it simply ships saturated - the only
-   non-brand colour on the page, seated last in the stack under the attribution. PLACEHOLDER:
-   Northfield is an invented company (content/proposed-copy.md §3), so this mark is a placeholder
-   asset and must not publish as a named endorsement without the client's own logo in its place. */
-.quote_logo-lockup{display:flex;justify-content:center;margin-top:clamp(1.75rem,2.33vw + 0.85rem,2.5rem)}
-.quote_logo{display:block;height:1.625rem;width:auto}
+/* THE CLIENT LOGO, IN FULL COLOUR (client note 2026-09-17: "add company logo to the bottom
+   (colorful)"). One testimonial and no hover target, so it ships saturated - with the portrait,
+   the only non-brand colour on the page. OPTICALLY CENTRED: the placeholder asset's
+   viewBox (0 0 156 26) carries 44.4 units of trailing whitespace after its ink, and the asset is
+   byte-shared with the homepage and design_handoff_homepage/MANIFEST.json's recorded sha256, so
+   it is not edited - a left margin of the same 44.4px on this class alone (no descendant, section
+   4a) moves the item right by half of it, so the INK, not the box, centres on the axis. PLACEHOLDER: Northfield is an invented company
+   (content/proposed-copy.md section 3); it must not publish as a named endorsement. */
+.quote_logo-lockup{display:flex;justify-content:center}
+.quote_logo{display:block;height:1.625rem;width:auto;margin-left:2.775rem}
 
+@media (max-width:991px){
+  .quote_panel{max-width:100%}
+  .quote_statement-block{max-width:100%}
+}
 @media (max-width:767px){
-  .quote_logo{height:1.375rem}
+  /* 1.375rem is 0.846 of the natural 26px, so the trailing whitespace scales with it: 37.6px */
+  .quote_logo{height:1.375rem;margin-left:2.35rem}
 }
 
 /* ============================================================================
@@ -1544,6 +1594,28 @@
   .band_lead-block{max-width:50rem}
   .close_stack{max-width:60rem}
   .faq_prompt{max-width:56rem}
+  .quote_panel{max-width:56rem}
+}
+/* R38 - THE RESPONSIVE PASS (client note 2026-09-17: "extremely responsive for both wide and small
+   desktop screens, also for tablet, landscape and phone"). MEASURED, in an iframe at each size,
+   for horizontal document overflow: 1920x1080 / 1680x1050 / 1440x900 / 1280x800 / 1024x768 /
+   991x900 / 834x1112 / 768x1024 / 600x900 / 479x900 / 390x844 / 844x390 / 320x640 - ZERO at every
+   one of them, before and after this block. The only elements that measure past the viewport are
+   the rule-sweep segments inside `.rules_h-bottom`, which is the animated rail and clips them.
+   What this block adds is the two SMALL-SCREEN rungs the testimonial panel was missing: its
+   internal padding steps down twice, so a 4.5rem plate and a 72px glyph still have air around them
+   inside a 288px-wide panel, and the client logo takes a third size so its ink clears the rails.
+   The animations' own responsiveness is not CSS - the three canvases derive every dimension from
+   their own box every frame; see our-approach.js R38 for the lattice's pitch and band width, the
+   hero veil and bloom centres, and the step focus's sigma floor. */
+@media (max-width:767px){
+  .quote_panel{padding:2.25rem 1.75rem}
+  .quote_glyph{font-size:5rem}
+}
+@media (max-width:479px){
+  .quote_panel{padding:1.75rem 1.25rem}
+  /* 1.125rem is 0.692 of the natural 26px, so the trailing whitespace scales to 30.7px */
+  .quote_logo{height:1.125rem;margin-left:1.92rem}
 }
 @media (max-width:991px){
   /* TABLET. The stacks go full width and the funnel is re-stated in proportion rather than lost. */
@@ -1566,6 +1638,6 @@
      against the 1rem body it sits on there; weight 500 is what keeps it reading as a heading. */
   .heading-style-h3.is-step{font-size:1.125rem}
   .step-plate_num{font-size:0.8125rem}
-  .quote_mark{width:4.5rem}
+  .quote_glyph{font-size:4.5rem}
   .close-field{top:-18vh}
 }
