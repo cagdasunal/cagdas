@@ -1,0 +1,379 @@
+<!-- @dsCard group="Pages" name="Our Approach" subtitle="The first interior page, and the interior-page template the next seven inherit: the page header, the six-step Deal Engineering sequence, two statement bands, the closing band. Phase D resolved — one composition per section." viewport="1680x1050" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled Our Approach page - the shell, the interior page header, the flat six-step sequence and the interior closing band. Seed the next interior page from this." viewport="1680x1050" -->
+<!-- CARD VIEWPORT, and why it is a SCREEN and not the page height: since R17 the header is
+     `min-height:100svh`, so the hero is exactly as tall as whatever frame renders it. A
+     full-page-height viewport (it was 1680x5040) therefore made the card a 5040px-tall hero - the
+     taller you made the frame, the taller the hero grew. 1680x1050 is one real screen, which is
+     how the page opens for a reader. Do not "fix" this back to a full-page height.
+     ROUND-TOKEN: R16-OUR-APPROACH (the first interior page, 2026-09-17).
+     WHAT THIS PAGE IS: /our-approach, and the interior-page TEMPLATE for Solutions, Areas of
+     Review, Industries, Afissio Law, Insights, About and Contact. Every string is client copy,
+     verbatim from pages/our-approach/our-approach-copy.md. Contractor-authored visible strings
+     added to the design: 0 - the `review_label` scaffolding is gone, deleted at Phase D with the
+     four losing option blocks.
+     PHASE D, 2026-09-17: the client picked 1A, 2A, 3A and 4B at review. The losing blocks (1B, 2B,
+     3B, 4A), their marker pairs and every review label are deleted, so this file is now ONE
+     COMPOSITION PER SECTION - the assembled page. The section ids are unchanged, #hero #steps
+     #judgment #next, with #next moved onto the surviving close. The option pairs as reviewed, and
+     the reasoning behind each pick, are recorded in pages/our-approach/PHASE0.md,
+     pages/our-approach/SECTION-PLAN.md and SYSTEM.md section R16.
+     REUSED VERBATIM: the navbar shell (native Navbar + its one native Dropdown) and the post-R15
+     footer, byte for byte from pages/homepage.html; the skeleton, the seams, the type rungs, the
+     one button construction, and - as the step markers - a minimal step-plate of this page's
+     own (R22 - the borrowed doc-tile / doc-slot faces were retired on a client note). The field itself is the homepage's alone and is
+     not rebuilt here: no doc-field, no doc-field_grid, no doc-row, so homepage.js sections 1 and 2
+     both no-op on this page. The header's apex watermark is the client's own interior-page device
+     at his own watermark value, STATIC and with no script hook - `intro_art` was tried and
+     rejected: it is sized for a 700px-tall section and it is what homepage.js section 5 animates.
+     NEW, and named for the seven pages that inherit them, never for this one: page-header_* ·
+     sequence_* · band_*, all added to the root client-first.css ADDITIVELY (the homepage renders
+     byte-identical - measured at 1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390). The rejected
+     options took their families with them: ledger_* (2B), band_note* (3B) and onward_* (4A) were
+     deleted from the sheet in the same pass, so nothing in the class dictionary is worn by zero
+     elements. The surviving close adds no class at all - it wears close_stack without is-box.
+     MOTION (revised 2026-09-17 on four client notes): the settle, the rule sweeps (homepage.js),
+     and TWO slow passes of this page's own, both in pages/our-approach.js, both opacity/position
+     only and both ADDING to something already visible - the header apex now carries the homepage's
+     own LIGHT PASS (section 5 there, ported: a third copy of the same file, cloned at runtime and
+     masked to a travelling band), and #judgment carries a three-station REVIEW BENCH - one machine pass writes,
+     one scans, one re-orders, and then the human mark settles: the section's own claim, in the
+     hairline vocabulary, on a 13s loop. #steps is still deliberately still. Reduced motion returns before anything is touched, and
+     nothing rests at opacity:0 in any stylesheet.
+     CLIENT NOTES APPLIED 2026-09-17: a full-height (100svh min) header with CTAs; the step number
+     lives INSIDE its tile now and is coloured by status (muted = the record as found, orange = the
+     lit friction, paper = decided and delivered); section descriptions take the system's smaller
+     paragraph rung (`text-size-regular is-fine`); the sequence rebuilt as a
+     timeline with a sticky head, a continuous rail and six DISTINCT tile faces; #judgment's
+     heading moved to the right column with an animated plate on the left; a wider closing lead.
+     COPY: every string is client copy, verbatim, EXCEPT the sequence description in #steps, which
+     is contractor-authored (a paraphrase of the client's own six steps - no new capability, no
+     timeline, no outcome). The operator directed on 2026-09-17 that no [PROPOSED - ...] marker
+     appear in any section, so it renders bare; content/proposed-copy.md records the string, the
+     override of its own rule 1, and that it is still awaiting the client's wording. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>[COPY REQUESTED — Our Approach meta title]</title>
+<meta name="description" content="[COPY REQUESTED — Our Approach meta description]">
+<link rel="stylesheet" href="../live/webflow-base.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="../preview-reset.css">
+<script src="../live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
+<script src="../preview-webflow-shim.js" defer></script>
+<script src="../homepage.js" defer></script>
+<script src="our-approach.js" defer></script>
+<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
+</head>
+<body>
+<div class="page-wrapper">
+<div class="navbar_shell">
+<div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="280" data-easing="ease" data-easing2="ease">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
+<div class="navbar_container">
+<a href="../" class="navbar_logo-link w-nav-brand"><img src="../brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
+<nav class="navbar_menu w-nav-menu" id="navbar-menu">
+<div class="navbar_menu-inner">
+<div class="navbar_links">
+<a href="./" class="navbar_link w-nav-link">Our Approach</a>
+<a href="/solutions" class="navbar_link w-nav-link">Solutions</a>
+<a href="/areas-of-review" class="navbar_link w-nav-link">Areas of Review</a>
+<a href="/industries" class="navbar_link w-nav-link">Industries</a>
+<a href="/insights" class="navbar_link w-nav-link">Insights</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<div class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about">
+<div class="navbar_dropdown-trigger"><p class="navbar_dropdown-label">About</p><div class="navbar_dropdown-caret"></div></div>
+</div>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="/our-company" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
+<a href="/afissio-law" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+</div>
+</nav>
+</div>
+</div>
+<div class="navbar_button-wrapper"><a href="/contact" class="button is-nav">Contact</a></div>
+</div>
+</nav>
+<div class="navbar_menu-button w-nav-button" aria-label="menu">
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<main class="main-wrapper">
+
+<!-- THE INTERIOR PAGE HEADER — R19, rebuilt on four client notes (2026-09-17): "a dark hero with
+     orange gradients as in the logo · sort of wave animation, very smooth, very elegant, not
+     distracting · align left the whole hero section · 100vh · make everything symmetrical."
+     The R18 hairline fan and the cropped apex watermark are DELETED, not hidden — see the
+     R19-HERO-WAVE block in client-first.css for the removals, the one standing law this
+     overrides on the client's instruction (§3.5, gradients), and what "symmetrical" resolves to
+     on a left-aligned stack. The copy is unchanged, verbatim. -->
+<section class="section_page-header" id="hero">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="hero-wave" aria-hidden="true">
+<canvas class="hero-wave_canvas"></canvas>
+</div>
+<div class="padding-global is-layer">
+<div class="padding-section-medium is-hero">
+<div class="container-xlarge">
+<div class="page-header_grid">
+<div class="page-header_stack is-left">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Our Approach</p></div>
+<div class="page-header_title-block is-left"><h1 class="heading-style-h1 is-reversed">Deal Engineering before due diligence begins.</h1></div>
+<div class="page-header_lead-block is-left"><p class="text-lead is-reversed">Deal Engineering is a disciplined process for helping companies become transaction-ready before institutional scrutiny intensifies.</p></div>
+<div class="button-row"><a href="/contact" class="button is-reversed">Start the Conversation</a><a href="/solutions" class="button is-ghost-reversed">Explore Solutions</a></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- THE SEQUENCE — six steps on ONE STRAIGHT RAIL of paper tiles, step 2 lit, the apex at step 6. The page's committed moment. Picked at review (was option 2A). -->
+<section class="section_sequence" id="steps">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="sequence_grid">
+<div class="sequence_aside">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Deal Engineering</p></div>
+<div class="sequence_head"><h2 class="heading-style-h2">How Deal Engineering works</h2></div>
+<div class="sequence_desc-block"><p class="text-size-regular">Six steps, in order. Each one hands the next what it needs: a record that has been read, the friction found inside it, a ranked list, a decided path, and a data room a stranger can follow.</p></div>
+<div class="button-row"><a href="/contact" class="button is-reversed">Start the Conversation</a></div>
+</div>
+<div class="sequence_list">
+<div class="sequence_step">
+<div class="sequence_marker"><div class="step-plate"><p class="step-plate_num">1</p></div><div class="sequence_stem"></div></div>
+<div class="sequence_body">
+<h3 class="heading-style-h3 is-step">Review the operative records</h3>
+<p class="text-size-regular">Examine the documents and information that define how the company is organized, financed, operated, and protected.</p>
+</div>
+</div>
+<div class="sequence_step">
+<div class="sequence_marker"><div class="step-plate"><p class="step-plate_num">2</p></div><div class="sequence_stem"></div></div>
+<div class="sequence_body">
+<h3 class="heading-style-h3 is-step">Identify diligence friction</h3>
+<p class="text-size-regular">Locate issues most likely to create questions, delays, discounts, or leverage for a counterparty.</p>
+</div>
+</div>
+<div class="sequence_step">
+<div class="sequence_marker"><div class="step-plate"><p class="step-plate_num">3</p></div><div class="sequence_stem"></div></div>
+<div class="sequence_body">
+<h3 class="heading-style-h3 is-step">Organize the findings</h3>
+<p class="text-size-regular">Convert the review into a structured analysis that leadership can understand and use.</p>
+</div>
+</div>
+<div class="sequence_step">
+<div class="sequence_marker"><div class="step-plate"><p class="step-plate_num">4</p></div><div class="sequence_stem"></div></div>
+<div class="sequence_body">
+<h3 class="heading-style-h3 is-step">Prioritize what matters</h3>
+<p class="text-size-regular">Distinguish urgent remediation from lower-priority matters and sequence the work accordingly.</p>
+</div>
+</div>
+<div class="sequence_step">
+<div class="sequence_marker"><div class="step-plate"><p class="step-plate_num">5</p></div><div class="sequence_stem"></div></div>
+<div class="sequence_body">
+<h3 class="heading-style-h3 is-step">Develop and implement the solution path</h3>
+<p class="text-size-regular">Help leadership decide how issues should be resolved and assist with execution.</p>
+</div>
+</div>
+<div class="sequence_step">
+<div class="sequence_marker"><div class="step-plate"><p class="step-plate_num">6</p><img src="../brand/logo/afissio-apex-orange.svg" alt="" class="doc-tile_mark"></div></div>
+<div class="sequence_body">
+<h3 class="heading-style-h3 is-step">Build and curate the data room</h3>
+<p class="text-size-regular">Organize the operative record so it can be presented clearly as the transaction approaches.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- THE STATEMENT BAND — RECOMPOSED R29 (client note 2026-09-17): "remove the texts in the left
+     illustration... align center everything and in the bg of the section create computing dots
+     etc darker orange on black... the center of the section will have no icons and animation but
+     top bottom left right have dark orange computing animation with dots which represents AI and
+     technology." The 42/58 editorial split and the whole 108-block ANALYSIS FIELD with its three
+     legend labels are DELETED, not hidden - the field, its head, its legend and their thirteen
+     classes are gone from client-first.css too. What replaces the illustration is the section's
+     own BACKGROUND: a dot lattice in the darker brand orange, computing across the top, bottom,
+     left and right, with an elliptical hole that keeps the centre clear for the type.
+     CONTRACTOR-AUTHORED VISIBLE STRINGS: 1 (the second paragraph). The h2, the lead and the
+     button label are client copy, verbatim. -->
+<section class="section_band" id="judgment">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="compute-field" aria-hidden="true"><canvas class="compute-field_canvas"></canvas></div>
+<div class="padding-global is-layer">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="band_stack">
+<!-- R29e (client note 2026-09-17: "better and more related tagline"). "Judgment" named the
+     section's noun and nothing else. "Who decides" asks the question the section exists to
+     answer, and the h2 under it - "Human-led. AI-assisted." - is the answer, so the two rungs
+     now work as a pair instead of repeating each other. CONTRACTOR-AUTHORED STRING. -->
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Who decides</p></div>
+<div class="band_title-block"><h2 class="heading-style-h2">Human-led. AI-assisted.</h2></div>
+<div class="band_lead-block"><p class="text-lead is-reversed">Afissio may use AI-assisted analysis to support review, but the Afissio team remains responsible for every decision and exercise of judgment. Technology improves the process; it does not replace experienced interpretation.</p></div>
+<div class="band_note-block"><p class="text-size-regular">Speed is not the point. A record read faster is only worth something if the reading is right, and that judgment is a person's every time.</p></div>
+<div class="button-row"><a href="/contact" class="button is-reversed">Start the Conversation</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- THE STATEMENT — ONE testimonial (client note 2026-09-17), lifted VERBATIM from the homepage's second proof card: the statement, the name, the role and the placeholder plate are the homepage's own strings and assets, not new copy. PLACEHOLDER ATTRIBUTION: still not client-supplied - see content/proposed-copy.md section 3. RECOMPOSED 2026-09-17 from the reference the client attached: CENTRED: the statement first, then the plate seating the attribution beneath it (client note 2026-09-17), the statement at the h3 rung in Regular 400, the name and role beneath it, and nothing else - no slider, no arrows, no tagline, no section heading, no button. R32 (client notes 2026-09-17) adds ONE thing to that list and changes one: the client company's logo now closes the stack, in full colour ("add company logo to the botom (colorful)"), and the quote mark is no longer an icon - the two raked bars and their breathing scale are replaced by a single hairline with a travelling glint ("I don't like the quote icon and it's animation. It must be more premium"), see client-first.css R32 and our-approach.js section 6. The copy is untouched. Two costs, stated: this is the page's FOURTH centred section where law 4 allows two, and the round plate is the only rounded corner in a square-edged system - both are the client's own call on his own reference. -->
+<section class="section_quote" id="voice">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="quote_stack">
+<div class="quote_mark" aria-hidden="true"><span class="quote_mark-rule"></span><span class="quote_mark-rule is-glint"></span></div>
+<div class="quote_statement-block"><p class="quote_statement heading-style-h3 is-quote">The value was the sequencing. We stopped guessing which problems mattered and worked through them in the order that mattered.</p></div>
+<div class="quote_plate"><img src="https://i.pravatar.cc/320?img=45" alt="" class="quote_photo"></div>
+<div class="quote_attrib"><p class="quote_name">Priya Raman</p><p class="quote_org">Chief Financial Officer, Northfield</p></div>
+<div class="quote_logo-lockup"><img src="../brand/placeholder/logo-northfield.svg" alt="Northfield" class="quote_logo"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- THE QUESTIONS — a six-row ledger, question left, answer right, one hairline per row. SAMPLE COPY (2026-09-17, client note "write related 6 questions and answers for sample"): every string in this section is CONTRACTOR-AUTHORED and mirrored into content/proposed-copy.md for approval. It is not client copy and must not publish unreviewed. AN ACCORDION, client-instructed 2026-09-17 ("align center, create accordion for the faqs"). PIPELINE COST, stated: section 4g plans no accordion widget for this site, so this is NOT a native Webflow widget - it is six real button controls (section 4h: a control that acts in place) whose open state is written INLINE by pages/our-approach.js section 5, because a combo that only exists at runtime is pruned from the published CSS (section 4f). Add the widget to 4g before the next page reuses it. EVERY PANEL IS AUTHORED OPEN and the script collapses five of them on load, so a reader with JS off, a print, or a crawler gets all six answers - no content is gated behind a script. -->
+<section class="section_faq" id="questions">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="faq_head">
+<div class="tagline_row is-centred"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Frequently Asked Questions</p></div>
+<div class="faq_title-block"><h2 class="heading-style-h2">What companies ask before they start</h2></div>
+</div>
+<div class="faq_list">
+<div class="faq_row">
+<h3 class="faq_q-wrap"><button type="button" class="faq_trigger" aria-expanded="true" aria-controls="faq-answer-1"><span class="faq_q">When should Deal Engineering start?</span><span class="faq_mark"><span class="faq_mark-bar"></span><span class="faq_mark-bar is-vert"></span></span></button></h3>
+<div class="faq_panel" id="faq-answer-1" role="region"><p class="faq_a text-size-regular is-fine">Earlier than most companies expect. The work is most valuable in the months before a process begins, while findings can still be resolved rather than disclosed.</p></div>
+</div>
+<div class="faq_row">
+<h3 class="faq_q-wrap"><button type="button" class="faq_trigger" aria-expanded="true" aria-controls="faq-answer-2"><span class="faq_q">How is this different from due diligence?</span><span class="faq_mark"><span class="faq_mark-bar"></span><span class="faq_mark-bar is-vert"></span></span></button></h3>
+<div class="faq_panel" id="faq-answer-2" role="region"><p class="faq_a text-size-regular is-fine">Due diligence is the counterparty’s examination. Deal Engineering is the preparation of the record that examination will read.</p></div>
+</div>
+<div class="faq_row">
+<h3 class="faq_q-wrap"><button type="button" class="faq_trigger" aria-expanded="true" aria-controls="faq-answer-3"><span class="faq_q">Who is it for?</span><span class="faq_mark"><span class="faq_mark-bar"></span><span class="faq_mark-bar is-vert"></span></span></button></h3>
+<div class="faq_panel" id="faq-answer-3" role="region"><p class="faq_a text-size-regular is-fine">Founder-led companies preparing for a financing, acquisition, strategic partnership, recapitalization, or institutional investment.</p></div>
+</div>
+<div class="faq_row">
+<h3 class="faq_q-wrap"><button type="button" class="faq_trigger" aria-expanded="true" aria-controls="faq-answer-4"><span class="faq_q">What does an engagement produce?</span><span class="faq_mark"><span class="faq_mark-bar"></span><span class="faq_mark-bar is-vert"></span></span></button></h3>
+<div class="faq_panel" id="faq-answer-4" role="region"><p class="faq_a text-size-regular is-fine">A record that has been read, the friction found inside it, a ranked list, a decided path, and a data room a stranger can follow.</p></div>
+</div>
+<div class="faq_row">
+<h3 class="faq_q-wrap"><button type="button" class="faq_trigger" aria-expanded="true" aria-controls="faq-answer-5"><span class="faq_q">Does this replace our counsel or advisers?</span><span class="faq_mark"><span class="faq_mark-bar"></span><span class="faq_mark-bar is-vert"></span></span></button></h3>
+<div class="faq_panel" id="faq-answer-5" role="region"><p class="faq_a text-size-regular is-fine">No. The work runs alongside existing counsel, accountants and bankers, and is designed to make their work faster rather than duplicate it.</p></div>
+</div>
+<div class="faq_row">
+<h3 class="faq_q-wrap"><button type="button" class="faq_trigger" aria-expanded="true" aria-controls="faq-answer-6"><span class="faq_q">How is AI used in the review?</span><span class="faq_mark"><span class="faq_mark-bar"></span><span class="faq_mark-bar is-vert"></span></span></button></h3>
+<div class="faq_panel" id="faq-answer-6" role="region"><p class="faq_a text-size-regular is-fine">AI-assisted analysis may support the review. The Afissio team remains responsible for every decision and exercise of judgment.</p></div>
+</div>
+</div>
+<!-- THE FAQ CLOSE (client note 2026-09-17). CONTRACTOR-AUTHORED STRINGS: 1 - the question. The sentence
+     under it and the hairline above it were removed on a client note 2026-09-17; the button label
+     is the page own existing CTA, not a new one. -->
+<div class="faq_prompt">
+<p class="faq_prompt-q">Still a question about your own record?</p>
+<div class="button-row"><a href="/contact" class="button is-reversed">Start the Conversation</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- THE CLOSE — centred and unboxed on the homepage's own closing construction: the page's one centred section, and it adds no class. Picked at review (was option 4B); it carries the section id #next. -->
+<section class="section_close" id="next">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="close-field" aria-hidden="true"></div>
+<div class="padding-global is-layer">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="close_stack">
+<!-- R31 tagline (client note 2026-09-17: "set a tagline and make it meaningful"). The section is
+     about TIMING - it is the only thing it argues - so the label names that and the h2 under it
+     states the consequence. CONTRACTOR-AUTHORED STRING. -->
+<div class="tagline_row is-centred"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">When to start</p></div>
+<div class="close_title-block"><h2 class="heading-style-h2">Designed for the period before urgency</h2></div>
+<div class="close_lead-block is-wide"><p class="text-size-regular">Afissio is most valuable while there is still time to prepare deliberately—before a buyer, investor, or partner begins using unresolved issues as leverage.</p></div>
+<div class="button-row is-centred"><a href="/solutions" class="button is-ghost-reversed">Explore Solutions</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="footer_component is-ink-soft" id="footer">
+<div class="padding-global">
+<div class="padding-section-small is-no-top">
+<div class="container-xlarge">
+<div class="footer_ledger">
+<div class="footer_cell is-brand">
+<img src="../brand/logo/afissio-icon-orange.png" alt="" class="footer_mark">
+<p class="footer_tagline">Deal engineering before the due diligence begins.</p>
+</div>
+<div class="footer_cell is-nav">
+<nav role="navigation" class="footer_index">
+<a href="../" class="footer_index-link"><p class="footer_index-name">Home</p></a>
+<a href="./" class="footer_index-link"><p class="footer_index-name">Our Approach</p></a>
+<a href="/solutions" class="footer_index-link"><p class="footer_index-name">Solutions</p></a>
+<a href="/areas-of-review" class="footer_index-link"><p class="footer_index-name">Areas of Review</p></a>
+<a href="/industries" class="footer_index-link"><p class="footer_index-name">Industries</p></a>
+<a href="/afissio-law" class="footer_index-link"><p class="footer_index-name">Afissio Law</p></a>
+<a href="/insights" class="footer_index-link"><p class="footer_index-name">Insights</p></a>
+<a href="/about" class="footer_index-link"><p class="footer_index-name">About</p></a>
+<a href="/contact" class="footer_index-link"><p class="footer_index-name">Contact</p></a>
+</nav>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">520 Broadway, Suite 200, Santa Monica, CA 90401</p>
+<p class="footer_entity-line">+1 (310) 555-0182</p>
+<p class="footer_entity-line">info@afissio.com</p>
+</div>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio Law LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">1438 W Broadway Road, Suite 101, Tempe, AZ 85282</p>
+<p class="footer_entity-line">+1 (480) 555-0119</p>
+<p class="footer_entity-line">info@afissiolaw.com</p>
+</div>
+</div>
+</div>
+<div class="footer_rule"></div>
+<div class="footer_cell">
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<div class="footer_legal-row">
+<a href="/privacy-policy" class="footer_legal-link">Privacy Policy</a>
+<a href="/terms-of-use" class="footer_legal-link">Terms of Use</a>
+<a href="/cookie-policy" class="footer_legal-link">Cookie Policy</a>
+<p class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

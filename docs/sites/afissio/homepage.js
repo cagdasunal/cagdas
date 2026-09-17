@@ -484,10 +484,18 @@ requestAnimationFrame(frame);
 if(window.__afissioStickyBarV1)return;window.__afissioStickyBarV1=1;
 var bar=document.querySelector('.navbar_shell');if(!bar)return;
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)bar.style.transition='none';
-var last=window.scrollY||0,hidden=false,tick=false,acc=0;
+var last=window.scrollY||0,hidden=false,tick=false,acc=0,grounded=null;
 function show(){if(!hidden)return;hidden=false;bar.style.transform='translateY(0)';bar.style.opacity='1'}
 function hide(){if(hidden)return;hidden=true;bar.style.transform='translateY(-101%)';bar.style.opacity='0'}
+/* R20 - THE GROUND ARRIVES ON SCROLL. The bar rests transparent so the hero's field runs unbroken
+   from y=0 behind it; past 24px of scroll it takes the page's own surface token so the links never
+   sit on moving content. Inline because a runtime-only combo is pruned from the published CSS
+   (§4f); the 360ms transition is authored on `.navbar_shell` and deploys. Idempotent - it writes
+   only on a change - and the rest state is the empty string, so removing this script leaves the
+   bar transparent rather than stuck. */
+function ground(y){var on=y>24;if(on===grounded)return;grounded=on;bar.style.backgroundColor=on?'#000000':''}
 function upd(){tick=false;var y=window.scrollY||0,d=y-last;last=y;
+ground(y);
 if(Math.abs(d)<1)return;
 if((d>0)!==(acc>0))acc=0;
 acc+=d;
@@ -495,6 +503,7 @@ if(y<160){acc=0;show();return}
 if(acc>120)hide();
 else if(acc<-64)show()}
 window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});
+ground(window.scrollY||0);   /* a reload part-way down the page must not open transparent */
 })();
 
 /* ============================================================================
