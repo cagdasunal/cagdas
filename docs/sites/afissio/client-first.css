@@ -60,6 +60,7 @@
 .padding-section-medium.is-hero{padding-top:clamp(7.5rem,8.14vw + 2.456rem,11rem);padding-bottom:clamp(3.5rem,3.49vw + 1.34rem,5rem)}
 .padding-section-small{padding-top:clamp(6rem,6.98vw + 1.675rem,var(--section-s,9rem));padding-bottom:clamp(6rem,6.98vw + 1.675rem,var(--section-s,9rem))}
 .padding-section-small.is-no-top{padding-top:0}
+.padding-section-large.is-no-top{padding-top:0}
 .container-large{max-width:var(--container-l,77.5rem);margin-left:auto;margin-right:auto}
 .container-medium{max-width:var(--container-m,60rem);margin-left:auto;margin-right:auto}
 .container-small{max-width:var(--container-s,45rem);margin-left:auto;margin-right:auto}
@@ -70,7 +71,7 @@
 .heading-style-h1{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(2.75rem,1.45vw + 2.03rem,3.375rem);line-height:1.04;letter-spacing:-0.03em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
 .heading-style-h2{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(2.25rem,1.16vw + 1.53rem,2.75rem);line-height:1.08;letter-spacing:-0.026em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
 .heading-style-h3{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(1.5rem,0.58vw + 1.15rem,1.75rem);line-height:1.24;letter-spacing:-0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
-.text-lead{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.375rem,0.436vw + 1.106rem,var(--size-lead,1.5625rem));line-height:1.5;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.text-lead{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:1.25rem;line-height:1.5;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:pretty}
 .text-size-regular{font-weight:400;font-size:1.1875rem;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
 .text-label{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;text-transform:uppercase;letter-spacing:0.14em;line-height:1.4;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0}
 .text-label.is-reversed{color:var(--text-reversed,#EDEDED)}
@@ -192,16 +193,11 @@
    The 3.5rem button gap was the thing he could see: every CTA row now sits 2rem under its
    paragraph, in every section including the hero. */
 .button-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;column-gap:0.75rem;row-gap:1rem;margin-top:2rem}
-/* RESTORED BY THE PREVIEW DEPLOY - not authored here. The round deleted these two
-   modifiers from the shared sheet as "worn by zero elements"; they are worn by EIGHT
-   elements on the approved homepage (4 button-row, 4 tagline_row), which left-aligned
-   without them. Byte-identical to the rules in the approved sheet. The build drops this
-   block by itself the moment Claude Design ships them again. */
-.button-row.is-centered{justify-content:center}
 .button.is-text{background:transparent;color:var(--orange-text,#B34B00);font-weight:400;padding-left:0;padding-right:0;padding-top:1rem;padding-bottom:1rem;border-radius:0;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:0.35em;transition:background-color 420ms cubic-bezier(0.16,1,0.3,1),color 420ms cubic-bezier(0.16,1,0.3,1),text-decoration-thickness 420ms cubic-bezier(0.16,1,0.3,1),text-underline-offset 420ms cubic-bezier(0.16,1,0.3,1)}
 .button.is-text:hover{background:transparent;color:var(--orange-text,#B34B00);text-decoration-thickness:2px}
 .button.is-ghost-reversed{background:transparent;color:var(--text-reversed,#EDEDED);border-color:var(--rule-plate,#454545);font-weight:400}
-.button.is-ghost-reversed:hover{background:var(--paper,#FAF9F6);color:var(--orange-text,#B34B00);border-color:var(--paper,#FAF9F6)}
+/* hover (client note 2026-09-24): dark grey #282828 from his reference, type unchanged — #EDEDED on #282828 is 12.6:1 */
+.button.is-ghost-reversed:hover{background:#282828;color:var(--text-reversed,#EDEDED);border-color:var(--rule-plate,#454545)}
 .button.is-ghost-reversed:focus-visible{outline-color:var(--orange,#FF6600)}
 /* WP3.5 - `.hero_stack` DELETED (base rule and both tier overrides): the centred single-column
    hero it sized has not existed since the two-column hero; `.hero_split` + `.hero_column` are
@@ -228,7 +224,6 @@
 .section_claim{position:relative;background-color:var(--ink-hero,#000000)}
 .claim_stack{max-width:72rem;margin-left:auto;margin-right:auto;text-align:center}
 .tagline_row{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0.5rem}
-.tagline_row.is-centered{justify-content:center}
 .tagline_mark{height:0.8125rem;width:auto}
 .claim_lede-block{max-width:clamp(38rem,62vw,64rem);margin-left:auto;margin-right:auto;margin-top:1.5rem}
 .claim_lede{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:300;font-size:clamp(1.5rem,0.58vw + 1.25rem,1.75rem);line-height:1.42;letter-spacing:-0.014em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:balance}
@@ -308,9 +303,26 @@
    the cells when Jerry supplies them (missing-copy list, SYSTEM.md). The two
    entity blocks are SEPARATE cells — contract §3; never merge them.
    ============================================================ */
+/* R39 - THE FOOTER WEARS THE BAR'S CONTAINER (client note 2026-09-17: "the footer container must
+   have the same container length and padding left right as with the top navigation so they will
+   look more symmetrical"). MEASURED at 1440 before: the bar spanned 32 -> 1408 (2rem rails, no
+   cap) and the footer 72 -> 1368 (5% rails inside the 105rem container) - 40px out on each side,
+   which is exactly the asymmetry the client was reading. The footer now takes 'padding-global
+   is-bar' and 'container-xlarge is-bar', so the two land on the same pixels at every width. The
+   rule's negative margins go with it: inside a full-width container they would push it PAST the
+   bar's rail. Three base classes, one 'is-' combo each (§4a), no descendant selectors. */
+.container-xlarge.is-bar{max-width:none}
+.footer_rule.is-bar{margin-left:0;margin-right:0}
+/* R39 - THE SEAM SITS ABOVE THE CLOSING FIELD. '.close-field' is an absolute gradient layer whose
+   bottom is 96% black, and it comes after '.rules_layer' in the DOM with no z-index - so on a page
+   that carries it, the section's bottom seam (the line that reads as the footer's TOP border, and
+   the orange sweep that travels it) was painted over. Measured 2026-09-17: present in the DOM,
+   with its two sweep segments, and invisible. One combo lifts that section's rules layer over the
+   field; every other rules layer is untouched. */
+.rules_layer.is-over{z-index:1}
 .footer_component{position:relative}
 .footer_component.is-panel{background-color:var(--panel,#EBE9E2)}
-.footer_component.is-ink-soft{background-color:var(--ink-hero,#000000)}
+.footer_component.is-ink-soft{background-color:transparent}
 .footer_mark{display:block;height:2.5rem;width:auto}
 /* LINES: VERTICALS only (client 2026-09-09, in two steps - the horizontals came out, the
    verticals came back). The ledger is one row of four cells over a rule-coloured ground with a
@@ -325,10 +337,12 @@
 .footer_rule{height:1px;background-color:var(--rule-plate,#454545);margin-left:clamp(-3rem,0.65rem - 3.5vw,-1.5rem);margin-right:clamp(-3rem,0.65rem - 3.5vw,-1.5rem)}
 .footer_cell{background-color:var(--ink-hero,#000000);padding-top:clamp(3.5rem,5.81vw - 0.106rem,6rem);padding-bottom:clamp(3.5rem,5.81vw - 0.106rem,6rem);padding-left:0;padding-right:0}
 .footer_cell.is-brand{padding-right:clamp(2rem,4.65vw - 0.881rem,4rem)}
-.footer_cell.is-nav{padding-left:clamp(2rem,4.65vw - 0.881rem,4rem);padding-right:clamp(2rem,4.65vw - 0.881rem,4rem)}
+/* 2026-09-24: three cells on the four-track ledger - the index takes two tracks and sets its nine
+   links as two columns, so no track is left empty and the index height matches the entity cell. */
+.footer_cell.is-nav{grid-column:span 2;padding-left:clamp(2rem,4.65vw - 0.881rem,4rem);padding-right:clamp(2rem,4.65vw - 0.881rem,4rem)}
 .footer_cell.is-entity{padding-left:clamp(2rem,4.65vw - 0.881rem,4rem);padding-right:clamp(2rem,4.65vw - 0.881rem,4rem)}
 .footer_tagline{font-weight:400;font-size:var(--size-body,1rem);line-height:1.65;color:var(--text-reversed-soft,#C9C9C9);max-width:20rem;margin-top:1.5rem;margin-bottom:0;text-wrap:pretty}
-.footer_index{display:grid;row-gap:0.25rem}
+.footer_index{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,4.65vw - 0.881rem,4rem);row-gap:0.25rem}
 .footer_index-link{display:flex;align-items:baseline;text-decoration:none;line-height:2rem;color:var(--text-reversed,#EDEDED);transition:transform 350ms cubic-bezier(0.22,1,0.36,1),color 350ms cubic-bezier(0.22,1,0.36,1)}
 .footer_index-link:hover{color:var(--orange,#FF6600)}
 .footer_index-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
@@ -336,6 +350,12 @@
 /* --- entity blocks --- */
 .footer_entity-name{font-size:var(--size-label,0.75rem);font-weight:400;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:1.25rem}
 .footer_entity-lines{display:grid;row-gap:0.5rem}
+/* R39 - the contact lines are now REACHABLE (tel: / mailto:) and the law entity's cell carries a
+   link to its page instead of a second contact set. Same rung as .footer_entity-line so the cell
+   reads as one block; the orange is the footer's only hover accent, as in the index above it. */
+.footer_entity-link{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);font-weight:400;line-height:1.55;color:var(--text-reversed-soft,#C9C9C9);text-decoration:none;max-width:18rem;justify-self:start;transition:color 280ms cubic-bezier(0.16,1,0.3,1)}
+.footer_entity-link:hover{color:var(--orange,#FF6600)}
+.footer_entity-link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
 .footer_entity-line{font-size:var(--size-body,1rem);font-weight:400;line-height:1.55;color:var(--text-reversed-soft,#C9C9C9);max-width:18rem;margin-top:0;margin-bottom:0}
 /* --- legal-compliance strip --- */
 .footer_disclaimer-text{font-family:"Pluto Sans",system-ui,sans-serif;font-size:var(--size-body,1rem);font-weight:400;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);max-width:none;margin-top:0;margin-bottom:0;text-wrap:pretty}
@@ -385,7 +405,7 @@
        window narrows past the breakpoint — */
   .heading-style-h1{font-size:clamp(2.375rem,1.5rem + 2.2vw,2.75rem)}
   .heading-style-h2{font-size:2.25rem}
-  .text-lead{font-size:1.375rem}
+  .text-lead{font-size:1.25rem}
   .claim_lede{font-size:2rem;line-height:1.34}
   /* — hero — */
   .section_hero{min-height:100svh}
@@ -402,6 +422,8 @@
   .footer_rule{margin-left:-1.5rem;margin-right:-1.5rem}
   /* — footer: two columns of the four-cell band, then the legal strip — */
   .footer_ledger{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .footer_cell.is-brand{grid-column:span 2}
+  .footer_cell.is-nav{grid-column:auto;padding-left:0}
   .footer_cell{padding-top:3.5rem;padding-bottom:3.5rem}
   .footer_mark{height:2rem}
   .footer_index{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:2rem}
@@ -419,7 +441,7 @@
   .heading-style-h1{font-size:clamp(2.25rem,1.55rem + 2.4vw,2.5rem)}
   .heading-style-h2{font-size:1.5rem}
   .heading-style-h3{font-size:1.5rem}
-  .text-lead{font-size:1.1875rem}
+  .text-lead{font-size:1.125rem}
   .text-size-regular.is-large{font-size:1.0625rem}
   .claim_lede{font-size:1.5rem}
   .ways_term{font-size:1.375rem}
@@ -440,7 +462,7 @@
   .ways_term{font-size:1.375rem}
   .claim_lede{font-size:1.5625rem}
   .footer_ledger{grid-template-columns:minmax(0,1fr)}
-  .footer_cell.is-brand{padding-right:0}
+  .footer_cell.is-brand{grid-column:auto;padding-right:0}
   .footer_cell.is-nav{padding-left:0;padding-right:0}
   .footer_cell.is-entity{padding-left:0;padding-right:0}
   .navbar_logo{height:1.5rem}
@@ -450,7 +472,7 @@
   .heading-style-h1{font-size:clamp(1.875rem,1.4rem + 2.5vw,2.125rem)}
   .heading-style-h2{font-size:1.375rem}
   .heading-style-h3{font-size:1.25rem}
-  .text-lead{font-size:1.125rem}
+  .text-lead{font-size:1.0625rem}
   .claim_lede{font-size:1.3125rem}
   .ways_term{font-size:1.25rem}
   .padding-section-large{padding-top:5rem;padding-bottom:5rem}
@@ -493,7 +515,12 @@
    and the button row are widest, and a straight edge cannot step, so it starts outside the text
    instead. It still bleeds RIGHT into the page gutter and the hero still clips it, so the page
    never gains a horizontal scrollbar. */
-.doc-field{width:calc(100% + 5vw);margin-left:0;max-width:none}
+/* R29-LITERAL - #3 of the seven: `width:calc(100% + 5vw)` mixed % with vw, which the deployer
+   REFUSES (STRUCTURE.md 4e), so the whole property would never have reached the site. Same box,
+   solved natively: for a block box in normal flow the used width is the containing block minus the
+   margins, so `width:auto` with `margin-right:-5vw` IS 100% + 5vw. Measured identical at
+   1920/1680/1440/1280/1024/992/768/390. The bleed, the flat left edge and the hero clip are unchanged. */
+.doc-field{width:auto;margin-left:0;margin-right:-5vw;max-width:none}
 /* A FLAT RECTANGLE, as in the client's own mockup: every row holds the SAME number of filings,
    so the field's left edge is one straight vertical line. The rows stay RIGHT-aligned and the
    tile width stays fixed; the behaviour script computes one column count for the whole field and
@@ -532,7 +559,11 @@
 .doc-tile_mark.is-dim{opacity:0}
 /* the caption is CLIENT copy (cap table / IP assignment / customer MSA) so it is a real
    classed element, never pseudo content. Its 14px leader line is decorative, so it is a pseudo. */
-.doc-tile_cap{position:absolute;left:0;top:calc(100% + 0.4375rem);font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;color:var(--orange,#FF6600);white-space:nowrap;opacity:1;margin-top:0;margin-bottom:0;transition:opacity 1500ms cubic-bezier(0.33,0,0.2,1)}
+/* R29-LITERAL - #4 of the seven: `top:calc(100% + 0.4375rem)` mixed % with rem and was REFUSED.
+   The caption is absolute with `bottom:auto`, so its static position resolves from `top` and is then
+   shifted by its own top margin: `top:100%` plus the rule's existing `margin-top` (0 -> 0.4375rem) is
+   the same used position. No declaration added. Measured identical at the eight widths. */
+.doc-tile_cap{position:absolute;left:0;top:100%;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;letter-spacing:0.06em;line-height:1.1;color:var(--orange,#FF6600);white-space:nowrap;opacity:1;margin-top:0.4375rem;margin-bottom:0;transition:opacity 1500ms cubic-bezier(0.33,0,0.2,1)}
 .doc-tile_cap.is-dim{opacity:0}
 .doc-tile_cap::before{content:"";position:absolute;left:0;top:-0.375rem;width:0.875rem;height:1px;background-color:var(--orange,#FF6600)}
 @media (max-width:991px){
@@ -602,7 +633,6 @@
    than the body lead rung: 26px at the 992 floor rising to 34px. The three emphasised phrases
    are the client's own words at Bold 700 - what the firm is, what it does, and when. */
 .intro_lede{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:clamp(1.625rem,1.16vw + 0.9rem,2.125rem);line-height:1.42;letter-spacing:-0.015em;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
-.intro_lede-em{font-weight:700;color:var(--text-reversed,#EDEDED)}
 /* WP4.1 - `position:relative` DELETED: `.navbar_dropdown` is the Webflow Dropdown itself
    (`w-dropdown`) and Webflow's own base already sets it. What this class must say instead is
    `margin-left/right:0`: `.w-dropdown` supplies `margin-left:auto;margin-right:auto`, and this
@@ -646,7 +676,16 @@
    run, the panel would open invisible. Nothing rests at `opacity:0` in this sheet now - the
    decorator sets the wipe inline at the instant `w--open` appears, and the finished panel is the
    CSS rest state. */
-.navbar_dropdown-list{top:calc(100% + clamp(1rem,1.5vw,1.5rem));left:-1.75rem;min-width:19.5rem;text-align:left;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);border-top-width:0;padding-top:1.375rem;padding-bottom:1.375rem}
+/* R29-LITERAL - #5 of the seven: `top:calc(100% + clamp(1rem,1.5vw,1.5rem))` mixed % with the clamp
+   and was REFUSED whole - the clamp itself is legal and is STEPPED at deploy. Split into the two
+   parts it always was: `top:100%` (the bar's bottom hairline) plus the same clamp as `margin-top`,
+   which on an absolute box with `bottom:auto` shifts it by exactly that amount. The offset VALUE is
+   unchanged, so the hover bridge (`navbar_dropdown-toggle`'s padding-bottom + negative margin-bottom,
+   the same clamp) still covers the gap: measured toggle-bottom to panel-top = 0px at every width.
+   THE COMPANION IS PART OF THIS REWRITE, NOT A SECOND CHANGE: at the collapse width Webflow's base
+   makes the open panel `position:static`, where `top` has no effect but a margin does - so the <=991
+   rule below pins `margin-top:0` to hold that tier exactly where it already sat. */
+.navbar_dropdown-list{top:100%;margin-top:clamp(1rem,1.5vw,1.5rem);left:-1.75rem;min-width:19.5rem;text-align:left;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);border-top-width:0;padding-top:1.375rem;padding-bottom:1.375rem}
 /* the drawn top edge: the panel's opening signature, and the one orange element in the bar */
 .navbar_dropdown-edge{position:absolute;top:0;left:-1px;right:-1px;height:1px;background-color:var(--orange,#FF6600);transform:scaleX(0);transform-origin:left center}
 .navbar_dropdown-inner{display:grid;row-gap:0.125rem}
@@ -672,7 +711,9 @@
   /* WP4.1 - `position:static` DELETED: webflow.js puts `w--nav-dropdown-list-open` on the list at
      the collapse width and Webflow's base makes THAT static, so the widget already does this. The
      closed state below 992 is Webflow's `display:none`, so top/left never apply. */
-  .navbar_dropdown-list{min-width:0;background-color:transparent;border-width:0;padding-top:0.75rem;padding-bottom:1.25rem}
+  /* R29-LITERAL: `margin-top:0` - see #5 above. The panel is static inside the open sheet, so the
+     desktop offset must be neutralised here or the tier would gain an offset it never had. */
+  .navbar_dropdown-list{min-width:0;margin-top:0;background-color:transparent;border-width:0;padding-top:0.75rem;padding-bottom:1.25rem}
   /* the leader is always on in the sheet, at its full 12px - same as the old `::before` here */
   .navbar_dropdown-link{font-size:1.25rem;padding:0.875rem 0 0.875rem 1.75rem;background-position:0 1.4375rem;background-size:0.75rem 1px}
 }
@@ -731,6 +772,15 @@
 .proof_title-block{max-width:none;margin-top:1.5rem}
 /* the slider: the next card stays cropped at the container edge, which is what makes it read
    as a strip you can pull rather than a closed set of three. */
+/* R29-LITERAL - #6 of the seven: NOT REWRITTEN, and the reason is the cascade, not the value.
+   `width:calc(100% + 5vw + 1.5rem)` mixes % with vw and IS refused at deploy (4e), so this stays a
+   MANUAL DESIGNER STEP (SYSTEM.md R29, step 3). The native route - `width:auto` plus a negative
+   `margin-right`, which is what made #3 identical - CANNOT WORK ON THIS CLASS: this element is also
+   `swiper`, and Swiper's own sheet (`.swiper{margin-left:auto;margin-right:auto}`) is linked AFTER the
+   class layer on every page, so at equal specificity it wins and the negative margin is discarded.
+   Measured, not assumed: with the margin form the slider lost its whole bleed - 370.5 -> 351px at 390,
+   729.6 -> 691.2 at 768, 966.4 -> 892.8 at 992, and the cards reflowed taller. Reverted. The bleed can
+   only live in `width` while Swiper's sheet loads last, so the literal is set in the Designer. */
 .proof_slider{width:calc(100% + 5vw + 1.5rem);overflow:hidden}
 .proof_slide{height:auto;display:flex;align-items:stretch}
 /* one row: the previous arrow at the container's left edge, the bar running the whole span
@@ -767,6 +817,8 @@
 @media (max-width:991px){
   .proof_card{min-height:0}
   .proof_quote{min-height:0}
+  /* R29-LITERAL - #7: NOT REWRITTEN, for the reason #6 is not - Swiper's own auto margins load
+     after this sheet. Manual Designer step (SYSTEM.md R29, step 4). */
   .proof_slider{width:calc(100% + 5vw)}
   .proof_lockup{margin-bottom:2.25rem}
   .proof_quote{margin-bottom:2.5rem}
@@ -911,6 +963,9 @@
 .insights_card{display:flex;flex-direction:column;aspect-ratio:1 / 1;align-self:stretch;max-width:100%;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2.5rem,4.65vw - 0.39rem,4rem);color:var(--text-reversed,#EDEDED);text-decoration:none;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1),border-color 640ms cubic-bezier(0.16,1,0.3,1)}
 .insights_card:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:var(--rule-ink,#3A3A3A)}
 .insights_card:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+/* Insights index: the card ground at half strength, so the header field reads through it (operator 2026-09-24). */
+.insights_card.is-index{background-color:rgba(8,8,8,0.5)}
+.insights_card.is-index:hover{background-color:rgba(14,14,14,0.7)}
 /* the drawing: the article's own chart at the offer icons' weight. Never an icon-library glyph. */
 .insights_plate{display:block;align-self:flex-start;width:auto;height:3rem;margin-top:0;margin-left:0;margin-right:auto;margin-bottom:clamp(1.25rem,2.33vw - 0.15rem,2.5rem)}
 /* ONE card-title rung for every card on the page - insights and method alike (client
@@ -1021,11 +1076,14 @@
    gradient dies out ACROSS the seam instead of AT it. The apex mark keeps its own clipping layer
    (hero-mark-layer) so it still bleeds off the hero edges without the page ever gaining a
    horizontal scrollbar - which is what the overflow:hidden was really load-bearing for. */
-.section_page-header{position:relative;display:grid;align-content:center;min-height:100vh;background-color:var(--ink-hero,#000000)}
+.section_page-header{position:relative;display:grid;align-content:center;min-height:100vh;background-color:transparent}
 .page-header_grid{display:grid;grid-template-columns:minmax(0,1fr)}
 /* the right track carries no element: it is the air the cropped apex occupies, which is what
    keeps the H1's measure off the mark instead of over it. */
 .page-header_stack{min-width:0;display:grid;text-align:center}
+/* index pages: TRANSPARENT, for the reason section_sequence is (R28) - the header field's -30vh tail
+   dies out across the seam instead of being cut by an opaque section. The black is on .main-wrapper. */
+.section_insights.is-index{margin-top:-4rem;background-color:transparent}
 /* measures are rem, never ch: `ch` on a WRAPPER resolves against the wrapper's own 16px, not the
    heading's 54px, which silently cuts the measure to a fifth (measured on the first render). */
 .page-header_title-block{max-width:46rem;margin-top:1.5rem;margin-left:auto;margin-right:auto}
@@ -1078,566 +1136,3 @@
   .sequence_step{grid-template-columns:2.75rem minmax(0,1fr);column-gap:1rem}
 }
 
-/* ============================================================================
-   R17-OUR-APPROACH-REVISION (2026-09-17) — FOUR CLIENT NOTES on the assembled page, applied in
-   one pass. ADDITIONS, plus five in-place edits to R16 rules that only pages/our-approach.html
-   wears (`section_page-header`, `page-header_art-svg`, `sequence_head`, `sequence_stem`,
-   `sequence_body`). No rule the homepage wears is touched, so it still renders byte-identical.
-   No new token, type rung, radius, button or breakpoint.
-
-   1 · THE HEADER IS FULL HEIGHT. `min-height:100svh` (client note 2026-09-17, revising 88svh the
-       same day), the homepage hero's own value, so interior and front door open on the same
-       measure. `min-height`, never `height`: content can only make it taller, so no string can
-       ever be clipped. STRUCTURE.md's old "content height, never a viewport height" line is
-       corrected there, not quietly ignored here.
-   2 · THE APEX IS SWEPT, like the homepage's intro mark. The second copy below is the lit one;
-       pages/our-approach.js clones IT and masks the clone to a travelling band. Both copies are
-       visible from the first frame, so the motion only ADDS (§4c-bis). It stays a WATERMARK: 0.08
-       ghost + 0.11 lit + a 0.22 clone = 0.41 alpha where the band peaks, and only over the right
-       track, which carries no text. It was 0.16 + 0.38 for one build on 2026-09-17 - measured at
-       ~0.6, which competed with the H1 - and that is why these two numbers are small.
-   3 · THE SEQUENCE IS A TIMELINE: a sticky head in a 34% aside, the six steps in the 66% track
-       (the width the single 42rem column was wasting), a wide column gap, and ONE CONTINUOUS RAIL - the stem now
-       bridges each step's bottom padding with a negative margin, so the line runs tile to tile
-       instead of stopping short. Six DISTINCT tile faces, each base + ONE `is-` combo, each
-       varying only the decorative `::before`/`::after` rules (§4c: decorative pseudo content
-       deploys; only author-visible pseudo TEXT cannot).
-   4 · #judgment's heading moved to the right column and the left column carries the REVIEW BENCH:
-       three stations of ruled worksheet - written, scanned, re-ordered - and the apex at its seat.
-       Placed by grid LINE NUMBERS so the <h2> stays first in the DOM (§4f).
-   ============================================================================ */
-.tagline_row.is-centred{justify-content:center}
-
-/* the sequence's two tracks. The aside sticks while the six steps pass it - the head, its
-   description and the section's CTA stay with the reader through all six. */
-/* REVISED 2026-09-17 (client note: "use the container width much better ... big gap on the right").
-   The two tracks were 34fr/66fr, so at 105rem the steps got a 63rem track while `.sequence_body`
-   was capped at 34rem - ~22rem of dead ground at the container's right edge. Now the STEPS track
-   is capped at its own content width and the aside takes the remainder, so the rail sits flush
-   with the container's right rule and the residual air falls in the gutter, anchored on both
-   edges (law 4). The left track keeps an 18rem floor so the right one SHRINKS between 992 and
-   1280 instead of starving the head. */
-.sequence_grid{display:grid;grid-template-columns:minmax(18rem,1fr) minmax(0,44rem);column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem);align-items:start}
-.sequence_aside{position:sticky;top:9rem;align-self:start;max-width:38rem}
-.sequence_desc-block{max-width:34rem;margin-top:1.5rem;margin-bottom:0}
-
-/* R22: THE SIX FACES ARE GONE (client note 2026-09-17: "I did not like too many lines in the
-   icons. make this section much more minimal, elegant, clean"). Each step marker used to be a
-   `doc-tile` wearing one of six pseudo-element ruled-line arrangements - up to five hairlines a
-   tile, thirty in the section - which is a lot of drawing for a list of six words. The markers
-   are `step-plate` now: one hairline edge, one centred numeral, nothing else. See the R22 block
-   at the end of this sheet. The document field's own vocabulary (`doc-tile` / `doc-slot` /
-   `is-hot` / `doc-tile_mark`) is untouched and still entirely the homepage's. */
-
-/* #judgment · THE ANALYSIS FIELD (client note 2026-09-17, replacing the review bench: "so light,
-   so thin, not meaningful ... create something about AI analysis, computing"). The bench was six
-   hairlines and a moving bar - the same 1px vocabulary the rest of the page already spends, and at
-   this size it read as scattered strokes. This is a FIELD OF BLOCKS: 108 filled cells, twelve to a
-   row, the operative record as the machine holds it. It is dense, it is square-edged, and it is
-   the only heavy mass on the page - so it can carry weight without a glow, a gradient or a second
-   hue, and it shares no treatment with the paper tiles of #steps one section above (law 3).
-   THE DEVICE SAYS THE SECTION'S CLAIM: a compute head passes the field left to right and each
-   column RESOLVES as it goes - read, or flagged; the seventeen flags then rise to full accent one
-   after another - surfaced, ranked; and the apex in the legend comes up last, because the machine
-   reads and the person decides.
-   NO radius (paper has one, data does not), no border, no icon from outside this brand. The
-   legend is three real classed rows, not pseudo content (section 4c), and it reuses the existing
-   label rung - no new type size.
-   HOW IT SHIPS: no @keyframes (section 4c-bis), so the head's travel, every cell's colour and the
-   mark's opacity are written inline by pages/our-approach.js section 3 on one rAF clock. The
-   STYLESHEET holds the finished state - every cell read, the seventeen flagged, the head parked at
-   the right edge, the mark lit - so with the script absent, reduced motion on, printing or a
-   crawler reading, #judgment is a completed analysis. Nothing here rests at opacity 0. */
-
-/* #next · the closing lead, wider (client note 2026-09-17, twice: "make it wider, 2 lines
-   paragraph"). A combo, not an edit to `.close_lead-block` itself: that rule is the homepage's
-   26rem three-line measure. 46rem balanced to three lines; the string measures 1055px set on one
-   line at 19px, so a 2-line set needs a measure over 528px — 60rem (960px) lands it at two
-   balanced lines with room for the webfont to swap without reflowing to three. */
-.close_lead-block.is-wide{max-width:60rem}
-
-@media (max-width:991px){
-  .section_page-header{min-height:100vh}
-  .sequence_grid{grid-template-columns:minmax(0,1fr);row-gap:3rem}
-  .sequence_aside{position:static;top:auto;max-width:100%}
-  .sequence_desc-block{max-width:100%}
-  .band_display-col.is-second{grid-column:1;grid-row:1;max-width:100%}
-  .band_body-col.is-second{grid-column:1;grid-row:2}
-  .band_cell{height:1rem}
-  .band_key-block{width:1rem;height:1rem}
-}
-@media (max-width:767px){
-  .section_page-header{min-height:100vh}
-  .sequence_stem{margin-bottom:-1.75rem}
-  .close_lead-block.is-wide{max-width:100%}
-}
-
-/* ============================================================================
-   R17-OUR-APPROACH-REVISION · TWO MORE FAMILIES (2026-09-17), both named for the seven interior
-   pages that will inherit them and never for this one:
-     quote_*  ONE testimonial on bare ground - no card, no strip, no arrows. The homepage spends
-              the card-and-slider construction on three statements; a single statement here is a
-              different treatment, which is what law 3 asks of adjacent sections. The name and
-              role rungs are the homepage's own (1rem paper / 0.875rem muted) under new names -
-              same sizes, no new rung. Measured: #EDEDED on #000 17.6:1 · #8E8E8E on #000 6.1:1.
-     faq_*    a six-row ledger, question left, answer right, one hairline per row. STATIC: no
-              accordion widget is planned for this site (section 4g) and hand-rolling <details>
-              in place of one is exactly what that rule forbids. :last-child closes the stack and
-              it deploys (section 4d).
-   ============================================================================ */
-.section_quote{position:relative;background-color:var(--ink-hero,#000000)}
-/* R35: THE BRACKETED PANEL (client note 2026-09-17: "It does not look good. But I also don't want
-   it look very generic and boring. be creative"). Five passes at a centred column with a small
-   round avatar were each a version of the default testimonial, and the client rejected each.
-   This is a different construction, built from three things the brand already owns:
-     · THE DIAGONAL CORNER BRACKETS from the client's own site source (reference/MOCKUP-DEVICES.md:
-       16px, 2px orange, top-left and bottom-right only, offset -1px so they thicken the panel's
-       own edge). They are the section's device. The name is in the apex orange too (client note
-       2026-09-17: "make it orange") - the same hue as the brackets and the glyph, so the panel's
-       three accents are one colour, spent on one device family. ::before/::after
-       with content:"" ship (section 4c); a pseudo carrying no text is the correct build here.
-     · THE PORTRAIT AS ARCHITECTURE, not an avatar: the colour photograph fills the panel's left
-       cell edge to edge, one hairline between it and the words - an offset-media block, which
-       law 3 lists and this page did not yet have. It is the first time the client's "make the
-       photo colorful" has been given enough photo to matter.
-     · THE HOUSE PANEL: #080808, one #242424 hairline, square corners, the .proof_card padding
-       ramp on the text cell. Square throughout - the round plate, the page's one exception, is
-       retired with the avatar it framed.
-   LOUD / QUIET: the glyph is the committed moment (~4.3x the statement's size, in the apex
-   orange); the statement is h3 Regular; the credit and the client logo are the quiet foot,
-   held under one hairline. LEFT-ALIGNED, which takes this page back down to three centred
-   sections. Reading order: who -> the mark -> the words -> the credit -> the client. */
-/* R36 (client note 2026-09-17: "The photo is too big. i like the borders etc. make it aligned
-   center. align everything symmetrical and well. photo must be the same size as in the homepage.
-   i like the quote icon etc. keep the general concept"). The brackets, the panel and the glyph
-   stay; the offset-media block goes. ONE CENTRED COLUMN on the panel's own axis, in the order the
-   client's reference set at R24 - the mark, the statement, the plate, the credit - closed by one
-   hairline with the client logo under it. The panel takes the 52rem measure so its edges line up
-   with the ledger below it, and the .proof_card padding ramp. Every element is centred on the
-   same axis, and the two diagonal brackets are the one deliberate asymmetry - which is what keeps
-   a symmetric panel from reading as a form.
-   R37 (client note 2026-09-17: "better and more symmetrical padding"). ONE internal rung, R =
-   clamp(2rem, 2.33vw + 1.1rem, 2.75rem), carries every vertical gap - mark to statement,
-   statement to plate, credit to rule, rule to logo - and the panel's padding is one larger
-   number on all four sides, clamp(3rem, 4.65vw + 0.1rem, 4.5rem). The one correction that makes
-   the top read equal to the bottom: at line-height 0.62 the quote glyph's ink sits in the upper
-   part of its line box and leaves ~0.41em of empty box beneath it, so the mark's margin is
-   NEGATIVE by that amount less R - the gap you see under the mark is R, not R plus the glyph's
-   own dead space. COST, stated: a fourth centred section (law 4 allows
-   two), on the client's explicit instruction. */
-.quote_panel{position:relative;display:grid;justify-items:center;text-align:center;max-width:52rem;margin-left:auto;margin-right:auto;padding:clamp(3rem,4.65vw + 0.1rem,4.5rem);background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);transition:background-color 520ms cubic-bezier(0.16,1,0.3,1),border-color 520ms cubic-bezier(0.16,1,0.3,1)}
-.quote_panel:hover{background-color:var(--surface-card-hover,#0E0E0E);border-color:#565656}
-.quote_panel::before{content:"";position:absolute;top:-1px;left:-1px;width:16px;height:16px;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
-.quote_panel::after{content:"";position:absolute;right:-1px;bottom:-1px;width:16px;height:16px;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
-/* THE PLATE IS THE HOMEPAGE'S (client: "photo must be the same size as in the homepage"):
-   .proof_plate's 4.5rem square, #080808 on one #242424 hairline - the same construction and the
-   same number, so the two pages show one portrait system - but ROUND (client note 2026-09-17:
-   "circled"): the plate is the page's one round corner again, a circular portrait being the single
-   deliberate exception in a square-edged system, not a global radius. The photograph is
-   absolute inside it and the aspect-ratio sets the height, so the plate can never be stretched. */
-.quote_media{position:relative;width:4.5rem;aspect-ratio:1 / 1;margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);border-radius:100%;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);overflow:hidden}
-/* R24: IN COLOUR (client note 2026-09-17: "make the photo colorful too"). The grayscale(100%)
-   is dropped; the light contrast and brightness trim stays, which is what keeps a colour
-   portrait from blowing out against a #080808 panel on a black page. */
-.quote_photo{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:50% 26%;filter:contrast(1.04) saturate(1.02) brightness(0.97)}
-.quote_statement-block{max-width:100%;margin-top:0}
-.quote_statement{margin-top:0;margin-bottom:0}
-/* A STATEMENT IS NOT A HEADING (client note 2026-09-17: "only the important h2 h3 etc must be bold
-   and big"), and as of the same day's second note it also steps DOWN a rung: the h3 size at
-   Regular 400 over a 52rem measure, which is the quietest way to carry three lines of speech.
-   One is- combo on the base rung (section 4a), no new type size. */
-.heading-style-h3.is-quote{font-weight:400;letter-spacing:-0.01em;line-height:1.38}
-.quote_attrib{display:grid;row-gap:0.375rem;max-width:26rem;margin-top:1.25rem}
-/* THE FOOT: one hairline the full width of the panel's content box, the client logo centred under
-   it. width:100% is load-bearing - the panel is a grid with justify-items:center, which would
-   otherwise shrink the rule to the logo's width. */
-.quote_foot{display:flex;justify-content:center;width:100%;margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);padding-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);border-top:1px solid var(--edge-card,#242424)}
-.quote_name{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1rem;font-weight:400;line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;color:var(--orange,#FF6600);margin-top:0;margin-bottom:0}
-.quote_org{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.4;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
-/* R31: TRANSPARENT, so #next's gradient can bleed up into it (client note: "it can be overflow
-   to the top section"). The page's black ground is on .main-wrapper. */
-.section_faq{position:relative;background-color:transparent}
-/* CENTRED, client-instructed. COST, stated once: this is the page's THIRD centred section (hero,
-   questions, close) and law 4 allows two - the head and the column are centred, the ROWS are not,
-   because a centred question over a centred two-line answer loses the left edge a reader returns
-   to on every row. NO ROW RULE (client note 2026-09-17, "remove horizontal border"): the rows are
-   separated by the trigger's own padding and by the open panel, nothing else. */
-.faq_head{max-width:46rem;margin-left:auto;margin-right:auto;text-align:center;margin-bottom:clamp(3.5rem,4.65vw + 0.6rem,5.5rem)}
-.faq_title-block{max-width:44rem;margin-top:1.5rem;margin-left:auto;margin-right:auto}
-.faq_list{display:grid;max-width:52rem;margin-left:auto;margin-right:auto}
-/* ONE DIVIDER, NOTHING ELSE (client note 2026-09-17: "only use border color as divider between
-   the questions. no top border no border left right"). The rule is a bottom edge, the last row
-   drops it, and the list is flush - no gap, because a divider needs its two rows adjacent to
-   divide them. The open row lifts to a surface barely off the ground (#0B0B0B): at this width the
-   premium reading comes from the air inside the row and the single hairline under it, not from a
-   box. Written inline by the behaviour script (section 4f); the transition is here. */
-/* R26 (client note 2026-09-17: "use the border color the same color with the bg color in the
-   faq... also add 6px border radius for the active faq"). The divider now matches the ground it
-   sits on - #000000, the page's own surface token - so a closed row has no visible edge at all
-   and the list is held together by its rhythm and its air instead of by six hairlines. The 1px
-   edge is KEPT rather than removed: it is what preserves the row's height and the open row's
-   inset, and it is what the open state recolours to #0B0B0B so the surface reads as one block.
-   border-radius and border-color are written inline by our-approach.js §5 (a combo that only
-   exists at runtime is pruned from the published CSS, §4f); the transitions are here and deploy.
-   THE RADIUS IS 6px ON THE OPEN ROW ONLY - this is not a global radius on everything (§3.5), it
-   is one state on one component, on the client's instruction. */
-.faq_row{display:grid;border-bottom:1px solid var(--ink-hero,#000000);border-radius:0;transition:background-color 520ms cubic-bezier(0.16,1,0.3,1),border-color 520ms cubic-bezier(0.16,1,0.3,1),border-radius 320ms cubic-bezier(0.16,1,0.3,1)}
-.faq_row:last-child{border-bottom-width:0}
-/* the trigger IS the row: a button that fills it is the whole hit target (59px+ tall at every
-   width, over the 44px floor). COMPACT AND LIGHT, client note 2026-09-17: the question wears the
-   BODY rung at Regular 400, not the Bold 700 h3 - six questions are a list to scan, and at the h3
-   rung they read as six headings competing with the one above them. No new type size: 1.125rem/1.5
-   is text-size-regular's own. The h3 element stays for structure and carries no heading class.
-   The row's horizontal padding is symmetric and is what the open background is drawn around. */
-.faq_q-wrap{margin-top:0;margin-bottom:0}
-.faq_trigger{display:flex;align-items:flex-start;justify-content:space-between;column-gap:clamp(1.5rem,2.33vw + 0.3rem,2.5rem);width:100%;background-color:transparent;border-style:none;border-width:0;cursor:pointer;text-align:left;font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);font-size:1.125rem;line-height:1.5;padding-top:clamp(1.625rem,2.33vw + 0.72rem,2.25rem);padding-bottom:clamp(1.625rem,2.33vw + 0.72rem,2.25rem);padding-left:clamp(1rem,1.86vw + 0.28rem,1.5rem);padding-right:clamp(1rem,1.86vw + 0.28rem,1.5rem);transition:color 420ms cubic-bezier(0.16,1,0.3,1)}
-.faq_trigger:hover{color:var(--orange,#FF6600)}
-.faq_trigger:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:4px}
-.faq_q{display:block;max-width:44rem}
-/* the mark is TWO HAIRLINES, this project's own vocabulary - never a chevron from an icon set.
-   The script rotates the vertical one to 0 when the row opens, so + becomes -. */
-.faq_mark{position:relative;flex-grow:0;flex-shrink:0;display:block;width:0.75rem;height:0.75rem;margin-top:0.5rem}
-.faq_mark-bar{position:absolute;top:50%;left:0;display:block;width:100%;height:1px;background-color:var(--orange,#FF6600);transition:transform 420ms cubic-bezier(0.16,1,0.3,1)}
-.faq_mark-bar.is-vert{transform:rotate(90deg)}
-/* AUTHORED OPEN: the height is the script's, inline, at runtime. With no script every answer is
-   simply visible, which is the only version that can be printed or crawled. */
-.faq_panel{overflow:hidden;transition:height 460ms cubic-bezier(0.16,1,0.3,1)}
-.faq_a{max-width:44rem;padding-left:clamp(1rem,1.86vw + 0.28rem,1.5rem);padding-right:clamp(1rem,1.86vw + 0.28rem,1.5rem);padding-bottom:clamp(1.75rem,2.33vw + 0.85rem,2.375rem)}
-@media (max-width:991px){
-  .faq_head{max-width:100%}
-  .faq_list{max-width:100%}
-  .faq_q{max-width:100%}
-  .faq_a{max-width:100%}
-}
-
-
-/* ============================================================================
-   R19-HERO-WAVE (2026-09-17) — THE INTERIOR PAGE HEADER, REBUILT ON FOUR CLIENT NOTES:
-   "a dark hero with orange gradients as in the logo · a wave animation, very smooth, very
-   elegant, not distracting · align left the whole hero section · 100vh · everything symmetrical."
-
-   WHAT WAS REMOVED: the whole R18 hairline fan, and with it the cropped apex watermark
-   (`page-header_art`, `page-header_art-svg`, `.is-light`) — deleted from this sheet rather than
-   left worn by zero elements. The apex still appears in the hero, once, at label size in
-   `tagline_row`, which is where the reader can actually read it.
-
-   STANDING LAW OVERRIDDEN ON CLIENT INSTRUCTION, named once: CLAUDE.md §3.5 bans gradients and
-   glows, on the reasoning that a near-black page with a warm bloom is the default "expensive" AI
-   surface. The client has asked for orange gradients explicitly, so the field is built from them
-   — but disciplined to the brand's own two oranges and nothing else: #FF6600 (the apex) and
-   #B34B00 (the CTA ground), at 0.04–0.30 alpha over #000000. No second hue, no blur filter, no
-   coloured shadow, no glass. DESIGN-RULES.md gets a row for this.
-
-   SYMMETRY, which is what "everything symmetrical" resolves to on a left-aligned stack: the
-   stack sits on the container's own left rail and every block in it shares ONE left edge; the
-   vertical rhythm is 1.5rem between the three text blocks and 2rem before the button row (the
-   button-row's own margin, measured 24/24/32px — one extra half-rung of air before the only
-   interactive pair in the section); and the section's top and bottom
-   padding are equal IN THE VISIBLE AREA — `padding-section-medium is-hero` is asymmetric by
-   exactly the 96px bar for that reason, so the stack centres between the bar seam and the section
-   seam rather than between the page edges. `page-header_grid`'s old `padding-bottom` is gone: it
-   existed only to reserve air for the watermark, and with the watermark deleted it was what
-   pushed the stack off centre.
-
-   MOTION SHIP ROUTE (§0, §4c-bis): the waves are a <canvas>, so they ship as custom code in the
-   site's script bundle — @keyframes do not survive the style pipeline and prefers-reduced-motion
-   is dropped by it, so the reduced-motion case is honoured in our-approach.js §2, which paints
-   ONE still frame instead of looping. The canvas carries no information: with no script the hero
-   is the black ground and the full type stack, which is everything a reader, a crawler or a
-   print needs. Nothing in this sheet rests at opacity 0.
-   ============================================================================ */
-.hero-wave{position:absolute;top:0;right:0;bottom:-30vh;left:0;pointer-events:none;overflow:hidden}
-.hero-wave_canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
-/* R30: THE APEX IS DRAWN ON THE CANVAS NOW, not as an <img> in its own layer. Its layer was
-   authored inset:0 with overflow:hidden - i.e. exactly the section box - so while the field's
-   canvas was extended 30vh past the seam, the mark was still hard-clipped at 100vh: a straight
-   511px horizontal edge sitting precisely on the hero/#steps seam, ~12 red levels tall. Copying
-   bottom:-30vh onto that layer would only have moved the cut 162px down into #steps. Painting the
-   mark into the field instead means the SAME bottom veil that dissolves the gradient dissolves
-   the mark, so there is no second clip anywhere. See our-approach.js section 2. */
-/* --- the left-aligned stack. One left edge, one 1.5rem rung, no centred combos. --- */
-.page-header_stack.is-left{text-align:left;justify-items:start}
-.page-header_title-block.is-left{margin-left:0;margin-right:0;max-width:48rem}
-.page-header_lead-block.is-left{margin-left:0;margin-right:0;max-width:40rem}
-
-@media (max-width:991px){
-  .page-header_title-block.is-left{max-width:100%}
-  .page-header_lead-block.is-left{max-width:100%}
-}
-
-/* ============================================================================
-   R21-SEQUENCE (2026-09-17) — TWO CLIENT NOTES on #steps: "dont use bold font and align them
-   better with the icons etc." and "the icons must be animated during scroll and up colors need
-   to change the same way. make it smarter."
-
-   TYPE. `.heading-style-h3` stays Bold 700 for the rest of the system (CLAUDE.md §3.5); the
-   step headings take ONE combo that drops them to Regular 400. Six steps read as a list of
-   equal items, not six sub-headlines, and at 24-28px Regular in Pluto Sans is the more premium
-   reading — Bold at that size next to a 4rem paper tile was the loudest thing in a section whose
-   committed moment is the RAIL. No new type size, no new weight: 400 is the brand's body face.
-
-   ALIGNMENT, measured not guessed. The heading's box top sat flush with the tile's top edge,
-   which puts its CAP LINE 3.8px lower than the edge (half-leading 2.88px + the ascender's
-   overshoot above cap height at 24px/1.24). `margin-top:-0.16em` lifts the cap onto the tile's
-   own top edge, so the heading and the paper share one horizontal datum at every type size the
-   rung steps through — em, not px, is what makes that true at 28px and at 20px alike.
-   ============================================================================ */
-.heading-style-h3.is-step{font-weight:500;font-size:1.3125rem;letter-spacing:-0.008em;line-height:1.3;margin-top:-0.16em}
-
-/* ============================================================================
-   R22-STEP-PLATE (2026-09-17) — #steps, on one client note: "while scrolling up and down, only
-   the current icon must change the color. not the bg color maybe only the borders. make it
-   smoother. I did not like too many lines in the icons. make this section much more minimal,
-   elegant, clean."
-
-   THE MARKER IS NOW ONE RECTANGLE AND ONE NUMBER. It keeps the paper proportion (1 : 1.31, US
-   Letter) because that is what ties the sequence to the operative record, and it keeps a single
-   hairline edge from the same #242424 rung every card and seam on the site uses. Everything else
-   is removed: no ruled lines, no six faces, no lit face, no second surface. A step marker had up
-   to five hairlines inside it and there were thirty in the section.
-
-   ONE hairline, ONE numeral, CENTRED - no absolute positioning anywhere in it, which is also why
-   it holds at 4rem, 3.25rem and 3rem without a single override.
-
-   WHAT MOVES: the EDGE and the NUMERAL of the CURRENT step only, written inline by
-   our-approach.js §4 from the scroll position. The face never changes - the client asked for
-   borders, not backgrounds, and a warming face was the thing that made six markers read as a
-   progress bar instead of a list. The stem also drops from #454545 to #242424: the rail is
-   structure, not emphasis, and the one lit edge should be the loudest thing in the section.
-   ============================================================================ */
-.step-plate{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1 / 1.31;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424)}
-.step-plate_num{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1;letter-spacing:0.04em;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
-
-/* ============================================================================
-   R24-QUOTE-MARK (2026-09-17) — "add a quote icon to the top which fits well with the current
-   design style."
-
-   It is NOT a glyph. Two reasons, and the second is the binding one: this brand's devices come
-   from its own ruling system, never from an imported icon set or a piece of punctuation set
-   large (CLAUDE.md §3 law 5) — and the client-supplied Pluto Sans TRIAL files carry a reduced
-   70-glyph set with NO quote character in it, so a typeset " would have rendered as a fallback
-   face or as nothing at all.
-
-   So the mark is two hairlines: 2px wide, 22px tall, raked 14 degrees, 7px apart, in the apex
-   orange. It is the same vocabulary as every seam, rail and rule on the site, at the one size
-   where two marks read unmistakably as an opening quote. Both bars wear the SAME class and the
-   SAME transform — no :nth-child (dropped at deploy, §4d), no pseudo content, no descendant
-   selector. It sits above the statement, which is the top of the stack.
-   ============================================================================ */
-/* THE MARK IS THE TYPOGRAPHIC QUOTE, AT DISPLAY SCALE (client note 2026-09-17: "the icon must
-   represent quote"). A real classed element carrying the character - section 4c blocks exactly one
-   shape, a pseudo whose content is author-visible text, and this is that shape. Pluto Sans Bold
-   in the apex orange, line-height 0.62 so the glyph's own top whitespace leaves the rhythm, and
-   centred over the statement on the panel's axis. ANIMATED (client note 2026-09-17: "animate the
-   icon") by our-approach.js §6 as an EMBER: the colour breathes from the apex orange up to the
-   hero field's own #FFA347 tint and back on a 5.6s cosine, riding 3px with it - additive only,
-   rest is the stylesheet's #FF6600, and that is what shows with no script or under reduced
-   motion. Two moving marks were rejected here before (R26 bars, R32 glint); this one moves
-   nothing but its warmth, which is the motion vocabulary the hero already set. */
-.quote_mark{display:flex;justify-content:center;margin-bottom:clamp(-0.5rem,-0.7vw + 0.4rem,0rem)}
-.quote_glyph{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(5rem,4.65vw + 2.6rem,7.5rem);line-height:0.62;letter-spacing:-0.02em;color:var(--orange,#FF6600)}
-
-/* THE CLIENT LOGO, IN FULL COLOUR (client note 2026-09-17: "add company logo to the bottom
-   (colorful)"). One testimonial and no hover target, so it ships saturated - with the portrait,
-   the only non-brand colour on the page. OPTICALLY CENTRED: the placeholder asset's
-   viewBox (0 0 156 26) carries 44.4 units of trailing whitespace after its ink, and the asset is
-   byte-shared with the homepage and design_handoff_homepage/MANIFEST.json's recorded sha256, so
-   it is not edited - a left margin of the same 44.4px on this class alone (no descendant, section
-   4a) moves the item right by half of it, so the INK, not the box, centres on the axis. PLACEHOLDER: Northfield is an invented company
-   (content/proposed-copy.md section 3); it must not publish as a named endorsement. */
-.quote_logo-lockup{display:flex;justify-content:center}
-.quote_logo{display:block;height:1.625rem;width:auto;margin-left:2.775rem}
-
-@media (max-width:991px){
-  .quote_panel{max-width:100%}
-  .quote_statement-block{max-width:100%}
-}
-@media (max-width:767px){
-  /* 1.375rem is 0.846 of the natural 26px, so the trailing whitespace scales with it: 37.6px */
-  .quote_logo{height:1.375rem;margin-left:2.35rem}
-}
-
-/* ============================================================================
-   R28-FAQ-PROMPT (2026-09-17) — "add something like: Have questions? + CTA button. Do it with
-   better copy and make it very meaningful."
-
-   CONTRACTOR-AUTHORED VISIBLE STRINGS: 3 (a question, one sentence, one button label). Every
-   other string on this page is client copy, verbatim; these are flagged here and in
-   content/proposed-copy.md terms, and the client should approve or replace them.
-
-   The copy is not "Have questions? Contact us". Six answers above it are general; the only thing
-   that can answer the seventh is the reader own record, and that is also this page whole
-   argument - so the prompt says exactly that, and the CTA is the same "Start the Conversation"
-   the rest of the page uses rather than a seventh button label.
-
-   It sits INSIDE #questions, under the list, on the list own 52rem measure and the section own
-   centred axis - so it reads as the end of the questions rather than as a new section. One
-   hairline above it, from the same line system as every other seam. */
-/* R29f: no divider and no sentence (client note 2026-09-17: "remove this remove the divider
-   too"). The hairline is gone, so the gap alone separates the prompt from the last answer - which
-   is the same reasoning the FAQ rows themselves now follow, where the divider matches the ground.
-   .faq_prompt-text went with the sentence rather than being left worn by zero elements. */
-/* R29g (client note 2026-09-17: "use the bg color in the cta section of the homepage with good
-   padding"). The prompt becomes the system's existing PANEL construction, not a new one: the
-   same #080808 ground, the same single #242424 hairline, the same square corners and the SAME
-   padding ramp - clamp(2.5rem, 4.65vw - 0.39rem, 4rem) - that .close_stack.is-box and
-   .proof_card already use. Nothing here is a new number. It keeps the list's 52rem measure so
-   the panel's edges line up with the questions above it. */
-.faq_prompt{display:grid;justify-items:center;text-align:center;max-width:52rem;margin-left:auto;margin-right:auto;margin-top:clamp(3.5rem,4.65vw + 0.6rem,5.5rem);background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2.5rem,4.65vw - 0.39rem,4rem)}
-.faq_prompt-q{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:500;font-size:clamp(1.5rem,0.58vw + 1.15rem,1.75rem);line-height:1.2;letter-spacing:-0.018em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0}
-
-/* ============================================================================
-   R29-COMPUTE-FIELD (2026-09-17) — #judgment, rebuilt on one client note: centre everything,
-   delete the left illustration and its labels, and put a dark-orange COMPUTING DOT field in the
-   section background - active top, bottom, left and right, clear through the middle.
-
-   WHAT WAS DELETED: band_grid, band_display-col, band_body-col (and both is-second combos),
-   band_art, band_field, band_cell (+is-hot), band_head, band_legend, band_key, band_key-block
-   (+is-hot) and band_key-mark - eighteen rules, plus their <=767 overrides. The 108-block
-   analysis field and its three legend labels are gone from the markup in the same pass, so
-   nothing in the dictionary is left worn by zero elements.
-
-   THE FIELD IS A LATTICE, NOT A GLOW. 20px pitch, 2px square dots in #B34B00 - the darker of the
-   brand two oranges, the one used for ink - and their brightness is the interference of three
-   travelling wavefronts, so bands of computation cross the lattice and meet. Squares rather than
-   circles because a pixel grid IS the subject, and because 2500 fillRects a frame cost a
-   fraction of 2500 arcs. An ELLIPTICAL HOLE keeps the middle empty: the multiplier is 0 inside
-   0.36 of the section half-diagonal and rises on a smoothstep to 1 by 0.72, so the type sits on
-   plain black and the computation happens around it.
-
-   MOTION SHIP ROUTE (section 0, 4c-bis): a <canvas>, so custom code in the site script bundle;
-   reduced motion is honoured in our-approach.js section 3, which paints ONE still frame. The
-   lattice carries no information - with no script #judgment is the black ground and the centred
-   type stack, which is all a reader, a crawler or a print needs.
-
-   THE STACK IS CENTRED, which is this page FIFTH centred section where law 4 allows two. Stated,
-   not hidden: it is the client own instruction, and the three before it (hero header, #voice,
-   #questions) were too. */
-.compute-field{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;overflow:hidden}
-.compute-field_canvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
-/* R29b (client note 2026-09-17: "simply align left, add tagline. better typography"). LEFT, on
-   the container's own rail, which also drops this back to four centred sections instead of five.
-   The stack now runs the page's full label -> display -> lead -> note -> action ladder, the same
-   five rungs in the same order as the page header, so #judgment is a variation on a composition
-   the reader has already learned rather than a new one:
-     tagline_row      0.75rem label + the apex mark, the page's own section opener
-     heading-style-h2 the h2 rung, Bold 700, unchanged
-     text-lead        1.5625rem Light 300 in --text-reversed #EDEDED (is-reversed), 40rem measure
-     text-size-regular 1.1875rem Regular 400 in --text-reversed-soft #C9C9C9, 36rem measure
-   Three sizes, three weights, two inks, and each measure narrower than the one above it, so the
-   block reads as a funnel down to the button instead of four paragraphs of equal claim.
-   The lattice's clear zone moves with the type - see HOLE_CX in our-approach.js section 3. */
-.band_stack{display:grid;justify-items:start;text-align:left;max-width:56rem;margin-left:0;margin-right:0}
-.band_title-block{max-width:44rem;margin-top:1.5rem}
-/* R29d (client note 2026-09-17: "wider paragraph"). The lead goes 40rem -> 48rem and the note
-   36rem -> 42rem. The funnel is preserved - each measure is still narrower than the one above
-   it (44 title / 48 lead is the one inversion, and it is deliberate: the h2 is display type at
-   2.75rem and wants the tighter measure, the lead is 1.5625rem Light and can carry more). */
-.band_lead-block{max-width:48rem;margin-top:1.5rem}
-/* R29h (client note 2026-09-17: "not all the paragraphs, it must be narrower"). The LEAD keeps
-   the wide 48rem measure it was just given; the note drops to 32rem. The two are now clearly
-   different rungs rather than two paragraphs of the same width - the lead carries the claim
-   across the full stack, the note is an aside under it. */
-.band_note-block{max-width:32rem;margin-top:1.125rem}
-
-/* ============================================================================
-   R31-CLOSE-FIELD (2026-09-17) — #next, on one client note: "use a similar gradient effect in
-   here but this time start it with top left, also it can be overflow to the top section. it must
-   be darker and smarter. no movement. no animation. but really good soft gradient. also align
-   center. set a tagline and make it meaningful."
-
-   NO CANVAS AND NO SCRIPT. The hero's field is a canvas because it moves; this one is explicitly
-   still, so it is four CSS background-image layers on one classed div - which also means it
-   deploys as a background-image string and needs no custom code at all. Four layers, in paint
-   order:
-
-     1 · a TOP VEIL to black, fading out by 22% - the layer starts 26vh above the section, inside
-         #questions, and this is what dissolves that overlap instead of starting it on a line.
-     2 · a BOTTOM VEIL to black over the last 45%, so the field is gone before the footer.
-     3 · a small inner bloom at 22% 26%, #FF6600.
-     4 · the main bloom anchored at 6% 4% - the TOP LEFT corner, as asked.
-
-   Both blooms are SEVEN-STOP, on the same falloff shape as the hero's canvas blooms, so there is
-   no kink and no visible core. DARKER THAN THE HERO by design: peaks are 0.085 and 0.050 against
-   the hero's 0.12, because this section sits directly under a long FAQ and above the footer and
-   is the quietest moment on the page.
-
-   AND IT IS THE ONLY GRADIENT ON THE PAGE THAT NEEDS NO JS: worth noting because it is the
-   smarter half of "darker and smarter" - a still field has no business costing a rAF.
-   ============================================================================ */
-.close-field{position:absolute;top:-26vh;right:0;bottom:0;left:0;pointer-events:none;overflow:hidden;background-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.86) 6%,rgba(0,0,0,0.45) 14%,rgba(0,0,0,0.12) 19%,rgba(0,0,0,0) 23%),linear-gradient(to bottom,rgba(0,0,0,0) 55%,rgba(0,0,0,0.30) 72%,rgba(0,0,0,0.70) 88%,rgba(0,0,0,0.96) 100%),radial-gradient(ellipse 46% 40% at 22% 26%,rgba(255,102,0,0.050) 0%,rgba(255,102,0,0.038) 22%,rgba(179,75,0,0.022) 44%,rgba(179,75,0,0.010) 64%,rgba(179,75,0,0.003) 82%,rgba(179,75,0,0) 100%),radial-gradient(ellipse 80% 64% at 6% 4%,rgba(255,102,0,0.085) 0%,rgba(255,102,0,0.066) 16%,rgba(255,102,0,0.044) 32%,rgba(179,75,0,0.026) 48%,rgba(179,75,0,0.013) 64%,rgba(179,75,0,0.005) 80%,rgba(179,75,0,0) 100%)}
-.button-row.is-centred{justify-content:center}
-
-/* ============================================================================
-   R32-BREAKPOINTS (2026-09-17) — "make the page responsive for both wider and narrower desktop
-   screens, tablet, landscape phone, and portrait phone. check for the symmetrical issues too."
-
-   Only the FIXED SET deploys - min 1920/1440/1280, max 991/767/479 - so these are the only six
-   widths anything below is written at. Everything authored this round that carried a bare value
-   at every width is stepped here; anything already on a clamp() is left alone, because a clamp
-   IS the responsive rule and restating it at a breakpoint is how two sources of truth start.
-
-   WHAT WAS WRONG, per element:
-     · heading-style-h3.is-step  1.3125rem at every width, so at 479 a 21px heading sat on a 19px
-                                 paragraph - a 1.1 ratio where the scale asks for 1.25 (law 2).
-     · band_*-block              three bare max-widths (44/48/32rem); they shrink, but the FUNNEL
-                                 they encode inverts below about 800px, where all three are simply
-                                 100% and the deliberate difference between lead and note is gone.
-     · step-plate_num            0.9375rem at every width against a 4rem -> 3rem plate.
-     · quote_mark                the gap did not step with the bars.
-     · close-field / hero-wave   vh-based bleeds, which are correct at every width by construction.
-   ============================================================================ */
-@media (min-width:1920px){
-  /* the wide desktop: the measures stop growing, the air does. Nothing re-sizes type - the rungs
-     are already capped by their own clamps at 1920. */
-  .band_stack{max-width:60rem}
-  .band_lead-block{max-width:50rem}
-  .close_stack{max-width:60rem}
-  .faq_prompt{max-width:56rem}
-  .quote_panel{max-width:56rem}
-}
-/* R38 - THE RESPONSIVE PASS (client note 2026-09-17: "extremely responsive for both wide and small
-   desktop screens, also for tablet, landscape and phone"). MEASURED, in an iframe at each size,
-   for horizontal document overflow: 1920x1080 / 1680x1050 / 1440x900 / 1280x800 / 1024x768 /
-   991x900 / 834x1112 / 768x1024 / 600x900 / 479x900 / 390x844 / 844x390 / 320x640 - ZERO at every
-   one of them, before and after this block. The only elements that measure past the viewport are
-   the rule-sweep segments inside `.rules_h-bottom`, which is the animated rail and clips them.
-   What this block adds is the two SMALL-SCREEN rungs the testimonial panel was missing: its
-   internal padding steps down twice, so a 4.5rem plate and a 72px glyph still have air around them
-   inside a 288px-wide panel, and the client logo takes a third size so its ink clears the rails.
-   The animations' own responsiveness is not CSS - the three canvases derive every dimension from
-   their own box every frame; see our-approach.js R38 for the lattice's pitch and band width, the
-   hero veil and bloom centres, and the step focus's sigma floor. */
-@media (max-width:767px){
-  .quote_panel{padding:2.25rem 1.75rem}
-  .quote_glyph{font-size:5rem}
-}
-@media (max-width:479px){
-  .quote_panel{padding:1.75rem 1.25rem}
-  /* 1.125rem is 0.692 of the natural 26px, so the trailing whitespace scales to 30.7px */
-  .quote_logo{height:1.125rem;margin-left:1.92rem}
-}
-@media (max-width:991px){
-  /* TABLET. The stacks go full width and the funnel is re-stated in proportion rather than lost. */
-  .band_stack{max-width:100%}
-  .band_title-block{max-width:100%}
-  .band_lead-block{max-width:38rem}
-  .band_note-block{max-width:30rem}
-  .heading-style-h3.is-step{font-size:1.25rem}
-  .faq_prompt{max-width:100%}
-}
-@media (max-width:767px){
-  /* LANDSCAPE PHONE. */
-  .band_lead-block{max-width:100%}
-  .band_note-block{max-width:100%;margin-top:1rem}
-  .heading-style-h3.is-step{font-size:1.1875rem;line-height:1.34}
-  .step-plate_num{font-size:0.875rem}
-}
-@media (max-width:479px){
-  /* PORTRAIT PHONE. The step heading steps below the paragraph rung and holds the 1.25 ratio
-     against the 1rem body it sits on there; weight 500 is what keeps it reading as a heading. */
-  .heading-style-h3.is-step{font-size:1.125rem}
-  .step-plate_num{font-size:0.8125rem}
-  .quote_glyph{font-size:4.5rem}
-  .close-field{top:-18vh}
-}

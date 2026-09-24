@@ -431,6 +431,10 @@ function init(){
      and cannot carry one of our classes, and its colour comes from a variable Swiper declares
      itself. The script sets the width inline, which is the sanctioned pattern for a state the
      Designer never sees. */
+  /* equal-height cards: Swiper's sheet loads after ours and sets .swiper-slide{height:100%;display:block}, which
+     blocks flex stretch; releasing both inline lets every slide stretch to the tallest and the card fill it (operator
+     2026-09-24). The card's foot is margin-top:auto, so logos, quotes and attributions align. */
+  sw.slides.forEach(function(s){s.style.height='auto';s.style.display='flex'});
   var fill=document.querySelector('.proof_progress-fill');
   function prog(){
     if(!fill)return;
@@ -456,20 +460,21 @@ if(window.Swiper)init();else window.addEventListener('load',init);
 (function(){
 if(window.__afissioRuleDriftV1)return;window.__afissioRuleDriftV1=1;
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-var H=[].slice.call(document.querySelectorAll('.rules_h-bottom,.footer_rule'));
+/* 2026-09-24: the masthead rule and the Industries spine join the system; the spine is vertical. */
+var H=[].slice.call(document.querySelectorAll('.rules_h-bottom,.footer_rule,.page-header_rule,.register_spine'));
 if(!H.length)return;
-function seg(p){var s=document.createElement('div');s.setAttribute('aria-hidden','true');
+function seg(p,v){var s=document.createElement('div');s.setAttribute('aria-hidden','true');
 s.style.position='absolute';s.style.willChange='transform';s.style.opacity='0.85';
-s.style.height='1px';s.style.width='16rem';s.style.top='0';s.style.left='0';
-s.style.background='linear-gradient(90deg, transparent 0%, #FF6600 50%, transparent 100%)';
+s.style.height=v?'16rem':'1px';s.style.width=v?'1px':'16rem';s.style.top='0';s.style.left='0';
+s.style.background='linear-gradient('+(v?180:90)+'deg, transparent 0%, #FF6600 50%, transparent 100%)';
 if(getComputedStyle(p).position==='static')p.style.position='relative';
 p.style.overflow='hidden';p.appendChild(s);return s}
-var hs=H.map(function(p){return{p:p,ss:[seg(p),seg(p)],ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero'))}});
+var hs=H.map(function(p){var v=(' '+p.className+' ').indexOf(' register_spine ')>-1;return{p:p,v:v,ss:[seg(p,v),seg(p,v)],ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero'))}});
 var cur=window.scrollY||0;
 function frame(now){var tgt=window.scrollY||0;cur+=(tgt-cur)*0.05;var t=(now||0)*0.0105;
-hs.forEach(function(o){var len=o.p.offsetWidth,sl=256,span=len+sl;if(span<=sl)return;
+hs.forEach(function(o){var len=o.v?o.p.offsetHeight:o.p.offsetWidth,sl=256,span=len+sl;if(span<=sl)return;
 var d=cur*0.1+(o.auto?t*1.5:t);
-o.ss.forEach(function(s,i){var x=((d+(o.ph+i/o.ss.length)*span)%span+span)%span-sl;s.style.transform='translateX('+x+'px)'})});
+o.ss.forEach(function(s,i){var x=((d+(o.ph+i/o.ss.length)*span)%span+span)%span-sl;s.style.transform=(o.v?'translateY(':'translateX(')+x+'px)'})});
 requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
 })();

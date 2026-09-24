@@ -1,0 +1,362 @@
+<!-- @dsCard group="Pages" name="Areas of Review" subtitle="What the record review covers — legal, financial and technical. A centred title page, the apex hinge, three ruled domain sections with their scope boxes, and the homepage CTA." viewport="1680x1050" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled Areas of Review page — the shell, the interior header, the three domains as one schedule of scope, the scope-word list and the generic ruled close. Seed Industries and About from this." viewport="1680x1050" -->
+<!-- ROUND-TOKEN: AOR-V2 (2026-09-24, operator) — Phase D by comment: 1B and 2A deleted; the hero rebuilt as the
+     Insights article's centred title page with the field in its centred mode (the apex seated between the
+     hero and #domains); the domains as three two-track entries (indexed tagline + H2 + paragraph | the
+     scope words in the Contents box); the close replaced by the homepage CTA (shell/cta), id #close
+     because homepage.js settles #contact. -->
+<!-- ROUND-TOKEN: R29-LITERAL (2026-09-22) — THE LITERAL ROUND. THIS ROUND CHANGES NO MARKUP ON THIS
+     PAGE: no section, string, class, id, attribute, comment or option block was touched. What changed
+     is the FORM of seven CSS declarations in client-first.css, so the deployer can turn every style
+     value into one literal per breakpoint (STRUCTURE.md §4e); three shipped, measured identical at
+     1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390, and four stay as written as manual Designer
+     steps. This comment is also the receipt for R28-READ-CAP's <head> edit, which R28 made on all 13
+     page files and stamped on none: the class layer's single <link> became ../client-first.css,
+     ../client-first-2.css and ../client-first-3.css, in that order, in the same position. -->
+<!-- ROUND-TOKEN: R27-WEBFLOW-ELEMENTS (2026-09-21) — THE ELEMENT ROUND. Nothing a visitor can see
+     changed on this page: no section, string, token, type rung, colour, spacing value, composition
+     or option pair was touched, and every change was proved identical by measurement before it
+     shipped. What changed is the ELEMENTS, so the deploy pipeline builds them instead of leaving
+     them as hand-work in the Designer. ON THIS PAGE: 2 `<canvas>` left the markup (WP1, the canvas is created by pages/interior.js §2) · 1 footer href, /about -> /our-company (WP7).
+     The element contract is reference/WEBFLOW-ELEMENTS.md; STRUCTURE.md §4h points at it and
+     carries its four numbers. This page measures 0 · 0 · 0 · 0 on all four. -->
+<!-- ROUND-TOKEN: R23-AREAS (2026-09-20).
+     WHAT THIS PAGE IS: /areas-of-review, the page that states WHAT AFISSIO ACTUALLY READS —
+     legal, financial and technical — and, just as load-bearing, WHAT IT DOES NOT DO. A reader
+     here is checking scope against their own situation, so the page's job is legibility, not
+     persuasion. Counsel reads it hardest: they are here for the carve-outs.
+     COPY: every string is client copy, verbatim from pages/areas-of-review/areas-of-review-copy.md,
+     extracted by script from page 04 of his mockup. CONTRACTOR-AUTHORED VISIBLE STRINGS: 0.
+     PROPOSED STRINGS: 0 — recorded in pages/areas-of-review/PHASE0.md §2 and in
+     content/proposed-copy.md. Two strings the design needs and the deck lacks render as
+     [COPY REQUESTED — ...]: the meta title and the meta description.
+     ⚠ THIS PAGE'S COPY HAS NO APPROVED SOURCE YET. The mockup's own appendix flags it: the three
+     domain paragraphs were rewritten for the mockup revision and replace Copy Deck v3.0's fifteen
+     itemised entries. Built with them; the operator confirms them with the client before launch.
+     THE THREE CARVE-OUTS SHIP WHOLE, AT THEIR OWN PARAGRAPH'S RUNG, and no option splits a
+     paragraph, so none of them can be trimmed by a composition: the lead's "it is not an audit,
+     tax return preparation, financial statement assurance, or regulator-facing representation"
+     (the lead's second sentence, at the lead rung); Legal's "without representation before
+     regulators" and Financial's "though not the content or accuracy of returns" (the last clause
+     of their paragraphs, at the 19px body rung). Never smaller, greyer, footnoted or behind a
+     toggle.
+     THE ROUND'S STANDING INSTRUCTION (operator 2026-09-20): "let Claude Design try different
+     layouts from now on." The SYSTEM is frozen and is not what varies — no new token, type rung,
+     section padding, container, radius, button or breakpoint enters here. The COMPOSITION is, and
+     novelty is the tie-breaker, so the rhythms this site had already spent on a list of N items
+     were listed first: Our Approach's numbered sequence on a rail, Solutions' flat continuum
+     track, its divided band and its stacked rail+body bands, Insights' index rows and its divided
+     band of cards, Contact's paired field grid. EVERY ONE OF THEM LETS EACH ITEM STACK ITS OWN
+     CONTENT, so only the tops line up — and that is exactly what this page cannot afford. §2 is
+     therefore A SCHEDULE: one grid whose nine cells are placed by grid-row LINE NUMBERS, so the
+     three domain names share one y, the three paragraphs share one y and the three scope lists
+     share one y. The first composition on this site that aligns anything ACROSS its items.
+     TWO OPTIONS PER SECTION, A then B, inside this page, marked with HTML comments alone — the
+     `review_label is-review` scaffolding was deleted at R16's Phase D and is not coming back, a
+     review label being contractor-authored VISIBLE text.
+     ONLY THE A BLOCKS CARRY IDS: #hero (1A) · #domains with #legal, #financial and #technical on
+     its three column heads (2A) · #close (3A). B is anchored by nothing. 1B's three-name index
+     links to #legal / #financial / #technical; if 2B is picked at Phase D those three ids move
+     onto its three entries, which is one attribute each.
+     §3 IS AN OPTION PAIR WHERE B IS ABSENCE. BUILD-BRIEF §4 §3 names "no close at all" as a real
+     layout difference rather than an empty cell, and the client wrote no closing copy, so a
+     closing band with a heading is banned outright. 3A is one hairline and the single
+     `Start the Conversation`; 3B is the page ending at #domains with the footer after it.
+     REUSED VERBATIM: the navbar shell (native Navbar + its one native Dropdown) and the post-R15
+     footer, byte for byte from pages/solutions.html, with no current-page state set; the
+     skeleton, the seams, the type rungs, the one button construction, the interior header and
+     R19's masthead combo, R21's `is-short`, the header field (hero-wave + its canvas, painted by
+     pages/interior.js §2, which takes querySelectorAll so both headers on this options page
+     paint), `button-row`, `section_close`, and — for 1B's index — `continuum_bar` +
+     `continuum_stop is-inline`, the family R22 named in its own sheet header for exactly this:
+     "Areas of Review (Legal · Financial · Technical) and Industries both need an index of exactly
+     this shape." The family is shared; the composition is not.
+     NEW, named for the DEVICE and never for this page, all APPENDED to the root client-first.css:
+     schedule_* (N items as columns over M shared rows, and the same N as ruled entries read down
+     — Industries' six sectors and About's two-entity comparison are the same object) · scope_*
+     (a short list of scope words — the component BUILD-BRIEF §3 asks for by name, worn by BOTH
+     options so whichever survives Phase D the system carries ONE scope rung) · close_foot (the
+     GENERIC name for a construction this sheet already holds twice as `latest_foot` and
+     `article_foot`; Phase D should fold all three, the same recommendation R22 made for
+     `panel_bracket`).
+     NOT TAKEN FROM THE MOCKUP, each with its replacement: his solid-orange button (the buttons
+     are frozen) · his mono face · #6B6B6B · HIS APEX MARK ON EVERY SCOPE WORD — eleven of them
+     would have blown this page's motif budget of 6 nearly twice over, and the brief bans an icon
+     per scope word by name; the words are square, ruled and at the label rung instead · HIS PIPE
+     GLYPHS in the three-word heading, which the copy deck expressly leaves as a composition
+     decision: set as real column heads on a ruled grid the divider IS the structure, so the glyph
+     becomes redundant ornament. No word is added, removed or reworded, and the three still read
+     left to right in his order · HIS DUPLICATED DOMAIN NAME (his file prints `Legal` twice per
+     column, once in the heading and once as the card title).
+     MOTION: NONE NEW, which BUILD-BRIEF §5 names as a valid answer. The settle already stages a
+     section's blocks in DOM order 130ms apart, so 2A arrives ROW BY ROW — the three names, then
+     the three paragraphs, then the three scope lists, which is the schedule filling in: 9 blocks
+     x 130ms + 1600ms = 2.77s, inside the 4s ceiling, told once, nothing looping. What else runs
+     is what runs on every interior page: the header wave field and the settle (interior.js) and
+     the rule sweeps (homepage.js), all three returning before touching anything under reduced
+     motion. ONE line changed in interior.js — five selectors added to the settle list, the
+     mechanism R19 built into it, none of which matches an element on any of the six pages built
+     before this one. CSS opacity:0 rests: 0; with JS off every string is there. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Areas of Review</title>
+<meta name="description" content="[COPY REQUESTED — Areas of Review meta description]">
+<link rel="stylesheet" href="../live/webflow-base.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="../client-first-2.css">
+<link rel="stylesheet" href="../client-first-3.css">
+<link rel="stylesheet" href="../preview-reset.css">
+<script src="../live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
+<script src="../preview-webflow-shim.js" defer></script>
+<script src="../homepage.js" defer></script>
+<script src="../interior.js" defer></script>
+<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
+</head>
+<body>
+<div class="page-wrapper">
+<!-- @component shell/navbar -->
+<div class="navbar_shell">
+<div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="280" data-easing="ease" data-easing2="ease">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
+<div class="navbar_container">
+<a href="../" class="navbar_logo-link w-nav-brand"><img src="../brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
+<nav class="navbar_menu w-nav-menu" id="navbar-menu">
+<div class="navbar_menu-inner">
+<div class="navbar_links">
+<a href="../our-approach/" class="navbar_link w-nav-link">Our Approach</a>
+<a href="../solutions/" class="navbar_link w-nav-link">Solutions</a>
+<a href="../areas-of-review/" class="navbar_link w-nav-link">Areas of Review</a>
+<a href="../industries/" class="navbar_link w-nav-link">Industries</a>
+<a href="../insights/" class="navbar_link w-nav-link">Insights</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<div class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about">
+<div class="navbar_dropdown-trigger"><p class="navbar_dropdown-label">About</p><div class="navbar_dropdown-caret"></div></div>
+</div>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="../our-company/" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
+<a href="../afissio-law/" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+</div>
+</nav>
+</div>
+</div>
+<div class="navbar_button-wrapper"><a href="../contact/" class="button is-nav">Contact</a></div>
+</div>
+</nav>
+<div class="navbar_menu-button w-nav-button" aria-label="menu">
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- /@component shell/navbar -->
+<main class="main-wrapper">
+
+<!-- §1 · THE TITLE PAGE (operator 2026-09-24): the Insights article's centred stack — label, H1, lead —
+     on the page's own field. The field runs in its CENTRED mode (hero-wave is-centered, interior.js §2):
+     the warmth and the apex are seated midway between this stack and the first domain, so the mark is
+     the hinge between the two sections. No seam rule here: the apex is the division. -->
+<section class="section_article-head" id="hero" data-screen-label="01 · Hero">
+<div class="hero-wave is-centered" aria-hidden="true"></div>
+<div class="padding-global is-layer">
+<div class="padding-section-large is-hero">
+<div class="container-xlarge">
+<div class="article-head_center">
+<div class="tagline_row is-centered"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Areas of Review</p></div>
+<div class="article-head_title"><h1 class="heading-style-h1 is-reversed">A focused review across legal, financial, and technical domains.</h1></div>
+<div class="article-head_lead"><p class="text-lead is-reversed">Afissio reviews operative documents to identify issues most likely to create friction during substantial diligence. The review is designed for transaction readiness; it is not an audit, tax return preparation, financial statement assurance, or regulator-facing representation.</p></div>
+<div class="button-row is-centered"><a href="../contact/" class="button is-reversed">Start the Conversation</a><a href="#domains" class="button is-ghost-reversed">Learn More</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- §2 · THE THREE DOMAINS, one ruled entry each (was option 2B; 2A deleted by the operator 2026-09-24).
+     Each entry reads as its own section: indexed tagline, H2 and paragraph on the left, the scope words
+     in the right track in the Contents box of the Insights article. -->
+<section class="section_schedule" id="domains" data-screen-label="02 · Domains">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large is-no-top">
+<div class="container-xlarge">
+<div class="sequence_grid is-even">
+<!-- the sticky head: Our Approach's sequence_aside construction, worn verbatim. COPY: operator-requested
+     2026-09-24 ("write the copy"), contractor-authored, logged in content/proposed-copy.md for client approval. -->
+<div class="sequence_aside">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Scope of Review</p></div>
+<div class="sequence_head"><h2 class="heading-style-h2">Three domains, one reading of the record.</h2></div>
+<div class="sequence_desc-block"><p class="text-size-regular">Each area lists what the review reads and, just as plainly, what it leaves to others. Check the scope against your own situation before a process begins.</p></div>
+<div class="button-row"><a href="../contact/" class="button is-reversed">Start the Conversation</a></div>
+</div>
+<div class="schedule_stack is-open">
+<div class="schedule_entry" id="legal">
+<div class="schedule_index"><p class="schedule_index-num">01</p></div>
+<div class="schedule_entry-main">
+<div class="schedule_entry-title"><h3 class="heading-style-h3">Legal</h3></div>
+<div class="schedule_entry-body"><p class="schedule_entry-text">The legal review covers governance and corporate records, intellectual property, commercial agreements with customers and vendors, and employment documentation, along with litigation claims and exposure, real property and equipment leases, and business and professional liability coverage. It also considers required licenses and related records, without representation before regulators.</p></div>
+<div class="scope_list is-rail">
+<div class="scope_item is-tick"><p class="text-label">Governance</p></div>
+<div class="scope_item is-tick"><p class="text-label">Corporate</p></div>
+<div class="scope_item is-tick"><p class="text-label">Intellectual Property</p></div>
+<div class="scope_item is-tick"><p class="text-label">Commercial</p></div>
+<div class="scope_item is-tick"><p class="text-label">Employment</p></div>
+</div>
+</div>
+</div>
+<div class="schedule_entry" id="financial">
+<div class="schedule_index"><p class="schedule_index-num">02</p></div>
+<div class="schedule_entry-main">
+<div class="schedule_entry-title"><h3 class="heading-style-h3">Financial</h3></div>
+<div class="schedule_entry-body"><p class="schedule_entry-text">The financial review examines capitalization — investment and financing records, loans, notes, equity grants, and cap tables — alongside operating results reflected in revenue, expenses, profit-and-loss statements, and balance sheets. It also considers federal and state filing currentness, including sales tax, though not the content or accuracy of returns.</p></div>
+<div class="scope_list is-rail">
+<div class="scope_item is-tick"><p class="text-label">Capitalization</p></div>
+<div class="scope_item is-tick"><p class="text-label">Operations</p></div>
+<div class="scope_item is-tick"><p class="text-label">Tax</p></div>
+</div>
+</div>
+</div>
+<div class="schedule_entry" id="technical">
+<div class="schedule_index"><p class="schedule_index-num">03</p></div>
+<div class="schedule_entry-main">
+<div class="schedule_entry-title"><h3 class="heading-style-h3">Technical</h3></div>
+<div class="schedule_entry-body"><p class="schedule_entry-text">The technical review covers software, including services, applications, AI models, and other software products or services; hardware, meaning physical computing equipment and devices; and data, including documentation concerning data flow, privacy, security, and AI use.</p></div>
+<div class="scope_list is-rail">
+<div class="scope_item is-tick"><p class="text-label">Software</p></div>
+<div class="scope_item is-tick"><p class="text-label">Hardware</p></div>
+<div class="scope_item is-tick"><p class="text-label">Data</p></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- THE STATEMENT — Our Approach's #voice construction (quote_panel), markup verbatim; the CONTENT is the homepage's first
+     proof card, verbatim: statement, name, role, portrait plate and client mark (all still placeholders on the homepage). -->
+<section class="section_quote" id="voice">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="quote_panel">
+<div class="quote_mark" aria-hidden="true"><p class="quote_glyph">“</p></div>
+<div class="quote_statement-block"><p class="quote_statement">The Afissio team has helped us with multiple rounds of fundraising, including extensive cap table modeling. They also helped us with plenty of commercial agreements and structuring various strategic relationships - we will not do a deal with out them.</p></div>
+<div class="quote_media"><img src="../brand/placeholder/portrait.svg" alt="Photo placeholder" class="quote_photo"></div>
+<div class="quote_attrib"><p class="quote_name">Michal P.</p><p class="quote_org">Founder, Enterprise Software Developer</p></div>
+<div class="quote_foot">
+<div class="quote_logo-lockup"><img src="../brand/placeholder/client-mark-01.svg" alt="Client logo placeholder" class="quote_logo"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- THE QUESTIONS — Our Approach's #questions, markup verbatim (accordion = interior.js §5). COPY: operator-requested
+     2026-09-24, contractor-authored, logged in content/proposed-copy.md; every answer restates the page's own carve-outs. -->
+<section class="section_faq" id="questions">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="faq_head">
+<div class="tagline_row is-centered"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Frequently Asked Questions</p></div>
+<div class="faq_title-block"><h2 class="heading-style-h2">What companies ask about scope</h2></div>
+</div>
+<div class="faq_list">
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-1"><h3 class="faq_q">Is the review an audit?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-1" role="region"><p class="faq_a">No. It reads operative documents for transaction readiness. It is not an audit, tax return preparation, financial statement assurance, or regulator-facing representation.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-2"><h3 class="faq_q">Which documents does the review read?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-2" role="region"><p class="faq_a">The operative record across the three domains: governance and corporate records, contracts, employment documentation, capitalization and financing records, operating results, and the documentation behind your software, hardware and data.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-3"><h3 class="faq_q">Do you prepare or check our tax returns?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-3" role="region"><p class="faq_a">No. The financial review considers whether federal and state filings, including sales tax, are current. It does not review the content or accuracy of the returns themselves.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-4"><h3 class="faq_q">Will you represent us before regulators?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-4" role="region"><p class="faq_a">No. The legal review considers required licenses and related records, but it does not include representation before regulators.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-5"><h3 class="faq_q">Can the review cover only one domain?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-5" role="region"><p class="faq_a">Scope is set at the start of an engagement. Most companies are reviewed across all three domains, because friction in one usually shows up in another.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-6"><h3 class="faq_q">What happens after the review?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-6" role="region"><p class="faq_a">You receive the issues found, ranked by how likely they are to create friction during diligence, so they can be resolved before a counterparty finds them.</p></div>
+</div>
+</div>
+<div class="faq_prompt">
+<p class="faq_prompt-q">Still a question about your own record?</p>
+<div class="button-row"><a href="../contact/" class="button is-reversed">Start the Conversation</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- @component shell/footer -->
+<footer class="footer_component is-ink-soft" id="footer">
+<div class="padding-global is-bar">
+<div class="padding-section-small is-no-top">
+<div class="container-xlarge is-bar">
+<div class="footer_ledger">
+<div class="footer_cell is-brand">
+<img src="../brand/logo/afissio-icon-orange.png" alt="" class="footer_mark">
+<p class="footer_tagline">Deal engineering before the due diligence begins.</p>
+</div>
+<div class="footer_cell is-nav">
+<nav role="navigation" class="footer_index">
+<a href="../" class="footer_index-link"><p class="footer_index-name">Home</p></a>
+<a href="../our-approach/" class="footer_index-link"><p class="footer_index-name">Our Approach</p></a>
+<a href="../solutions/" class="footer_index-link"><p class="footer_index-name">Solutions</p></a>
+<a href="../areas-of-review/" class="footer_index-link"><p class="footer_index-name">Areas of Review</p></a>
+<a href="../industries/" class="footer_index-link"><p class="footer_index-name">Industries</p></a>
+<a href="../afissio-law/" class="footer_index-link"><p class="footer_index-name">Afissio Law</p></a>
+<a href="../insights/" class="footer_index-link"><p class="footer_index-name">Insights</p></a>
+<a href="../our-company/" class="footer_index-link"><p class="footer_index-name">About</p></a>
+<a href="../contact/" class="footer_index-link"><p class="footer_index-name">Contact</p></a>
+</nav>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282, USA</p>
+<a href="mailto:info@afissio.com" class="footer_entity-link">info@afissio.com</a>
+</div>
+</div>
+</div>
+<div class="footer_rule is-bar"></div>
+<div class="footer_cell">
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<div class="footer_legal-row">
+<a href="../privacy-policy/" class="footer_legal-link">Privacy Policy</a>
+<a href="../privacy-policy/" class="footer_legal-link">Terms of Use</a>
+<a href="../privacy-policy/" class="footer_legal-link">Cookie Policy</a>
+<p class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- /@component shell/footer -->
+</div>
+</body>
+</html>

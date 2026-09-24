@@ -1,0 +1,395 @@
+<!-- @dsCard group="Pages" name="About" subtitle="The firm and the two people who do the work, at /our-company. The interior header, the argument in two paragraphs, Jerry and Heidi as two equal entries on ruled initial plates, and his bracketed network panel. Two options per section, A then B, pending Phase D." viewport="1680x1050" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled About page — the shell, the interior header, a two-rung prose block, the initial-plate person object (JS / HA) in two equal treatments, and the network panel. Seed any page that must present named people without photography from this." viewport="1680x1050" -->
+<!-- ROUND-TOKEN: R29-LITERAL (2026-09-22) — THE LITERAL ROUND. THIS ROUND CHANGES NO MARKUP ON THIS
+     PAGE: no section, string, class, id, attribute, comment or option block was touched. What changed
+     is the FORM of seven CSS declarations in client-first.css, so the deployer can turn every style
+     value into one literal per breakpoint (STRUCTURE.md §4e); three shipped, measured identical at
+     1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390, and four stay as written as manual Designer
+     steps. This comment is also the receipt for R28-READ-CAP's <head> edit, which R28 made on all 13
+     page files and stamped on none: the class layer's single <link> became ../client-first.css,
+     ../client-first-2.css and ../client-first-3.css, in that order, in the same position. -->
+<!-- ROUND-TOKEN: R27-WEBFLOW-ELEMENTS (2026-09-21) — THE ELEMENT ROUND. Nothing a visitor can see
+     changed on this page: no section, string, token, type rung, colour, spacing value, composition
+     or option pair was touched, and every change was proved identical by measurement before it
+     shipped. What changed is the ELEMENTS, so the deploy pipeline builds them instead of leaving
+     them as hand-work in the Designer. ON THIS PAGE: 2 `<canvas>` left the markup (WP1, the canvas is created by pages/interior.js §2) · 1 footer href, /about -> /our-company (WP7 — and this is THIS PAGE'S OWN ROUTE, flagged since R25).
+     The element contract is reference/WEBFLOW-ELEMENTS.md; STRUCTURE.md §4h points at it and
+     carries its four numbers. This page measures 0 · 0 · 0 · 0 on all four. -->
+<!-- ROUND-TOKEN: R26-CLOSE (2026-09-21). HALF A of the round that closes the site.
+     WHAT THIS PAGE IS: /our-company, his page 08 — the page about the firm and THE TWO PEOPLE WHO
+     DO THE WORK. A reader arrives after deciding the offer might fit, to answer one question: who
+     is actually going to be in my documents? Most of them have already met Jerry, so the failure
+     mode is DOWNGRADE — a page that makes him look smaller than he did in the room.
+     ⚠ THREE DIFFERENT WORDS POINT AT THIS ONE PAGE, AND ALL THREE ARE HIS. The route is
+     /our-company (what the approved navbar already links), the nav link inside the About dropdown
+     says "Afissio", and the page label — the hero's tagline string — is "About", his own page-08
+     label. Nothing is renamed.
+     COPY: every string is client copy, verbatim from pages/about/about-copy.md, extracted by
+     script from page 08 of his mockup. CONTRACTOR-AUTHORED VISIBLE STRINGS: 0. PROPOSED STRINGS: 0.
+     Two strings the design needs and the deck lacks are the meta title and description; both are
+     [COPY REQUESTED — ...] in <head>, so the page carries NO visible requested string.
+     ⚠ HEIDI ABDUL'S BIO IS LEGALLY SHAPED COPY. content-inventory.md §2: it was drafted from a
+     supplied LinkedIn summary and DELIBERATELY AVOIDS "specialist"/"expert" and legal-services
+     phrasing so it does not read as holding out a non-attorney as practising law. It ships whole,
+     unedited, un-tightened, with no credential line added and no label the deck does not give her.
+     ⚠ THE ROLE SEPARATOR IS TWO NON-BREAKING SPACES EITHER SIDE OF THE SLASH (&nbsp;&nbsp;/&nbsp;&nbsp;),
+     which is how he keeps the role on one line. The characters are kept; the slash is never
+     restyled into a bullet, a pipe or a rule.
+     ⚠ NO PHOTOGRAPHY, AND NO SUBSTITUTE FOR IT. He rejected stock photography twice, unprompted,
+     and no portraits have been supplied. The RULED INITIAL PLATE is his own device and it is what
+     ships: no avatar, no illustrated figure, no silhouette, no empty photo frame. Photographs on
+     this page: 0. Avatars: 0. Inline <svg>: 0.
+     ⚠ "How we work" was REMOVED from this page at client direction and is not restored from any
+     older deck. The network panel replaced two About placeholders, also at his direction.
+     ⚠ CTA ADDED 2026-09-24 at operator request: shell/cta duplicated verbatim from homepage. Previously: NO CTA ANYWHERE ON THIS PAGE. The deck gives it no CTA string and no closing band; the only
+     permitted string would be "Start the Conversation" → /contact, and no composition here needs
+     one — the network panel IS the page's close (BUILD-BRIEF §4 §4). Reported, not invented.
+     THE ROUND'S STANDING INSTRUCTION (operator, in force since R23): "let Claude Design try
+     different layouts from now on." The SYSTEM is frozen — no new token, type rung, section
+     padding, container, radius, button or breakpoint enters here. The COMPOSITION is open.
+     So the FIFTEEN list shapes the nine built pages already spend were listed first
+     (pages/about/PHASE0.md §3), and every one of them SETS AN ITEM'S IDENTITY ABOVE ITS BODY.
+     Not one hangs identity in a margin track BESIDE the body, and only two use more than two
+     tracks. §3 3A is therefore the sixteenth shape: THE COLOPHON — plate · identity · bio in three
+     tracks, so the two names form a column of their own down the page. 3B is THE FACING LEAVES,
+     the pair read across on one grid and one top.
+     AND THE COLOPHON WAS FOUND BY ARITHMETIC, NOT BY TASTE. Two bios at the 60-character floor
+     need ~1460px of container (2 × 690 + gap). The container is 1296px at a 1440 viewport and
+     1152px at 1280, so TWO PEOPLE SIDE BY SIDE CANNOT HOLD THE MEASURE at any common desktop
+     width. That is why 3A reads down, and it is the one number 3B pays: 3B sets 53ch at the
+     1440–1679 tier and 64ch everywhere else. Named in the report rather than hidden.
+     TWO PEOPLE, EQUAL. Their ROLES say who leads and who advises; the layout adds no second
+     hierarchy on top. One .initial_plate rule serves both plates — same surface, same edge, same
+     ruled field, same size — and his mockup's warm-lit plate for Jerry beside a cool one for Heidi
+     is NOT taken: that is a founder spotlight in surface form. No larger cell, no numeral, no
+     ordering device beyond the deck's own order.
+     THE COMMITTED MOMENT IS #people, and its advantage is measurable: padding-section-large
+     (18rem at 1680) against padding-section-small (9rem) on BOTH neighbours = EXACTLY 2× the
+     surrounding whitespace. The page spends no accent on the section beyond the two role lines,
+     and the H1 stays the largest type on the page.
+     NEW: ONE DEVICE and TWO composition families, all APPENDED to the root client-first.css and
+     named for the DEVICE, never for this page — initial_plate (+is-large), the person object the
+     site did not have, built out of the document tile at small scale exactly as BRIEF.md §6.4
+     says; people_* (the colophon and the facing leaves); network_shelf (4B's ruled close).
+     Ten base classes, one combo. A later page crediting a network member, an author or a
+     contributor wears initial_plate and people_* unchanged, which is why nothing here is about_….
+     REUSED VERBATIM: the navbar shell and the post-R15 footer, byte for byte from
+     pages/afissio-law.html with no current-page state; the skeleton and its declared four-div
+     nest; the seams; the type rungs; the interior header, its wave field and R19's masthead set;
+     passage_* (R25) for #why 2A; band_grid + statement_body-item for 2B and 4A; panel_bracket
+     (R22 named About's network block as its waiting second user — it takes it).
+     NOT TAKEN FROM HIS PAGE 08, each with its replacement: his warm-lit plate for Jerry alone
+     (both plates are identical) · his orange button (the buttons are frozen, and this page has no
+     CTA at all) · his mono face (one typeface only) · #6B6B6B (3.9:1 on black) · his footer (still
+     the OLD entity wording).
+     MOTION: NONE NEW. §5 names that as the expected answer and §8's tie-breaker settles it. What
+     runs is what runs on every interior page: the header wave field and the settle (interior.js)
+     and the rule sweeps (homepage.js), all three returning before touching anything under reduced
+     motion. THREE selectors added to the settle list — .people_entry, .people_leaf,
+     .network_shelf — none of which matches an element on any of the nine pages built before this
+     one. #why needs nothing added (.passage_* and .band_grid are already in the list) and 4A's
+     inner band_grid settles for the same reason. CSS opacity:0 rests: 0.
+     ONLY THE A BLOCKS CARRY IDS: #hero (1A) · #why (2A) · #people (3A) · #network (4A). -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>About</title>
+<meta name="description" content="[COPY REQUESTED — About meta description]">
+<link rel="stylesheet" href="../live/webflow-base.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="../client-first-2.css">
+<link rel="stylesheet" href="../client-first-3.css">
+<link rel="stylesheet" href="../preview-reset.css">
+<script src="../live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
+<script src="../preview-webflow-shim.js" defer></script>
+<script src="../homepage.js" defer></script>
+<script src="../interior.js" defer></script>
+<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
+</head>
+<body>
+<div class="page-wrapper">
+<!-- @component shell/navbar -->
+<div class="navbar_shell">
+<div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="280" data-easing="ease" data-easing2="ease">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
+<div class="navbar_container">
+<a href="../" class="navbar_logo-link w-nav-brand"><img src="../brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
+<nav class="navbar_menu w-nav-menu" id="navbar-menu">
+<div class="navbar_menu-inner">
+<div class="navbar_links">
+<a href="../our-approach/" class="navbar_link w-nav-link">Our Approach</a>
+<a href="../solutions/" class="navbar_link w-nav-link">Solutions</a>
+<a href="../areas-of-review/" class="navbar_link w-nav-link">Areas of Review</a>
+<a href="../industries/" class="navbar_link w-nav-link">Industries</a>
+<a href="../insights/" class="navbar_link w-nav-link">Insights</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<div class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about">
+<div class="navbar_dropdown-trigger"><p class="navbar_dropdown-label">About</p><div class="navbar_dropdown-caret"></div></div>
+</div>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="../our-company/" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
+<a href="../afissio-law/" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+</div>
+</nav>
+</div>
+</div>
+<div class="navbar_button-wrapper"><a href="../contact/" class="button is-nav">Contact</a></div>
+</div>
+</nav>
+<div class="navbar_menu-button w-nav-button" aria-label="menu">
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- /@component shell/navbar -->
+<main class="main-wrapper">
+
+<!-- OPTION 1A — stacked-statement: the built interior header at FULL viewport, left stack on the
+     container's own rail. His page label → H1 → lead, three descending rungs on ONE left edge.
+     THE H1 IS ONE STRING IN ONE ELEMENT. It is three sentence fragments and it sets as THREE LINES
+     at 1680 inside the existing 48rem cap (measured: "Experienced judgment." is ~588px at the
+     54px Bold rung, and adding " Direct" exceeds 768px, so the break falls at the full stop) —
+     which is the arrangement his page 08 shows, reached without ever splitting the string into
+     three elements that could be re-ordered or re-styled apart.
+     NO CTA, and that is the deck rather than a decision: this page has no CTA string. Areas of
+     Review 1A and Afissio Law 1A already established a header with no button for a page whose job
+     is legibility rather than persuasion.
+     The one structural rule: ONE LEFT EDGE, THREE DESCENDING RUNGS. -->
+<section class="section_page-header" id="hero" data-screen-label="01 · Hero">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="hero-wave" aria-hidden="true">
+</div>
+<div class="padding-global is-layer">
+<div class="padding-section-medium is-hero">
+<div class="container-xlarge">
+<div class="page-header_grid">
+<div class="page-header_stack is-left">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">About Afissio</p></div>
+<div class="page-header_title-block is-left"><h1 class="heading-style-h1 is-reversed">Experienced judgment. Direct involvement. Practical preparation.</h1></div>
+<div class="page-header_lead-block is-left"><p class="text-lead is-reversed">Afissio is a transaction-readiness firm built for the period before a consequential transaction becomes urgent.</p></div>
+<div class="button-row"><a href="../contact/" class="button is-reversed">Start the Conversation</a><a href="#why" class="button is-ghost-reversed">Learn More</a></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 1A -->
+
+
+
+<!-- OPTION 2A — stacked-statement · THE ARGUMENT ON ONE EDGE. QUIET, and quiet is the assignment:
+     this is the page's prose block and it exists to state why the firm exists, in his two
+     paragraphs, in his order, at his two rungs.
+     R25's `passage_*` WORN WHOLE AND WITHOUT ITS RULE, and the missing rule is the point: that
+     family's rule marks a TURN, and #why has no turn — the second paragraph continues the first
+     rather than reversing it. Wearing an existing family minus the leaf the content does not need
+     is cheaper than a second family that says the same thing (§8: when an existing class and a new
+     one name the same object, choose the existing).
+     NO PULL-QUOTE, NO OVERSIZED NUMERAL, NO STATISTIC — the client supplied none and inventing one
+     would be an authored claim (§4 §2).
+     Measures: lead 48rem at the 22–25px Light rung, sub 46rem at the 19px body rung = 64
+     characters, R20's twice-measured figure.
+     ⚠ DROPPING THE RULE DROPPED THE RUNG, AND THAT WAS CAUGHT BY RENDERING RATHER THAN BY
+     PLANNING. On Afissio Law the thing separating these two paragraphs is passage_rule's own
+     2–2.75rem margins; without it the lead's bottom and the sub's top measured at the SAME y and
+     the two rungs read as one continuous run of text. .passage_sub's base rule is worn by
+     pages/afissio-law.html and is frozen, so the rung returns as `is-spaced` — 1.5rem, the gap
+     scale's existing role-to-role step, which is exactly what a lead-to-body change is.
+     The one structural rule: TWO RUNGS ON ONE EDGE, NOTHING BESIDE THEM. -->
+<section class="section_passage" id="why" data-screen-label="02 · Why (2A)">
+<div class="padding-global">
+<div class="padding-section-small">
+<div class="container-xlarge">
+<div class="intro_stack is-tagged"><div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><h2 class="text-label">Why Afissio exists</h2></div><div class="intro_lede w-richtext"><p>Founder-led companies are often <strong>strong in product, technology, and market execution</strong> while their documented business has received less attention. Afissio helps leadership <strong>prepare the operative record</strong> for the scrutiny that accompanies serious transactions.</p></div></div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 2A -->
+
+
+<!-- OPTION 3A — marginal-notes · THE COLOPHON. THE PAGE'S ONE COMMITTED MOMENT, and its advantage
+     is measurable: padding-section-large (18rem at 1680) against padding-section-small (9rem) on
+     BOTH neighbours = exactly 2× the surrounding whitespace. The two plates are also the page's
+     only non-type object. The accent is deliberately NOT spent here beyond the two role lines, and
+     the H1 stays the largest type on the page.
+     THE SIXTEENTH LIST SHAPE, AND WHY IT HAD TO BE NEW. Fifteen shapes exist across the nine built
+     pages (PHASE0 §3) and EVERY ONE OF THEM SETS AN ITEM'S IDENTITY ABOVE ITS BODY. Not one hangs
+     identity in a margin track BESIDE the body, and only two use more than two tracks. Here the
+     name and the role sit in their own track between the plate and the bio, so the two names form
+     a COLUMN OF THEIR OWN down the page — which is how a serious report credits its authors, and
+     which is the whole brief for this section.
+     AND IT WAS FOUND BY ARITHMETIC. Two bios at the 60-character floor need ~1460px of container
+     (2 × 690 + gap); the container is 1296px at a 1440 viewport and 1152px at 1280. Two people
+     side by side CANNOT hold the measure at any common desktop width, so the pair reads DOWN and
+     the bio keeps the 46rem = 64-character measure at 1920 · 1680 · 1440 · 1280 and, stacked,
+     at 991 and 768. §8: when the plate and the bio compete for width, the bio takes the measure.
+     THE THIRD TRACK IS BOUGHT ONLY WHERE THE CONTAINER CAN PAY FOR IT — three tracks at
+     min-width:1280, two below it with the identity moving above the bio, one at ≤991. The same
+     pattern register_plate (min-width:1440) and page-header_grid is-intake (min-width:1280) use.
+     TWO PEOPLE, EQUAL. One .initial_plate rule and one .people_entry rule serve both, so plate,
+     identity and bio share one x and one width down the page; both entries are the full container;
+     both open on their own hairline. The two entries differ in HEIGHT and only by the bios' own
+     line count — Heidi's bio is 484 characters to Jerry's 216 — and forcing that equal would open
+     three empty lines under Jerry, a layout lying about the copy. No larger cell, no numeral, no
+     founder marker, no ordering device beyond the deck's order.
+     THE PLATE IS A MARK, NOT A PORTRAIT. Square (never paper-proportioned and never 3:4 — a
+     portrait-shaped frame with no portrait in it is the empty photo frame §9 bans), on the card
+     surface, with the document field's own three ruled lines behind the initials.
+     NO SECTION HEADING, because the deck gives this section none and authoring one would be
+     contractor copy. The air is anchored by the plates on the left and by the entries' hairlines.
+     TRANSPARENT ground, for the reason section_sequence, section_form, section_continuum,
+     section_schedule, section_register and section_divide carry none (R28): the header's field
+     layer is bottom:-30vh and an opaque later sibling paints over the tail.
+     The one structural rule: THE BIO KEEPS THE MEASURE; THE PLATE IS A MARK. -->
+<section class="section_people" id="people" data-screen-label="03 · People">
+<div class="padding-global">
+<div class="padding-section-small is-tight-bottom">
+<div class="container-xlarge">
+<div class="people_list is-zigzag">
+<div class="people_entry is-zigzag">
+<div class="initial_plate is-portrait"><img src="../brand/people/afissio-jerry-smith-headshot-bw.jpg" alt="" loading="lazy" width="1200" height="1600" class="people_portrait"></div>
+<div class="people_text">
+<div class="people_ident is-linked">
+<div class="people_name"><h3 class="heading-style-h3">Jerry Stephen Smith</h3><p class="text-label is-accent">CEO&nbsp;&nbsp;/&nbsp;&nbsp;Principal</p></div>
+<a href="https://www.linkedin.com/in/jerry-stephen-smith/" class="author_link" target="_blank" rel="noopener" aria-label="Jerry Stephen Smith on LinkedIn"></a>
+</div>
+<div class="people_bio is-measured"><p class="text-size-regular is-fine">Jerry Stephen Smith leads Afissio and is directly involved in the transaction-readiness and diligence process. His role emphasizes careful review, structured analysis, practical judgment, and close collaboration with company leadership.</p></div>
+</div>
+</div>
+<div class="people_entry is-zigzag-end">
+<div class="initial_plate is-portrait"><img src="../brand/people/afissio-heidi-abdul-headshot-bw.jpg" alt="" loading="lazy" width="1200" height="1600" class="people_portrait"></div>
+<div class="people_text">
+<div class="people_ident is-linked">
+<div class="people_name"><h3 class="heading-style-h3">Heidi Abdul</h3><p class="text-label is-accent">Senior Advisor</p></div>
+<!-- [LINK REQUESTED — Heidi Abdul's LinkedIn URL] --><a href="#" class="author_link" target="_blank" rel="noopener" aria-label="Heidi Abdul on LinkedIn"></a>
+</div>
+<div class="people_bio is-measured"><p class="text-size-regular is-fine">Heidi Abdul focuses on the organizational and compliance side of transaction readiness. Her background spans entity formation, governance, and organizational documents; capitalization records and complex cap tables; corporate compliance programs and required corporate filings; and transaction documentation, including diligence and disclosure schedules through closing. She has directed compliance functions in highly regulated, fast-moving environments.</p></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 3A -->
+
+
+
+<!-- OPTION 4B — stacked-statement · THE RULED SHELF. The panel refused: one full-container
+     hairline opens the block and the three rungs sit on one edge on the page's own black, at the
+     46rem = 64-character measure. §8's tie-breaker — when a block could be presented with more or
+     less decoration, choose less — answered the other way from 4A, so the operator is choosing
+     between HIS device and the page's own ground rather than between two paint jobs.
+     ONE NEW CLASS, network_shelf, named for the device and not the page: any quiet closing
+     statement on any future page wears it.
+     The pair's axes against 4A, five: surface (a filled #080808 panel against the page's own
+     black), containment (boxed against open), axis (two tracks against one), density (a padded
+     panel against an open shelf) and focal (the two orange corner brackets against the opening
+     hairline). This block carries no id. -->
+<!-- 2026-09-24 (operator): the network block takes Our Approach #judgment's band — tagline, H2,
+     lead, note on the left rail over a full-bleed field — with its own field: a NETWORK instead of
+     a lattice. Nodes drift, hairlines join the ones in reach, and signals travel edge to edge, in
+     the same one orange hue ramp, 2px square dots and elliptical clear zone behind the type.
+     The field's canvas is created by pages/interior.js §3b (a canvas has no Webflow element).
+     CONTRACTOR-AUTHORED STRING: 1 (the tagline "The network"). The H2 was the client's H3,
+     verbatim; the lead and the note are his, verbatim. -->
+<section class="section_band" id="network" data-screen-label="04 · Network">
+<div class="network-field" aria-hidden="true"></div>
+<div class="padding-global is-layer">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="band_stack">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">The network</p></div>
+<div class="band_title-block"><h2 class="heading-style-h2">A network of experts</h2></div>
+<div class="band_lead-block"><p class="text-lead is-reversed">Afissio draws on a network of financial and technical experts with deep experience in the areas that matter most to transaction readiness.</p></div>
+<div class="band_note-block is-wide"><p class="text-size-regular">On the financial side, that experience spans capitalization, operating records, financial documentation, and transaction-readiness priorities. On the technical side, it spans software, hardware, data, privacy, security, and the use of emerging technologies. These professionals are engaged as a company's circumstances require, and their work supports the same review, prioritization, and judgment that guide every Afissio engagement.</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+</main>
+<!-- @component shell/cta -->
+<section class="section_close" id="contact">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="close_stack is-box">
+<div class="tagline_row is-centered"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Before a process begins</p></div>
+<div class="close_title-block"><h2 class="heading-style-h2">There is still time to prepare deliberately.</h2></div>
+<div class="close_lead-block"><p class="text-size-regular">Afissio reads the operative record early, so the questions that matter arrive with answers already attached.</p></div>
+<div class="button-row is-centered"><a href="../contact/" class="button is-reversed">Start the Conversation</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /@component shell/cta -->
+
+<!-- @component shell/footer -->
+<footer class="footer_component is-ink-soft" id="footer">
+<div class="padding-global is-bar">
+<div class="padding-section-small is-no-top">
+<div class="container-xlarge is-bar">
+<div class="footer_ledger">
+<div class="footer_cell is-brand">
+<img src="../brand/logo/afissio-icon-orange.png" alt="" class="footer_mark">
+<p class="footer_tagline">Deal engineering before the due diligence begins.</p>
+</div>
+<div class="footer_cell is-nav">
+<nav role="navigation" class="footer_index">
+<a href="../" class="footer_index-link"><p class="footer_index-name">Home</p></a>
+<a href="../our-approach/" class="footer_index-link"><p class="footer_index-name">Our Approach</p></a>
+<a href="../solutions/" class="footer_index-link"><p class="footer_index-name">Solutions</p></a>
+<a href="../areas-of-review/" class="footer_index-link"><p class="footer_index-name">Areas of Review</p></a>
+<a href="../industries/" class="footer_index-link"><p class="footer_index-name">Industries</p></a>
+<a href="../afissio-law/" class="footer_index-link"><p class="footer_index-name">Afissio Law</p></a>
+<a href="../insights/" class="footer_index-link"><p class="footer_index-name">Insights</p></a>
+<a href="../our-company/" class="footer_index-link"><p class="footer_index-name">About</p></a>
+<a href="../contact/" class="footer_index-link"><p class="footer_index-name">Contact</p></a>
+</nav>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282, USA</p>
+<a href="mailto:info@afissio.com" class="footer_entity-link">info@afissio.com</a>
+</div>
+</div>
+</div>
+<div class="footer_rule is-bar"></div>
+<div class="footer_cell">
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<div class="footer_legal-row">
+<a href="../privacy-policy/" class="footer_legal-link">Privacy Policy</a>
+<a href="../privacy-policy/" class="footer_legal-link">Terms of Use</a>
+<a href="../privacy-policy/" class="footer_legal-link">Cookie Policy</a>
+<p class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- /@component shell/footer -->
+</div>
+</body>
+</html>

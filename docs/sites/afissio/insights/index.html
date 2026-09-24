@@ -1,0 +1,227 @@
+<!-- @dsCard group="Pages" name="Insights" subtitle="The briefs listing: the interior page header, the quiet 'Designed to be useful' band, the three-brief index built as a Webflow CMS Collection List, and the closing link. Two options per section, A then B, for review." viewport="1680x1050" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled Insights listing - the shell, the interior page header with its field, the statement band and the brief index as a CMS Collection List. Seed the Insights ARTICLE template from this, and any page that lists a collection." viewport="1680x1050" -->
+<!-- ROUND-TOKEN: R29-LITERAL (2026-09-22) — THE LITERAL ROUND. THIS ROUND CHANGES NO MARKUP ON THIS
+     PAGE: no section, string, class, id, attribute, comment or option block was touched. What changed
+     is the FORM of seven CSS declarations in client-first.css, so the deployer can turn every style
+     value into one literal per breakpoint (STRUCTURE.md §4e); three shipped, measured identical at
+     1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390, and four stay as written as manual Designer
+     steps. This comment is also the receipt for R28-READ-CAP's <head> edit, which R28 made on all 13
+     page files and stamped on none: the class layer's single <link> became ../client-first.css,
+     ../client-first-2.css and ../client-first-3.css, in that order, in the same position. -->
+<!-- ROUND-TOKEN: R27-WEBFLOW-ELEMENTS (2026-09-21) — THE ELEMENT ROUND. Nothing a visitor can see
+     changed on this page: no section, string, token, type rung, colour, spacing value, composition
+     or option pair was touched, and every change was proved identical by measurement before it
+     shipped. What changed is the ELEMENTS, so the deploy pipeline builds them instead of leaving
+     them as hand-work in the Designer. ON THIS PAGE: 2 `<canvas>` left the markup (WP1, the canvas is created by pages/interior.js §2) · 1 footer href, /about -> /our-company (WP7).
+     The element contract is reference/WEBFLOW-ELEMENTS.md; STRUCTURE.md §4h points at it and
+     carries its four numbers. This page measures 0 · 0 · 0 · 0 on all four. -->
+<!-- ROUND-TOKEN: R19-INSIGHTS (the briefs listing, 2026-09-18).
+     WHAT THIS PAGE IS: /insights, the listing of Afissio's briefs - three today, his three-part
+     privacy series - and the page that NAMES a brief for the article template and for the
+     homepage's teasers. DOM order: the navbar shell, #hero, #useful, #briefs, #latest, the footer.
+     CARD VIEWPORT is ONE SCREEN, not the page height, for the same reason Our Approach's is: the
+     header is min-height:100vh, so a full-page-height frame would render a full-page-height hero.
+
+     TWO OPTIONS PER SECTION, A then B, each in its marker pair; ONLY the A block carries the
+     section id. Phase D deletes the losing blocks and their families in one pass. The filled
+     option table is pages/insights/SECTION-PLAN.md; the reasoning is pages/insights/PHASE0.md.
+
+     COPY: every visible string is CLIENT COPY, verbatim, extracted by script from
+     pages/insights/insights-copy.md - not retyped. Contractor-authored visible strings: ZERO.
+     There is deliberately no tagline on #useful and no label at the head of #briefs: the deck has
+     no string for either, rule 4 of content/proposed-copy.md says a slot that reads fine without a
+     sentence does not get one, and the brief's ban list forbids an invented heading for the briefs.
+     Three [COPY REQUESTED] placeholders, all named by the deck itself: the meta title, the meta
+     description and the collection's empty-state message.
+
+     REUSED VERBATIM: the navbar shell and the post-R15 footer (stamped from components/shell/) and
+     THE INTERIOR PAGE HEADER as pages/our-approach.html wears it NOW - which since R19 is the wave
+     field with the apex painted into its canvas, not the R16/R17 watermark-and-light-pass pair
+     (that family was deleted from client-first.css). Also the skeleton, the seams, the type rungs,
+     the one button construction, the band, and the interior close.
+
+     NEW, named for the pages that inherit them and never for this one: brief_* (the CMS item and
+     both index structures), page-header_masthead/_rule/_foot (1B), band_grid/_display-col/_body-col/
+     _rule (2B, restored with their R16 semantics), section_latest + latest_foot (4B). All appended
+     to the root client-first.css; the homepage and Our Approach render byte-identical.
+
+     MOTION: none of this page's own. The shared pages/interior.js runs the settle (which stages the
+     three CMS items in order, 130ms apart - the reason #briefs needs no animation) and the header's
+     wave field; pages/homepage.js runs the rule sweeps and the shell decorators. BUILD-BRIEF section 5
+     allows ONE new animation on #briefs and permits none; stillness is the choice, and section 8's
+     tie-breaker settles it. Nothing rests at opacity:0 in any stylesheet.
+
+     NO shell/cta MARKER PAIR, deliberately: this page has no closing band. The client's copy for
+     Insights ends at one button, and the brief forbids adding a closing band without copy - so
+     components/stamp.js will report "NO MARKERS :: shell/cta" for this page, and that is correct,
+     not a bug. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Insights</title>
+<meta name="description" content="[COPY REQUESTED — Insights meta description]">
+<link rel="stylesheet" href="../live/webflow-base.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="../client-first-2.css">
+<link rel="stylesheet" href="../client-first-3.css">
+<link rel="stylesheet" href="../preview-reset.css">
+<script src="../live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
+<script src="../preview-webflow-shim.js" defer></script>
+<script src="../homepage.js" defer></script>
+<script src="../interior.js" defer></script>
+<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
+</head>
+<body>
+<div class="page-wrapper">
+<!-- @component shell/navbar -->
+<div class="navbar_shell">
+<div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="280" data-easing="ease" data-easing2="ease">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
+<div class="navbar_container">
+<a href="../" class="navbar_logo-link w-nav-brand"><img src="../brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
+<nav class="navbar_menu w-nav-menu" id="navbar-menu">
+<div class="navbar_menu-inner">
+<div class="navbar_links">
+<a href="../our-approach/" class="navbar_link w-nav-link">Our Approach</a>
+<a href="../solutions/" class="navbar_link w-nav-link">Solutions</a>
+<a href="../areas-of-review/" class="navbar_link w-nav-link">Areas of Review</a>
+<a href="../industries/" class="navbar_link w-nav-link">Industries</a>
+<a href="../insights/" class="navbar_link w-nav-link">Insights</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<div class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about">
+<div class="navbar_dropdown-trigger"><p class="navbar_dropdown-label">About</p><div class="navbar_dropdown-caret"></div></div>
+</div>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="../our-company/" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
+<a href="../afissio-law/" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+</div>
+</nav>
+</div>
+</div>
+<div class="navbar_button-wrapper"><a href="../contact/" class="button is-nav">Contact</a></div>
+</div>
+</nav>
+<div class="navbar_menu-button w-nav-button" aria-label="menu">
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- /@component shell/navbar -->
+<main class="main-wrapper">
+
+<!-- OPTION 1A — stacked-statement: the interior page header, REUSED. One left edge, the full
+     type stack centred in the visible area, one CTA, the wave field behind it. -->
+<section class="section_page-header" id="hero">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="hero-wave" aria-hidden="true">
+</div>
+<div class="padding-global is-layer">
+<div class="padding-section-medium is-hero">
+<div class="container-xlarge">
+<div class="page-header_grid">
+<div class="page-header_stack is-left">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Insights</p></div>
+<div class="page-header_title-block is-left"><h1 class="heading-style-h1 is-reversed">Briefs for leaders preparing for serious transactions.</h1></div>
+<div class="page-header_lead-block is-left"><p class="text-lead is-reversed">Afissio Insights offers concise, practical analysis on transaction readiness, governance, capitalization, commercial matters, data, privacy, AI, and other issues that arise before institutional diligence begins.</p></div>
+<div class="button-row"><a href="#briefs" class="button is-ghost-reversed">Learn More</a></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 1A -->
+<!-- The homepage's Insights card grid, duplicated verbatim (operator 2026-09-24); cards link to each brief. is-index is transparent so the hero field fades across the seam, as on Our Approach. -->
+<section class="section_insights is-index" id="briefs">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large is-no-top">
+<div class="container-xlarge">
+<div class="insights_grid">
+<a href="../insights-article/" class="insights_card is-index">
+<img src="../brand/icons/insight-part-one.svg" alt="" class="insights_plate">
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">The Patchwork: How U.S. Privacy Law Actually Works</h3></div>
+<p class="insights_action">Read the brief</p>
+</a>
+<a href="../insights-article/" class="insights_card is-index">
+<img src="../brand/icons/insight-part-two.svg" alt="" class="insights_plate">
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">What Companies Actually Do With Data</h3></div>
+<p class="insights_action">Read the brief</p>
+</a>
+<a href="../insights-article/" class="insights_card is-index">
+<img src="../brand/icons/insight-part-three.svg" alt="" class="insights_plate">
+<div class="insights_card-title"><h3 class="heading-style-h3 is-card">Privacy as a Competitive Asset, Not a Compliance Checklist</h3></div>
+<p class="insights_action">Read the brief</p>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+
+</main>
+
+<!-- @component shell/footer -->
+<footer class="footer_component is-ink-soft" id="footer">
+<div class="padding-global is-bar">
+<div class="padding-section-small is-no-top">
+<div class="container-xlarge is-bar">
+<div class="footer_ledger">
+<div class="footer_cell is-brand">
+<img src="../brand/logo/afissio-icon-orange.png" alt="" class="footer_mark">
+<p class="footer_tagline">Deal engineering before the due diligence begins.</p>
+</div>
+<div class="footer_cell is-nav">
+<nav role="navigation" class="footer_index">
+<a href="../" class="footer_index-link"><p class="footer_index-name">Home</p></a>
+<a href="../our-approach/" class="footer_index-link"><p class="footer_index-name">Our Approach</p></a>
+<a href="../solutions/" class="footer_index-link"><p class="footer_index-name">Solutions</p></a>
+<a href="../areas-of-review/" class="footer_index-link"><p class="footer_index-name">Areas of Review</p></a>
+<a href="../industries/" class="footer_index-link"><p class="footer_index-name">Industries</p></a>
+<a href="../afissio-law/" class="footer_index-link"><p class="footer_index-name">Afissio Law</p></a>
+<a href="../insights/" class="footer_index-link"><p class="footer_index-name">Insights</p></a>
+<a href="../our-company/" class="footer_index-link"><p class="footer_index-name">About</p></a>
+<a href="../contact/" class="footer_index-link"><p class="footer_index-name">Contact</p></a>
+</nav>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282, USA</p>
+<a href="mailto:info@afissio.com" class="footer_entity-link">info@afissio.com</a>
+</div>
+</div>
+</div>
+<div class="footer_rule is-bar"></div>
+<div class="footer_cell">
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<div class="footer_legal-row">
+<a href="../privacy-policy/" class="footer_legal-link">Privacy Policy</a>
+<a href="../privacy-policy/" class="footer_legal-link">Terms of Use</a>
+<a href="../privacy-policy/" class="footer_legal-link">Cookie Policy</a>
+<p class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- /@component shell/footer -->
+</div>
+</body>
+</html>

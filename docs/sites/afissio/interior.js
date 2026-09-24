@@ -1,4 +1,38 @@
 /* ============================================================================
+   AFISSIO — THE SHARED INTERIOR BEHAVIOUR SCRIPT
+   ROUND-TOKEN: R30-BUTTON-PURPOSE (2026-09-22) - section 5 only: the accordion trigger is a Div
+   Block with role="button" + tabindex="0" now, so this file owns Enter as well as Space. No other
+   pass, selector, timing or failsafe changed. Previous token: R19-INSIGHTS (2026-09-18), below.
+   ROUND-TOKEN: R19-INSIGHTS (2026-09-18)
+
+   WAS pages/our-approach.js. Solutions' brief §3 and Insights' brief §3 both forbid a second and a
+   third copy of a shared pass, so every behaviour an interior page can share lives here and every
+   interior page links this ONE file. Our Approach's own file is deleted rather than left as a stale
+   second copy; a page keeps a file of its own only for code no other page could use, and after
+   this move no such code exists.
+
+   ALL SIX PASSES BELOW ARE UNCHANGED from the R16/R17 file except for two mechanical edits, both
+   named so the next reader does not have to diff:
+     · the window guards are __afissioInterior… instead of __afissioApproach… (the two renamed
+       passes are the settle and the field; the lattice, the accordion's sibling passes and the
+       quote ember kept theirs, which were never page-named);
+     · §2 takes querySelectorAll instead of querySelector, so a page carrying TWO headers — which
+       is what an options page under review is — paints both fields instead of leaving the second
+       a dead black box. With one canvas the behaviour is identical, which is what Our Approach
+       must and does still get.
+   Nothing else moved: same selectors, same timings, same easing, same failsafes, same reduced-motion
+   returns, same beforeprint reveals. Our Approach behaves exactly as before.
+
+   WHICH PASS SERVES WHICH PAGE. Every one is keyed to the ELEMENTS it serves and no-ops without
+   them, so this file is safe on any interior page:
+     1 settle          every interior page (class-keyed, never id-keyed)
+     2 hero wave field every interior page header (.hero-wave — the canvas is CREATED, R27)
+     3 compute lattice a statement band that asks for it (.compute-field, same) — Our Approach
+     4 step focus      a numbered sequence (.step-plate) — Our Approach
+     5 accordion       an FAQ list (.faq_row) — Our Approach
+     6 quote ember     a testimonial panel (.quote_glyph) — Our Approach
+
+   PREVIOUS HEADER, kept because everything it says is still true of the passes below:
    AFISSIO — OUR APPROACH · PRODUCTION BEHAVIOUR SCRIPT
    ROUND-TOKEN: R16-OUR-APPROACH (2026-09-17)
 
@@ -50,13 +84,68 @@
    a transition that cannot advance.
    ============================================================================ */
 (function(){
-if(window.__afissioApproachSettleV1)return;window.__afissioApproachSettleV1=1;
+if(window.__afissioInteriorSettleV1)return;window.__afissioInteriorSettleV1=1;
 if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+/* R20 adds '.article_foot' - pages/insights-article.html's option 4B, the closing foot. #body is
+   DELIBERATELY ABSENT from this list and must stay absent: reading text never animates in, and a
+   reader who lands on an article from a LinkedIn post must not watch it arrive. Neither page's
+   header is in the list either, for the same reason the homepage's hero is not.
+   R19 adds four selectors, all for pages/insights.html: '.band_grid' (the statement band's
+   split composition), '.brief_row' and '.brief_card' (the two brief-item designs, so the three
+   CMS items stage in DOM order 130ms apart — which is how the series tells itself, and the whole
+   reason #briefs needs no animation of its own), and '.latest_foot'. None of the four matches an
+   element on pages/our-approach.html, so its settle is byte-for-byte the same list it ran before. */
 var SEL=['.sequence_aside','.sequence_step',
- '.band_stack',
+ '.band_stack','.band_grid',
  '.quote_panel',
  '.faq_head','.faq_row',
- '.close_stack'].join(',');
+ '.brief_row','.brief_card',
+ /* R22-SOLUTIONS: pages/solutions.html's four families. None of the six matches an element on any
+    of the five pages built before it, so every one of those pages settles exactly as it did. */
+ '.continuum_stop','.spectrum_head','.spectrum_slot','.spectrum_row','.service_row','.service_card',
+ /* R23-AREAS: pages/areas-of-review.html. The schedule's nine cells are listed as their three ROW
+    classes, in DOM order, so #domains arrives ROW BY ROW - the three domain names, then the three
+    paragraphs, then the three scope lists, which is the schedule filling in. 9 x 130ms + 1600ms =
+    2.77s, inside the brief's 4s ceiling, told once, nothing looping. `.schedule_entry` does the
+    same for 2B (Legal -> Financial -> Technical) and `.close_foot` matches the ruled close. None
+    of the five matches an element on any of the six pages built before this one, so all six
+    settle exactly as they did. */
+ '.schedule_head','.schedule_body','.schedule_scope','.schedule_entry','.close_foot',
+ /* R24-INDUSTRIES: pages/industries.html. '.register_head' is the section head of BOTH options,
+    and '.register_row' is 2A's six register entries, so the six arrive in the deck's order 130ms
+    apart — 6 x 130 + 1600 = 2.38s, which is why #industries needs no animation of its own.
+    2B needed nothing added at all: its six panes are '.service_card', already in this list since
+    R22. Neither new selector matches an element on any of the seven pages built before this one,
+    so all seven settle exactly as they did. */
+ '.register_head','.register_row',
+ /* R25-LAW: pages/afissio-law.html. '.passage_head' is the section head of BOTH #role options and
+    '.passage_lead'/'.passage_sub' (2A) and '.passage_first'/'.passage_second' (2B) are their
+    prose blocks, which stage in reading order. '.divide_pair' (3A) and '.divide_open' (3B) are
+    THE HOSTS, NOT THE TWO PANELS, AND THAT IS A DESIGN DECISION: settled separately the two
+    firms would arrive 130ms apart, which is a boundary narrating itself as a transition from one
+    to the other — the exact reading BUILD-BRIEF §5 forbids on that section. Settled as one block
+    they arrive in the same frame, and the attorney slot and the column divider ride with them.
+    '.divide_note' follows as the next block, which is its reading order. Neither #office option
+    is listed: office_* is worn by pages/contact.html, and adding it here would change a built
+    page's behaviour. None of the eight matches an element on any of the eight pages built before
+    this one, so all eight settle exactly as they did. */
+ '.passage_head','.passage_lead','.passage_sub','.passage_first','.passage_second',
+ '.divide_pair','.divide_open','.divide_note',
+ /* R26-CLOSE (half A): pages/about.html. '.people_entry' (3A) and '.people_leaf' (3B) are the two
+    people themselves, so they stage in the deck's order 130ms apart — two colleagues arriving one
+    after the other is reading order, not a boundary narrating itself, which is why About lists the
+    ITEMS where Afissio Law deliberately listed the HOSTS. '.network_shelf' is 4B's ruled close;
+    4A needs nothing, because the panel's inner '.band_grid' has been in this list since R19, and
+    #why needs nothing either — '.passage_*' (R25) and '.band_grid' cover both its options. None of
+    the three matches an element on any of the nine pages built before this one, so all nine settle
+    exactly as they did. Half B adds nothing at all: a policy page and a 404 are the two surfaces on
+    this site where motion has nothing to say, and their reading columns must never be staged. */
+ '.people_entry','.people_leaf','.network_shelf',
+ '.latest_foot','.article_foot',
+ '.close_stack',
+ /* 2026-09-24: About #why wears the homepage lede. homepage.js settles it only under #intro, and
+    the homepage does not load this file, so '.intro_lede' matches About alone. */
+ '.intro_lede'].join(',');
 var els=[].slice.call(document.querySelectorAll(SEL));
 if(!els.length)return;
 var EASE='cubic-bezier(0.33,0,0.2,1)',DUR=1600,STEP=130;
@@ -163,10 +252,83 @@ pass();
    which is all a reader, a crawler or a print needs. Nothing rests at opacity 0.
    ============================================================================ */
 (function(){
-if(window.__afissioApproachWaveV1)return;window.__afissioApproachWaveV1=1;
-var cv=document.querySelector('.hero-wave_canvas');if(!cv)return;
+if(window.__afissioInteriorWaveV1)return;window.__afissioInteriorWaveV1=1;
+/* R19: EVERY header on the page gets a field, not just the first. An options page carries two
+   headers under review and querySelector painted only one, which left the second a dead black
+   box — and a reviewer cannot judge a composition whose ground is missing. The whole pass is
+   wrapped in __field(cv) and called once per canvas; every value in it was already local, so with
+   one canvas this is the same code doing the same thing. */
+/* R27-WEBFLOW-ELEMENTS: THE CANVAS IS CREATED HERE, NOT AUTHORED IN THE MARKUP. Webflow has no
+   canvas element and the deployer has no mapping for the tag, so a <canvas> written into a page is
+   SKIPPED and the field never exists on the built site - which is why this pass used to bind to
+   markup that could not be deployed. The host .hero-wave IS a Div Block and does deploy; the canvas
+   is built inside it here and carries INLINE the six properties the deleted .hero-wave_canvas rule
+   used to set (CLAUDE.md 4f: a class only ever worn at runtime has no published CSS to attach to).
+   Nothing else in this pass changed: host is still cv.parentNode, which is still .hero-wave, so
+   size() measures the same box and paints the same field. The querySelector('canvas') guard means a
+   page that still carries an authored canvas reuses it rather than getting a second one. */
+function __mount(hostEl){
+  var cv=hostEl.querySelector('canvas');
+  if(cv)return cv;
+  cv=document.createElement('canvas');
+  cv.style.position='absolute';cv.style.top='0';cv.style.left='0';
+  cv.style.width='100%';cv.style.height='100%';cv.style.display='block';
+  hostEl.appendChild(cv);
+  return cv;
+}
+var __hosts=[].slice.call(document.querySelectorAll('.hero-wave'));
+if(!__hosts.length)return;
+/* 2026-09-24 (404): when the header is the LAST section before the footer, nothing follows it for the
+   field's 30vh tail to dissolve across, so the layer is extended inline to run on under the footer
+   (runtime geometry, §4f) — the field then fades out behind the footer instead of stopping at it. */
+function __reach(hostEl){var sec=hostEl.closest&&hostEl.closest('section');if(!sec)return;var mn=sec.parentElement;
+  if(!mn||mn.tagName!=='MAIN'||mn.lastElementChild!==sec)return;var f=mn.nextElementSibling;
+  while(f&&f.tagName!=='FOOTER'&&f.tagName!=='SECTION')f=f.nextElementSibling;if(!f||f.tagName!=='FOOTER')return;
+  hostEl.style.bottom=(-Math.round(f.getBoundingClientRect().height))+'px';}
+__hosts.forEach(__reach);window.addEventListener('resize',function(){__hosts.forEach(__reach)});
+__hosts.forEach(function(hostEl){__field(__mount(hostEl))});
+function __field(cv){
 var ctx=cv.getContext('2d');if(!ctx)return;
 var host=cv.parentNode,W=1,H=1;
+/* AOR-V2 (2026-09-24): THE CENTRED MODE. A host wearing `hero-wave is-centered` seats the warmth and
+   the apex on the page's centre line, MIDWAY between the header's content and the next section's
+   content, so the mark is the hinge between the two. Measured from the live boxes every frame, so the
+   seat follows the type at every width. The default mode below is untouched. */
+var centered=!!(host.classList&&host.classList.contains('is-centered'));
+/* THE CENTRED MODE IS THE DEFAULT FIELD, CENTRED - never a second design (operator 2026-09-24: "the
+   same animation, coloring and sizing as other pages", then "move the logo animation to the top, the
+   hero section"). Same three BLOOMS at the same heights, radii, travel, periods, peaks and colours;
+   the same apex at 64% of the width capped at 1152px, 0.06 alpha, its foot just below the seam; the
+   same top veil and the same tail. Only x moves: the bloom group and the mark are centred on the page,
+   and the left veil is dropped, because a centred stack has no left column to protect. */
+function paintCentered(t){
+  var d=Math.max(W,H),i;
+  ctx.fillStyle='#000000';ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+  for(i=0;i<BLOOMS.length;i++){
+    var bl=BLOOMS[i],p1=t*bl.s,p2=t*bl.s*1.7,p3=t*bl.s*0.6;
+    var cx=(bl.x-0.32+(Math.sin(p1)*0.78+Math.sin(p2)*0.34)*bl.dx)*W;
+    var cy=(bl.y+(Math.cos(p1*0.78)*0.78+Math.sin(p3)*0.34)*bl.dy)*H;
+    var rr=bl.r*d*(1+Math.sin(t*bl.rs)*bl.rw*0.72+Math.sin(t*bl.rs*1.9)*bl.rw*0.28);
+    var g=ctx.createRadialGradient(cx,cy,0,cx,cy,rr);
+    soft(g,bl.c,bl.a);
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }
+  ctx.globalCompositeOperation='source-over';
+  if(markOK){
+    var mr=(mark.naturalWidth&&mark.naturalHeight)?(mark.naturalHeight/mark.naturalWidth):(192/230);
+    var mw=Math.min(W*0.64,1152),mh=mw*mr;
+    ctx.globalAlpha=0.06;
+    ctx.drawImage(mark,W/2-mw/2,H*0.869-mh,mw,mh);
+    ctx.globalAlpha=1;
+  }
+  var vg=ctx.createLinearGradient(0,0,0,H*0.66);
+  for(i=0;i<=8;i++){var u=i/8;vg.addColorStop(u,'rgba(0,0,0,'+(Math.pow(1-u,1.8)*0.9).toFixed(4)+')')}
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,Math.ceil(H*0.66)+1);
+  var tg=ctx.createLinearGradient(0,H*0.74,0,H);
+  for(i=0;i<=8;i++){var n=i/8;tg.addColorStop(n,'rgba(0,0,0,'+Math.pow(n,1.9).toFixed(4)+')')}
+  ctx.fillStyle=tg;ctx.fillRect(0,Math.floor(H*0.74),W,Math.ceil(H*0.26)+1);
+}
 /* THE APEX, PAINTED INTO THE FIELD (R30). It used to be an <img> in .hero-mark-layer, which was
    the section box with overflow:hidden - so it was still cut dead straight at 100vh even after
    the canvas itself was extended past the seam. Drawn here it is inside the same 130vh layer as
@@ -316,6 +478,7 @@ function paint(t){
      a frame buy a field that cannot come up dead. */
   var bx=host.getBoundingClientRect(),dp=Math.min(1.25,window.devicePixelRatio||1);
   if(cv.width!==Math.round(bx.width*dp)||cv.height!==Math.round(bx.height*dp))size();
+  if(centered){paintCentered(t);return}
   ctx.fillStyle='#000000';ctx.fillRect(0,0,W,H);
   var d=Math.max(W,H),i,j,x,y;
   ctx.globalCompositeOperation='lighter';   /* R29: additive, so overlaps keep the brand hue */
@@ -425,6 +588,7 @@ window.addEventListener('resize',function(){size();paint(t0?(performance.now()-t
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
 window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0});
 start();
+}
 })();
 
 /* ============================================================================
@@ -464,7 +628,18 @@ start();
    ============================================================================ */
 (function(){
 if(window.__afissioComputeFieldV1)return;window.__afissioComputeFieldV1=1;
-var cv=document.querySelector('.compute-field_canvas');if(!cv)return;
+/* R27-WEBFLOW-ELEMENTS: same as section 2 - the lattice's canvas is created here and styled
+   inline, because <canvas> has no Webflow element and .compute-field_canvas could never deploy.
+   .compute-field is the classed Div Block host and is unchanged. */
+/* 2026-09-24: EVERY host gets its own lattice (Industries' six register plates), one closure each. */
+[].slice.call(document.querySelectorAll('.compute-field')).forEach(function(__lhost){(function(){
+var cv=__lhost.querySelector('canvas');
+if(!cv){
+  cv=document.createElement('canvas');
+  cv.style.position='absolute';cv.style.top='0';cv.style.left='0';
+  cv.style.width='100%';cv.style.height='100%';cv.style.display='block';
+  __lhost.appendChild(cv);
+}
 var ctx=cv.getContext('2d');if(!ctx)return;
 var host=cv.parentNode,W=1,H=1;
 function size(){
@@ -494,6 +669,13 @@ function scale(){
    (R29b), so the hole is centred at 32% of the width rather than 50% - the computation is then
    heaviest to the right of the copy, where there is nothing to read. */
 var HOLE_CX=0.32,HOLE_CY=0.50;
+/* a host wearing `compute-field is-centered` carries a CENTRED stack (Solutions #data-room), so the clear
+   zone sits on the centre line instead (operator 2026-09-24). */
+if(__lhost.classList&&__lhost.classList.contains('is-centered'))HOLE_CX=0.5;
+/* `compute-field is-plate` (Industries register wells): a small centred clear zone that holds the drawing. */
+if(__lhost.classList&&__lhost.classList.contains('is-plate')){HOLE_CX=0.5;HOLE_IN=0.14;HOLE_OUT=0.46;FLOOR=0.1;PEAK=0.95}
+/* `compute-field is-full` (Afissio Law #separation, 2026-09-24): no clear zone — the lattice IS the plate's drawing. */
+if(__lhost.classList&&__lhost.classList.contains('is-full')){HOLE_IN=-1;HOLE_OUT=-0.5;FLOOR=0.06;PEAK=0.85}
 /* ALPHA IS QUANTISED INTO 14 BUCKETS and each bucket is filled in one pass. Building a
    fillStyle string per dot meant ~2900 string allocations a frame, which is the whole cost of a
    lattice this size; 14 strings a frame is not. Invisible at 1/255 steps. */
@@ -603,6 +785,252 @@ setInterval(function(){
   paint(n-t0);
 },900);
 start();
+})()});
+})();
+
+/* ============================================================================
+   3b · THE NETWORK FIELD — v2 (operator 2026-09-24: "very weak ... the dots are not connected ... in
+   the network everyone is connected"). The idea is now the drawing: ONE CONNECTED GRAPH.
+     · NODES on a jittered grid across the whole band; five of them are HUBS (a 4px square inside a
+       square hairline plate — the site's plate device at node scale).
+     · EDGES: a minimum spanning tree over every node (so the graph is provably connected — there is
+       no island) plus each node's two nearest neighbours (so it reads as a mesh, not a tree). Every
+       edge is always drawn.
+     · THE WAVE: every ~2.4s a hub fires. The signal runs out along the edges at a constant speed
+       (shortest-path arrival times, computed once per wave), lighting each hairline as it travels
+       and flashing each node as it arrives, until it has reached EVERY node — one call reaching the
+       whole network, which is the section's sentence. Waves from different hubs overlap.
+     · The nodes breathe a few px about their anchors, so the mesh is never a still diagram.
+   Same vocabulary as the #judgment lattice: square dots, 1px hairlines, one hue ramped
+   #B34B00 -> #FF6600, the elliptical clear zone behind the type. No glow, no blur, no second hue.
+   HOW IT SHIPS: a canvas created here, styled inline. Reduced motion paints the graph still. Nothing
+   paints off screen or in a hidden tab; a watchdog restarts a paused loop. Nothing rests at opacity 0.
+   ============================================================================ */
+(function(){
+if(window.__afissioNetworkFieldV2)return;window.__afissioNetworkFieldV2=1;
+[].slice.call(document.querySelectorAll('.network-field')).forEach(function(host){(function(){
+var cv=document.createElement('canvas');
+cv.style.position='absolute';cv.style.top='0';cv.style.left='0';cv.style.width='100%';cv.style.height='100%';cv.style.display='block';
+host.appendChild(cv);
+var ctx=cv.getContext('2d');if(!ctx)return;
+var W=1,H=1,N=[],E=[],ADJ=[],HUBS=[],WAVES=[],SPEED=0.42,HOLE_IN=0.22,HOLE_OUT=0.6,HCX=0.3,HCY=0.5,nextFire=0,hubTurn=0;
+function rnd(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function hole(x,y){var hx=W*HCX,hy=H*HCY;
+  var ex=(x-hx)/Math.max(1,Math.max(hx,W-hx)),ey=(y-hy)/Math.max(1,Math.max(hy,H-hy));
+  var u=(Math.sqrt(ex*ex+ey*ey)-HOLE_IN)/(HOLE_OUT-HOLE_IN);u=u<0?0:u>1?1:u;return u*u*(3-2*u)}
+function col(u,al){return 'rgba('+Math.round(179+76*u)+','+Math.round(75+27*u)+',0,'+(al<0?0:al>1?1:al).toFixed(3)+')'}
+function build(){
+  var r=host.getBoundingClientRect(),dpr=Math.min(1.5,window.devicePixelRatio||1);
+  W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  var d=Math.sqrt(W*W+H*H),cell=Math.max(70,Math.min(130,d/15)),i,k,seed=0;
+  N=[];E=[];WAVES=[];
+  for(var gy=cell*0.5;gy<H;gy+=cell)for(var gx=cell*0.5;gx<W;gx+=cell){seed++;
+    var x=gx+(rnd(seed)-0.5)*cell*0.8,y=gy+(rnd(seed+400)-0.5)*cell*0.8,h=hole(x,y);
+    if(h<0.08&&rnd(seed+900)>0.25)continue;
+    N.push({ax:x,ay:y,p:rnd(seed+77)*6.283,s:0.00035+rnd(seed+55)*0.00035,x:x,y:y,h:h,flash:0,hub:false});}
+  var n=N.length;if(n<2)return;
+  var key={};function add(a,b){if(a===b)return;var kk=a<b?a+'_'+b:b+'_'+a;if(key[kk])return;key[kk]=1;E.push([a,b])}
+  /* Prim: the spanning tree that guarantees one connected network */
+  var inT=[],best=[],from=[];for(i=0;i<n;i++){inT.push(false);best.push(Infinity);from.push(-1)}best[0]=0;
+  for(var it=0;it<n;it++){var m=-1;for(i=0;i<n;i++)if(!inT[i]&&(m<0||best[i]<best[m]))m=i;inT[m]=true;if(from[m]>=0)add(m,from[m]);
+    for(i=0;i<n;i++)if(!inT[i]){var dx=N[i].ax-N[m].ax,dy=N[i].ay-N[m].ay,dd=dx*dx+dy*dy;if(dd<best[i]){best[i]=dd;from[i]=m}}}
+  /* plus two nearest neighbours each: a mesh, not a tree */
+  for(i=0;i<n;i++){var ds=[];for(k=0;k<n;k++)if(k!==i){var ddx=N[i].ax-N[k].ax,ddy=N[i].ay-N[k].ay;ds.push([ddx*ddx+ddy*ddy,k])}
+    ds.sort(function(p,q){return p[0]-q[0]});add(i,ds[0][1]);if(ds[1])add(i,ds[1][1]);}
+  ADJ=[];for(i=0;i<n;i++)ADJ.push([]);
+  E.forEach(function(e,ix){var a=N[e[0]],b=N[e[1]],len=Math.sqrt((a.ax-b.ax)*(a.ax-b.ax)+(a.ay-b.ay)*(a.ay-b.ay));e[2]=len;ADJ[e[0]].push([e[1],len]);ADJ[e[1]].push([e[0],len])});
+  /* hubs: the five best-connected nodes outside the clear zone, spread apart */
+  var order=N.map(function(q,ix){return ix}).filter(function(ix){return N[ix].h>0.6}).sort(function(p,q){return ADJ[q].length-ADJ[p].length});
+  HUBS=[];order.forEach(function(ix){if(HUBS.length>=5)return;for(var z=0;z<HUBS.length;z++){var hb=N[HUBS[z]];if(Math.abs(hb.ax-N[ix].ax)+Math.abs(hb.ay-N[ix].ay)<cell*3)return}HUBS.push(ix)});
+  HUBS.forEach(function(ix){N[ix].hub=true});
+  nextFire=0;
+}
+function fire(t){
+  if(!HUBS.length)return;var src=HUBS[hubTurn++%HUBS.length],n=N.length,dist=[],done=[],i;
+  for(i=0;i<n;i++){dist.push(Infinity);done.push(false)}dist[src]=0;
+  for(var it=0;it<n;it++){var m=-1;for(i=0;i<n;i++)if(!done[i]&&(m<0||dist[i]<dist[m]))m=i;if(m<0||dist[m]===Infinity)break;done[m]=true;
+    ADJ[m].forEach(function(p){if(dist[m]+p[1]<dist[p[0]])dist[p[0]]=dist[m]+p[1]})}
+  var max=0;for(i=0;i<n;i++)if(dist[i]<Infinity&&dist[i]>max)max=dist[i];
+  WAVES.push({t0:t,d:dist,end:max/SPEED+1400});
+}
+function paint(t){
+  var bx=host.getBoundingClientRect(),dp=Math.min(1.5,window.devicePixelRatio||1);
+  if(cv.width!==Math.round(bx.width*dp)||cv.height!==Math.round(bx.height*dp))build();
+  ctx.clearRect(0,0,W,H);if(!N.length)return;
+  var i,w,e,a,b;
+  for(i=0;i<N.length;i++){a=N[i];a.x=a.ax+Math.cos(t*a.s+a.p)*6;a.y=a.ay+Math.sin(t*a.s*1.3+a.p)*5;a.h=hole(a.x,a.y);a.flash=0}
+  for(w=WAVES.length-1;w>=0;w--)if(t-WAVES[w].t0>WAVES[w].end)WAVES.splice(w,1);
+  if(t>=nextFire){fire(t);nextFire=t+2400}
+  /* node flash from every live wave */
+  WAVES.forEach(function(wv){var el=t-wv.t0;for(var q=0;q<N.length;q++){var at=wv.d[q]/SPEED,g=el-at;if(g>=0&&g<1000){var f=1-g/1000;if(f>N[q].flash)N[q].flash=f}}});
+  /* edges: every edge, always; then the travelling light on top */
+  ctx.lineWidth=1;
+  for(i=0;i<E.length;i++){e=E[i];a=N[e[0]];b=N[e[1]];var hh=Math.min(a.h,b.h)*0.85+0.15*Math.max(a.h,b.h);
+    ctx.strokeStyle=col(0,0.26*hh);ctx.beginPath();ctx.moveTo(a.x+0.5,a.y+0.5);ctx.lineTo(b.x+0.5,b.y+0.5);ctx.stroke();}
+  ctx.lineWidth=1.5;
+  WAVES.forEach(function(wv){var el=t-wv.t0;
+    for(var q=0;q<E.length;q++){var ed=E[q],ia=ed[0],ib=ed[1];var ta=wv.d[ia]/SPEED,tb=wv.d[ib]/SPEED;if(tb<ta){var sw=ia;ia=ib;ib=sw;sw=ta;ta=tb;tb=sw}
+      if(el<ta||tb===Infinity)continue;var A=N[ia],Bn=N[ib],span=Math.max(1,tb-ta);
+      var head=Math.min(1,(el-ta)/span),fade=el>tb?1-(el-tb)/900:1;if(fade<=0)continue;
+      var tail=Math.max(0,head-0.55);
+      var x0=A.x+(Bn.x-A.x)*tail,y0=A.y+(Bn.y-A.y)*tail,x1=A.x+(Bn.x-A.x)*head,y1=A.y+(Bn.y-A.y)*head;
+      var hh2=Math.max(0.12,Math.min(A.h,Bn.h));
+      ctx.strokeStyle=col(0.55,0.35*fade*hh2);ctx.beginPath();ctx.moveTo(A.x+0.5,A.y+0.5);ctx.lineTo(x1+0.5,y1+0.5);ctx.stroke();
+      if(head<1){ctx.strokeStyle=col(1,0.95*hh2);ctx.beginPath();ctx.moveTo(x0+0.5,y0+0.5);ctx.lineTo(x1+0.5,y1+0.5);ctx.stroke();
+        ctx.fillStyle=col(1,hh2);ctx.fillRect(x1-1,y1-1,3,3);}
+    }});
+  /* nodes */
+  for(i=0;i<N.length;i++){a=N[i];var hv=Math.max(a.h,0.1),f=a.flash;
+    if(a.hub){ctx.strokeStyle=col(0.3+0.7*f,(0.45+0.5*f)*hv);ctx.lineWidth=1;ctx.strokeRect(Math.round(a.x)-6.5,Math.round(a.y)-6.5,14,14);
+      ctx.fillStyle=col(0.7+0.3*f,(0.85)*hv);ctx.fillRect(Math.round(a.x)-1.5,Math.round(a.y)-1.5,4,4);}
+    else{var sz=f>0.05?3:2;ctx.fillStyle=col(0.2+0.8*f,(0.5+0.5*f)*a.h);ctx.fillRect(Math.round(a.x)-(sz-2)/2,Math.round(a.y)-(sz-2)/2,sz,sz);}}
+}
+build();
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  nextFire=Infinity;paint(0);window.addEventListener('resize',function(){build();nextFire=Infinity;paint(0)});return;
+}
+var raf=0,t0=0,tOff=0,lastF=0;
+function frame(now){
+  lastF=now;if(!t0)t0=now-tOff;
+  if(document.visibilityState==='hidden'){tOff=now-t0;t0=0;raf=0;return}
+  var r=host.getBoundingClientRect(),vh=window.innerHeight||0;
+  if(r.bottom>-60&&r.top<vh+60){try{paint(now-t0)}catch(err){if(!window.__afissioNetErr){window.__afissioNetErr=1;console.error('network field paint failed',err)}}}
+  raf=requestAnimationFrame(frame);
+}
+function start(){if(!raf){t0=0;raf=requestAnimationFrame(frame)}}
+window.addEventListener('resize',function(){build()});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
+window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0});
+setInterval(function(){
+  if(document.visibilityState!=='visible')return;var n=performance.now();
+  if(raf&&(n-lastF)<900)return;var r=host.getBoundingClientRect();
+  if(r.bottom<-60||r.top>(window.innerHeight||0)+60)return;
+  raf=0;start();if(!t0)t0=n-tOff;paint(n-t0);
+},900);
+start();
+})()});
+})();
+
+/* ============================================================================
+   3c · THE DRAFTING FIELD (Afissio Law #separation, 2026-09-24). The partner of the Afissio plate's
+   lattice: where Afissio's square COMPUTES (review, analysis), Afissio Law's square DRAFTS — ruled
+   lines written one after another, a caret at the tip of the line being set, a 4px clause marker in
+   the margin at each heading, the finished lines settling to the dim orange. When the sheet is full
+   it holds, fades, and a new sheet begins. The document tile's own vocabulary (ruled lines, the
+   short closing line of a paragraph) at plate scale, in the same one hue ramp #B34B00 -> #FF6600.
+   HOW IT SHIPS: a canvas created here, styled inline. Reduced motion paints one finished sheet.
+   Nothing paints off screen or in a hidden tab; a watchdog restarts a paused loop.
+   ============================================================================ */
+(function(){
+if(window.__afissioDraftFieldV1)return;window.__afissioDraftFieldV1=1;
+[].slice.call(document.querySelectorAll('.draft-field')).forEach(function(host){(function(){
+var cv=document.createElement('canvas');
+cv.style.position='absolute';cv.style.top='0';cv.style.left='0';cv.style.width='100%';cv.style.height='100%';cv.style.display='block';
+host.appendChild(cv);
+var ctx=cv.getContext('2d');if(!ctx)return;
+var W=1,H=1,L=[],T=0,MX=0,seed=7,cyc=0,HOLD=1900,FADE=1200,SPEED=0.9;
+function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646}
+function col(u,al){return 'rgba('+Math.round(179+76*u)+','+Math.round(75+27*u)+',0,'+(al<0?0:al>1?1:al).toFixed(3)+')'}
+function size(){var r=host.getBoundingClientRect(),dpr=Math.min(1.5,window.devicePixelRatio||1);
+  W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
+function layout(){
+  L=[];MX=Math.round(W*0.14);var w=W-2*MX,pitch=Math.max(8,Math.min(16,Math.round(H/30))),y=Math.round(H*0.14),bottom=H*0.86,t=300;
+  while(y<bottom){
+    L.push({x:MX,y:y,len:w*(0.24+rnd()*0.2),head:true});y+=Math.round(pitch*1.7);
+    var n=2+((rnd()*4)|0);
+    for(var i=0;i<n&&y<bottom;i++){L.push({x:MX,y:y,len:w*(i<n-1?0.88+rnd()*0.12:0.3+rnd()*0.45),head:false});y+=pitch}
+    y+=Math.round(pitch*1.2);
+  }
+  for(var k=0;k<L.length;k++){var ln=L[k];t+=ln.head?320:80;ln.t0=t;ln.dur=ln.len/SPEED;t+=ln.dur}
+  T=t;
+}
+function paint(tc){
+  var bx=host.getBoundingClientRect(),dp=Math.min(1.5,window.devicePixelRatio||1);
+  if(cv.width!==Math.round(bx.width*dp)||cv.height!==Math.round(bx.height*dp)){size();layout()}
+  ctx.clearRect(0,0,W,H);
+  var fade=tc>T+HOLD?Math.max(0,1-(tc-T-HOLD)/FADE):1;if(fade<=0)return;
+  for(var k=0;k<L.length;k++){var ln=L[k];if(tc<ln.t0)break;
+    var p=Math.min(1,(tc-ln.t0)/ln.dur),th=ln.head?2:1,yy=Math.round(ln.y);
+    if(ln.head){ctx.fillStyle=col(1,0.95*fade);ctx.fillRect(Math.round(MX*0.5)-2,yy-1,4,4)}
+    if(p<1){
+      var x1=ln.x+ln.len*p;
+      ctx.fillStyle=col(1,0.95*fade);ctx.fillRect(ln.x,yy,ln.len*p,th);
+      ctx.fillRect(Math.round(x1)+2,yy-5,2,11);
+    }else{
+      var since=tc-(ln.t0+ln.dur),g=since<800?1-since/800:0;
+      ctx.fillStyle=ln.head?col(0.45+0.55*g,(0.7+0.25*g)*fade):col(0.1+0.8*g,(0.36+0.5*g)*fade);
+      ctx.fillRect(ln.x,yy,ln.len,th);
+    }
+  }
+}
+size();layout();
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  paint(T);window.addEventListener('resize',function(){size();layout();paint(T)});return;
+}
+var raf=0,t0=0,tOff=0,lastF=0;
+function frame(now){
+  lastF=now;if(!t0)t0=now-tOff;
+  if(document.visibilityState==='hidden'){tOff=now-t0;t0=0;raf=0;return}
+  var r=host.getBoundingClientRect(),vh=window.innerHeight||0,tc=now-t0-cyc;
+  if(tc>T+HOLD+FADE){cyc=now-t0;layout();tc=0}
+  if(r.bottom>-60&&r.top<vh+60){try{paint(tc)}catch(err){if(!window.__afissioDraftErr){window.__afissioDraftErr=1;console.error('drafting field paint failed',err)}}}
+  raf=requestAnimationFrame(frame);
+}
+function start(){if(!raf){t0=0;raf=requestAnimationFrame(frame)}}
+window.addEventListener('resize',function(){size();layout()});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
+window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0});
+setInterval(function(){
+  if(document.visibilityState!=='visible')return;var n=performance.now();
+  if(raf&&(n-lastF)<900)return;var r=host.getBoundingClientRect();
+  if(r.bottom<-60||r.top>(window.innerHeight||0)+60)return;
+  raf=0;start();if(!t0)t0=n-tOff;paint(n-t0-cyc);
+},900);
+start();
+})()});
+})();
+
+/* ============================================================================
+   3d · THE PORTRAIT EDGE (About #people, operator 2026-09-24: "animate the border with orange
+   lines"). Two orange light-runs travel the portrait's hairline, starting at the two corner
+   brackets and chasing each other round, each a short bright head with a fading tail — the rule
+   sweeps' light, bent round a plate. It draws ON the 1px edge only, never over the face. Both
+   portraits share one clock, so the two people stay identical.
+   HOW IT SHIPS: a canvas created here inside the plate, styled inline. Reduced motion: nothing is
+   added (the brackets and the hairline stand). Nothing paints off screen or in a hidden tab.
+   ============================================================================ */
+(function(){
+if(window.__afissioPortraitEdgeV1)return;window.__afissioPortraitEdgeV1=1;
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var plates=[].slice.call(document.querySelectorAll('.initial_plate.is-portrait'));if(!plates.length)return;
+var PERIOD=18000,PEAK=0.42,items=[];
+plates.forEach(function(pl){
+  var cv=document.createElement('canvas');cv.setAttribute('aria-hidden','true');
+  cv.style.position='absolute';cv.style.left='-2px';cv.style.top='-2px';cv.style.width='calc(100% + 4px)';cv.style.height='calc(100% + 4px)';
+  cv.style.pointerEvents='none';cv.style.zIndex='2';cv.style.display='block';
+  pl.appendChild(cv);items.push({pl:pl,cv:cv,ctx:cv.getContext('2d'),w:0,h:0});
+});
+function fit(it){var r=it.pl.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),W=Math.round(r.width)+4,H=Math.round(r.height)+4;
+  if(it.cv.width!==Math.round(W*dpr)||it.cv.height!==Math.round(H*dpr)){it.cv.width=Math.round(W*dpr);it.cv.height=Math.round(H*dpr);it.ctx.setTransform(dpr,0,0,dpr,0,0)}it.w=W;it.h=H}
+function pt(it,d){var w=it.w-4,h=it.h-4,L=2*(w+h);d=((d%L)+L)%L;var o=2.5;
+  if(d<w)return [o+d,o];d-=w;if(d<h)return [o+w,o+d];d-=h;if(d<w)return [o+w-d,o+h];d-=w;return [o,o+h-d]}
+function draw(it,t){var ctx=it.ctx;if(!ctx)return;fit(it);ctx.clearRect(0,0,it.w,it.h);
+  var w=it.w-4,h=it.h-4,L=2*(w+h),len=L*0.2,N=48,u=(t%PERIOD)/PERIOD;ctx.lineWidth=1.5;ctx.lineCap='butt';
+  for(var r=0;r<2;r++){var head=u*L+r*L/2;
+    for(var k=0;k<N;k++){var d0=head-len+k*len/N,d1=d0+len/N+0.6,a=Math.pow((k+1)/N,1.7);
+      var p0=pt(it,d0),p1=pt(it,d1);ctx.strokeStyle='rgba(255,102,0,'+(a*PEAK).toFixed(3)+')';
+      ctx.beginPath();ctx.moveTo(p0[0],p0[1]);ctx.lineTo(p1[0],p1[1]);ctx.stroke();}}}
+var raf=0,lastF=0;
+function frame(now){lastF=now;if(document.visibilityState==='hidden'){raf=0;return}
+  var vh=window.innerHeight||0;items.forEach(function(it){var r=it.pl.getBoundingClientRect();if(r.bottom>-40&&r.top<vh+40){try{draw(it,now)}catch(e){}}});
+  raf=requestAnimationFrame(frame)}
+function start(){if(!raf)raf=requestAnimationFrame(frame)}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
+window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0;items.forEach(function(it){it.ctx&&it.ctx.clearRect(0,0,it.w,it.h)})});
+setInterval(function(){if(document.visibilityState!=='visible')return;var n=performance.now();if(raf&&(n-lastF)<900)return;raf=0;start();items.forEach(function(it){draw(it,n)})},900);
+start();
 })();
 
 /* ============================================================================
@@ -641,7 +1069,7 @@ start();
    Nothing rests at opacity 0 and no content is gated behind scrolling.
    ============================================================================ */
 (function(){
-if(window.__afissioApproachFocusV1)return;window.__afissioApproachFocusV1=1;
+if(window.__afissioInteriorFocusV1)return;window.__afissioInteriorFocusV1=1;
 var plates=[].slice.call(document.querySelectorAll('.step-plate'));
 if(!plates.length)return;
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -733,15 +1161,33 @@ measure();paint();
 
    HOW IT SHIPS: no keyframes and no runtime combo (sections 4c-bis, 4f) - the panel height and
    the mark rotation are written inline here, while the TRANSITIONS live in client-first.css on
-   faq_panel and faq_mark-bar, which do deploy. The trigger is a real button with aria-expanded
-   and aria-controls (section 4h), so the keyboard and a screen reader get the control for free,
-   and focus-visible is authored in the sheet.
+   faq_panel and faq_mark-bar, which do deploy.
+
+   R27-WEBFLOW-ELEMENTS: THE TRIGGER IS NOT A <button>. The old row was
+   <h3 class="faq_q-wrap"><button><span class="faq_q"><span class="faq_mark"><span class="faq_mark-bar">
+   - and the deployer builds NONE of that: a Heading cannot hold a Button, a Button holds no
+   children at all, and every inline tag is transparent, so the question lost its class and BOTH
+   drawn bars of the plus mark vanished outright. R27 rebuilt it as a Link Block,
+   <a href="#" class="faq_trigger" role="button">, holding an <h3 class="faq_q"> and two classed <div>s.
+
+   R30-BUTTON-PURPOSE (2026-09-22): THE TRIGGER IS A DIV BLOCK NOW -
+   <div class="faq_trigger" role="button" tabindex="0">. The operator ruled how a button is built, BY
+   PURPOSE: a control that NAVIGATES is the native Button (a link); a control that only TOGGLES
+   something on the page - menu, accordion, tab, dialog - is a Div Block with role="button" and
+   tabindex="0", its script handling Enter and Space; a SUBMIT is the Form Button inside w-form
+   (reference/WEBFLOW-ELEMENTS.md section 1). An accordion toggle is not a link, so the href is gone
+   and with it the preventDefault that held it. A <div> is focusable with tabindex but activates on
+   NEITHER key, so this pass owns both now: the ONE keydown listener is EXTENDED with Enter rather
+   than joined by a second listener, and preventDefault is kept for Space ALONE, where it is what
+   stops the page scrolling under the reader. Nothing else moved - same class, same aria-expanded and
+   aria-controls (section 4h), same setOpen, same one-open-at-a-time, the same :focus-visible ring
+   authored in the sheet, and the same mouse behaviour: click fires on a div exactly as on a link.
 
    ONE OPEN AT A TIME: six answers this short are a set to scan, not a document to read in
    parallel, and a single open row keeps all six questions on one screen.
    ============================================================================ */
 (function(){
-if(window.__afissioApproachFaqV1)return;window.__afissioApproachFaqV1=1;
+if(window.__afissioInteriorFaqV1)return;window.__afissioInteriorFaqV1=1;
 var rows=[].slice.call(document.querySelectorAll(".faq_row"));
 if(!rows.length)return;
 var REDUCED=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -797,11 +1243,22 @@ function setOpen(it,open,animate){
   }
 }
 items.forEach(function(it,i){setOpen(it,i===0,false)});
+function toggle(it){
+  var next=!it.open;
+  items.forEach(function(other){if(other!==it&&other.open)setOpen(other,false,true)});
+  setOpen(it,next,true);
+}
 items.forEach(function(it){
-  it.btn.addEventListener("click",function(){
-    var next=!it.open;
-    items.forEach(function(other){if(other!==it&&other.open)setOpen(other,false,true)});
-    setOpen(it,next,true);
+  /* the mouse, unchanged: click fires on a div exactly as it fired on the link - and with no href
+     left to hold, the preventDefault R27 needed here is gone (R30) */
+  it.btn.addEventListener("click",function(){toggle(it)});
+  /* R30: a <div role="button"> activates on NEITHER key natively, so this one listener carries both.
+     Enter needs no preventDefault - a div has no default action to cancel and raises no click of its
+     own, so there is no second toggle behind it; Space keeps its preventDefault, which is the thing
+     that stops the page scrolling. */
+  it.btn.addEventListener("keydown",function(e){
+    if(e.key==="Enter"||e.keyCode===13){toggle(it);return}
+    if(e.key===" "||e.key==="Spacebar"||e.keyCode===32){e.preventDefault();toggle(it)}
   });
 });
 window.addEventListener("beforeprint",function(){items.forEach(function(it){setOpen(it,true,false)})});
@@ -847,4 +1304,91 @@ function start(){if(!raf){t0=0;raf=requestAnimationFrame(frame)}}
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
 window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0;rest()});
 start();
+})();
+
+/* ============================================================================
+   7 · THE CONTENTS RAIL (2026-09-24, operator: "put a table of contents area to the left").
+   The body is a CMS Rich Text element, so its <h2>s carry no id and a contents list cannot be
+   authored per article. The Designer holds ONE .toc_link as the template; this pass reads the
+   body's <h2>s, gives each an id, and clones the template once per heading, so every article gets
+   its own list with no field to fill. In this preview the static list already matches the
+   specimen and the rebuild produces the same five rows.
+   STATE, NEVER CONTENT: the list renders without the script; the pass adds the anchors and marks
+   the heading being read, colour only, set INLINE (CLAUDE.md §4f — a runtime-only combo is pruned
+   by Webflow). Reduced motion: the jump is instant. Nothing rests at opacity 0. No-op on any page
+   without .toc_list.
+   ============================================================================ */
+(function(){
+if(window.__afissioContentsV1)return;window.__afissioContentsV1=1;
+var list=document.querySelector('.toc_list');if(!list)return;
+var nav=list.closest?list.closest('.toc_component'):null;
+var body=document.querySelector('.article_richtext');
+var heads=body?[].slice.call(body.querySelectorAll('h2')):[];
+if(!heads.length){if(nav)nav.style.display='none';return}
+var tpl=list.querySelector('.toc_link');if(!tpl)return;
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var used={};
+function slug(t){
+  var s=(t||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'section',k=s,n=2;
+  while(used[k]||document.getElementById(k)){k=s+'-'+(n++)}
+  used[k]=1;return k;
+}
+var links=[],frag=document.createDocumentFragment();
+heads.forEach(function(h,i){
+  if(!h.id)h.id=slug(h.textContent);
+  h.style.scrollMarginTop='7rem';
+  var a=tpl.cloneNode(true),txt=a.querySelector('.toc_text');
+  a.setAttribute('href','#'+h.id);a.removeAttribute('aria-current');
+  if(txt)txt.textContent=h.textContent;
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    var y=h.getBoundingClientRect().top+(window.pageYOffset||0)-112;
+    window.scrollTo({top:Math.max(0,y),behavior:reduce?'auto':'smooth'});
+    if(history.replaceState)history.replaceState(null,'','#'+h.id);
+  });
+  links.push(a);frag.appendChild(a);
+});
+while(list.firstChild)list.removeChild(list.firstChild);
+list.appendChild(frag);
+var cur=-2,tick=false;
+function paint(i){
+  if(i===cur)return;cur=i;
+  links.forEach(function(a,k){
+    var on=k===i;
+    a.style.color=on?'#EDEDED':'';
+    if(on)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');
+  });
+}
+function pass(){
+  tick=false;
+  var line=(window.innerHeight||0)*0.3,i=-1;
+  for(var k=0;k<heads.length;k++){if(heads[k].getBoundingClientRect().top-line<=0)i=k;else break}
+  if(body.getBoundingClientRect().bottom<line)i=-1;
+  paint(i);
+}
+function onScroll(){if(tick)return;tick=true;requestAnimationFrame(pass)}
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',onScroll);
+pass();
+})();
+
+/* ============================================================================
+   8 · IN-PAGE LINKS (operator 2026-09-24: Solutions' "Learn More" - "when clicked go to next section").
+   A link whose href is "#id" for an element on this page scrolls to it smoothly, stopping 0px under the
+   top: every section opens on its own padding, so the fixed bar never covers content. Reduced motion
+   jumps instantly. No-op for any hash with no target; the contents rail (section 7) keeps its own.
+   ============================================================================ */
+(function(){
+if(window.__afissioHashLinksV1)return;window.__afissioHashLinksV1=1;
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.addEventListener('click',function(e){
+  var a=e.target&&e.target.closest?e.target.closest('a[href^="#"]'):null;
+  if(!a||a.classList.contains('toc_link'))return;
+  var id=a.getAttribute('href').slice(1);if(!id)return;
+  var el=document.getElementById(id);if(!el)return;
+  e.preventDefault();
+  var y=el.getBoundingClientRect().top+(window.pageYOffset||0);
+  window.scrollTo({top:Math.max(0,y),behavior:reduce?'auto':'smooth'});
+  if(history.replaceState)history.replaceState(null,'','#'+id);
+});
 })();

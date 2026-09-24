@@ -1,0 +1,310 @@
+<!-- @dsCard group="Pages" name="Policy template (Privacy Policy)" subtitle="ONE template for /privacy-policy, /terms-of-use and /cookie-policy: a short header and a reading column built to hold one measure while iubenda injects the document into it. Two options per section, A then B, pending Phase D." viewport="1680x1050" -->
+<!-- @startingPoint section="Pages" subtitle="The policy template — the shell, the short interior header, and a container that reads correctly with unstyled h2/p/ul inside it. Seed any long document served by a third party from this." viewport="1680x1050" -->
+<!-- ROUND-TOKEN: R29-LITERAL (2026-09-22) — THE LITERAL ROUND. THIS ROUND CHANGES NO MARKUP ON THIS
+     PAGE: no section, string, class, id, attribute, comment or option block was touched. What changed
+     is the FORM of seven CSS declarations in client-first.css, so the deployer can turn every style
+     value into one literal per breakpoint (STRUCTURE.md §4e); three shipped, measured identical at
+     1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390, and four stay as written as manual Designer
+     steps. This comment is also the receipt for R28-READ-CAP's <head> edit, which R28 made on all 13
+     page files and stamped on none: the class layer's single <link> became ../client-first.css,
+     ../client-first-2.css and ../client-first-3.css, in that order, in the same position. -->
+<!-- ROUND-TOKEN: R27-WEBFLOW-ELEMENTS (2026-09-21) — THE ELEMENT ROUND. Nothing a visitor can see
+     changed on this page: no section, string, token, type rung, colour, spacing value, composition
+     or option pair was touched, and every change was proved identical by measurement before it
+     shipped. What changed is the ELEMENTS, so the deploy pipeline builds them instead of leaving
+     them as hand-work in the Designer. ON THIS PAGE: 1 `<canvas>` left the markup (WP1) · BOTH option blocks' policy containers stopped wearing `w-richtext` (WP5) — that class belongs to Webflow's Rich Text ELEMENT, and an iubenda embed is an Embed inside a Div Block, so the class would not exist on the built page and the preview was showing rich-text defaults the real page will not have. The container is a plain `<div class="article_richtext">` (reused, not renamed) and the marker is `<p class="article_marker">`, the round's one new class, holding the 1.5rem the retired `.w-richtext p` preview rule was giving it. Measured identical on both options, at 1440 and 390 · 1 footer href, /about -> /our-company (WP7).
+     The element contract is reference/WEBFLOW-ELEMENTS.md; STRUCTURE.md §4h points at it and
+     carries its four numbers. This page measures 0 · 0 · 0 · 0 on all four. -->
+<!-- ROUND-TOKEN: R26-CLOSE (2026-09-21). HALF B of the round that closes the site.
+     WHAT THIS PAGE IS: ONE TEMPLATE FOR THREE ROUTES — /privacy-policy (shown), /terms-of-use and
+     /cookie-policy. Three of the site's four remaining routes are the same artifact with a
+     different name and a different body, so this round builds the template once. THE SWAP IS FOUR
+     STRINGS AND NOTHING ELSE: the <title>, the meta description, the <h1>, and the #body marker.
+     If 2B wins Phase D the rail's label is a fifth occurrence of the same <h1> word, changed in
+     the same pass. No class, no rule, no id and no structure changes. (pages/legal/PHASE0.md §5.)
+     ⚠ THE BODY IS NOT OURS TO WRITE. docs/contract-brief.md: iubenda is the platform (Jerry
+     confirmed 2026-08-18) and "Legal sufficiency ... are Jerry's. Çağdaş does not draft or supply
+     that text." The design provides a CONTAINER and a reading treatment; the marker renders in it
+     meanwhile. A paraphrased policy sentence is a legal exposure, not a style problem, so there is
+     no specimen body, no lorem, no plausible-looking clause. CONTRACTOR-AUTHORED VISIBLE STRINGS: 0.
+     ⚠ NO LAST-UPDATED DATE, NO VERSION NUMBER, NO CONTACT LINE, NO TABLE OF CONTENTS. iubenda owns
+     the first three. A TOC would have to list headings we do not author, so it cannot be built
+     without authoring copy — §4 §2 rules it out on exactly that ground.
+     THE ONE TECHNICAL PROBLEM, AND ITS SHIP ROUTE. iubenda injects <h2>, <p> and <ul> at runtime;
+     CLAUDE.md §4a maps one CSS rule to one class, so OUR CLASSES CANNOT REACH THOSE NODES. The
+     mechanism that makes the page correct anyway is INHERITANCE: the class on the container sets
+     font-family, font-size, line-height and colour, and all four reach every injected paragraph
+     and list item with NO DESCENDANT SELECTOR EXISTING ANYWHERE (descendant selectors aimed at the
+     injected nodes: 0). What does not inherit — heading sizes and margins, list padding, figure
+     margins, link colour — is the SAME NINE NAMED MANUAL DESIGNER STEPS SYSTEM.md §R20 already
+     writes out, because the container wears the same class. Ship route for the type treatment:
+     iubenda's own styling options at Stage 3, or page-level custom code — the operator settles it;
+     this round does not need it settled, it needs it named.
+     THE HEADER IS SHORT ON PURPOSE. §2b: full-viewport is NOT used here. A reader who came to check
+     clause 7 should not scroll past a viewport of air to reach clause 1. At 1440×900, is-short
+     (56vh = 504px) puts the document's first line ~600px down — visible without a scroll. 1B goes
+     further and makes the header content-height, so the pair asks the operator the actual question.
+     §2c, HONESTLY ANSWERED: a legal page earns its keep by being READABLE, not by being inventive.
+     So 2A WEARS pages/insights-article.html's reading column WHOLE and says so — §8's tie-breaker
+     asks for exactly that, and a second solution to the long-measure problem is how a system starts
+     having two of everything. 2B differs on the one axis a policy can afford: where the reader
+     finds the document's NAME while they are 900px into clause 14.
+     NEW: THREE base classes and ONE combo, named for the DEVICE — longform_grid / longform_rail /
+     longform_body (a long document with a running head in the margin) and section_body is-clear.
+     Nothing is named policy_… or legal_…: the next long document on this site wears these.
+     ⚠ THE DISCLAIMER SHIPS HERE. docs/contract-brief.md requires the two-entity disclaimer on every
+     page and template WITHOUT EXCEPTION, Privacy Policy named. It is in the approved footer below,
+     verbatim, carried by the shell.
+     MOTION: NONE, and nothing added to the settle list. A policy page is one of the two surfaces on
+     this site where motion has nothing to say, and a reading column that stages itself is a
+     document withholding itself from someone who came to check a clause. CSS opacity:0 rests: 0.
+     ONLY THE A BLOCKS CARRY IDS: #hero (1A) · #body (2A). -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Privacy Policy</title>
+<meta name="description" content="[COPY REQUESTED — Privacy Policy meta description]">
+<link rel="stylesheet" href="../live/webflow-base.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="../client-first-2.css">
+<link rel="stylesheet" href="../client-first-3.css">
+<link rel="stylesheet" href="../preview-reset.css">
+<script src="../live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
+<script src="../preview-webflow-shim.js" defer></script>
+<script src="../homepage.js" defer></script>
+<script src="../interior.js" defer></script>
+<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
+</head>
+<body>
+<div class="page-wrapper">
+<!-- @component shell/navbar -->
+<div class="navbar_shell">
+<div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="280" data-easing="ease" data-easing2="ease">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
+<div class="navbar_container">
+<a href="../" class="navbar_logo-link w-nav-brand"><img src="../brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
+<nav class="navbar_menu w-nav-menu" id="navbar-menu">
+<div class="navbar_menu-inner">
+<div class="navbar_links">
+<a href="../our-approach/" class="navbar_link w-nav-link">Our Approach</a>
+<a href="../solutions/" class="navbar_link w-nav-link">Solutions</a>
+<a href="../areas-of-review/" class="navbar_link w-nav-link">Areas of Review</a>
+<a href="../industries/" class="navbar_link w-nav-link">Industries</a>
+<a href="../insights/" class="navbar_link w-nav-link">Insights</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<div class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about">
+<div class="navbar_dropdown-trigger"><p class="navbar_dropdown-label">About</p><div class="navbar_dropdown-caret"></div></div>
+</div>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="../our-company/" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
+<a href="../afissio-law/" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+</div>
+</nav>
+</div>
+</div>
+<div class="navbar_button-wrapper"><a href="../contact/" class="button is-nav">Contact</a></div>
+</div>
+</nav>
+<div class="navbar_menu-button w-nav-button" aria-label="menu">
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- /@component shell/navbar -->
+<main class="main-wrapper">
+
+<!-- OPTION 1A — stacked-statement · THE SHORT HEADER. R21's section_page-header is-short (56vh),
+     the built header construction and its wave field, with the page name as the H1 on the
+     container's own left rail.
+     NO LEAD PARAGRAPH — the deck has none for this page and one would be authored copy. NO TAGLINE
+     ROW EITHER: the only string this section has is the page name, and setting it twice (once as a
+     label, once as an H1) would be the same word competing with itself.
+     THE PAGE NAME IS THE FOOTER'S, EXACTLY: "Privacy Policy". No "Legal", no "Policies", no
+     invented sub-heading. The footer of every built page already links this string.
+     The one structural rule: THE DOCUMENT IS THE CONTENT — the header spends 56vh and no more. -->
+<section class="section_page-header is-short" id="hero" data-screen-label="01 · Header (1A)">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="hero-wave" aria-hidden="true">
+</div>
+<div class="padding-global is-layer">
+<div class="padding-section-medium is-hero">
+<div class="container-xlarge">
+<div class="page-header_grid">
+<div class="page-header_stack is-left">
+<div class="page-header_title-block is-left"><h1 class="heading-style-h1 is-reversed">Privacy Policy</h1></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 1A -->
+
+<!-- OPTION 1B — editorial-split · THE CONTENT-HEIGHT TITLE PAGE. R20 built section_article-head for
+     exactly this question and its own note in client-first.css says so: "deliberately NOT
+     section_page-header: that rule is min-height:100vh, and the question this option puts to the
+     operator is whether an article — read, not browsed — should spend a full viewport before its
+     first line." A policy is read, not browsed, harder than any article on this site.
+     So this header is as tall as its heading and its padding, and nothing else. The 14rem aside
+     track is EMPTY and that is the composition: the H1 sits on the document's own column axis, so
+     the page name and the first clause share one left edge. Zero new classes, and no field — a
+     reading page's ground is the page's own black (R20's note again).
+     The one structural rule: THE HEADER IS AS TALL AS ITS HEADING.
+     The pair's axes against 1A, four: density (a fixed 56vh against the height of one heading),
+     containment (a field-lit header band against an open two-track head), reading order (a stack
+     centred in a band against a rail and a stack) and focal (the H1 alone in its own screen
+     against the H1 read against the document below it). This block carries no id. -->
+<section class="section_article-head" data-screen-label="01 · Header (1B)">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-medium is-hero">
+<div class="container-xlarge">
+<div class="article-head_grid">
+<div class="article-head_aside"></div>
+<div class="article-head_stack">
+<h1 class="heading-style-h1 is-reversed">Privacy Policy</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 1B -->
+
+<!-- OPTION 2A — editorial-split · R20'S READING COLUMN, WORN WHOLE, AND ZERO NEW CLASSES. §8's
+     tie-breaker is explicit: when an existing composition and a new one both fit, prefer the one
+     pages/insights-article.html already proved for a long read — and say that you did. This does.
+     A POLICY IS THE SAME OBJECT AS AN ARTICLE BODY: a long document of headings, paragraphs and
+     lists that we do not author and cannot class. THE MEASURE WAS MEASURED TWICE on that page —
+     39rem set 55ch, under the floor; 46rem sets 64ch at every desktop width and 61ch at 768 — so
+     there is no max-width:100% release at ≤991 and the rem cap holds at every width.
+     NO CARD, NO PANEL, NO BOXED DOCUMENT. A legal page inside a raised card reads as a widget; this
+     is the page's main content, on the page's own ground (§4 §2).
+     THE CONTAINER IS STYLED AND THE INJECTED NODES ARE NOT. It is a plain classed Div Block, NOT a
+     w-richtext (R27: an iubenda embed is an Embed inside a Div Block, and w-richtext is Webflow own
+     class for its Rich Text ELEMENT - the preview was showing rich-text defaults the built page will
+     not have). article_richtext carries font-family,
+     font-size, line-height and colour, and all four INHERIT into every <h2>, <p> and <ul> iubenda
+     injects. The page reads correctly with browser defaults inside it and nothing can overflow: the
+     46rem cap sits inside a capped container with min-width:0 on the track that holds it.
+     THE SECTION IS TRANSPARENT (section_body is-clear) for the reason six other sections are
+     (R28): the header's field layer is bottom:-30vh and an opaque later sibling paints over the
+     tail and reinstates the hard line at the seam. section_body's base rule is worn by
+     pages/insights-article.html and is frozen, so the transparency arrives as a combo.
+     The one structural rule: ONE MEASURE, HELD FROM 1680 TO 390. -->
+<section class="section_body is-clear" id="body" data-screen-label="02 · Body (2A)">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-medium">
+<div class="container-xlarge">
+<div class="article_column">
+<div class="article_richtext"><p class="article_marker">[COPY REQUESTED — Privacy Policy body (iubenda-served)]</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 2A -->
+
+<!-- OPTION 2B — marginal-notes · THE RUNNING HEAD. The same 46rem column and the same container
+     class, with a 14rem STICKY margin rail beside it carrying the document's name — so a reader
+     900px into clause 14 can still see which of the three policies they are in without scrolling
+     back. §4 §2 permits a rail only if it can be populated without authoring copy: this one is
+     populated by the page name, a string that is already on the page and already in the footer of
+     every built page. Nothing is written to feed it.
+     NOT A TABLE OF CONTENTS. A TOC would have to list headings iubenda generates and we never see,
+     which is the one thing §4 §2 rules out by name.
+     THE RAIL COSTS THE COLUMN NOTHING at 992 and above: 14rem + a 5rem gap + 46rem is 60rem
+     (960px) and the 992 container is 893px, so the column takes what is left and the 46rem cap
+     still governs above 1200. At ≤991 the rail un-sticks and sits above the column as a plain
+     label, and the document takes the full container.
+     Named for the device: any future long document — a terms page, a disclosure, a report — wears
+     longform_*. Nothing here is policy_… or legal_….
+     The one structural rule: ONE MEASURE, HELD; THE RAIL CARRIES NO SECOND MEASURE.
+     The pair's axes against 2A, five: axis (one column against two tracks), containment (an open
+     column against a column with a margin), reading order (straight into the document against name
+     then document), density (one element in the container against two) and focal (the measure
+     itself against the sticky head). This block carries no id. -->
+<section class="section_body is-clear" data-screen-label="02 · Body (2B)">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-medium">
+<div class="container-xlarge">
+<div class="longform_grid">
+<div class="longform_rail"><p class="text-label">Privacy Policy</p></div>
+<div class="longform_body">
+<div class="article_column">
+<div class="article_richtext"><p class="article_marker">[COPY REQUESTED — Privacy Policy body (iubenda-served)]</p></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 2B -->
+
+</main>
+
+<!-- @component shell/footer -->
+<footer class="footer_component is-ink-soft" id="footer">
+<div class="padding-global is-bar">
+<div class="padding-section-small is-no-top">
+<div class="container-xlarge is-bar">
+<div class="footer_ledger">
+<div class="footer_cell is-brand">
+<img src="../brand/logo/afissio-icon-orange.png" alt="" class="footer_mark">
+<p class="footer_tagline">Deal engineering before the due diligence begins.</p>
+</div>
+<div class="footer_cell is-nav">
+<nav role="navigation" class="footer_index">
+<a href="../" class="footer_index-link"><p class="footer_index-name">Home</p></a>
+<a href="../our-approach/" class="footer_index-link"><p class="footer_index-name">Our Approach</p></a>
+<a href="../solutions/" class="footer_index-link"><p class="footer_index-name">Solutions</p></a>
+<a href="../areas-of-review/" class="footer_index-link"><p class="footer_index-name">Areas of Review</p></a>
+<a href="../industries/" class="footer_index-link"><p class="footer_index-name">Industries</p></a>
+<a href="../afissio-law/" class="footer_index-link"><p class="footer_index-name">Afissio Law</p></a>
+<a href="../insights/" class="footer_index-link"><p class="footer_index-name">Insights</p></a>
+<a href="../our-company/" class="footer_index-link"><p class="footer_index-name">About</p></a>
+<a href="../contact/" class="footer_index-link"><p class="footer_index-name">Contact</p></a>
+</nav>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282, USA</p>
+<a href="mailto:info@afissio.com" class="footer_entity-link">info@afissio.com</a>
+</div>
+</div>
+</div>
+<div class="footer_rule is-bar"></div>
+<div class="footer_cell">
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<div class="footer_legal-row">
+<a href="../privacy-policy/" class="footer_legal-link">Privacy Policy</a>
+<a href="../privacy-policy/" class="footer_legal-link">Terms of Use</a>
+<a href="../privacy-policy/" class="footer_legal-link">Cookie Policy</a>
+<p class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- /@component shell/footer -->
+</div>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!-- @dsCard group="Pages" name="Contact" subtitle="The contact page and its intake form — the page every Start the Conversation leads to. Two options per section, A then B, pending Phase D." viewport="1680x1050" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled Contact page — the shell, the interior header, the native Webflow intake form and the Afissio address block. Seed any page carrying a form from this." viewport="1680x1050" -->
+<!-- ROUND-TOKEN: R29-LITERAL (2026-09-22) — THE LITERAL ROUND. THIS ROUND CHANGES NO MARKUP ON THIS
+     PAGE: no section, string, class, id, attribute, comment or option block was touched. What changed
+     is the FORM of seven CSS declarations in client-first.css, so the deployer can turn every style
+     value into one literal per breakpoint (STRUCTURE.md §4e); three shipped, measured identical at
+     1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390, and four stay as written as manual Designer
+     steps. This comment is also the receipt for R28-READ-CAP's <head> edit, which R28 made on all 13
+     page files and stamped on none: the class layer's single <link> became ../client-first.css,
+     ../client-first-2.css and ../client-first-3.css, in that order, in the same position. -->
+<!-- ROUND-TOKEN: R27-WEBFLOW-ELEMENTS (2026-09-21) — THE ELEMENT ROUND. Nothing a visitor can see
+     changed on this page: no section, string, token, type rung, colour, spacing value, composition
+     or option pair was touched, and every change was proved identical by measurement before it
+     shipped. What changed is the ELEMENTS, so the deploy pipeline builds them instead of leaving
+     them as hand-work in the Designer. ON THIS PAGE: 2 `<canvas>` left the markup (WP1, the canvas is created by pages/interior.js §2) · 1 footer href, /about -> /our-company (WP7). The native form block is untouched.
+     The element contract is reference/WEBFLOW-ELEMENTS.md; STRUCTURE.md §4h points at it and
+     carries its four numbers. This page measures 0 · 0 · 0 · 0 on all four. -->
+<!-- ROUND-TOKEN: R21-CONTACT (2026-09-19).
+     WHAT THIS PAGE IS: /contact, where "Start the Conversation" leads from every page. Its one
+     job is to be frictionless: the reader has usually met Jerry already, so the form is in reach
+     at once, short to read, and certain in what it asks.
+     COPY: every string is client copy, verbatim from pages/contact/contact-copy.md (extracted by
+     script from page 09 of his mockup). CONTRACTOR-AUTHORED VISIBLE STRINGS: 0. No placeholder
+     text inside a field, no "(required)" mark, no validation wording, no section tagline and no
+     section description — the client has written none of those and Addendum No. 1 section 3 says
+     the contractor authors none. Seven strings the design needs and the deck lacks render as
+     [COPY REQUESTED - ...] and are logged in pages/contact/PHASE0.md section 3.
+     NO REVIEW LABELS. The `review_label is-review` scaffolding was deleted from client-first.css
+     at R16's Phase D and is not coming back: a review label is contractor-authored VISIBLE text,
+     which this project forbids. The option blocks are marked with HTML comments alone, as
+     pages/insights.html and pages/insights-article.html mark theirs.
+     TWO OPTIONS PER SECTION, A then B, inside this page. Only the A blocks carry ids - #hero on
+     1A, #form on 2A's wrapper inside it, #office on 3A. #contact is never used: pages/homepage.js
+     settles #contact and a shared id would be settled twice.
+     WHY 2A IS NESTED INSIDE 1A. The brief's section 4 defines option A as "the form in the
+     header's second track", so section 1 and section 2 are one decision on this page and the
+     markers say so: deleting 1A at Phase D takes 2A with it, deleting 1B takes 2B. The form is
+     authored ONCE per composition - duplicating it so the pairs could be picked apart would
+     duplicate every for/id pair and break label binding.
+     THE HEADER HEIGHT, and the one brief line that could not hold as written. Section 4 asks for
+     a full-viewport header AND for option B to start the form inside the first screen; at
+     1440x900 those are mutually exclusive. 1A keeps the full 100vh and puts the form in the
+     second track, so both are in one screen. 1B keeps the CONSTRUCTION (R19's masthead, every
+     class already in the system) and gives up the height - `section_page-header is-short`, 56vh.
+     Stated here rather than substituted quietly.
+     #booking IS NOT BUILT - SKIP, recorded in pages/contact/SECTION-PLAN.md with both considered
+     options and the reason in PHASE0.md section 5: its only content would be
+     [COPY REQUESTED - booking link label] pointing at nothing, the Cal.com link agreed on
+     2026-08-26 does not exist yet, and a second door placed after the page's one committed moment
+     either competes with it or reads as an afterthought. One line to add when the label and the
+     URL arrive.
+     REUSED VERBATIM: the navbar shell (native Navbar + its one native Dropdown) and the post-R15
+     footer, byte for byte from pages/our-approach.html; the skeleton, the seams, the type rungs,
+     the one button construction, the interior header and R19's masthead combo, and the header
+     field (hero-wave + its canvas, painted by pages/interior.js section 2 - which takes
+     querySelectorAll, so both headers on this options page paint).
+     NEW, named for what they are and never for this page: form_* (the native Webflow Form Block,
+     dressed) and office_* (an entity address block, which the Afissio Law page reuses for its own
+     entity), plus page-header_sub-block - this deck is the first to give a page a SUB as well as
+     a lead. All appended to the root client-first.css ADDITIVELY.
+     THE FORM IS A NATIVE WEBFLOW FORM BLOCK, built exactly as one: div.w-form > form > classed
+     field wrappers > label(for) + input.w-input / select.w-select / textarea.w-input, the submit
+     an input[type=submit] carrying `button is-reversed w-button`, and Webflow's own w-form-done
+     and w-form-fail blocks. It needs no script: Webflow handles sending and its states. The route
+     to HubSpot is settled at Stage 3.
+     THE PREVIEW HAS NO WEBFLOW FORM DEFAULTS. live/webflow-base.css was copied from a live page
+     with no form on it, so it carries no w-form / w-input / w-select / w-button rule at all,
+     while the published site carries all of them. Every property those defaults would set is
+     therefore declared explicitly on our own classes - see the R21 header in client-first.css.
+     One visible consequence here: both state blocks render, because nothing sets display:none on
+     them in this preview. Deliberate, and the same precedent as R19's w-dyn-empty - it is how a
+     reviewer reads a string that is otherwise invisible.
+     MOTION: none new. The header field, the settle and the rule sweeps run from the shared
+     scripts, all three returning before anything is touched under reduced motion. THE FORM NEVER
+     WAITS ON MOTION - no form_* or office_* selector is in interior.js's settle list and none was
+     added, so every field is usable and fully opaque on first paint. CSS opacity:0 rests: 0. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Contact</title>
+<meta name="description" content="[COPY REQUESTED — Contact meta description]">
+<link rel="stylesheet" href="../live/webflow-base.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="../client-first-2.css">
+<link rel="stylesheet" href="../client-first-3.css">
+<link rel="stylesheet" href="../preview-reset.css">
+<script src="../live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
+<script src="../preview-webflow-shim.js" defer></script>
+<script src="../homepage.js" defer></script>
+<script src="../interior.js" defer></script>
+<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
+</head>
+<body>
+<div class="page-wrapper">
+<!-- @component shell/navbar -->
+<div class="navbar_shell">
+<div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="280" data-easing="ease" data-easing2="ease">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
+<div class="navbar_container">
+<a href="../" class="navbar_logo-link w-nav-brand"><img src="../brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
+<nav class="navbar_menu w-nav-menu" id="navbar-menu">
+<div class="navbar_menu-inner">
+<div class="navbar_links">
+<a href="../our-approach/" class="navbar_link w-nav-link">Our Approach</a>
+<a href="../solutions/" class="navbar_link w-nav-link">Solutions</a>
+<a href="../areas-of-review/" class="navbar_link w-nav-link">Areas of Review</a>
+<a href="../industries/" class="navbar_link w-nav-link">Industries</a>
+<a href="../insights/" class="navbar_link w-nav-link">Insights</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<div class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about">
+<div class="navbar_dropdown-trigger"><p class="navbar_dropdown-label">About</p><div class="navbar_dropdown-caret"></div></div>
+</div>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="../our-company/" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
+<a href="../afissio-law/" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+</div>
+</nav>
+</div>
+</div>
+<div class="navbar_button-wrapper"><a href="../contact/" class="button is-nav">Contact</a></div>
+</div>
+</nav>
+<div class="navbar_menu-button w-nav-button" aria-label="menu">
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- /@component shell/navbar -->
+<main class="main-wrapper">
+
+<!-- OPTION 1A — editorial-split header: the type stack left, the intake sheet riding in the
+     header's second track, one 100vh screen carrying both. The H1 is the largest text on the
+     page and the only display figure — there is no H2 anywhere on this page, because the client
+     has written no section headings and the contractor may not. "Start the conversation." IS the
+     form's heading, which is why the form sits beside it. No button row: the form's own submit
+     is the page's action (BUILD-BRIEF §4 §1). -->
+<section class="section_page-header" id="hero">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="hero-wave" aria-hidden="true">
+</div>
+<div class="padding-global is-layer">
+<div class="padding-section-medium is-hero">
+<div class="container-xlarge">
+<div class="page-header_grid is-intake">
+<div class="page-header_stack is-left">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Contact</p></div>
+<div class="page-header_title-block is-left"><h1 class="heading-style-h1 is-reversed">Start the conversation.</h1></div>
+<div class="page-header_lead-block is-left"><p class="text-lead is-reversed">Tell us about your company, the transaction you are preparing for, and where you believe diligence friction may exist.</p></div>
+<div class="page-header_sub-block"><p class="text-size-regular">We will begin by understanding your timeline, priorities, and current state of readiness.</p></div>
+<!-- Afissio's own details only (operator 2026-09-24), the same strings as the footer's entity cell. -->
+<div class="contact_details">
+<div class="contact_item is-static">
+<div class="contact_well"><img src="../brand/icons/contact-location.svg" alt="" class="contact_icon"></div>
+<div class="contact_text"><p class="contact_name">Afissio LLC</p><p class="contact_value is-soft">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282, USA</p></div>
+</div>
+<a href="mailto:info@afissio.com" class="contact_item">
+<div class="contact_well"><img src="../brand/icons/contact-email.svg" alt="" class="contact_icon"></div>
+<p class="contact_value">info@afissio.com</p>
+</a>
+</div>
+</div>
+<!-- OPTION 2A — the bracketed intake panel. His own device (reference/MOCKUP-DEVICES.md): the
+     house panel with 16px / 2px orange diagonal brackets on the top-left and bottom-right corners
+     only. Pairs where the mockup pairs them — Name/Company, Title/Email — Phone alone on its own
+     row as in his file, both selects and the message at full width, and the submit filling the
+     panel. THE PAGE'S COMMITTED MOMENT: the only raised surface, the only saturated colour and
+     the only filled button on the page. -->
+<div class="form_panel" id="form">
+<div class="form_block w-form">
+<form class="form_form" id="contact-form-a" name="contact-form-a" data-name="Contact" method="get">
+<!-- CONTRACT §2: the Notice at Collection belongs here, above the first label. Removed from the design on operator instruction 2026-09-24 until the client supplies its wording; it must return before launch. -->
+<div class="form_grid">
+<div class="form_field"><label for="a-name" class="form_label">Name</label><input type="text" class="form_input w-input" id="a-name" name="name" data-name="Name" autocomplete="name"></div>
+<div class="form_field"><label for="a-company" class="form_label">Company</label><input type="text" class="form_input w-input" id="a-company" name="company" data-name="Company" autocomplete="organization"></div>
+<div class="form_field"><label for="a-title" class="form_label">Title</label><input type="text" class="form_input w-input" id="a-title" name="title" data-name="Title" autocomplete="organization-title"></div>
+<div class="form_field"><label for="a-email" class="form_label">Email</label><input type="email" class="form_input w-input" id="a-email" name="email" data-name="Email" autocomplete="email"></div>
+<div class="form_field is-wide"><label for="a-phone" class="form_label">Phone</label><input type="tel" class="form_input w-input" id="a-phone" name="phone" data-name="Phone" autocomplete="tel"></div>
+<div class="form_field"><label for="a-transaction" class="form_label">Anticipated transaction</label><select class="form_select w-select" id="a-transaction" name="anticipated-transaction" data-name="Anticipated transaction"><option value="">Select</option><option value="Financing">Financing</option><option value="Acquisition">Acquisition</option><option value="Strategic partnership">Strategic partnership</option><option value="Recapitalization">Recapitalization</option><option value="Institutional investment">Institutional investment</option><option value="Other">Other</option></select><div class="form_caret" aria-hidden="true"></div></div>
+<div class="form_field"><label for="a-timeline" class="form_label">Expected timeline</label><select class="form_select w-select" id="a-timeline" name="expected-timeline" data-name="Expected timeline"><option value="">Select</option><option value="Less than 6 months">Less than 6 months</option><option value="6–12 months">6–12 months</option><option value="12–24 months">12–24 months</option><option value="24–36 months">24–36 months</option><option value="Exploratory">Exploratory</option></select><div class="form_caret" aria-hidden="true"></div></div>
+<div class="form_field is-wide"><label for="a-message" class="form_label">How can we help?</label><textarea class="form_message w-input" id="a-message" name="message" data-name="Message"></textarea></div>
+</div>
+<!-- the no-attorney-client notice, ADJACENT to the submit — Addendum §3. One column, so the
+     notice sits directly on top of the button and the button stretches to the panel's width
+     without a third class on it. -->
+<div class="form_foot">
+<!-- CONTRACT: the no-attorney-client-relationship notice belongs here, adjacent to the submit. Removed on operator instruction 2026-09-24 until the client supplies it; it must return before launch. -->
+<input type="submit" class="button is-paper w-button" value="Submit Form">
+</div>
+</form>
+<div class="form_state w-form-done" role="region" aria-live="polite"><p class="form_state-text">[COPY REQUESTED — form success message]</p></div>
+<div class="form_state is-fail w-form-fail" role="region" aria-live="polite"><p class="form_state-text">[COPY REQUESTED — form error message]</p></div>
+</div>
+</div>
+<!-- /OPTION 2A -->
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 1A -->
+
+
+
+
+
+</main>
+
+<!-- @component shell/footer -->
+<footer class="footer_component is-ink-soft" id="footer">
+<div class="padding-global is-bar">
+<div class="padding-section-small is-no-top">
+<div class="container-xlarge is-bar">
+<div class="footer_ledger">
+<div class="footer_cell is-brand">
+<img src="../brand/logo/afissio-icon-orange.png" alt="" class="footer_mark">
+<p class="footer_tagline">Deal engineering before the due diligence begins.</p>
+</div>
+<div class="footer_cell is-nav">
+<nav role="navigation" class="footer_index">
+<a href="../" class="footer_index-link"><p class="footer_index-name">Home</p></a>
+<a href="../our-approach/" class="footer_index-link"><p class="footer_index-name">Our Approach</p></a>
+<a href="../solutions/" class="footer_index-link"><p class="footer_index-name">Solutions</p></a>
+<a href="../areas-of-review/" class="footer_index-link"><p class="footer_index-name">Areas of Review</p></a>
+<a href="../industries/" class="footer_index-link"><p class="footer_index-name">Industries</p></a>
+<a href="../afissio-law/" class="footer_index-link"><p class="footer_index-name">Afissio Law</p></a>
+<a href="../insights/" class="footer_index-link"><p class="footer_index-name">Insights</p></a>
+<a href="../our-company/" class="footer_index-link"><p class="footer_index-name">About</p></a>
+<a href="../contact/" class="footer_index-link"><p class="footer_index-name">Contact</p></a>
+</nav>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282, USA</p>
+<a href="mailto:info@afissio.com" class="footer_entity-link">info@afissio.com</a>
+</div>
+</div>
+</div>
+<div class="footer_rule is-bar"></div>
+<div class="footer_cell">
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<div class="footer_legal-row">
+<a href="../privacy-policy/" class="footer_legal-link">Privacy Policy</a>
+<a href="../privacy-policy/" class="footer_legal-link">Terms of Use</a>
+<a href="../privacy-policy/" class="footer_legal-link">Cookie Policy</a>
+<p class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- /@component shell/footer -->
+</div>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!-- @dsCard group="Pages" name="Afissio Law" subtitle="Where legal work enters the Afissio process, and where it stops — redesigned from the About page (2026-09-24): the interior header, the supporting role as one bold-phrased lede, the two entities as an equal pair of bracketed square plates (Afissio's computing lattice, Afissio Law's drafting lines), and the office as the bracketed close box." viewport="1680x1050" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled Afissio Law page — the shell, the interior header, a one-paragraph Rich Text lede, the equal-pair device (two bracketed square plates with a live field each, names and sentences beneath) and the bracketed close box. Seed any page that must show two things as equal and separate from this." viewport="1680x1050" -->
+<!-- 2026-09-24 (operator: "redesign this page completely by getting inspired by the About page").
+     ONE composition per section — the A/B pairs are retired, as About's were. 01 hero = About's
+     header with the page's own CTA · 02 role = About #why's tagged lede · 03 separation = About
+     #people's pair, with a live field in each square plate · 04 office = About's bracketed close.
+     New: two combos on the plate and pair (initial_plate is-field, divide_pair is-plates,
+     divide_panel is-plate), two leaves (divide_frame, divide_text), one field host (draft-field,
+     pages/interior.js §3c) and one lattice flag (compute-field is-full). CONTRACTOR STRINGS: 0. -->
+<!-- ROUND-TOKEN: R29-LITERAL (2026-09-22) — THE LITERAL ROUND. THIS ROUND CHANGES NO MARKUP ON THIS
+     PAGE: no section, string, class, id, attribute, comment or option block was touched. What changed
+     is the FORM of seven CSS declarations in client-first.css, so the deployer can turn every style
+     value into one literal per breakpoint (STRUCTURE.md §4e); three shipped, measured identical at
+     1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390, and four stay as written as manual Designer
+     steps. This comment is also the receipt for R28-READ-CAP's <head> edit, which R28 made on all 13
+     page files and stamped on none: the class layer's single <link> became ../client-first.css,
+     ../client-first-2.css and ../client-first-3.css, in that order, in the same position. -->
+<!-- ROUND-TOKEN: R27-WEBFLOW-ELEMENTS (2026-09-21) — THE ELEMENT ROUND. Nothing a visitor can see
+     changed on this page: no section, string, token, type rung, colour, spacing value, composition
+     or option pair was touched, and every change was proved identical by measurement before it
+     shipped. What changed is the ELEMENTS, so the deploy pipeline builds them instead of leaving
+     them as hand-work in the Designer. ON THIS PAGE: 2 `<canvas>` left the markup (WP1, the canvas is created by pages/interior.js §2) · 1 footer href, /about -> /our-company (WP7).
+     The element contract is reference/WEBFLOW-ELEMENTS.md; STRUCTURE.md §4h points at it and
+     carries its four numbers. This page measures 0 · 0 · 0 · 0 on all four. -->
+<!-- ROUND-TOKEN: R25-LAW (2026-09-20).
+     WHAT THIS PAGE IS: /afissio-law, page 06 — the page that says when a finding needs a lawyer
+     and, with equal weight, THAT THE TWO FIRMS ARE SEPARATE. Counsel reads this one hardest of
+     all: they are checking the boundary, not the offer. A regulator would read it first.
+     COPY: every string is client copy, verbatim from pages/afissio-law/afissio-law-copy.md,
+     extracted by script from page 06 of his mockup. CONTRACTOR-AUTHORED VISIBLE STRINGS: 0.
+     PROPOSED STRINGS: 0 — this page allows none, and it is the page where an invented sentence
+     would be a legal problem rather than a style problem. Five strings the design needs and the
+     deck lacks render as [COPY REQUESTED — ...] and are logged in pages/afissio-law/PHASE0.md §4.
+     ⚠ THE BUTTON ON THIS PAGE READS "Discuss Legal Implementation", NOT "Start the Conversation"
+     and NOT "Schedule a Consultation". It is the client's own string for page 06, it ships
+     verbatim, once, and it links to /contact. The site carries THREE CTA strings because he wrote
+     three; reconciling them is the client's call (Addendum §3) and it is reported, never resolved.
+     ⚠ THE ATTORNEY IS NOT NAMED YET. docs/contract-brief.md lists "Attorney identification on the
+     Afissio Law page (name supplied by Jerry)" as an outstanding obligation, so the design carries
+     a REAL PLACE for it: in 3A the slot is the pair's own third column, its left edge aligned to
+     the Afissio Law LLC panel's left edge; in 3B it is the last line of the Afissio Law column.
+     Body rung in both, sized as the name will be. §8's tie-breaker put it with the panels rather
+     than with the address, because it identifies an entity and not an office.
+     ⚠ THE TWO ENTITIES ARE NEVER MERGED (docs/contract-brief.md). This page carries AFISSIO LAW
+     LLC'S address (Tempe, Arizona) and nothing else; the Santa Monica address appears ZERO times.
+     No "our offices" block, no reuse of Contact's values, no combined contact block, no
+     "Afissio & Afissio Law" lockup, and NO APEX MARK ANYWHERE INSIDE #separation — the apex is
+     Afissio's mark, and putting it on the Afissio Law LLC panel would merge the two marks at
+     exactly the moment the page says they are separate. Motif count on this page: 2 (the hero
+     tagline and the office tagline), against a budget of 6.
+     THE ROUND'S STANDING INSTRUCTION (operator, in force since R23): "let Claude Design try
+     different layouts from now on." The SYSTEM is frozen — no new token, type rung, section
+     padding, container, radius, button or breakpoint enters here. The COMPOSITION is open, and
+     novelty is the tie-breaker. So the thirteen list shapes the eight built pages already spend
+     were listed first (PHASE0 §3), and NOT ONE OF THEM IS TWO EQUAL THINGS: every one either
+     gives each item its own container or makes the set the unit, and both readings are wrong here
+     — a container per firm that differs in any way makes one firm primary, and a set that reads
+     as one object merges them.
+     SO §3 IS THE SHAPE THIS SITE HAS NEVER BUILT, twice over. 3A is his own device advanced: two
+     SEPARATE, identically-built panels with a genuine gap and a PERFORATED RULE standing in the
+     gap. 3B is not a card at all: two equal type columns on the page's own black, opened and
+     closed by one shared hairline each and separated by ONE solid vertical rule drawn through the
+     page. Neither is a shared container that reads as one block.
+     THE SEPARATION RULE IS #8E8E8E, AND THAT IS A CONTRAST DECISION, NOT A TASTE ONE. It is the
+     one non-text element on this page that carries meaning, so WCAG 1.4.11's 3:1 applies: the
+     site's hairline vocabulary measures 1.29:1 (#242424) and 2.09:1 (#454545) on the panel ground,
+     while --text-muted-ink measures 6.28:1 on #000000 and 6.11:1 on #080808. An existing token in
+     exactly the role R21 already gave it on the form's field edge. No new colour.
+     §2 IS SINGLE-AXIS IN BOTH OPTIONS, DELIBERATELY: §3 is two columns, and no two adjacent
+     sections may share a composition. 2A marks the turn with a rule, 2B with a step.
+     TWO OPTIONS PER SECTION, A then B, inside this page, marked with HTML comments alone — the
+     review-label scaffolding was deleted at R16's Phase D and is not coming back, a review label
+     being contractor-authored VISIBLE text.
+     ONLY THE A BLOCKS CARRY IDS: #hero (1A) · #role (2A) · #separation (3A) · #office (4A).
+     REUSED VERBATIM: the navbar shell (native Navbar + its one native Dropdown) and the post-R15
+     footer, byte for byte from pages/industries.html, with no current-page state set; the
+     skeleton and its declared four-div nest, the seams, the type rungs, the one button
+     construction, button-row, the interior header and R19's masthead combo, the header field
+     (hero-wave + its canvas, painted by pages/interior.js §2, which takes querySelectorAll so both
+     headers on this options page paint), close_foot, section_office AND THE WHOLE office_* FAMILY
+     — R21 built it for Contact and named it generically because "the Afissio Law page reuses it
+     for its own entity". It does. §4 ADDS ZERO CLASSES.
+     NEW: TWO families and ONE combo pair, all APPENDED to the root client-first.css, named for
+     the DEVICE and never for this page — passage_* (a reading passage at two rungs and the two
+     ways to mark the turn between them) and divide_* (TWO EQUAL NAMED THINGS AND THE RULE BETWEEN
+     THEM; About's two-entity block wants exactly this object, which is why nothing here is
+     law_...), plus close_foot is-spaced.
+     NOT TAKEN FROM HIS PAGE 06, each with its replacement: his solid-orange button (the buttons
+     are frozen) · his mono face (one typeface only) · #6B6B6B (3.9:1 on black) · his 1280px print
+     pixels · his footer (still the OLD entity wording) · a shared container around the two panels
+     (it reads as one block, which is the one thing this section exists not to be).
+     MOTION: NONE NEW, on any section — §5 names that as the expected answer for #separation and
+     §8's tie-breaker settles the rest. What runs is what runs on every interior page: the header
+     wave field and the settle (interior.js) and the rule sweeps (homepage.js), all three returning
+     before touching anything under reduced motion. EIGHT selectors added to the settle list, and
+     one of them is a design decision: .divide_pair and .divide_open are the HOSTS, not the two
+     panels, so both entities arrive in the same frame — a 130ms stagger between the two firms
+     would be a boundary narrating itself as a transition from one to the other. None of the eight
+     matches an element on any of the eight pages built before this one. CSS opacity:0 rests: 0. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Afissio Law</title>
+<meta name="description" content="[COPY REQUESTED — Afissio Law meta description]">
+<link rel="stylesheet" href="../live/webflow-base.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="../client-first-2.css">
+<link rel="stylesheet" href="../client-first-3.css">
+<link rel="stylesheet" href="../preview-reset.css">
+<script src="../live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
+<script src="../preview-webflow-shim.js" defer></script>
+<script src="../homepage.js" defer></script>
+<script src="../interior.js" defer></script>
+<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
+</head>
+<body>
+<div class="page-wrapper">
+<!-- @component shell/navbar -->
+<div class="navbar_shell">
+<div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="280" data-easing="ease" data-easing2="ease">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
+<div class="navbar_container">
+<a href="../" class="navbar_logo-link w-nav-brand"><img src="../brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
+<nav class="navbar_menu w-nav-menu" id="navbar-menu">
+<div class="navbar_menu-inner">
+<div class="navbar_links">
+<a href="../our-approach/" class="navbar_link w-nav-link">Our Approach</a>
+<a href="../solutions/" class="navbar_link w-nav-link">Solutions</a>
+<a href="../areas-of-review/" class="navbar_link w-nav-link">Areas of Review</a>
+<a href="../industries/" class="navbar_link w-nav-link">Industries</a>
+<a href="../insights/" class="navbar_link w-nav-link">Insights</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<div class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about">
+<div class="navbar_dropdown-trigger"><p class="navbar_dropdown-label">About</p><div class="navbar_dropdown-caret"></div></div>
+</div>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="../our-company/" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
+<a href="../afissio-law/" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+</div>
+</nav>
+</div>
+</div>
+<div class="navbar_button-wrapper"><a href="../contact/" class="button is-nav">Contact</a></div>
+</div>
+</nav>
+<div class="navbar_menu-button w-nav-button" aria-label="menu">
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- /@component shell/navbar -->
+<main class="main-wrapper">
+<!-- 01 · HERO — the interior header exactly as About wears it: tagline → H1 → lead → the page's
+     own CTA (his string) beside Learn More. -->
+<section class="section_page-header" id="hero" data-screen-label="01 · Hero">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="hero-wave" aria-hidden="true">
+</div>
+<div class="padding-global is-layer">
+<div class="padding-section-medium is-hero">
+<div class="container-xlarge">
+<div class="page-header_grid">
+<div class="page-header_stack is-left">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Afissio Law</p></div>
+<div class="page-header_title-block is-left"><h1 class="heading-style-h1 is-reversed">Legal implementation when remediation requires legal work.</h1></div>
+<div class="page-header_lead-block is-left"><p class="text-lead is-reversed">Afissio identifies and prioritizes transaction-readiness issues. Afissio Law implements legal solutions when remediation requires legal services.</p></div>
+<div class="button-row"><a href="../contact/" class="button is-reversed">Discuss Legal Implementation</a><a href="#role" class="button is-ghost-reversed">Learn More</a></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 02 · ROLE — About #why's construction: the H2 as the tagline, the client's two paragraphs as ONE
+     homepage lede (Rich Text), his own phrases in bold: what most findings need, and what Afissio Law
+     is for. Every word is his, in his order. -->
+<section class="section_passage" id="role" data-screen-label="02 · Role">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-small">
+<div class="container-xlarge">
+<div class="intro_stack is-tagged"><div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><h2 class="text-label">A supporting role in the Afissio process</h2></div><div class="intro_lede w-richtext"><p>Some findings can be resolved through <strong>organization, documentation, operational action, or coordination</strong> with the company's existing advisors. Others require legal work. <strong>Afissio Law is available for that legal implementation</strong> when appropriate.</p></div></div>
+</div>
+</div>
+</div>
+</section>
+<!-- 03 · SEPARATION — THE PAGE'S COMMITTED MOMENT, built as About's pair: two equal columns in one
+     86rem frame, each opening on a SQUARE PLATE under the client's corner brackets, the entity's
+     name and sentence beneath. The plates are equal in everything but what they draw: Afissio's
+     COMPUTES (the site's analysis lattice, compute-field is-full) and Afissio Law's DRAFTS (ruled
+     lines written one by one, draft-field) — identify, then implement. The gap between them is the
+     separation; nothing crosses it. No rule under this section, as About's #people. -->
+<section class="section_divide" id="separation" data-screen-label="03 · Separation">
+<div class="padding-global">
+<div class="padding-section-large is-short-bottom">
+<div class="container-xlarge">
+<div class="divide_frame">
+<div class="divide_head"><h2 class="heading-style-h2">Clear separation of services</h2></div>
+<div class="divide_pair is-plates">
+<div class="divide_panel is-plate">
+<div class="initial_plate is-field"><div class="compute-field is-full" aria-hidden="true"></div></div>
+<div class="divide_text"><h3 class="heading-style-h3">Afissio</h3><p class="text-lead is-reversed">Afissio provides non-legal transaction-readiness services.</p></div>
+</div>
+<div class="divide_panel is-plate">
+<div class="initial_plate is-field"><div class="draft-field" aria-hidden="true"></div></div>
+<div class="divide_text"><h3 class="heading-style-h3">Afissio Law LLC</h3><p class="text-lead is-reversed">Afissio Law LLC is an Arizona law firm that provides legal services.</p><div class="divide_ident"><p class="text-size-regular">[COPY REQUESTED — responsible attorney name and title]</p></div></div>
+</div>
+</div>
+<div class="divide_note"><p class="text-size-regular">Engaging Afissio does not by itself create an attorney-client relationship with Afissio Law.</p></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 04 · OFFICE — the close, as About's: the bracketed square box, centred. The entity as the
+     tagline, its address at the H3 rung, the two contact values the client still owes, and his
+     button, once more. id #office, never #contact (homepage.js settles #contact). -->
+<section class="section_office" id="office" data-screen-label="04 · Office">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="close_stack is-box">
+<div class="tagline_row is-centered"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Afissio Law</p></div>
+<div class="close_title-block"><p class="heading-style-h3">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282</p></div>
+<div class="close_lead-block"><p class="text-size-regular">[COPY REQUESTED — Afissio Law LLC telephone]</p><p class="text-size-regular">[COPY REQUESTED — Afissio Law LLC email]</p></div>
+<div class="button-row is-centered"><a href="../contact/" class="button is-reversed">Discuss Legal Implementation</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<!-- @component shell/footer -->
+<footer class="footer_component is-ink-soft" id="footer">
+<div class="padding-global is-bar">
+<div class="padding-section-small is-no-top">
+<div class="container-xlarge is-bar">
+<div class="footer_ledger">
+<div class="footer_cell is-brand">
+<img src="../brand/logo/afissio-icon-orange.png" alt="" class="footer_mark">
+<p class="footer_tagline">Deal engineering before the due diligence begins.</p>
+</div>
+<div class="footer_cell is-nav">
+<nav role="navigation" class="footer_index">
+<a href="../" class="footer_index-link"><p class="footer_index-name">Home</p></a>
+<a href="../our-approach/" class="footer_index-link"><p class="footer_index-name">Our Approach</p></a>
+<a href="../solutions/" class="footer_index-link"><p class="footer_index-name">Solutions</p></a>
+<a href="../areas-of-review/" class="footer_index-link"><p class="footer_index-name">Areas of Review</p></a>
+<a href="../industries/" class="footer_index-link"><p class="footer_index-name">Industries</p></a>
+<a href="../afissio-law/" class="footer_index-link"><p class="footer_index-name">Afissio Law</p></a>
+<a href="../insights/" class="footer_index-link"><p class="footer_index-name">Insights</p></a>
+<a href="../our-company/" class="footer_index-link"><p class="footer_index-name">About</p></a>
+<a href="../contact/" class="footer_index-link"><p class="footer_index-name">Contact</p></a>
+</nav>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282, USA</p>
+<a href="mailto:info@afissio.com" class="footer_entity-link">info@afissio.com</a>
+</div>
+</div>
+</div>
+<div class="footer_rule is-bar"></div>
+<div class="footer_cell">
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<div class="footer_legal-row">
+<a href="../privacy-policy/" class="footer_legal-link">Privacy Policy</a>
+<a href="../privacy-policy/" class="footer_legal-link">Terms of Use</a>
+<a href="../privacy-policy/" class="footer_legal-link">Cookie Policy</a>
+<p class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- /@component shell/footer -->
+</div>
+</body>
+</html>

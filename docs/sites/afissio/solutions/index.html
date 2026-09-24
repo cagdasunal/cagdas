@@ -1,0 +1,395 @@
+<!-- @dsCard group="Pages" name="Solutions" subtitle="The last page of the main navigation, and the page where a reader picks a way in: the interior header, the readiness continuum, the three engagements read as one progression, and Data room services. Two options per section, A then B, pending Phase D." viewport="1680x1050" -->
+<!-- @startingPoint section="Pages" subtitle="The assembled Solutions page — the shell, the interior header, the flat continuum track, the three engagements as one spectrum and the data-room close. Seed Areas of Review and Industries from this." viewport="1680x1050" -->
+<!-- ROUND-TOKEN: R29-LITERAL (2026-09-22) — THE LITERAL ROUND. THIS ROUND CHANGES NO MARKUP ON THIS
+     PAGE: no section, string, class, id, attribute, comment or option block was touched. What changed
+     is the FORM of seven CSS declarations in client-first.css, so the deployer can turn every style
+     value into one literal per breakpoint (STRUCTURE.md §4e); three shipped, measured identical at
+     1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390, and four stay as written as manual Designer
+     steps. This comment is also the receipt for R28-READ-CAP's <head> edit, which R28 made on all 13
+     page files and stamped on none: the class layer's single <link> became ../client-first.css,
+     ../client-first-2.css and ../client-first-3.css, in that order, in the same position. -->
+<!-- ROUND-TOKEN: R27-WEBFLOW-ELEMENTS (2026-09-21) — THE ELEMENT ROUND. Nothing a visitor can see
+     changed on this page: no section, string, token, type rung, colour, spacing value, composition
+     or option pair was touched, and every change was proved identical by measurement before it
+     shipped. What changed is the ELEMENTS, so the deploy pipeline builds them instead of leaving
+     them as hand-work in the Designer. ON THIS PAGE: 2 `<canvas class="hero-wave_canvas">` left the markup (WP1) — <canvas> has no Webflow element, so pages/interior.js §2 now CREATES the canvas inside each `.hero-wave` host and styles it inline (CLAUDE.md §4f). THIS WAS THE PROOF PAGE for WP1: rect, DPR-capped backing store, all six computed properties and all five RGB sample points on both canvases came back byte-identical before the roll-out. Plus 1 footer href, /about -> /our-company (WP7).
+     The element contract is reference/WEBFLOW-ELEMENTS.md; STRUCTURE.md §4h points at it and
+     carries its four numbers. This page measures 0 · 0 · 0 · 0 on all four. -->
+<!-- ROUND-TOKEN: R22-SOLUTIONS (2026-09-19).
+     WHAT THIS PAGE IS: /solutions, the one page of the main navigation still unbuilt, and the page
+     where a reader chooses between the three engagements. Its one job is to answer WHICH ONE FITS
+     WHERE THE COMPANY IS NOW. The homepage shows the reading room, Our Approach explains how the
+     record is read, and this page is where the reader picks a way in.
+     COPY: every string is client copy, verbatim from pages/solutions/solutions-copy.md, extracted
+     by script from page 03 of his mockup. CONTRACTOR-AUTHORED VISIBLE STRINGS: 0. PROPOSED
+     STRINGS: 0 — and that zero is a decision, recorded in pages/solutions/PHASE0.md §3 and in
+     content/proposed-copy.md. The interior template's tagline and description slots are LEFT
+     EMPTY on every section here, because this deck already supplies a heading, a lead and a sub
+     for each one and proposed-copy.md §4 forbids a line that says what a client line says. The
+     #engagements heading is the client's own `Three ways to engage`, which the copy deck
+     explicitly sanctions for this section. Two strings the design needs and the deck lacks render
+     as [COPY REQUESTED — ...]: the meta title and the meta description.
+     TWO OPTIONS PER SECTION, A then B, inside this page, marked with HTML comments alone — the
+     `review_label is-review` scaffolding was deleted at R16's Phase D and is not coming back, a
+     review label being contractor-authored VISIBLE text.
+     ONLY THE A BLOCKS CARRY IDS: #hero (1A) · #continuum (2A) · #engagements with #review,
+     #sprint and #support on its three slots (3A) · #data-room (4A). B is anchored by nothing. The
+     continuum's three stops link to #review / #sprint / #support in BOTH options; if 3B is picked
+     at Phase D those three ids move onto its rows, which is one attribute each.
+     WHY 1B CARRIES 2B. BUILD-BRIEF §4 §2 asks the two options to try both placements of the
+     continuum — its own section, and inside the header as his mockup has it — so §1 and §2 are
+     one decision on this page and the markers say so: deleting 1B at Phase D takes 2B with it,
+     deleting 1A takes 2A. The same interdependence pages/contact.html declared for its 1A/2A.
+     THE HEADER KEEPS ITS FULL HEIGHT IN BOTH OPTIONS, and that was measured before it was chosen.
+     At 1440x900 the header's visible area is 672px (900 - 156.5 top - 71.7 bottom at that width);
+     the type stack is ~330px and the continuum block ~210px, so 540 of 672px — both fit in the
+     first screen. `section_page-header is-short` (56vh) was therefore not needed by either
+     option, and the tie-breaker "when the continuum and the header compete for the first screen,
+     choose the header" costs nothing here.
+     REUSED VERBATIM: the navbar shell (native Navbar + its one native Dropdown) and the post-R15
+     footer, byte for byte from pages/contact.html, with no current-page state set; the skeleton,
+     the seams, the type rungs, the one button construction, the one card construction, the
+     interior header and R19's masthead combo, the header field (hero-wave + its canvas, painted
+     by pages/interior.js §2, which takes querySelectorAll so both headers on this options page
+     paint), the editorial split (band_grid / band_display-col / band_body-col) and the stacked
+     band head (band_stack / band_lead-block / band_note-block), and his three offer glyphs.
+     NEW, named for what they are and never for this page, all APPENDED to the root
+     client-first.css: offer_mark (one name for the one glyph component) · continuum_* (a question
+     and N stops on one flat track — Areas of Review and Industries both need this shape) ·
+     spectrum_* (N items read as one progression — named for the DEVICE, which is why it is not
+     `engagement_*`) · service_* (a service item whose art sits in a well — Industries' six drawn
+     cards are exactly this) · panel_bracket (his corner brackets, as a GENERIC panel). The R22
+     header in client-first.css carries the reasoning for the two judgement calls: why the divided
+     band's MECHANISM is worn but R19's brief_* NAMES are not, and why panel_bracket is a third
+     copy of a construction the sheet already holds twice under content-specific names.
+     THREE NEW ICON FILES, his drawings in this project's own system:
+     brand/icons/room-structured.svg, room-comprehensive.svg, room-secured.svg. 52x52 to match
+     insight-part-*.svg, 1.5px strokes, square joins, colour baked into the file (§4c as
+     corrected — an <img>-loaded SVG cannot see the page's CSS), #8E8E8E for the drawn structure
+     and exactly ONE #FF6600 element each. Behind <img>, never inline <svg>.
+     NOT TAKEN FROM THE MOCKUP, each with its replacement: his solid-orange button (the buttons
+     are frozen; every Start the Conversation is `button is-reversed`) · his mono face · #6B6B6B ·
+     his DIMMED second and third display words, which read as *disabled* rather than as *deeper*
+     and would drop two of three under the 3:1 large-text floor — all three words take the same
+     stroke and the glyphs carry the depth · his ORANGE LEFT-BORDER STRIP on the "Best suited for"
+     notes, which CLAUDE.md §3.5 bans by name — the note takes one hairline above it and the meta
+     rung instead.
+     MOTION: NONE NEW, which BUILD-BRIEF §5 names as a valid answer. The settle already stages a
+     section's blocks in DOM order 130ms apart, so Review -> Sprint -> Support arrives once, in
+     order, on first read; a second engine narrating the same sequence is the "lots of moving
+     parts" this client named as his failure mode. What runs is what runs on every interior page:
+     the header wave field and the settle (interior.js) and the rule sweeps (homepage.js), all
+     three returning before touching anything under reduced motion. ONE line changed in
+     interior.js — six selectors added to the settle list, the mechanism R19 built into it, none
+     of which matches an element on any of the five pages built before this one. CSS opacity:0
+     rests: 0. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<title>Solutions</title>
+<meta name="description" content="[COPY REQUESTED — Solutions meta description]">
+<link rel="stylesheet" href="../live/webflow-base.css">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../client-first.css">
+<link rel="stylesheet" href="../client-first-2.css">
+<link rel="stylesheet" href="../client-first-3.css">
+<link rel="stylesheet" href="../preview-reset.css">
+<script src="../live/jquery-3.5.1.min.dc5e7f18c8.js" defer></script>
+<script src="../preview-webflow-shim.js" defer></script>
+<script src="../homepage.js" defer></script>
+<script src="../interior.js" defer></script>
+<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=wwc4fksqsvbajgu8lehp1q" async="true"></script>
+</head>
+<body>
+<div class="page-wrapper">
+<!-- @component shell/navbar -->
+<div class="navbar_shell">
+<div class="navbar_component w-nav" data-animation="default" data-collapse="medium" data-duration="280" data-easing="ease" data-easing2="ease">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+
+<div class="padding-global is-bar">
+<div class="navbar_container">
+<a href="../" class="navbar_logo-link w-nav-brand"><img src="../brand/logo/afissio-lockup-ink.png" alt="Afissio" class="navbar_logo"></a>
+<nav class="navbar_menu w-nav-menu" id="navbar-menu">
+<div class="navbar_menu-inner">
+<div class="navbar_links">
+<a href="../our-approach/" class="navbar_link w-nav-link">Our Approach</a>
+<a href="../solutions/" class="navbar_link w-nav-link">Solutions</a>
+<a href="../areas-of-review/" class="navbar_link w-nav-link">Areas of Review</a>
+<a href="../industries/" class="navbar_link w-nav-link">Industries</a>
+<a href="../insights/" class="navbar_link w-nav-link">Insights</a>
+<div data-hover="true" data-delay="120" class="navbar_dropdown w-dropdown">
+<div class="navbar_dropdown-toggle w-dropdown-toggle" id="nav-dd-about">
+<div class="navbar_dropdown-trigger"><p class="navbar_dropdown-label">About</p><div class="navbar_dropdown-caret"></div></div>
+</div>
+<nav class="navbar_dropdown-list w-dropdown-list" id="nav-dd-about-list">
+<div class="navbar_dropdown-edge"></div>
+<div class="navbar_dropdown-inner">
+<a href="../our-company/" class="navbar_dropdown-link w-dropdown-link">Afissio</a>
+<a href="../afissio-law/" class="navbar_dropdown-link w-dropdown-link">Afissio Law</a>
+</div>
+</nav>
+</div>
+</div>
+<div class="navbar_button-wrapper"><a href="../contact/" class="button is-nav">Contact</a></div>
+</div>
+</nav>
+<div class="navbar_menu-button w-nav-button" aria-label="menu">
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+<div class="navbar_menu-bar"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- /@component shell/navbar -->
+<main class="main-wrapper">
+
+<!-- OPTION 1A — stacked-statement: the built interior header, verbatim. Full-viewport
+     `section_page-header`, the homepage's wave field, the left stack on the container's own left
+     rail, the ruled seam below it. ONE CTA and not two: Our Approach's second header button points
+     AT this page, and the copy deck gives Solutions no onward string — the homepage's page-link
+     button labels are not in it, and inventing one is banned. -->
+<!-- 1A v6 (operator 2026-09-24): the centred interior header on the field in its centred mode; the continuum was removed. -->
+<section class="section_page-header" id="hero" data-screen-label="01 · Hero">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="hero-wave is-centered" aria-hidden="true"></div>
+<div class="padding-global is-layer">
+<div class="padding-section-medium is-hero">
+<div class="container-xlarge">
+<div class="page-header_stack">
+<div class="tagline_row is-centered"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Solutions</p></div>
+<div class="page-header_title-block"><h1 class="heading-style-h1 is-reversed">A practical path to transaction readiness.</h1></div>
+<div class="page-header_lead-block"><p class="text-lead is-reversed">Afissio's solutions are designed around three needs: discover and diagnose, resolve, and maintain readiness over time.</p></div>
+<div class="button-row is-centered"><a href="../contact/" class="button is-reversed">Start the Conversation</a><a href="#engagements" class="button is-ghost-reversed">Learn More</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 1A -->
+
+<!-- OPTION 3B — THE AREAS OF REVIEW CONSTRUCTION (operator 2026-09-24: "the same two column layout as in Areas of
+     Review ... icons instead of numbers, the same look and feel"). sequence_grid is-even: the sticky head
+     left (the page's nav label as tagline, the client H2, the one CTA), the three engagements right, each
+     entry an index plate carrying its offer glyph instead of a numeral, then H3, body and note. -->
+<section class="section_spectrum" id="engagements" data-screen-label="03 · Engagements">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="sequence_grid is-even">
+<div class="sequence_aside">
+<div class="tagline_row"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Solutions</p></div>
+<div class="sequence_head"><h2 class="heading-style-h2">Three ways to engage</h2></div>
+<!-- COPY: operator-requested 2026-09-24, contractor-authored, logged in content/proposed-copy.md. -->
+<div class="sequence_desc-block"><p class="text-size-regular">Start with a fixed-scope Review, go deeper with a Sprint when the findings or the timeline call for it, and keep the record ready with ongoing Support.</p></div>
+<div class="button-row"><a href="../contact/" class="button is-reversed">Start the Conversation</a></div>
+</div>
+<div class="schedule_stack is-open">
+<div class="schedule_entry" id="review">
+<div class="schedule_index is-plain"><img src="../brand/icons/offer-review.svg" alt="" class="schedule_index-icon"></div>
+<div class="schedule_entry-main">
+<div class="schedule_entry-title"><h3 class="heading-style-h3">Transaction Readiness Review</h3></div>
+<div class="schedule_entry-body"><p class="schedule_entry-text">A fixed-scope review of operative documents and transaction-readiness conditions. The Review identifies the issues most likely to create friction during institutional diligence, summarizes the most important findings, and provides a prioritized remediation roadmap.</p></div>
+<p class="spectrum_note is-boxed">Best suited for: companies that need a clear view of readiness before a transaction process begins.</p>
+</div>
+</div>
+<div class="schedule_entry" id="sprint">
+<div class="schedule_index is-plain"><img src="../brand/icons/offer-sprint.svg" alt="" class="schedule_index-icon"></div>
+<div class="schedule_entry-main">
+<div class="schedule_entry-title"><h3 class="heading-style-h3">Deal Engineering Sprint</h3></div>
+<div class="schedule_entry-body"><p class="schedule_entry-text">A focused follow-on engagement for companies that need deeper work after the Review or face a nearer-term transaction event. Afissio helps leadership sequence solutions, organize remediation, refine decisions, and prepare for the practical pressures of diligence.</p></div>
+<p class="spectrum_note is-boxed">Best suited for: companies with significant findings or an approaching financing, acquisition, partnership, or recapitalization.</p>
+</div>
+</div>
+<div class="schedule_entry" id="support">
+<div class="schedule_index is-plain"><img src="../brand/icons/offer-support.svg" alt="" class="schedule_index-icon"></div>
+<div class="schedule_entry-main">
+<div class="schedule_entry-title"><h3 class="heading-style-h3">Ongoing Readiness Support</h3></div>
+<div class="schedule_entry-body"><p class="schedule_entry-text">Continued transaction-readiness support for companies on an active transaction runway. Afissio refreshes the analysis as conditions change, responds to new developments, and helps maintain the company's readiness over time.</p></div>
+<p class="spectrum_note is-boxed">Best suited for: companies preparing over time for institutional investment or another consequential transaction.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 3B -->
+
+<!-- OPTION 4A — ledger-rows: the data room OPEN on the page's black. A stacked head on the
+     container's left rail, then three hairline-closed rows, each a square art plate beside the
+     title and the body, then the one Start the Conversation on the same left rail. The plate is a
+     fixed square, so the three plates share one x and one width. THE SURFACE DIRECTION, stated:
+     these rows sit on the PAGE ground, which is already #000000 and has no rung below it, so the
+     plate steps UP one rung (#080808 on a #242424 hairline — `step-plate`'s own construction in
+     #steps) rather than down. 4B's wells, which sit inside a #080808 panel, step DOWN to #000000
+     as MOCKUP-DEVICES.md's governing rule requires. Same idea, each correct for its ground. -->
+<!-- 4A v2 (operator 2026-09-24): CENTRED, on Our Approach's computing lattice (compute-field is-centered,
+     interior.js section 3 - the clear zone centred for a centred stack), and the three services as a
+     trio of translucent panels, so the lattice reads through them at the edges. -->
+<section class="section_service" id="data-room" data-screen-label="04 · Data room">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="compute-field is-centered" aria-hidden="true"></div>
+<div class="padding-global is-layer">
+<div class="padding-section-medium">
+<div class="container-xlarge">
+<div class="band_stack is-centered">
+<!-- tagline COPY: operator-requested 2026-09-24, logged in content/proposed-copy.md. -->
+<div class="tagline_row is-centered"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">An extension of the Review</p></div>
+<div class="band_title-block"><h2 class="heading-style-h2">Data room services</h2></div>
+<div class="band_lead-block"><p class="text-lead is-reversed">Any solution may include building and curating a data room for the anticipated transaction.</p></div>
+<div class="band_note-block is-wide"><p class="text-size-regular">The data room is a natural extension of the Review. Afissio has already worked through the operative record to identify diligence friction, and that same work produces the structure, completeness, and ordering the room requires.</p></div>
+<div class="button-row is-centered"><a href="../contact/" class="button is-reversed">Start the Conversation</a></div>
+</div>
+<div class="service_list is-trio">
+<div class="service_row is-card">
+<div class="service_well is-plate"><img src="../brand/icons/room-structured.svg" alt="" class="service_art"></div>
+<div class="service_body is-center">
+<h3 class="heading-style-h3 is-card">Structured and curated</h3>
+<p class="service_copy">Afissio structures, sorts, organizes, and curates each room so that a reviewer can move through it easily and find what they are looking for without being walked through it.</p>
+</div>
+</div>
+<div class="service_row is-card">
+<div class="service_well is-plate"><img src="../brand/icons/room-comprehensive.svg" alt="" class="service_art"></div>
+<div class="service_body is-center">
+<h3 class="heading-style-h3 is-card">Comprehensive by necessity</h3>
+<p class="service_copy">The room is built to be comprehensive, in part because the Review itself requires that level of completeness. The record assembled for the analysis is the record the room presents.</p>
+</div>
+</div>
+<div class="service_row is-card">
+<div class="service_well is-plate"><img src="../brand/icons/room-secured.svg" alt="" class="service_art"></div>
+<div class="service_body is-center">
+<h3 class="heading-style-h3 is-card">Named, secured, controlled</h3>
+<p class="service_copy">File naming, security, and access control follow established practice, so the room stays consistent and orderly as documents are added and as the transaction moves forward.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- /OPTION 4A -->
+<!-- THE STATEMENT — Our Approach's #voice construction (quote_panel); the CONTENT is the homepage's second proof
+     card, verbatim (placeholders as on the homepage). -->
+<section class="section_quote" id="voice">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="quote_panel">
+<div class="quote_mark" aria-hidden="true"><p class="quote_glyph">“</p></div>
+<div class="quote_statement-block"><p class="quote_statement is-long">Our organization had some big ideas for multi-dimensional market expansion going into the year. Afissio played a key role among the professionals we consulted to develop our plan, which included new corporate entities in multiple states with a variety of equity structures. Afissio’s co-founders were patient and flexible through the process, helping us consider many options and alternatives. They designed a legal and compliance strategy that aligned with our goals.</p></div>
+<div class="quote_media"><img src="../brand/placeholder/portrait.svg" alt="Photo placeholder" class="quote_photo"></div>
+<div class="quote_attrib"><p class="quote_name">Travis C.</p><p class="quote_org">Co-Founder, Digital Executive Coaching Platform</p></div>
+<div class="quote_foot">
+<div class="quote_logo-lockup"><img src="../brand/placeholder/client-mark-02.svg" alt="Client logo placeholder" class="quote_logo"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- THE QUESTIONS — Our Approach's #questions markup (accordion = interior.js section 5). COPY: operator-requested
+     2026-09-24, contractor-authored from the page's own engagement copy, logged in content/proposed-copy.md. -->
+<section class="section_faq" id="questions">
+<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
+<div class="padding-global">
+<div class="padding-section-large">
+<div class="container-xlarge">
+<div class="faq_head">
+<div class="tagline_row is-centered"><img src="../brand/logo/afissio-icon-orange.png" alt="" class="tagline_mark"><p class="text-label">Frequently Asked Questions</p></div>
+<div class="faq_title-block"><h2 class="heading-style-h2">What companies ask before they engage</h2></div>
+</div>
+<div class="faq_list">
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-1"><h3 class="faq_q">Which engagement should we start with?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-1" role="region"><p class="faq_a">Most companies start with the Transaction Readiness Review. It is fixed in scope and gives a clear view of readiness before a transaction process begins; the Sprint and Support build on what it finds.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-2"><h3 class="faq_q">When does a Sprint make sense?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-2" role="region"><p class="faq_a">When the Review surfaces significant findings, or when a financing, acquisition, partnership, or recapitalization is approaching and the remediation has to be sequenced and done.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-3"><h3 class="faq_q">What does Ongoing Readiness Support involve?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-3" role="region"><p class="faq_a">Afissio refreshes the analysis as conditions change, responds to new developments, and keeps the record ready for the companies on an active transaction runway.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-4"><h3 class="faq_q">Is a data room included?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-4" role="region"><p class="faq_a">Any solution may include building and curating a data room for the anticipated transaction. It draws on the same work the Review has already done on the operative record.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-5"><h3 class="faq_q">Can we move from one engagement to another?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-5" role="region"><p class="faq_a">Yes. The three are designed as a progression, so the work in one carries directly into the next rather than starting again.</p></div>
+</div>
+<div class="faq_row">
+<div class="faq_trigger" role="button" tabindex="0" aria-expanded="true" aria-controls="faq-answer-6"><h3 class="faq_q">Does this replace our counsel or advisers?</h3><div class="faq_mark" aria-hidden="true"><div class="faq_mark-bar"></div><div class="faq_mark-bar is-vert"></div></div></div>
+<div class="faq_panel" id="faq-answer-6" role="region"><p class="faq_a">No. The work runs alongside existing counsel, accountants and bankers, and is designed to make their work faster rather than duplicate it.</p></div>
+</div>
+</div>
+<div class="faq_prompt">
+<p class="faq_prompt-q">Still a question about your own record?</p>
+<div class="button-row"><a href="../contact/" class="button is-reversed">Start the Conversation</a></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<!-- @component shell/footer -->
+<footer class="footer_component is-ink-soft" id="footer">
+<div class="padding-global is-bar">
+<div class="padding-section-small is-no-top">
+<div class="container-xlarge is-bar">
+<div class="footer_ledger">
+<div class="footer_cell is-brand">
+<img src="../brand/logo/afissio-icon-orange.png" alt="" class="footer_mark">
+<p class="footer_tagline">Deal engineering before the due diligence begins.</p>
+</div>
+<div class="footer_cell is-nav">
+<nav role="navigation" class="footer_index">
+<a href="../" class="footer_index-link"><p class="footer_index-name">Home</p></a>
+<a href="../our-approach/" class="footer_index-link"><p class="footer_index-name">Our Approach</p></a>
+<a href="../solutions/" class="footer_index-link"><p class="footer_index-name">Solutions</p></a>
+<a href="../areas-of-review/" class="footer_index-link"><p class="footer_index-name">Areas of Review</p></a>
+<a href="../industries/" class="footer_index-link"><p class="footer_index-name">Industries</p></a>
+<a href="../afissio-law/" class="footer_index-link"><p class="footer_index-name">Afissio Law</p></a>
+<a href="../insights/" class="footer_index-link"><p class="footer_index-name">Insights</p></a>
+<a href="../our-company/" class="footer_index-link"><p class="footer_index-name">About</p></a>
+<a href="../contact/" class="footer_index-link"><p class="footer_index-name">Contact</p></a>
+</nav>
+</div>
+<div class="footer_cell is-entity">
+<p class="footer_entity-name">Afissio LLC</p>
+<div class="footer_entity-lines">
+<p class="footer_entity-line">1438 W Broadway Road, Suite 101<br>Tempe, Arizona 85282, USA</p>
+<a href="mailto:info@afissio.com" class="footer_entity-link">info@afissio.com</a>
+</div>
+</div>
+</div>
+<div class="footer_rule is-bar"></div>
+<div class="footer_cell">
+<p class="footer_disclaimer-text">Transaction-readiness services are provided by Afissio. Legal services are provided separately by Afissio Law LLC, an Arizona law firm.</p>
+<div class="footer_legal-row">
+<a href="../privacy-policy/" class="footer_legal-link">Privacy Policy</a>
+<a href="../privacy-policy/" class="footer_legal-link">Terms of Use</a>
+<a href="../privacy-policy/" class="footer_legal-link">Cookie Policy</a>
+<p class="footer_legal-link">© 2026 Afissio LLC. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- /@component shell/footer -->
+</div>
+</body>
+</html>

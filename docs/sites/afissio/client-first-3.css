@@ -1,0 +1,1360 @@
+/* ============================================================================
+   R22-SOLUTIONS (2026-09-19) — THE SOLUTIONS PAGE (`pages/solutions.html`). ADDITIONS ONLY: not
+   one rule above this line was touched, so pages/homepage.html, pages/our-approach.html,
+   pages/insights.html, pages/insights-article.html and pages/contact.html render byte-identical —
+   every selector below matches 0 elements on all five. No new token, type rung, section padding,
+   container, radius, button or breakpoint; every value is an existing rung or an existing clamp
+   formula, and the only `@media` widths are the deployable six.
+
+   FOUR FAMILIES PLUS ONE LEAF, named for what they are and never for this page:
+     offer_mark      the offer glyph as a sized element. ONE name for the one component — the
+                     continuum stops and the engagement cells wear the same class, not two
+                     synonyms for the same 32×32 file.
+     continuum_*     a question and N stops on ONE FLAT TRACK. Areas of Review (Legal · Financial ·
+                     Technical) and Industries both need an index of exactly this shape.
+     spectrum_*      N items read as ONE PROGRESSION — a display word, a title, a description and
+                     a note. Named for the DEVICE, which is why it is not `engagement_*`.
+     service_*       a service item whose art sits in a well. Industries' six drawn cards are this;
+                     Areas of Review's three are too.
+     panel_bracket   his diagonal corner brackets, as a GENERIC panel (see the note below).
+
+   ─────────────────────────────────────────────────────────────────────────────────────────────
+   WHY `spectrum_*` AND NOT R19's `brief_*`, WHICH THE BRIEF ASKS ABOUT BY NAME.
+
+   The divided band's MECHANISM is worn here verbatim and is not reinvented: one border around the
+   series, ONE hairline between cells, **no grid gap**, and `:first-child` dropping the leading
+   cell's own edge so it cannot double the band's border (a numeric `:nth-child` is dropped at
+   deploy, §4d, and he hand-fixed this exact two-pixel artefact in his own file). What is NOT worn
+   is the NAME. `brief_slot` / `brief_card` / `brief_well` are the class set of a CMS content type
+   — an Insights *brief* — and on the published site those classes sit on a Collection Item whose
+   every leaf is bound to that collection's fields. An engagement is not a brief. "One name per
+   component" cuts both ways: it forbids two names for one thing, and it forbids one name for two.
+
+   WHY `panel_bracket` EXISTS, AND THE ONE DEVIATION IN THIS ROUND, STATED RATHER THAN QUIET.
+
+   `BUILD-BRIEF` §3 says to wear Contact's bracketed panel rather than draw a second one. The
+   construction is already in this sheet TWICE — `.form_panel` (R21) and `.quote_panel` (R35) each
+   carry their own copy of the same four declarations and the same two pseudos — both under
+   content-specific names. Putting `form_panel` on a data-room panel would make the dictionary lie
+   about what a form is. So this round adds the GENERIC name the construction should have had,
+   wears it once, and recommends that Phase D fold `form_panel` and `quote_panel` onto
+   `panel_bracket` + one combo each. A third copy is a cost; three copies under three
+   content-specific names would have been the same cost with no way out of it.
+
+   THE SURFACE LADDER, AND THE ONE PLACE IT STEPS UP. `MOCKUP-DEVICES.md`: containers step UP from
+   their ground, art wells step DOWN toward black. 4B's well does exactly that — `#000000` inside
+   the panel's `#080808`. 4A's rows sit on the PAGE ground, which is already `#000000` and has no
+   rung below it, so its art plate steps UP by exactly one rung instead: `#080808` on a `#242424`
+   hairline, which is `step-plate`'s own construction in `#steps`. Two builds of one idea, each
+   correct for the ground it sits on, and that is why it is a combo and not a second class.
+   ─────────────────────────────────────────────────────────────────────────────────────────────
+
+   MOTION: NONE NEW. `BUILD-BRIEF` §5 allows one animation and permits none; the settle already
+   stages a section's blocks in DOM order 130ms apart, so Review → Sprint → Support arrives once,
+   in order, on first read. Six selectors were added to `pages/interior.js`'s settle list — the
+   mechanism R19 built into that file — and nothing else in it changed. Nothing here rests at
+   `opacity:0`.
+   ============================================================================ */
+
+/* --- THE OFFER GLYPH. His own progression mark (one, two, three bars lit), at the two sizes this
+   page needs. One class, because it is one component. --- */
+.offer_mark{display:block;height:1.25rem;width:auto}
+.offer_mark.is-large{height:2rem}
+
+/* --- §2 · `#continuum` — THE READINESS CONTINUUM. Wayfinding, and nothing else: the label rung,
+   one hairline, no fill, no display type. TRANSPARENT for the reason `section_sequence` and
+   `section_form` are (R28): the header's field layer is `bottom:-30vh`, and an opaque later
+   sibling paints over the tail and puts the hard 100vh line back at the seam. --- */
+.section_continuum{position:relative;background-color:transparent}
+/* 2A · THE DIVIDED TRACK, its own section. The question on a 26rem left track, the three stops on
+   ONE grid row in the right track — one row is what makes them flat, at every width, by
+   construction rather than by inspection. */
+.continuum_grid{display:grid;grid-template-columns:minmax(0,26rem) minmax(0,1fr);column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem);align-items:start}
+.continuum_head{min-width:0;max-width:24rem}
+.continuum_track{min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--edge-card,#242424)}
+/* the stop is a link and the WHOLE cell is the hit target, so the whole cell answers the pointer —
+   the card construction's own one property, no second. 3.5rem minimum by padding + content, so
+   every target clears 44px. */
+.continuum_stop{min-width:0;display:grid;justify-items:start;align-content:start;row-gap:0.75rem;padding-top:1.5rem;padding-bottom:1.5rem;padding-left:1.25rem;padding-right:1.25rem;border-left:1px solid var(--edge-card,#242424);text-decoration:none;transition:background-color 640ms cubic-bezier(0.16,1,0.3,1)}
+.continuum_stop:first-child{border-left-width:0;padding-left:0}
+.continuum_stop:hover{background-color:var(--surface-card,#080808)}
+.continuum_stop:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+/* 2B · THE OPEN BAR, inside the header. No cells and no dividers — one hairline over three equal
+   tracks, and the glyph sits BESIDE its name rather than above it. Same flatness guarantee: one
+   grid row. `continuum_block` opens it with a seam and the head-to-content rung, so it reads as
+   part of the header rather than as a panel dropped into it. */
+.continuum_block{border-top:1px solid var(--rule-plate,#454545);padding-top:clamp(2rem,2.33vw + 1.1rem,2.75rem)}
+.continuum_bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1.5rem,2.91vw - 1.38rem,3rem);border-top:1px solid var(--edge-card,#242424);margin-top:1.5rem}
+.continuum_stop.is-inline{grid-auto-flow:column;align-items:center;justify-content:start;column-gap:0.75rem;row-gap:0;border-left-width:0;padding-left:0;padding-right:0}
+
+/* ============================================================================
+   §3 · `#engagements` — THE THREE ENGAGEMENTS. THE PAGE'S ONE COMMITTED MOMENT, and its advantage
+   is measurable three ways: the outlined short names are 40px against a 19px body (2.11×) and are
+   the only stroked type in the system; the section takes `padding-section-large` (18rem) against
+   `#continuum`'s `padding-section-small` (9rem), exactly 2× the surrounding whitespace; and it is
+   the only place on the page carrying `#FF6600` at display scale.
+
+   FLAT, BY CONSTRUCTION, BOTH WAYS. 3A is one grid row, so the three glyphs share one y at every
+   width; 3B is one grid column with a fixed rail track, so the three glyphs share one x. Neither
+   can become a staircase, an offset or a stagger — the client pinned that twice, the second time
+   about these same three offers (BugHerd #8, 2026-09-10).
+
+   THE DEPTH IS SHOWN, NOT TOLD: his offer glyphs, one / two / three bars lit, in the copy deck's
+   order. His mockup DIMS the second and third display words to grey, and that is not taken — a
+   dimmed word reads as *disabled*, not as *deeper*, and it would also drop two of the three under
+   the 3:1 large-text floor. All three take the same stroke; the glyphs carry the progression.
+
+   THE NOTE IS NOT HIS ORANGE LEFT-BORDER STRIP. `CLAUDE.md` §3.5 bans the coloured left-border
+   accent strip by name. The "Best suited for:" line takes the site's own separation vocabulary
+   instead — one hairline above it, the sentence at the meta rung in `#8E8E8E` (6.11:1 on #080808,
+   6.28:1 on #000000). Whole, in Pluto Sans, his mono face stays out.
+
+   THE OUTLINED WORD ships as the THREE LONGHANDS and never the shorthand (`STRUCTURE.md` §4c —
+   `-webkit-text-stroke-width` / `-color` and `-webkit-text-fill-color` are three of the only four
+   prefixed properties Webflow accepts). `color` is set to the same orange underneath, so if the
+   fill override is ever dropped the word renders solid rather than invisible. The word is
+   `aria-hidden` in the markup: the H3 beside it carries the meaning.
+   ============================================================================ */
+.section_spectrum{position:relative;background-color:transparent}
+.spectrum_head{max-width:44rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+.spectrum_word{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:700;font-size:clamp(2rem,1.163vw + 1.279rem,2.5rem);line-height:1.08;letter-spacing:-0.02em;color:var(--orange,#FF6600);-webkit-text-stroke-width:1.5px;-webkit-text-stroke-color:var(--orange,#FF6600);-webkit-text-fill-color:transparent;margin-top:0;margin-bottom:0}
+.spectrum_note{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.6;color:var(--text-muted-ink,#8E8E8E);border-top:1px solid var(--edge-card,#242424);padding-top:1.25rem;margin-top:0.75rem;margin-bottom:0;text-wrap:pretty}
+/* 3A · THE DIVIDED BAND — his own device: ONE border around the series, ONE hairline between
+   cells, NO grid gap. A gap makes three products; a shared edge makes one spectrum. */
+.spectrum_band{border:1px solid var(--edge-card,#242424)}
+.spectrum_series{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.spectrum_slot{display:grid;border-left:1px solid var(--edge-card,#242424)}
+.spectrum_slot:first-child{border-left-width:0}
+.spectrum_cell{display:grid;align-content:start;justify-items:start;row-gap:1.25rem;background-color:var(--surface-card,#080808);padding:clamp(2rem,2.91vw + 0.88rem,2.5rem)}
+/* 3B · THREE STACKED BANDS. Equal rows, rail to rail, the rail track fixed so the three glyphs and
+   the three words share one x. The row hairlines anchor every gap top and bottom. */
+.spectrum_stack{border-top:1px solid var(--edge-card,#242424)}
+.spectrum_row{display:grid;grid-template-columns:minmax(0,22rem) minmax(0,1fr);column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem);align-items:start;padding-top:clamp(2.5rem,3.49vw + 0.34rem,4rem);padding-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem);border-bottom:1px solid var(--edge-card,#242424)}
+.spectrum_rail{min-width:0;display:grid;justify-items:start;align-content:start;row-gap:1.25rem}
+.spectrum_body{min-width:0;max-width:46rem;display:grid;justify-items:start;align-content:start;row-gap:1.25rem}
+
+/* ============================================================================
+   §4 · `#data-room` — DATA ROOM SERVICES. The page's close: it carries the one
+   `Start the Conversation`, so no closing band is added for copy the client has not written.
+   QUIET-to-medium — `padding-section-medium` against `#engagements`'s large.
+   ============================================================================ */
+.section_service{position:relative;background-color:var(--ink-hero,#000000)}
+.service_art{display:block;height:3rem;width:auto}
+.service_copy{font-family:"Pluto Sans",system-ui,sans-serif;font-weight:400;font-size:1.0625rem;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);max-width:40rem;margin-top:0;margin-bottom:0;text-wrap:pretty}
+.service_body{min-width:0;max-width:46rem;display:grid;justify-items:start;align-content:start;row-gap:0.75rem}
+/* 4A · OPEN ROWS on the page's black. A stacked head, then three hairline-closed rows; the art
+   plate is a fixed square so the three plates share one x and one width. */
+.service_list{border-top:1px solid var(--edge-card,#242424);margin-top:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+.service_row{display:grid;grid-template-columns:9rem minmax(0,1fr);column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem);align-items:start;padding-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);padding-bottom:clamp(2rem,2.33vw + 1.1rem,2.75rem);border-bottom:1px solid var(--edge-card,#242424)}
+/* the well. BASE = the recessed region inside a card (4B): `#000000` under the card's `#080808`,
+   full bleed, closed by one hairline. COMBO `is-tile` = the same art on the PAGE's black (4A),
+   where there is no rung below to step to, so it steps UP one rung instead — `step-plate`'s own
+   construction, and the reason this is a combo and not a second class. */
+.service_well{display:grid;place-items:center;background-color:var(--ink-hero,#000000);border-bottom:1px solid var(--edge-card,#242424);padding-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);padding-bottom:clamp(2rem,2.33vw + 1.1rem,2.75rem)}
+.service_well.is-tile{aspect-ratio:1 / 1;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding-top:0;padding-bottom:0}
+/* 4B · HIS BRACKETED PANEL, and the three cards inside it. The cards carry NO fill: on a `#080808`
+   panel a `#080808` card is invisible, so the card is its hairline and the well is the step down
+   to `#000000` — the three-step inward darkening his own file writes, with the borders stepping
+   the same way. */
+.panel_bracket{position:relative;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2rem,4.65vw - 0.89rem,4rem)}
+.panel_bracket::before{content:"";position:absolute;top:-1px;left:-1px;width:16px;height:16px;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
+.panel_bracket::after{content:"";position:absolute;right:-1px;bottom:-1px;width:16px;height:16px;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
+.service_grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1.5rem,2.91vw - 1.38rem,3rem);row-gap:2rem;margin-top:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+.service_card{display:grid;align-content:start;border:1px solid var(--edge-card,#242424)}
+.service_card-body{display:grid;justify-items:start;row-gap:0.75rem;padding:clamp(1.5rem,2.33vw + 0.6rem,2rem)}
+
+/* --- the three deployable narrow tiers. Anything already on a clamp is left alone: a clamp IS the
+   responsive rule, and restating it at a breakpoint is how two sources of truth start. --- */
+@media (max-width:991px){
+  /* TABLET. The continuum's question moves above its track; the band goes one cell per row and its
+     divider turns from a left edge into a top edge, exactly as `brief_slot` does; the engagement
+     rows and the service rows keep two tracks but tighten. The STOPS STAY ON ONE ROW — that is the
+     section's one structural rule and it holds at every tier. */
+  .continuum_grid{grid-template-columns:minmax(0,1fr);row-gap:2rem}
+  .continuum_head{max-width:100%}
+  .spectrum_head{max-width:100%}
+  .spectrum_series{grid-template-columns:minmax(0,1fr)}
+  .spectrum_slot{border-left-width:0;border-top:1px solid var(--edge-card,#242424)}
+  .spectrum_slot:first-child{border-top-width:0}
+  .spectrum_row{grid-template-columns:minmax(0,1fr);row-gap:1.5rem}
+  .spectrum_body{max-width:100%}
+  .service_row{grid-template-columns:7rem minmax(0,1fr);column-gap:2rem}
+  .service_body{max-width:100%}
+  .service_copy{max-width:100%}
+  .service_grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:767px){
+  /* LANDSCAPE PHONE. The rail turns horizontal so the glyph and the outlined word share a line
+     instead of adding a row to every band; the service cards go to one column and the service row
+     stacks its plate above its body. */
+  .spectrum_rail{grid-auto-flow:column;align-items:center;justify-content:start;column-gap:1.25rem;row-gap:0}
+  .service_grid{grid-template-columns:minmax(0,1fr)}
+  .service_row{grid-template-columns:minmax(0,1fr);row-gap:1.25rem}
+  .service_well.is-tile{width:7rem}
+}
+@media (max-width:479px){
+  /* PORTRAIT PHONE, and the one measurement that decided this tier. At 320px the container is
+     288px and a divided three-cell track leaves 72px of cell inside its 1.25rem padding, while
+     `SUPPORT` at the 14px label rung with +0.14em tracking measures ~77px — five pixels of
+     overflow. So at this tier the dividers become a 0.75rem gap and the cells lose their padding:
+     88px of cell for a 77px word, and the three stops stay on ONE ROW down to 320. Stacking them
+     would have been the easy fix and it would have broken the section's only structural rule. */
+  .continuum_track{column-gap:0.75rem}
+  .continuum_stop{padding-left:0;padding-right:0;border-left-width:0}
+  .continuum_stop.is-inline{grid-auto-flow:row;column-gap:0;row-gap:0.5rem}
+  .spectrum_cell{padding:1.5rem 1.25rem}
+  .panel_bracket{padding:1.5rem 1.25rem}
+  .service_card-body{padding:1.25rem}
+}
+
+
+
+/* ============================================================================
+   R23-AREAS (2026-09-20) — AREAS OF REVIEW (`pages/areas-of-review.html`). ADDITIONS ONLY: not
+   one rule above this line was touched, so pages/homepage.html, pages/our-approach.html,
+   pages/insights.html, pages/insights-article.html, pages/contact.html and pages/solutions.html
+   render byte-identical — every selector below matches 0 elements on all six. No new token, type
+   rung, section padding, container, radius, button or breakpoint; every value is an existing rung
+   or an existing clamp formula, and the only `@media` widths are the deployable six.
+
+   THE ROUND'S INSTRUCTION, AND WHAT IT CHANGED HERE (operator 2026-09-20, "let Claude Design try
+   different layouts from now on"). The SYSTEM is frozen and is not what varies. The COMPOSITION
+   is, and novelty is the tie-breaker — so before composing, the rhythms this site has already
+   spent on a list of N items were listed: Our Approach's numbered sequence on a rail, Solutions'
+   flat continuum track, its divided band and its stacked rail+body bands, Insights' index rows
+   and its divided band of cards, Contact's paired field grid. EVERY ONE OF THEM LETS EACH ITEM
+   STACK ITS OWN CONTENT, so only the tops line up. That is exactly what this page cannot afford:
+   a reader checking scope against their own situation reads ACROSS the three domains.
+
+   So §2 is A SCHEDULE — the one shape `BUILD-BRIEF` §2c names that this site has never shown,
+   and the shape the content actually is.
+
+   THREE FAMILIES, named for the DEVICE and never for this page:
+     schedule_*   N items as columns over M SHARED ROWS (2A), and the same N items as full-width
+                  ruled entries read down (2B). Industries' six sectors and About's two-entity
+                  comparison are the same object.
+     scope_*      A SHORT LIST OF SCOPE WORDS — the component `BUILD-BRIEF` §3 asks for by name,
+                  worn three times here and by BOTH options, so whichever composition survives
+                  Phase D the system carries ONE scope-list rung. Industries' six cards and
+                  About's network panel inherit it.
+     close_foot   a close that is one hairline and one button row on the container's left rail.
+
+   ─────────────────────────────────────────────────────────────────────────────────────────────
+   WHY `continuum_*` IS WORN FOR 1B'S INDEX AND NOTHING NEW IS DRAWN. R22's own header in this
+   sheet says it in terms: "Areas of Review (Legal · Financial · Technical) and Industries both
+   need an index of exactly this shape." 1B needs N stops on one flat ruled track, minus the
+   question — which is `continuum_bar` + `continuum_stop is-inline` exactly as authored. The
+   FAMILY is shared; the COMPOSITION is not: Solutions 1B wraps it in `continuum_block` under a
+   question as a fourth masthead row, and here it is a bare three-name index below the lead,
+   each stop linking to its own column of the schedule.
+
+   WHY `close_foot` EXISTS, AND THE ONE DEVIATION THIS ROUND, STATED RATHER THAN QUIET. The
+   construction — `display:grid; justify-items:start; border-top` — is already in this sheet
+   TWICE, as `.latest_foot` (R19) and `.article_foot` (R20), both under content-specific names.
+   A third content-named copy (`areas_foot`) would have been the same cost with no way out of it,
+   so this round adds the GENERIC name the construction should have had and wears it once.
+   PHASE D SHOULD FOLD `latest_foot` AND `article_foot` ONTO `close_foot`. Same reasoning, and
+   the same recommendation, as R22's `panel_bracket`.
+
+   FLAT, BY CONSTRUCTION, BOTH WAYS — and the client pinned flatness twice (BugHerd #5 and #8).
+   2A is ONE grid whose nine cells are placed by `grid-row` line numbers, so the three domain
+   names share one y, the three paragraphs share one y and the three scope lists share one y, at
+   every width. 2B is one column of identical entries, so the three names share one x. Neither
+   can become a staircase, an offset or a stagger, and no domain is treated as larger than
+   another: same rung, same padding, same rules.
+
+   THE COLUMN DIVIDERS IN 2A ARE GAPS, NOT RULES, and that is his own device — the index on his
+   mockup's cover page is three columns of hairline rows with a gap between them and no vertical
+   rule (`client-mockup-00-cover.png`). It also means no `:first-child` edge-dropping is needed
+   anywhere this round, so the two-pixel doubling artefact `MOCKUP-DEVICES.md` warns about cannot
+   occur. And it keeps the standing law intact: lines govern the margins, never cross type.
+
+   THE SCOPE WORDS ARE SCOPE, NOT TAGS. Square, hairline, ruled, at the existing 14px label rung
+   (`.text-label`, #C9C9C9 on #000000 = 12.3:1). No pill, no radius, no coloured chip, no icon
+   each — the apex would also have blown the page's motif budget of 6 eleven times over. The
+   plainer setting is the brief's own tie-breaker for exactly this element.
+
+   MOTION: NONE NEW, which `BUILD-BRIEF` §5 names as a valid answer. The settle already stages a
+   section's blocks in DOM order 130ms apart, so 2A arrives ROW BY ROW — the three names, then
+   the three paragraphs, then the three scope lists — which is the schedule filling in, told once,
+   in 2.77s. Five selectors were appended to `pages/interior.js`'s settle list and nothing else in
+   it changed; none of the five matches an element on any of the six pages built before this one.
+   Nothing here rests at `opacity:0`.
+   ============================================================================ */
+
+/* --- §2 · `#domains` — THE SECTION. TRANSPARENT, for the reason `section_sequence`,
+   `section_form` and `section_continuum` are (R28): the header's field layer is `bottom:-30vh`
+   and an opaque later sibling paints over the tail, which puts the hard 100vh line back at the
+   seam. The page's black is on `.main-wrapper`, one level up. --- */
+.section_schedule{position:relative;background-color:transparent}
+
+/* --- THE SCOPE LIST, worn by BOTH options and by both of this page's compositions. BASE = a
+   ruled column: one hairline opens it and every word closes on its own. COMBO `is-band` = the
+   same words as one horizontal strip of equal cells under one continuous rule, divided by GAPS
+   rather than by vertical rules (2B). `display:flex` rather than `grid-auto-flow:column`
+   deliberately: flex-grow and flex-basis are core Webflow controls, and `grid-auto-flow` /
+   `grid-auto-columns` appear in neither STRUCTURE.md §4c nor §4f's table, i.e. they are unproven
+   (§4f). Unproven properties used this round: 0.
+   `min-width` on the cell is what makes the strip responsive without a single @media rule: the
+   cells wrap when the container can no longer hold them, at every width down to 320. --- */
+.scope_list{display:grid;width:100%;border-top:1px solid var(--edge-card,#242424)}
+.scope_item{padding-top:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--edge-card,#242424)}
+.scope_list.is-band{display:flex;flex-wrap:wrap;column-gap:clamp(1.5rem,2.91vw - 1.38rem,3rem);margin-top:2rem}
+.scope_item.is-cell{flex-grow:1;flex-basis:0;min-width:8rem}
+
+/* --- 2A · THE SCOPE SCHEDULE. Three domain columns over three SHARED rows. The row placement is
+   `grid-row` LINE NUMBERS — §4f's sanctioned replacement for the `grid-template-areas` §4c bans —
+   and the DOM order is DOMAIN-MAJOR (name, paragraph, scope · name, paragraph, scope · …), which
+   is what lets the whole schedule become three complete stacked domains at ≤991 by dropping the
+   row numbers and nothing else. Sparse auto-placement puts each definite-row item in the next
+   free column of its row, so no column numbers are authored at all.
+   The heavier `#454545` rule opens the schedule (the section-seam weight, rail to rail); the two
+   interior rules are the `#242424` card hairline. Three rungs of one line system, no fourth. --- */
+.schedule_grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(2rem,3.49vw - 0.16rem,3rem)}
+.schedule_head{grid-row:1;border-top:1px solid var(--rule-plate,#454545);padding-top:1.5rem;padding-bottom:1.5rem}
+.schedule_body{grid-row:2;border-top:1px solid var(--edge-card,#242424);padding-top:1.5rem;padding-bottom:2.5rem}
+/* row 3 carries no rule of its own: `.scope_list`'s own top hairline IS the row rule, so the
+   schedule never draws two lines where one belongs. */
+.schedule_scope{grid-row:3}
+
+/* --- 2B · THE SCOPE LEDGER. The same three domains read DOWN as full-width ruled entries. The
+   paragraph keeps the reading measure (46rem, the article template's measured 64ch cap) while the
+   scope strip spans the WHOLE container — the strip is deliberately wider than the paragraph it
+   belongs to, which is what makes it read as a schedule line rather than as a list. --- */
+.schedule_stack{border-top:1px solid var(--rule-plate,#454545)}
+/* is-open: no opening rule - the ledger begins straight under the header (operator 2026-09-24). */
+.schedule_stack.is-open{border-top-width:0}
+/* is-even (operator 2026-09-24: "too much gap between the columns on wider screens"). The base sequence
+   grid caps its right track at 44rem and lets the left one take the rest, so past ~1440 the surplus
+   collects between the head and the entries. Here BOTH tracks are fractions, 5:7, so the surplus is
+   shared and the gutter stays at the base's own clamp. <=991 stacks via the base rule. */
+.sequence_grid.is-even{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+/* AOR-V2 (operator 2026-09-24): each entry reads as its own section - the small section rung above and
+   below, the seam-weight rule between, and TWO TRACKS: tagline + H2 + paragraph on the left, the scope
+   words in the Contents box (toc_component's construction) on the right, tops aligned. */
+/* TWO TRACKS (operator 2026-09-24): the index plate hangs in a 3.5rem left track; title, paragraph and
+   scope words share the right one, so all three entries read down one text edge. */
+.schedule_entry{display:grid;grid-template-columns:3.5rem minmax(0,1fr);column-gap:clamp(1.5rem,1.86vw + 0.45rem,2.25rem);align-items:start;padding-top:clamp(4.5rem,4.65vw + 1.6rem,6rem);padding-bottom:clamp(4.5rem,4.65vw + 1.6rem,6rem)}
+/* in the sequence grid's right track the first entry's top aligns with the sticky head's tagline. */
+.schedule_entry:first-child{padding-top:0}
+.schedule_entry-main{min-width:0;display:grid;justify-items:start}
+.schedule_entry-title{margin-top:0.625rem}
+/* THE INDEX PLATE (operator 2026-09-24: "a more creative way for the numbers ... remove the icon"). A 3.5rem
+   square on the house card ground and hairline, the panels' orange corner bracket on its top-left only,
+   the numeral in Bold at the lead rung. Decorative pseudo, content:"" (CLAUDE.md 4c).
+   #EDEDED on #080808 = 16.9:1. */
+.schedule_index{position:relative;display:grid;place-items:center;width:3.5rem;height:3.5rem;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424)}
+.schedule_index::before{content:"";position:absolute;top:-1px;left:-1px;width:8px;height:8px;border-top:1px solid var(--orange,#FF6600);border-left:1px solid var(--orange,#FF6600)}
+.schedule_index::after{content:"";position:absolute;right:-1px;bottom:-1px;width:8px;height:8px;border-right:1px solid var(--orange,#FF6600);border-bottom:1px solid var(--orange,#FF6600)}
+/* is-plain - the plate without its two orange brackets (Solutions' icon plates, operator 2026-09-24). */
+.schedule_index.is-plain::before{display:none}
+.schedule_index.is-plain::after{display:none}
+/* is-boxed - the "Best suited for" note in the house card (#080808 on one #242424 hairline, square), as the
+   Areas of Review scope box and Our Approach's panels wear it (operator 2026-09-24). #8E8E8E on #080808 = 6.11:1. */
+.spectrum_note.is-boxed{position:relative;width:100%;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(1.5rem,1.4vw + 0.9rem,2rem) clamp(1.75rem,1.86vw + 0.95rem,2.5rem);margin-top:1.75rem}
+/* the house panel's diagonal brackets, top-left and bottom-right: decorative, content:"" (CLAUDE.md 4c). */
+.spectrum_note.is-boxed::before{content:"";position:absolute;top:-1px;left:-1px;width:12px;height:12px;border-top:1px solid var(--orange,#FF6600);border-left:1px solid var(--orange,#FF6600)}
+.spectrum_note.is-boxed::after{content:"";position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-right:1px solid var(--orange,#FF6600);border-bottom:1px solid var(--orange,#FF6600)}
+/* the same plate carrying an offer glyph instead of a numeral (pages/solutions.html 3B). */
+.schedule_index-icon{display:block;width:1.75rem;height:1.75rem}
+.schedule_index-num{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.0625rem;font-weight:700;line-height:1;letter-spacing:0.02em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0}
+.schedule_entry-body{max-width:46rem;margin-top:1.5rem}
+/* the entry paragraph: Light 300 like the fine rung, one step up to the 17px rung the contact values and
+   form states already carry (operator: "a little bigger"). #C9C9C9 on #000 = 12.3:1. */
+.schedule_entry-text{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.0625rem;font-weight:300;line-height:1.65;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
+/* THE SCOPE LINE (operator 2026-09-24: no borders, no lines - "they look like progress bars"). Typographic
+   only: the words run as one wrapping line at the label rung, each led by the Contents list's 4px orange
+   square, with generous air between them. No rule, no surface, no edge anywhere. */
+/* three EQUAL tracks at the same width in all three entries, so every column of words sits on the same
+   three x positions down the page - Legal 3 + 2, Financial and Technical one row each. */
+.scope_list.is-rail{margin-top:2.5rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:2rem;row-gap:1.125rem;width:100%;max-width:none;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(1.5rem,1.4vw + 0.7rem,2rem) clamp(1.5rem,1.86vw + 0.45rem,2.25rem)}
+.scope_item.is-tick{display:flex;align-items:center;column-gap:0.75rem;padding-top:0;padding-bottom:0;border-bottom-width:0}
+.scope_item.is-tick::before{content:"";display:block;flex-shrink:0;width:4px;height:4px;background-color:var(--orange,#FF6600)}
+/* the header field's centred mode is geometry only (interior.js section 2); the layer keeps the base's
+   -30vh, so no rule is needed and none is authored. */
+
+/* --- 1B's THREE-NAME INDEX is `continuum_bar` worn rather than redrawn, and `is-index` is the one
+   combo that tells the difference between R22's use and this one. Solutions' bar sits under a
+   question inside `continuum_block`, which supplies its own top rung; here the bar is a bare
+   index in `page-header_foot`'s action slot, bottom-aligned with the lead's last line — so the
+   combo drops the 1.5rem the block-wrapped version needs, and no number is added anywhere.
+   THE TRACK MODEL IS THE OTHER HALF OF THE COMBO. Three equal `1fr` tracks are right for R22's
+   bar, which spans the container under a question; in an auto-width action slot they all size to
+   the widest word, so LEGAL sits in a TECHNICAL-sized cell and the index reads ragged. Content
+   sized with one even gap, the three names read as one index — and the same model is what makes
+   the narrow tier below work.
+   THE NARROW TIER IS A MEASUREMENT, NOT A PREFERENCE. At 320 the container is 288px and the foot
+   is one column, so the index has the full width: TECHNICAL at the 14px label rung with +0.14em
+   tracking measures 102px, FINANCIAL 97px and LEGAL 57px — 256px of words. The desktop gap would
+   put that at 304px, 16px past the container, so below 480 the gap tightens to 0.5rem: 272px
+   inside 288px, and the three names still share ONE Y at every width, which is 1B's one
+   structural rule. `is-index` is why Solutions' own bar is untouched at every tier. --- */
+.continuum_bar.is-index{display:flex;flex-wrap:nowrap;justify-content:flex-start;column-gap:clamp(1.5rem,2.91vw - 1.38rem,3rem);margin-top:0}
+
+/* --- §3 · `#close` — 3A's RULED FOOT. One hairline rail to rail at the small section rung, then
+   the page's single `Start the Conversation` on the container's left rail; the 2rem between the
+   rule and the button is `.button-row`'s own margin, so no new number enters the system. 3B adds
+   nothing at all, because 3B is NO CLOSE. --- */
+.close_foot{display:grid;justify-items:start;border-top:1px solid var(--edge-card,#242424)}
+
+/* --- the three deployable narrow tiers. Anything already on a clamp is left alone: a clamp IS
+   the responsive rule, and restating it at a breakpoint is how two sources of truth start. The
+   scope strip needs no tier at all — its cells wrap on their own `min-width`. --- */
+@media (max-width:991px){
+  /* TABLET. The schedule becomes ONE COLUMN and, because the DOM order is domain-major, it stacks
+     as three complete domains rather than as three names followed by three paragraphs. Two
+     changes and no more: the three `grid-row` numbers go, and THE OPENING RULE MOVES FROM THE
+     HEAD TO THE GRID. That second one is a doubling fix, measured: stacked, each domain's last
+     scope row already closes on a hairline, so a head that kept its own `border-top` drew a
+     SECOND line 17px under the first at every domain boundary — the two-pixel artefact class
+     MOCKUP-DEVICES.md holds us to. With the rule on the grid, the schedule opens once and every
+     boundary after it is one line. A stacked domain is rule · name · rule · paragraph · rule ·
+     scope, and the 5rem between the last scope row and the next name is what separates them. */
+  .schedule_grid{grid-template-columns:minmax(0,1fr);border-top:1px solid var(--rule-plate,#454545)}
+  .schedule_head{grid-row:auto;border-top-width:0;padding-top:2.5rem}
+  .schedule_body{grid-row:auto;padding-bottom:2rem}
+  .schedule_scope{grid-row:auto;padding-bottom:2.5rem}
+  .schedule_entry-body{max-width:100%}
+  .schedule_entry{padding-top:4rem;padding-bottom:4rem}
+}
+@media (max-width:991px){
+  .sequence_grid.is-even{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:479px){
+  .schedule_entry{grid-template-columns:minmax(0,1fr);row-gap:1.5rem;padding-top:3.5rem;padding-bottom:3.5rem}
+  .schedule_entry-title{margin-top:0}
+  .scope_list.is-rail{margin-top:2rem}
+  .scope_list.is-rail{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.25rem;row-gap:0.875rem;padding:1.25rem}
+}
+@media (max-width:767px){
+  /* LANDSCAPE PHONE. */
+  .schedule_head{padding-top:2rem;padding-bottom:1.25rem}
+  .schedule_body{padding-top:1.25rem;padding-bottom:1.5rem}
+}
+@media (max-width:767px){
+  .register_plate{aspect-ratio:16 / 9}
+}
+@media (max-width:479px){
+  /* PORTRAIT PHONE. The index's gap tightens so the three domain names stay on one row at 320
+     (the measurement is in the note above `.continuum_bar.is-index`). */
+  .schedule_entry{padding-top:2.25rem;padding-bottom:2.25rem}
+  .continuum_bar.is-index{column-gap:0.5rem}
+}
+
+
+
+/* ============================================================================
+   R24-INDUSTRIES (2026-09-20) — INDUSTRIES (`pages/industries.html`). ADDITIONS ONLY: not one
+   rule above this line was touched, so pages/homepage.html, pages/our-approach.html,
+   pages/insights.html, pages/insights-article.html, pages/contact.html, pages/solutions.html and
+   pages/areas-of-review.html render byte-identical — every NEW BASE selector below matches 0
+   elements on all seven, and the four new combos are combos on classes those pages wear WITHOUT
+   them. No new token, type rung, section padding, container, radius, button or breakpoint; every
+   value is an existing rung or an existing clamp formula, and the only `@media` widths are the
+   deployable six.
+
+   §2c, AND WHAT IT CHANGED HERE. The round opened by inventorying what the seven built pages
+   already do for a set of N: Our Approach's numbered sequence on one rail with a sticky aside;
+   Solutions' flat continuum track, its divided band, its stacked rail+body bands, its open art
+   rows and its 3-up card grid; Insights' index rows and its divided band of cards; Contact's
+   paired field grid; Areas of Review's schedule and its ruled entries; the homepage's corner-
+   numbered band and its 3-up teaser grid. ELEVEN SHAPES, AND EVERY ONE TREATS THE ITEM AS THE
+   UNIT — each item owns its own container, its own art and its own edges. Six is where that
+   habit is most expensive: six containers is six of everything, and "three across, twice" is both
+   the shape that writes itself and the shape that squeezes his 268-character Real Estate
+   description to 38 characters a line.
+
+   So 2A's unit is THE REGISTER, not the card. One band, six rows, and the six art wells stacked
+   with NO GAP so they form ONE CONTINUOUS RECESSED GUTTER down the band's left edge — six plates
+   in one channel, which is the page's own argument made structural: six readings of one record.
+   No page here has run a continuous recessed channel beside a list, and none has made the art
+   column a single object instead of six.
+
+   TWO NEW FAMILIES? NO — ONE, AND THE OTHER OPTION WEARS `service_*` WHOLE. §8: when an existing
+   class and a new one name the same object, choose the existing. R22's own header in this sheet
+   says it: `service_*` is "a service item whose art sits in a well. Industries' six drawn cards
+   are this." 2B therefore adds NO base class at all — it is `service_grid is-stack` >
+   `service_card is-raised` > `service_well` + `service_card-body`, with the six-up rhythm change
+   the brief requires of a reused family: the data room is three cards ACROSS inside a bracketed
+   panel, this is six panes DOWN at full container width with no panel around them.
+
+     register_*   N entries in ONE ruled band whose art sits in a continuous recessed gutter.
+                  About's two-entity register and Afissio Law's separation-of-services pair are
+                  the same object, which is why nothing here is named `industry_…`.
+
+   WHY `service_card` NEEDS `is-raised` AND IT IS A SURFACE DECISION, NOT A COLOUR TWEAK.
+   `MOCKUP-DEVICES.md`: containers step UP from their ground, art wells step DOWN toward black.
+   In R22's 4B the card is UNFILLED because it sits inside `panel_bracket`'s #080808, so the
+   well's #000000 is already a step down. Here the panes sit on the PAGE's #000000, where an
+   unfilled card would put a #000000 well on a #000000 ground and the recess would not exist. The
+   combo raises the card to #080808 so the well can genuinely recess — the same three-step inward
+   darkening 2A builds with its band, reached the other way round.
+
+   FLAT, BY CONSTRUCTION, BOTH WAYS — the client pinned flatness twice (BugHerd #5 and #8). 2A's
+   plate track is a FIXED rem width, never content-sized, so the six plates share one x and one
+   width and no row can widen its own; the six rows are one construction with one padding and one
+   hairline. 2B is one column of identical panes, so the six plate bands share one x and one
+   width. Neither can become a staircase, a 2/3+1/3 split or a "featured" sector, and neither
+   carries a numeral — a numeral implies rank, and these six differ in subject, never in rank.
+
+   THE MEASURE IS WHY THERE IS NO SECOND COLUMN, and it is arithmetic rather than taste. The
+   project's own measured ratio is 46rem = 64ch at 19px, i.e. ~11.5px a character. 60ch therefore
+   needs 690px of text. Two columns with a 7.5rem art rail need 2 x (690 + 120) + a 3rem gutter =
+   1668px of CONTAINER, which only exists above a 1860px viewport — so a two-up register holds the
+   brief's measure at no authorable breakpoint and one column is the only honest answer. 2A lands
+   64ch at 1280/1440/1680 and 62ch at 992; 2B lands 62ch at every desktop width on
+   `service_copy`'s existing 40rem cap at the 17px rung.
+
+   MOTION: NONE NEW, which `BUILD-BRIEF` §5 names as a valid answer and §8's tie-breaker settles
+   ("when motion and stillness serve the set equally, choose stillness"). The settle already
+   stages a section's blocks in DOM order 130ms apart, so the six arrive once, in the deck's
+   order: 6 x 130 + 1600 = 2.38s, inside the 4s ceiling, nothing looping. TWO selectors were
+   appended to `pages/interior.js`'s settle list (`.register_head`, `.register_row`) and nothing
+   else in it changed; neither matches an element on any of the seven pages built before this one,
+   and `.service_card` was already in the list (R22), so 2B settles with no edit at all. Nothing
+   here rests at `opacity:0`.
+   ============================================================================ */
+
+/* --- §2 · `#industries` — THE SECTION. TRANSPARENT, for the reason `section_sequence`,
+   `section_form`, `section_continuum` and `section_schedule` are (R28): the header's field layer
+   is `bottom:-30vh` and an opaque later sibling paints over the tail, which puts the hard 100vh
+   line back at the seam. The page's black is on `.main-wrapper`, one level up. Worn by BOTH
+   options, as `section_schedule` is. --- */
+.section_register{position:relative;background-color:transparent}
+/* the section head — the H2 and the system's own 4rem head-to-content rung. Worn by both options,
+   so whichever survives Phase D the head is one rung and not two. `service_grid is-stack` zeroes
+   its own `margin-top` for exactly this reason: one gap between a head and its content, never a
+   head margin plus a grid margin. */
+.register_head{max-width:44rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+
+/* --- #industries · THE ZIG-ZAG REGISTER (client note 2026-09-24). One band, six rows of two EQUAL halves — the
+   drawing's well (#000000) and the text (#080808) — that trade sides every row via `is-flip` (row-reverse, so DOM order
+   stays plate → body and the stacked tier reads the same in every row). The halves are equal, so the boundary is always
+   the band's centre: ONE spine (a real element, so the rule sweep can travel it) and one node per row on it. Surfaces
+   step as before: page #000000 → band #080808 → well #000000. `:last-child` drops the trailing hairline (§4d). --- */
+.register_head.is-centered{max-width:46rem;margin-left:auto;margin-right:auto;text-align:center}
+.register_title-block{margin-top:1.5rem}
+.register_band{position:relative;border:1px solid var(--edge-card,#242424)}
+.register_spine{position:absolute;top:0;bottom:0;left:50%;z-index:1;width:1px;background-color:var(--edge-card,#242424)}
+.register_row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background-color:var(--surface-card,#080808);border-bottom:1px solid var(--edge-card,#242424)}
+.register_row:last-child{border-bottom-width:0}
+/* EXACTLY 50/50 (client note 2026-09-24): two fr tracks; is-flip mirrors the track order with direction, and both
+   halves restate ltr so type and the lattice never read right-to-left. */
+.register_row.is-flip{direction:rtl}
+/* ALMOST SQUARE (client note 2026-09-24): the well is 10:9 and sets the row height; the text half centres in it.
+   The well carries its own computing lattice (compute-field is-plate, interior.js §3) with a clear zone for the drawing. */
+.register_plate{direction:ltr;position:relative;overflow:hidden;min-width:0;aspect-ratio:10 / 9;display:grid;place-items:center;padding:clamp(3rem,4.65vw + 0.2rem,5rem);background-color:var(--ink-hero,#000000)}
+.register_art{position:relative;z-index:1;display:block;height:4.5rem;width:auto}
+.register_body{direction:ltr;min-width:0;display:grid;align-content:center;justify-items:start;row-gap:1rem;padding:clamp(2rem,5.81vw - 2.6rem,5rem)}
+.register_node{position:absolute;top:50%;left:50%;z-index:2;width:0.5625rem;height:0.5625rem;background-color:var(--ink-hero,#000000);border:1px solid var(--orange,#FF6600);transform:translate(-50%,-50%) rotate(45deg)}
+
+/* --- 2B · THE SECTOR FOLIO. Two combos and not one new base class. `is-stack` is the six-up
+   rhythm change (one column, the family's existing 2rem row-gap between panes, and no top margin
+   because `register_head` already owns the head-to-content rung). `is-raised` is the surface
+   decision explained in the header above. --- */
+.service_grid.is-stack{grid-template-columns:minmax(0,1fr);margin-top:0}
+.service_card.is-raised{background-color:var(--surface-card,#080808)}
+/* AND THE THIRD COMBO IS A MEASUREMENT, FOUND BY MEASURING RATHER THAN BY READING. R22's own
+   <=991 tier releases `.service_copy` to `max-width:100%`, which is correct for the composition
+   it was written for — the data room's rows are two-track at that width, so the released copy is
+   still narrow. Worn here on a SIX-UP STACK the pane is the full container, and at 991 the
+   released copy measured **91 characters a line**, sixteen past the brief's 75 ceiling. The base
+   rule is worn by pages/solutions.html and is frozen, so the cap is restored on a combo instead:
+   (0,2,0) beats the tier rule's (0,1,0), and below a 640px container it is inert. 71ch at every
+   width from 992 up, 70ch at 768. */
+.service_copy.is-measured{max-width:40rem}
+/* AND THE FOURTH IS THE SAME KIND OF CORRECTION. `.service_well` is `place-items:center`, which is
+   right for R22's 4B, where the well is one third of a panel and a 48px drawing centred in a
+   ~360px plate is his own device (`client-mockup-insights.png`). Worn on a SIX-UP STACK the pane
+   is the full container and the plate became 1596px wide: a 48px drawing centred in it reads as
+   30:1 and the mark looks mislaid rather than placed. `is-band` starts the art instead, on the
+   card body's own padding, so the drawing, the name and the copy share ONE left edge down all six
+   panes — which is also what makes 2B's axis (plate ABOVE the text) legible as a decision. */
+.service_well.is-band{place-items:center start;padding-left:clamp(1.5rem,2.33vw + 0.6rem,2rem);padding-right:clamp(1.5rem,2.33vw + 0.6rem,2rem)}
+
+/* --- §1 · 1B's HEADER FOOT. The foot's second slot has carried an action (Insights, Solutions)
+   and an index (Areas). This deck is the first to hand the header a lead AND a sub, so here the
+   slot carries TEXT: two equal `1fr` measures, TOPS ALIGNED, instead of a 40rem lead beside an
+   end-aligned action. `align-items:start` replaces the base's `end` — bottom-aligning two
+   paragraphs of unequal length is how a foot starts looking accidental.
+   The sub's combo exists for ONE reason and it is alignment: `.page-header_sub-block` carries
+   `margin-top:1.25rem` for the stacked composition (1A), and `.page-header_lead-block.is-left`
+   carries 1.5rem, so side by side the two tops would sit 4px apart. The combo matches the lead's
+   1.5rem and its 40rem cap, and the pair's one structural rule — the lead and the sub share one
+   top — holds at every width. It cannot be a third class on the lead (F2 mangles any selector
+   with three classes), so the rung is equalised on the element that is free to take a combo. --- */
+.page-header_foot.is-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;justify-content:stretch}
+.page-header_sub-block.is-pair{max-width:40rem;margin-top:1.5rem}
+
+/* --- the deployable tiers. Anything already on a clamp is left alone: a clamp IS the responsive
+   rule, and restating it at a breakpoint is how two sources of truth start. --- */
+@media (max-width:991px){
+  /* TABLET: the halves stack, plate above body in every row (row-reverse is restated as column), so the spine and
+     the nodes retire; the plate keeps its recess and closes on one hairline. The header foot goes to one column. */
+  .register_head{max-width:100%}
+  .register_head.is-centered{max-width:100%}
+  .register_spine{display:none}
+  .register_node{display:none}
+  .register_row{grid-template-columns:minmax(0,1fr)}
+  .register_plate{aspect-ratio:21 / 9;padding:2rem;border-bottom:1px solid var(--edge-card,#242424)}
+  .page-header_foot.is-pair{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:479px){
+  /* PORTRAIT PHONE. The body's padding steps down once, as every other panel on the site does, so
+     a 288px container still has a readable column inside it. */
+  .register_body{padding:1.25rem}
+  .register_plate{aspect-ratio:3 / 2;padding:1.5rem}
+  .register_art{height:3.5rem}
+}
+/* RESPONSIVE PASS (2026-09-24): the stacked well steps 21:9 (tablet + landscape phone, so it never outgrows a 390px-tall
+   screen) → 16:9 (≤767) → 3:2 (≤479); the text half's padding is one clamp that reads 32px at 992–1280 and grows to 80px. */
+
+
+/* ============================================================================
+   R25-LAW (2026-09-20) — AFISSIO LAW (`pages/afissio-law.html`, /afissio-law, page 06): the page
+   that says when a finding needs a lawyer and, with equal weight, THAT THE TWO FIRMS ARE
+   SEPARATE. ADDITIONS ONLY: not one rule above this line was touched, so the homepage, Our
+   Approach, Insights, the article template, Contact, Solutions, Areas of Review and Industries
+   render byte-identical — the eighteen names below appear in NO other page's markup, so every new
+   selector matches 0 elements on all eight. Two options per section pending Phase D, so the count
+   will fall: each losing block takes its family with it.
+
+   TWO FAMILIES, NAMED FOR THE DEVICE AND NEVER FOR THIS PAGE:
+     passage_*  a reading passage at two rungs, and the two ways to mark the turn between them
+     divide_*   TWO EQUAL NAMED THINGS AND THE RULE BETWEEN THEM
+
+   WHY divide_* IS A NEW FAMILY AND NOT A REUSE, WHICH §8 WOULD OTHERWISE REQUIRE. Thirteen list
+   shapes exist across the eight built pages — the numbered sequence, the continuum track, the
+   divided band, the stacked rail+body bands, the open art rows, the 3-up card grid, the index
+   rows, the divided band of cards, the field grid, the schedule, the ruled entries, the register,
+   the six-up panes — and EVERY ONE of them either gives each item its own container or makes the
+   SET the unit. Both readings are wrong for two entities that must be equal and separate: a
+   container per firm that differs in any way makes one firm primary, and a set that reads as one
+   object merges them. `register_*`'s own header in this sheet already names this page's pair as
+   the same object it is; the register is the inverse answer (one band, no gaps) and is the one
+   thing §4 §3 rules out by name — "a shared container that reads as one block". So the device is
+   new, and About's two-entity block is its second user.
+
+   THE SEPARATION RULE IS --text-muted-ink, AND THAT IS A CONTRAST DECISION. It is the one
+   non-text element on this page that carries meaning, so WCAG 1.4.11's 3:1 applies to it: the
+   site's hairline vocabulary measures 1.29:1 (#242424) and 2.09:1 (#454545) against the panel
+   ground, while #8E8E8E measures 6.28:1 on #000000 and 6.11:1 on #080808. An existing token in
+   exactly the role R21 gave it on the form's field edge. No new colour, no new token.
+
+   NO APEX ANYWHERE IN #separation. The apex is Afissio's mark; on the Afissio Law LLC panel it
+   would merge the two marks at the moment the page says they are separate, and on one panel only
+   it would make that panel the branded one. The section is the first on this site to refuse the
+   motif on purpose, which is also why its committed-moment advantage is whitespace and surface
+   rather than colour.
+   ============================================================================ */
+
+/* --- §2 `#role` · TRANSPARENT, for the reason section_sequence, section_form, section_continuum,
+   section_schedule and section_register carry no ground (R28): the header's field layer is
+   bottom:-30vh and an opaque later sibling paints over the tail, putting the hard 100vh line back
+   at the seam. This is the FIRST section after the header, so it is the one that would show it.
+   The page's black is on .main-wrapper. --- */
+.section_passage{position:relative;background-color:transparent}
+/* the section head, shared by both options — the H2 and the system's own 4rem head-to-content
+   rung, so whichever composition survives Phase D the head is one rung and not two. The
+   `grid-column` is inert in 2A (its parent is the container, not a grid) and load-bearing in 2B,
+   where the head must span both tracks; one rule therefore serves both without a combo. */
+.passage_head{max-width:44rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem);grid-column:1 / 3}
+
+/* --- 2A · THE TURNED PASSAGE. One reading axis; the turn marked by ONE FULL-CONTAINER HAIRLINE
+   between the two paragraphs. No page on this site has put a rule inside a prose block, and the
+   turn — from "resolves without a lawyer" to "requires legal work" — is the only thing in this
+   quiet section worth making structural.
+   LINES NEVER CROSS TEXT (operator, absolute): the rule spans the container while both paragraphs
+   hold their own measure, so it governs the margins and passes BETWEEN two blocks, which is the
+   same category as every other divider in the line system. It takes --rule-plate and not
+   --text-muted-ink because unlike §3's seam it carries no meaning the sentences do not already
+   carry: remove it and the paragraphs still say everything.
+   THE MEASURES ARE THE ONES THIS PROJECT HAS ALREADY PROVEN: 48rem at the 22–25px Light lead rung
+   (the figure band_lead-block carries) and 46rem at the 19px body rung (R20's article_richtext
+   measurement, 73ch). --- */
+.passage_lead{max-width:48rem}
+.passage_rule{height:1px;background-color:var(--rule-plate,#454545);margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem);margin-bottom:clamp(2rem,2.33vw + 1.1rem,2.75rem)}
+.passage_sub{max-width:46rem}
+/* R26-CLOSE: `passage_sub` +is-spaced — THE RUNG THE RULE WAS CARRYING. On this page the two
+   paragraphs are separated by `.passage_rule`, whose own 2–2.75rem margins ARE the gap. About's
+   `#why` 2A wears the same family without the rule (it has no turn to mark), and measured on the
+   rendered page the lead's bottom and the sub's top were both at 1354px — 0px apart, two rungs
+   reading as one run of text, and 0 is not on the five-rung gap scale. The base rule is worn by
+   `pages/afissio-law.html` and is frozen, so the rung arrives as a combo on the element that is
+   free to take one — the same shape as `close_foot is-spaced` (R25) and `service_copy is-measured`
+   (R24). 1.5rem is the scale's existing role-to-role rung, which is what a lead-to-body step is. */
+.passage_sub.is-spaced{margin-top:1.5rem}
+
+/* --- 2B · THE OFFSET TURN. The same two paragraphs at the same two rungs in the same order, with
+   the second STARTING AT THE CONTAINER'S MIDPOINT: the turn is a step across the page instead of
+   a rule through it. Placed by grid LINE NUMBERS (§4f's sanctioned replacement for the
+   grid-template-areas §4c drops) — the head spans both tracks, the lead auto-places into row 2
+   column 1, and the sub is pinned to row 3 column 2.
+   THE ROW NUMBER IS LOAD-BEARING, NOT DECORATIVE: with sparse auto-placement the sub would land
+   in row 2 BESIDE the lead, which is the one thing it must not do. §3 is two columns and no two
+   adjacent sections may share a composition, so §2 is single-axis in both options — nothing here
+   sits beside anything.
+   `row-gap:0` because the head already owns the head-to-content rung on its own margin and the
+   sub owns its own step; one gap per relationship, never a margin plus a grid gap. --- */
+.passage_shift{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem);row-gap:0}
+.passage_first{min-width:0;max-width:48rem}
+.passage_second{min-width:0;max-width:46rem;grid-column:2;grid-row:3;margin-top:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+
+/* --- §3 `#separation` · the page's ONE COMMITTED MOMENT. Transparent for the same reason §2 is.
+   Its advantage is measurable twice: padding-section-large (18rem at 1680) against #office's
+   padding-section-small (9rem) is EXACTLY 2x the surrounding whitespace, and 3A's panels are the
+   only place on the page where the surface ladder steps at all. --- */
+.section_divide{position:relative;background-color:transparent}
+.divide_head{max-width:44rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+
+/* --- 3A · THE DIVIDED RECORD — his own device, taken whole and advanced. His page 06 sets two
+   bordered panels side by side with a perforated divider standing in the gap; that arrangement is
+   the one that cannot be misread, so it is the one that is taken.
+   TWO SEPARATE BORDERS AND A GENUINE GAP, NOT ONE BAND. The divided-band mechanism this sheet
+   already carries twice (brief_series, spectrum_series: one border round the set, one hairline
+   between cells, no gap) is exactly what §4 §3 rules out here — it reads as ONE BLOCK, and one
+   block is a merged entity block. The habit move is the banned move.
+   EQUAL, AND EQUAL IS MEASURED, FOUR WAYS: two minmax(0,1fr) tracks, so the panels are the same
+   width at every viewport; ONE .divide_panel rule, so they are the same surface, border, padding
+   and internal rungs; the grid's default stretch, so they are the same height whatever the two
+   sentences do; and one row, so they share one top. The two panels are IDENTICAL LEAF FOR LEAF.
+   THE SEAM IS A GRID CHILD WITH BOTH LINES PINNED, and that is not belt-and-braces. With only its
+   row pinned it would be an item "locked to row 1" and CSS grid would place it in the first
+   AVAILABLE column of that row — column 1, i.e. in front of the first panel, because the panels
+   are auto-placed and nothing has claimed column 1 yet at that point in the algorithm. Pinned to
+   column 2 it is placed first, and the two panels then auto-flow into columns 1 and 3.
+   A 0-WIDTH BOX WITH A LEFT BORDER, not a 1px box with a background: the `auto` track then sizes
+   to exactly the 1px the border occupies, and `dashed` is a core Webflow border style, so the
+   perforation ships as a style object rather than as hand work at deploy.
+   THE ATTORNEY SLOT IS THE PAIR'S FOURTH CHILD, at grid-column:3 / grid-row:2, so its left edge
+   IS the Afissio Law LLC panel's left edge at every width. It is OUTSIDE both panels on purpose:
+   giving the right panel a fourth leaf the left one cannot have would spend the equality this
+   section exists for, so attribution comes from alignment — which is exact and measurable —
+   rather than from containment, which would cost it. --- */
+.divide_pair{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);column-gap:clamp(1.5rem,2.91vw - 1.38rem,3rem)}
+.divide_panel{display:grid;justify-items:start;align-content:start;row-gap:1.25rem;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2rem,4.65vw - 0.89rem,4rem)}
+/* the attorney-client sentence: a contract obligation, so it renders at the BODY rung — the same
+   rung as the sentences inside the panels — whole, adjacent to the pair, and above the section's
+   own seam. Never a caption, never a footnote, never behind a toggle. 46rem is the site's proven
+   body measure (73ch), which sets the 92-character sentence on two lines rather than stretching
+   it to a 90-character line just to keep it unbroken. Worn by BOTH options. */
+.divide_note{max-width:46rem;margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem)}
+
+/* --- 3B · THE OPEN DIVIDE, and there are no cards in it: §4 §3 asks that at least one answer not
+   be a pair of boxes. No panel, no fill, no border around either firm — two equal type columns on
+   the page's own black, OPENED and CLOSED by one shared hairline each and separated by ONE SOLID
+   VERTICAL RULE drawn through the page. The boundary is a line, not an edge, so nothing contains
+   either entity and nothing can contain one of them better than the other.
+   THE VERTICAL RULE IS A CELL BORDER, which is the FOOTER's own construction — its four cells are
+   divided exactly this way — and is therefore not one of the full-height RAILS the line system
+   retired in R11. It divides two cells and crosses no text.
+   MIRROR-SYMMETRIC PADDING, AND THE TRANSPARENT BORDER IS WHY THE TWO MEASURES ARE EXACTLY EQUAL
+   RATHER THAN ALMOST. The left column pays the gap on its right and the right column pays the
+   same gap on its left; without compensation the right column would also lose the divider's 1px
+   and the two text boxes would differ by one pixel. The base rule therefore gives EVERY column a
+   1px transparent right border, and `is-second` trades it for a 1px coloured left one — so both
+   boxes lose exactly 1px + one gap, whichever side of the rule they are on. Measured equal at
+   every width.
+   TYPE-ROLE INVERTED against 3A: the name stays at H3 and the sentence rises to the lead rung, so
+   what a reader takes away is the two SENTENCES rather than the two names. Both rungs are the
+   spine's; none is invented. --- */
+/* the attorney slot INSIDE the Afissio Law column — 0.75rem on top of the column's own 1.25rem
+   row gap, so it sits 2rem under that entity's sentence and reads as an identification line
+   rather than as a continuation of it. Body rung, sized as the name and title will be. */
+.divide_ident{max-width:40rem;margin-top:0.75rem}
+
+/* --- §4 `#office` · ZERO new base classes: R21's office_* is worn whole with THIS entity's
+   strings, which is what its own sheet header said it was for. ONE combo, and it is a gap rather
+   than a style: .close_foot carries no top margin because on pages/areas-of-review.html it is its
+   section's only child, whereas here it follows the address strip. The base rule is worn by that
+   page and is frozen, so the gap is added on a combo and takes the system's existing
+   head-to-content clamp rather than a new number. --- */
+.close_foot.is-spaced{margin-top:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+
+/* --- the deployable tiers. Anything already on a clamp is left alone: a clamp IS the responsive
+   rule, and restating it at a breakpoint is how two sources of truth start. --- */
+@media (max-width:991px){
+  /* TABLET AND BELOW. THE ONE RULE OF THIS PAGE THAT SURVIVES EVERY TIER: the boundary never
+     disappears, it only changes AXIS. Stacked, 3A's perforated seam turns from a vertical line
+     standing in a gap into a full-width dashed rule between the two panels, and 3B's column
+     divider becomes the second column's border-top. At no width do the two entities sit against
+     each other with nothing between them.
+     3A stacked, in DOM order with two pins: the seam takes row 2 and the attorney slot row 4, so
+     the two auto-placed panels flow into rows 1 and 3 — panel / rule / panel / slot. row-gap goes
+     to 0 because the seam's own margins are the gap; a grid gap on top of them would double it.
+     The seam becomes a 0-HEIGHT box with a top border, the exact inverse of the desktop rule, so
+     the perforation is the same device turned 90 degrees and not a second construction.
+     2B's offset is released here: an offset that costs half the container is a composition for a
+     wide screen and an indent bug on a narrow one. The sub returns to row 3 column 1 and keeps a
+     gap, so the turn survives as vertical rhythm.
+     The two heads lose their 44rem caps, as every head on this site does at this tier. */
+  .passage_head{max-width:100%}
+  .passage_shift{grid-template-columns:minmax(0,1fr)}
+  .passage_second{grid-column:1;grid-row:auto;margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem)}
+  .divide_head{max-width:100%}
+  .divide_pair{grid-template-columns:minmax(0,1fr);row-gap:0}
+}
+@media (max-width:479px){
+  /* PORTRAIT PHONE. The panel's padding steps down once, as every other panel on the site does,
+     so a 288px container still has a readable column inside it. */
+  .divide_panel{padding:1.5rem}
+}
+
+/* ============================================================================
+   R26-CLOSE (2026-09-21) — HALF A · ABOUT (`pages/about.html`, /our-company, page 08): the firm
+   and THE TWO PEOPLE WHO DO THE WORK. ADDITIONS ONLY: not one rule above this line was touched,
+   so the homepage, Our Approach, Insights, the article template, Contact, Solutions, Areas of
+   Review, Industries and Afissio Law render byte-identical — every one of the eleven new
+   selectors matches 0 elements on all nine.
+
+   THE PERSON OBJECT THIS SITE DID NOT HAVE. Nine pages in, the system can draw a document, a
+   plate, a well, a panel, a band, a register and a seam, and it cannot draw a PERSON. It gets one
+   here, and it is built out of the object it already has: BUILD-BRIEF §3 and BRIEF.md §6.4 both
+   say the initial plate IS the document field at small scale, so `.initial_plate` repeats
+   `.doc-tile`'s construction — same `#080808` face, same one `#242424` hairline, same radius 0,
+   the same three ruled lines drawn as ONE `::before` plus two cloned `box-shadow`s and one short
+   `::after` (§4c-bis: the right shape, and rebuilding it as divs is "allowed but worse").
+   THE ONE DIFFERENCE FROM THE TILE IS THE PROPORTION, and it is a ban honoured rather than a
+   preference: `aspect-ratio 1 / 1`, never paper's 1 / 1.31 and never 3 / 4, because a
+   portrait-shaped frame with no portrait in it is the EMPTY PHOTO FRAME the brief's §9 bans by
+   name. The initials are a real classed element at the H3-card rung — pseudo `content` carrying
+   author-visible text is the one pseudo shape that cannot ship (§4c), and `JS` / `HA` are the
+   client's own strings.
+   NAMED FOR THE DEVICE: a later page crediting a network member, an author or a contributor wears
+   `initial_plate` and `people_*` unchanged, which is why nothing here is `about_…`.
+   ============================================================================ */
+
+/* --- THE INITIAL PLATE. One rule serves BOTH people — same surface, same edge, same ruled field,
+   same size — which is the strongest available answer to "neither of them is the main one". His
+   mockup lights Jerry's plate warm and leaves Heidi's cool; that is a founder spotlight in surface
+   form and BUILD-BRIEF §4 §3 forbids it, so the device is taken and the hierarchy is not. --- */
+.initial_plate{position:relative;display:grid;place-items:center;width:7.5rem;aspect-ratio:1 / 1;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424)}
+/* the ruled field: three 1px lines from ONE element. The first is `--rule-ink`; its two clones are
+   the softer `--edge-card`, so the field fades downward exactly as the document tile's does. */
+.initial_plate::before{content:"";position:absolute;left:0.875rem;top:1rem;right:0.875rem;height:1px;background-color:var(--rule-ink,#3A3A3A);box-shadow:0 8px 0 var(--edge-card,#242424),0 16px 0 var(--edge-card,#242424)}
+/* the short closing line, the way a real paragraph ends — `doc-tile`'s own 52%. */
+.initial_plate::after{content:"";position:absolute;left:0.875rem;bottom:1rem;width:52%;height:1px;background-color:#262626}
+/* 3B only: the pair of marks IS the page's image there, so the plate steps up. WIDTH ONLY — the
+   aspect ratio, the surface, the edge and the ruled field are the base rule's, untouched. */
+.initial_plate.is-large{width:11rem}
+
+/* --- §3 · `#people`, THE COMMITTED MOMENT. Transparent, for the reason `section_sequence`,
+   `section_form`, `section_continuum`, `section_schedule`, `section_register` and `section_divide`
+   carry no ground (R28): the interior header's field layer is `bottom:-30vh` and an opaque later
+   sibling paints over the tail and reinstates the hard line at the seam. The page's black is on
+   `.main-wrapper`. --- */
+.section_people{position:relative;background-color:transparent}
+
+/* --- 3A · THE COLOPHON, and it was found by arithmetic. Two bios at the brief's 60-character
+   floor need ~1460px of container (2 × 690 + a gap); the container is 1296px at a 1440 viewport
+   and 1152px at 1280, so TWO PEOPLE SIDE BY SIDE CANNOT HOLD THE MEASURE at any common desktop
+   width. The pair therefore reads DOWN, and §8's tie-breaker settles the rest: when the plate and
+   the bio compete for width, the bio takes the measure and the plate stays a mark.
+   THE SHAPE IS THE SIXTEENTH ON THIS SITE. All fifteen the nine built pages spend — the numbered
+   sequence, the continuum track, the divided band, the stacked rail+body bands, the open art rows,
+   the 3-up card grid, the index rows, the divided band of cards, the field grid, the schedule, the
+   ruled entries, the register, the six-up panes, the two equal panels with a seam, the two open
+   type columns — set an item's IDENTITY ABOVE ITS BODY. None hangs it in a margin track BESIDE the
+   body, and only two use more than two tracks. Here the name and role take a track of their own
+   between the plate and the bio, so the two names read as a column down the page: how a serious
+   report credits its authors.
+   THE MEASURE IS A GRID TRACK, NOT A CELL CAP — R24's lesson, taken whole: written as a max-width
+   it sizes the cell and leaves the entry's hairline short of the container. --- */
+.people_list{display:grid;border-top:1px solid var(--edge-card,#242424)}
+/* BASE (992–1279): two tracks. There is not room for a third — at 992 the container is 893px and
+   a 120px plate plus a 160px identity rail plus two gaps would leave 437px, i.e. 38 characters. So
+   the identity moves INTO the second track, above the bio, and the bio still sets 64ch. */
+.people_entry{display:grid;grid-template-columns:7.5rem minmax(0,46rem);column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem);row-gap:1.5rem;align-items:start;padding-top:clamp(2.5rem,3.49vw + 0.34rem,4rem);padding-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem);border-bottom:1px solid var(--edge-card,#242424)}
+.people_ident{min-width:0;display:grid;justify-items:start;align-content:start;row-gap:0.5rem;grid-column:2;grid-row:1}
+/* THE BIO IS PINNED, AND THE PIN IS LOAD-BEARING. With sparse auto-placement a two-column grid
+   would put the third child at row 2 column 1 — under the plate — which is the one place it must
+   not go. The plate itself stays unpinned: it is the first child, so it takes the first free slot,
+   which is row 1 column 1. */
+.people_bio{min-width:0;grid-column:2;grid-row:2}
+@media (min-width:1280px){
+  /* THE THIRD TRACK IS BOUGHT ONLY WHERE THE CONTAINER CAN PAY FOR IT — the same pattern
+     `register_plate` (min-width:1440) and `page-header_grid.is-intake` (min-width:1280) already
+     use. At 1280 the container is 1152px: 120 + 160 + 2×57 = 394, leaving 758, so the 736px cap
+     bites and the bio sets 64 characters at 1280 · 1440 · 1680 · 1920 alike. */
+  .people_entry{grid-template-columns:7.5rem minmax(0,10rem) minmax(0,46rem)}
+  .people_bio{grid-column:3;grid-row:1}
+}
+
+/* --- 3B · THE FACING LEAVES. No card, no fill, no border around either person, and NOTHING
+   BETWEEN THEM: a rule between two colleagues would read as a separation, which is the Afissio Law
+   page's job and not this one's — and is exactly why R25's `divide_*` (two equal named things and
+   the rule between them) is deliberately not reused here. Right shape, wrong sentence.
+   EQUALITY IS STRONGER THAN 3A'S AND IT IS MEASURED: two `minmax(0,1fr)` tracks (same width), ONE
+   `.people_leaf` rule (same rungs, same gaps, same plate), the grid's default stretch (same
+   HEIGHT, which two stacked entries cannot have), one row (one top).
+   ⚠ THE ONE NUMBER OUT OF RANGE, STATED: two-up, the leaf sets 64ch at 1680 and above and 53ch in
+   the 1440–1679 tier — seven characters under the floor. Stacked below 1440 it recovers 64ch. The
+   fix that would clear it is two-up at min-width:1920 only, which would make this option identical
+   to a stack at every width an operator reviews at. The cost is named instead. --- */
+.people_spread{display:grid;grid-template-columns:minmax(0,1fr);row-gap:clamp(2.5rem,3.49vw + 0.34rem,4rem);border-top:1px solid var(--edge-card,#242424);border-bottom:1px solid var(--edge-card,#242424);padding-top:clamp(2.5rem,3.49vw + 0.34rem,4rem);padding-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+.people_leaf{min-width:0;display:grid;grid-template-columns:minmax(0,46rem);justify-items:start;align-content:start;row-gap:1.25rem}
+@media (min-width:1440px){
+  .people_spread{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem)}
+}
+
+/* --- §4 · `#network`. Transparent, same reason. 4A adds NOTHING: `panel_bracket` is R22's generic
+   name for his diagonal corner brackets, and that family's own header in this sheet names this
+   block as its waiting second user — "About's 'A network of experts' block in his own mockup is
+   the same device". It takes it, with `band_grid` inside for his own arrangement. --- */
+.section_network{position:relative;background-color:transparent}
+/* 4B · THE RULED SHELF: the panel refused. One full-container hairline opens the block and the
+   three rungs sit on one edge at the 46rem = 64-character measure, on the page's own black. Named
+   for the device — any quiet closing statement on any future page wears it. */
+.network_shelf{display:grid;grid-template-columns:minmax(0,46rem);justify-items:start;row-gap:1.5rem;border-top:1px solid var(--edge-card,#242424);padding-top:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+
+@media (max-width:991px){
+  /* TABLET AND BELOW. The colophon stacks — plate, then identity, then bio, one edge — and the
+     measure cap is released to the container, which is now the smaller number. This is the
+     Industries lesson: the stack happens at 991 and not at 767, because between them the container
+     cannot hold a plate, an identity rail and 60 characters at once.
+     3B's leaves are already one column here (two-up starts at min-width:1440), so nothing is
+     written for them at this tier. */
+  .people_entry{grid-template-columns:minmax(0,1fr);row-gap:1.25rem}
+  .people_ident{grid-column:1;grid-row:auto}
+  .people_bio{grid-column:1;grid-row:auto;max-width:100%}
+  .people_leaf{grid-template-columns:minmax(0,1fr)}
+  .network_shelf{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:479px){
+  /* PORTRAIT PHONE. The plate steps down once — 120px inside a 288px container leaves the name
+     enough room to sit under it without the entry reading as a margin rail with nothing in it. */
+  .initial_plate{width:6rem}
+  .initial_plate.is-large{width:6rem}
+}
+
+/* ============================================================================
+   R26-CLOSE (2026-09-21) — HALF B · THE POLICY TEMPLATE AND THE 404
+   (`pages/legal-policy.html` → /privacy-policy, /terms-of-use, /cookie-policy · `pages/404.html`).
+   ADDITIONS ONLY. Three base classes and one combo, and that is the whole round on this side:
+   §2c says in as many words that a legal page earns its keep by being READABLE, not by being
+   inventive, and §8's tie-breaker asks for the composition `pages/insights-article.html` already
+   proved for a long read. Option 2A wears it whole and adds nothing.
+
+   THE 404 ADDS NOTHING AT ALL: both of its options are the built interior header at `is-short`,
+   in the two arrangements the system already carries.
+   ============================================================================ */
+
+/* --- `section_body` +is-clear. Transparent, for the reason `section_sequence`, `section_form`,
+   `section_continuum`, `section_schedule`, `section_register`, `section_divide`, `section_people`
+   and `section_network` carry no ground (R28): the interior header's field layer is `bottom:-30vh`
+   and an opaque later sibling paints over the tail and reinstates the hard line at the seam. The
+   base rule is worn by `pages/insights-article.html` and is frozen, so the transparency arrives as
+   a combo and not as an edit — the same shape R19 used for `section_band is-clear`. --- */
+.section_body.is-clear{background-color:transparent}
+
+/* --- `longform_*` · A LONG DOCUMENT WITH A RUNNING HEAD IN THE MARGIN (2B). The rail exists for
+   one reader: the one who is 900px into clause 14 and wants to know which of the three policies
+   they are in. It is STICKY, it carries the page name and nothing else, and it is populated by a
+   string already on the page — which is §4 §2's condition for a rail existing at all, because a
+   table of contents would have to list headings iubenda generates and we never see.
+   IT COSTS THE COLUMN NOTHING: 14rem + a 5rem gap + 46rem is 60rem, and above 1200px of container
+   the 46rem cap is still the smaller number, so the measure is the same 64 characters 2A holds.
+   Named for the DEVICE — a terms page, a disclosure or a report wears it next. Nothing on these
+   two files is named `policy_…` or `legal_…`. --- */
+/* THE RAIL IS BOUGHT ONLY WHERE THE CONTAINER CAN PAY FOR IT, AND THAT WAS MEASURED RATHER THAN
+   ASSUMED. Written as a base rule the two tracks set the column to 629px = 54.7 characters at 992
+   — under the 60 floor — because a 224px rail plus a 40px gap comes out of an 893px container.
+   So the margin composition starts at min-width:1280 (1152px container: 1152 − 224 − 57 = 871,
+   and the 46rem cap bites at 736 = 64ch) and below it the rail sits above the column exactly as it
+   does at ≤991. The same pattern `people_entry`'s third track, `register_plate` and
+   `page-header_grid is-intake` use: a track appears at the tier that can afford it. */
+.longform_grid{display:grid;grid-template-columns:minmax(0,1fr);row-gap:1.5rem}
+/* `top` clears the fixed bar (96px) plus one rung of air, so the label never sits under it. */
+.longform_rail{min-width:0;display:grid;justify-items:start}
+.longform_body{min-width:0}
+@media (min-width:1280px){
+  .longform_grid{grid-template-columns:minmax(0,14rem) minmax(0,1fr);column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem);row-gap:0;align-items:start}
+  .longform_rail{position:sticky;top:8rem}
+}
+
+/* No ≤991 tier is written for `longform_*`: the base IS the stacked form, so the rail is already a
+   plain label above the column at every width under 1280, and `article_column`'s own 46rem cap is
+   deliberately never released — R20 measured an uncapped release at 78ch, past the 72 ceiling, and
+   below 768 the viewport is the smaller number anyway. */
+
+/* ============================================================================
+   R27-WEBFLOW-ELEMENTS (2026-09-21) — THE ELEMENT ROUND. ADDITIONS AND TWO FOLDS ONLY; nothing a
+   visitor can see changes. Every rule this round writes exists to hold a rendering that already
+   shipped, while the ELEMENT under it becomes one the deploy pipeline actually builds.
+
+   RETIRED, each proved unworn by any static element on any of the 13 page files first:
+     .hero-wave_canvas · .compute-field_canvas  — <canvas> has no Webflow element, so the canvas is
+       CREATED by pages/interior.js §2/§3 and carries those six properties inline (CLAUDE.md §4f).
+       The hosts .hero-wave and .compute-field are classed Div Blocks and are untouched.
+     .faq_q-wrap  — its <h3> wrapper is gone; the trigger is the grid item now.
+     .intro_lede-em  — the homepage lede is a Rich Text element and bold runs cannot be classed.
+       Its two properties are a named Designer step (SYSTEM.md §R27) and a preview-only rule in
+       pages/preview-reset.css, never in this sheet.
+
+   FOLDED (a second GLOBAL class is dropped silently by the builder — reference/WEBFLOW-ELEMENTS.md
+   §3): .faq_a absorbed text-size-regular + is-fine · .quote_statement absorbed heading-style-h3 +
+   is-quote. Both utilities STAY in the sheet: style-guide.html wears them at rest (F1).
+   ============================================================================ */
+/* the two steps .quote_statement inherited from .heading-style-h3's responsive ladder. Placed here,
+   after every pre-existing @media block, so the cascade resolves in the same order it did when the
+   global class supplied them. Verified at 1920 · 1680 · 1440 · 1280 · 1024 · 992 · 768 · 390. */
+@media (max-width:767px){
+  .quote_statement{font-size:1.4375rem}
+}
+@media (max-width:479px){
+  .quote_statement{font-size:1.375rem}
+}
+/* WP5 · the [COPY REQUESTED] marker inside the policy column. The container stopped wearing
+   `w-richtext` (it is an iubenda Embed in a Div Block, not a Webflow Rich Text element), so the
+   marker lost preview-reset's `.w-richtext p{margin-bottom:1.5rem}` and would have fallen to
+   webflow-base's 10px — 14px of height, on an approved page. One class, named for the device, and
+   it follows the precedent brief_empty-text set on pages/insights.html. */
+.article_marker{margin-top:0;margin-bottom:1.5rem}
+
+
+/* ============================================================================
+   ARTICLE v2 (2026-09-24, operator: "more elegant ... better readability"). The title page is ONE
+   centred stack in the operator's order — icon, part, title, standfirst, date, cover — and the
+   reading column sits centred under it: contents in the left margin, author in the right, both
+   sticky. byline_* and series_* (this morning) are RETIRED: no page wears them after this edit.
+   Measured on #000: #EDEDED 17.4:1 · #C9C9C9 12.3:1 · #8E8E8E 6.28:1 · #FF6600 6.9:1.
+   ============================================================================ */
+.article-head_center{display:grid;justify-items:center;text-align:center}
+.article-head_icon{display:grid;place-items:center}
+.article-head_icon-img{display:block;width:4.5rem;height:4.5rem}
+.article-head_title{max-width:56rem;margin-top:2rem}
+.article-head_lead{max-width:56rem;margin-top:1.5rem}
+.article-head_meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;column-gap:0.875rem;row-gap:0.5rem;margin-top:2rem}
+.article-head_fact{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.4;letter-spacing:0.01em;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
+/* the cover spans the container, so its two edges are the two rails' outer edges below it. */
+.article-head_cover{justify-self:stretch;margin-top:clamp(3rem,2.33vw + 1.6rem,4rem);background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);overflow:hidden}
+.article-head_cover-img{display:block;width:100%;height:auto}
+/* THE READING LAYOUT. Base = one centred 46rem column: the rail (author, contents), then the text. */
+.article-layout_grid{display:grid;grid-template-columns:minmax(0,1fr);row-gap:3.5rem}
+.article-layout_rail{display:grid;align-content:start;row-gap:2.5rem;min-width:0;width:100%;max-width:42rem;justify-self:center}
+.article-layout_body{min-width:0;width:100%;max-width:42rem;justify-self:center}
+/* the two rail boxes share the house card: #080808 on one #242424 hairline, square. */
+.toc_component{min-width:0;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:2rem}
+.toc_list{display:grid;row-gap:0.25rem;margin-top:1.25rem}
+.toc_link{display:grid;grid-template-columns:4px minmax(0,1fr);column-gap:0.875rem;align-items:start;padding-top:0.5rem;padding-bottom:0.5rem;color:var(--text-muted-ink,#8E8E8E);text-decoration:none;transition:color 280ms cubic-bezier(0.16,1,0.3,1)}
+.toc_link:hover{color:var(--text-reversed,#EDEDED)}
+/* the list marker: a 4px orange square, decorative, seated on the first line (14px x 1.5 = 21px line). */
+.toc_link::before{content:"";display:block;width:4px;height:4px;margin-top:8.5px;background-color:var(--orange,#FF6600)}
+.toc_link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+.toc_text{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.5;color:inherit;margin-top:0;margin-bottom:0;text-wrap:pretty}
+/* the author: label and profile link on one line, then the plate beside the name. */
+.author_component{min-width:0}
+/* the mark is the link's own background image, so :hover can swap it to the orange cut — one class per
+   rule, no descendant selector. The link is named by its aria-label. */
+.author_link{display:block;flex-shrink:0;width:2.25rem;height:2.25rem;background-color:var(--ink-hero,#000000);background-image:url("brand/icons/social-linkedin.svg");background-position:50% 50%;background-size:0.9375rem 0.9375rem;background-repeat:no-repeat;border:1px solid var(--edge-card,#242424);transition:border-color 260ms cubic-bezier(0.22,1,0.36,1),background-color 260ms cubic-bezier(0.22,1,0.36,1)}
+.author_link:hover{background-color:var(--surface-card-hover,#0E0E0E);background-image:url("brand/icons/social-linkedin-orange.svg");border-color:var(--rule-plate,#454545)}
+.author_link:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:2px}
+.author_person{display:grid;grid-template-columns:4rem minmax(0,1fr) auto;column-gap:1rem;align-items:center}
+.author_portrait{position:relative;width:4rem;height:4rem;overflow:hidden;background-color:var(--surface-card-hover,#0E0E0E);border:1px solid var(--edge-card,#242424)}
+.author_avatar{position:absolute;top:0;left:0;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 8%}
+.author_identity{display:grid;row-gap:0.25rem;min-width:0}
+.author_name{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.125rem;font-weight:700;line-height:1.3;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0}
+.author_role{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.45;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
+/* is-card: the same author, closing the article — boxed as the contents is, the plate and the name a rung larger. */
+.author_component.is-card{position:relative;margin-top:4rem;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(1.75rem,2.33vw + 0.35rem,2.5rem)}
+/* his corner brackets, as on .quote_panel and the article blockquote: decorative pseudo-elements, content:"" (CLAUDE.md §4c). */
+.author_component.is-card::before{content:"";position:absolute;top:-1px;left:-1px;width:16px;height:16px;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
+.author_component.is-card::after{content:"";position:absolute;right:-1px;bottom:-1px;width:16px;height:16px;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
+.author_person.is-card{grid-template-columns:5.5rem minmax(0,1fr) auto;column-gap:1.5rem}
+.author_portrait.is-large{width:5.5rem;height:5.5rem}
+.author_name.is-large{font-size:1.5rem;line-height:1.25;letter-spacing:-0.015em}
+.author_role.is-large{font-size:1rem;line-height:1.5}
+.author_link.is-large{width:2.75rem;height:2.75rem;background-size:1.0625rem 1.0625rem}
+/* 1280: THE ARTICLE IS CENTRED ON THE SCREEN (operator 2026-09-24). Three tracks, the column in the
+   middle one, the rail in the left track on the container's edge; only the contents sticks. At 1280
+   the side track is 208px: the contents fits it, the rail author does not, so the rail author steps
+   out (the article's closing card carries the author) and returns at 1440. Below 1280 the rail stacks
+   above the centred column. */
+@media (min-width:1280px){
+  .article-layout_grid{grid-template-columns:minmax(0,1fr) minmax(0,42rem) minmax(0,1fr);align-items:start;column-gap:2rem;row-gap:0}
+  .article-layout_rail{grid-column-start:1;grid-column-end:2;grid-row-start:1;grid-row-end:2;align-self:stretch;max-width:22rem;justify-self:start}
+  .article-layout_body{grid-column-start:2;grid-column-end:3;grid-row-start:1;grid-row-end:2}
+  .toc_component{position:sticky;top:8rem;padding:1.5rem}
+  .author_component.is-rail{display:none}
+}
+@media (min-width:1440px){
+  .toc_component{padding:1.75rem}
+  .author_component.is-rail{display:block}
+  .author_person{grid-template-columns:3rem minmax(0,1fr) auto;column-gap:0.75rem}
+  .author_portrait{width:3rem;height:3rem}
+  .author_name{font-size:1rem}
+}
+@media (min-width:1920px){
+  .article-layout_grid{column-gap:4rem}
+  .article-layout_rail{max-width:24rem}
+  .author_person{grid-template-columns:3.5rem minmax(0,1fr) auto;column-gap:0.875rem}
+  .author_portrait{width:3.5rem;height:3.5rem}
+  .author_name{font-size:1.125rem}
+}
+@media (max-width:767px){
+  .article-head_icon-img{width:3.75rem;height:3.75rem}
+  .article-head_cover-img{aspect-ratio:16/10;object-fit:cover}
+  .article-layout_grid{row-gap:3rem}
+  .author_link{width:2.75rem;height:2.75rem}
+  .article-layout_rail{row-gap:2rem}
+  .toc_link{padding-top:0.75rem;padding-bottom:0.75rem}
+  .author_component.is-card{margin-top:3rem}
+}
+@media (max-width:479px){
+  .toc_component{padding:1.5rem}
+  .author_component.is-card{padding:1.5rem}
+  .author_person{grid-template-columns:3.5rem minmax(0,1fr) auto}
+  .author_portrait{width:3.5rem;height:3.5rem}
+  /* the card: plate and profile link share the first row, the name takes the full width beneath. */
+  .author_person.is-card{grid-template-columns:4rem minmax(0,1fr) auto;column-gap:1rem}
+  .author_portrait.is-large{width:4rem;height:4rem;grid-column-start:1;grid-column-end:2;grid-row-start:1;grid-row-end:2}
+  .author_link.is-large{grid-column-start:3;grid-column-end:4;grid-row-start:1;grid-row-end:2}
+  .author_identity.is-card{grid-column-start:1;grid-column-end:4;grid-row-start:2;grid-row-end:3;margin-top:1.25rem}
+  .author_name.is-large{font-size:1.25rem}
+}
+
+/* ============================================================================
+   CONTACT DETAILS (2026-09-24, operator: "add email address and office address to here"). Afissio's
+   email and office in the Contact header's type stack, under one hairline. Afissio's details alone —
+   Afissio Law LLC's are never merged in. #EDEDED on #000 17.4:1 · #C9C9C9 12.3:1.
+   ============================================================================ */
+/* two items, each a quiet 48px well holding one of the two drawings, the value beside it on its
+   first line. No hairline: the air above the pair is the division (operator: "not minimalist"). */
+.contact_details{display:grid;grid-template-columns:minmax(0,1fr);row-gap:1.25rem;margin-top:3rem}
+.contact_item{display:grid;grid-template-columns:3rem minmax(0,1fr);column-gap:1rem;align-items:start;color:var(--text-reversed,#EDEDED);text-decoration:none;transition:color 260ms cubic-bezier(0.22,1,0.36,1)}
+.contact_item:hover{color:var(--orange,#FF6600)}
+.contact_item:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:4px}
+.contact_item.is-static:hover{color:var(--text-reversed,#EDEDED)}
+.contact_well{display:grid;place-items:center;width:3rem;height:3rem;background-color:var(--surface-card-hover,#0E0E0E)}
+/* 24px exactly, so the drawings' 1.5px stroke lands on the pixel. */
+.contact_icon{display:block;width:1.5rem;height:1.5rem}
+.contact_value{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.0625rem;font-weight:400;line-height:1.6;color:inherit;margin-top:0;margin-bottom:0;padding-top:0.65625rem}
+.contact_value.is-soft{color:var(--text-reversed-soft,#C9C9C9);padding-top:0}
+.contact_text{display:grid;row-gap:0.125rem;padding-top:0.65625rem}
+.contact_name{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.0625rem;font-weight:700;line-height:1.6;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0}
+@media (max-width:767px){
+  .contact_details{margin-top:2.5rem}
+}
+
+/* CONTACT · RESPONSIVE PASS (operator 2026-09-24: "super responsive for smaller desktop screens",
+   tablet, landscape and mobile). Measured failures this fixes:
+   · 1280-1439: the 48rem panel cap left the type track 320px at 1280, narrower than the H1's
+     unbreakable "conversation." — so the cap now starts at 1440 and 1280 runs on fr tracks.
+   · 992-1279: 40/60 gave the stack 341px at 992; 44/56 gives it 375px and the panel still holds two
+     field columns, with the field gap eased so each control stays over 190px.
+   · 768-991: the stacked header wastes a screen on two one-line contact items - they pair up.
+   · 480-767 (landscape phones): the form keeps its two columns - Name/Company and Title/Email are
+     pairs, and at 480px each control is still 200px - and goes to one column only below 480.
+   · <=479: the submit fills the panel, a full-width 44px+ target under the thumb.
+   Sheet order note: the base rule below follows client-first-2's <=991 rule, so that rule is restated
+   here at the same tier or it would be overridden. */
+.page-header_grid.is-intake{grid-template-columns:minmax(0,44fr) minmax(0,56fr)}
+.form_grid{column-gap:clamp(1.25rem,2.68vw - 0.41rem,2rem)}
+@media (min-width:1280px){
+  .page-header_grid.is-intake{grid-template-columns:minmax(0,42fr) minmax(0,58fr)}
+}
+@media (min-width:1440px){
+  .page-header_grid.is-intake{grid-template-columns:minmax(0,1fr) minmax(0,48rem)}
+}
+@media (max-width:991px){
+  .page-header_grid.is-intake{grid-template-columns:minmax(0,1fr);row-gap:clamp(2.5rem,4.65vw - 0.39rem,4rem)}
+  .contact_details{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:2rem}
+}
+@media (max-width:767px){
+  .form_grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.25rem;row-gap:1.5rem}
+  .form_field.is-wide{grid-column:span 2}
+}
+@media (max-width:479px){
+  .contact_details{grid-template-columns:minmax(0,1fr);row-gap:1rem}
+  .form_grid{grid-template-columns:minmax(0,1fr);row-gap:1.25rem}
+  .form_field.is-wide{grid-column:span 1}
+  .form_foot{justify-items:stretch}
+}
+
+
+/* the form's submit (operator 2026-09-24): paper ground, ink type, its own width. #1A1A1A on #FAF9F6
+   is 16.4:1; the hover takes the CTA orange, #FFFFFF on #B34B00 5.40:1. */
+.button.is-paper{background:var(--paper,#FAF9F6);color:var(--ink,#1A1A1A);font-weight:400}
+.button.is-paper:hover{background:var(--orange-text,#B34B00);color:var(--on-accent,#FFFFFF)}
+.button.is-paper:focus-visible{outline-color:var(--orange,#FF6600)}
+
+
+/* ============================================================================
+   AREAS OF REVIEW · RESPONSIVE PASS (operator 2026-09-24). Measured failures this fixes:
+   · 992-1439: the scope box ran three tracks in a right column of 498-709px, so a track was 99px at 992
+     and 138px at 1280 - narrower than INTELLECTUAL at the label rung (~130px with its tracking), which
+     broke mid-word. Three tracks now start at 1440 (162px each); below it two.
+   · <=767 / <=479: the hero wore the large rung with no bar allowance - 104px and 80px of top padding
+     under a 56-64px fixed bar left 24-40px of air. `padding-section-large is-hero` keeps the large rung
+     at every desktop width and adds the bar back on phones.
+   · <=479: the index plate and the H3 step down so the entry opens on one tight unit.
+   ============================================================================ */
+.padding-section-large.is-hero{padding-top:clamp(9rem,20.93vw - 3.975rem,var(--section-l,18rem))}
+.scope_list.is-rail{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:1440px){
+  .scope_list.is-rail{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:991px){
+  .padding-section-large.is-hero{padding-top:10rem}
+  .sequence_grid.is-even{row-gap:3.5rem}
+}
+@media (max-width:767px){
+  .padding-section-large.is-hero{padding-top:8.5rem}
+  .schedule_entry{column-gap:1.25rem}
+  .scope_list.is-rail{column-gap:1.25rem;padding:1.25rem 1.5rem}
+}
+@media (max-width:479px){
+  .padding-section-large.is-hero{padding-top:7rem}
+  .schedule_index{width:3rem;height:3rem}
+  .schedule_index-num{font-size:1rem}
+  .scope_list.is-rail{grid-template-columns:minmax(0,1fr);row-gap:0.875rem;padding:1.25rem}
+}
+
+/* ============================================================================
+   SOLUTIONS · #data-room v2 (operator 2026-09-24: "align center", Our Approach's "Who decides" lattice,
+   "3 column layout ... modern, creative, elegant, premium"). The head centred; the three services as ONE
+   row of three translucent panels - #080808 at 0.6 over the lattice, one #242424 hairline, square - each
+   a centred column: a 4.5rem black plate on the hairline, the H3, the copy. The hover lifts the edge
+   one rung (#454545). #C9C9C9 on the panel over black = 12.1:1.
+   ============================================================================ */
+.band_stack.is-centered{justify-items:center;text-align:center;margin-left:auto;margin-right:auto}
+/* is-wide: the note at the lead's own 48rem measure instead of the 32rem aside (operator 2026-09-24). */
+.band_note-block.is-wide{max-width:48rem}
+.service_list.is-trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1rem,1.4vw + 0.2rem,1.5rem);row-gap:1rem;border-top-width:0;margin-top:clamp(3rem,3.49vw + 0.84rem,4.5rem)}
+.service_row.is-card{grid-template-columns:minmax(0,1fr);justify-items:center;row-gap:1.75rem;text-align:center;background-color:rgba(8,8,8,0.3);border:1px solid var(--edge-card,#242424);padding:clamp(2.25rem,2.33vw + 1.35rem,3rem) clamp(1.5rem,1.86vw + 0.45rem,2.25rem);transition:border-color 320ms cubic-bezier(0.22,1,0.36,1)}
+.service_row.is-card:hover{border-color:var(--rule-plate,#454545)}
+.service_well.is-plate{width:4.5rem;height:4.5rem;background-color:var(--ink-hero,#000000);border:1px solid var(--edge-card,#242424);padding-top:0;padding-bottom:0}
+.service_body.is-center{justify-items:center;max-width:none;row-gap:1rem}
+@media (max-width:991px){
+  .service_list.is-trio{grid-template-columns:minmax(0,1fr);max-width:40rem;margin-left:auto;margin-right:auto}
+}
+@media (max-width:479px){
+  .service_row.is-card{padding:2rem 1.25rem}
+}
+
+/* is-long - a long testimonial (Solutions' is 70 words) steps down to the lead rung so it reads as prose,
+   not display (operator 2026-09-24: "smaller font size"). */
+.quote_statement.is-long{font-size:clamp(1.1875rem,0.29vw + 1.01rem,1.3125rem);line-height:1.55}
+@media (max-width:767px){
+  .quote_statement.is-long{font-size:1.125rem}
+}
+@media (max-width:479px){
+  .quote_statement.is-long{font-size:1.0625rem}
+}
+
+
+/* ============================================================================
+   SOLUTIONS · RESPONSIVE PASS (operator 2026-09-24). What each tier needed:
+   · 992-1279: the data-room trio keeps three panels, so the panel's side padding and the gap step in.
+   · <=991: the trio stacks to one centred column (already) and the boxed notes' padding eases.
+   · <=767: the entry's boxed note and the trio panels take the phone paddings; the note's brackets
+     stay 12px.
+   · <=479: everything is one column; the notes and panels drop to 1.25rem sides so a 320px screen
+     keeps 250px+ of measure.
+   ============================================================================ */
+.service_row.is-card{min-width:0}
+/* 1279 is not a deployable tier (4b), so the 992-1279 values are the BASE here and the wider clamps
+   return at min-width:1280. */
+.service_list.is-trio{column-gap:1rem}
+.service_row.is-card{padding:2.25rem 1.5rem}
+@media (min-width:1280px){
+  .service_list.is-trio{column-gap:clamp(1rem,1.4vw + 0.2rem,1.5rem)}
+  .service_row.is-card{padding:clamp(2.25rem,2.33vw + 1.35rem,3rem) clamp(1.5rem,1.86vw + 0.45rem,2.25rem)}
+}
+@media (max-width:991px){
+  .spectrum_note.is-boxed{padding:1.5rem 1.75rem}
+  .service_row.is-card{padding:2.5rem 2rem}
+}
+@media (max-width:767px){
+  .spectrum_note.is-boxed{padding:1.375rem 1.5rem;margin-top:1.5rem}
+  .service_list.is-trio{row-gap:0.875rem}
+}
+@media (max-width:479px){
+  .spectrum_note.is-boxed{padding:1.25rem}
+  .service_row.is-card{padding:2rem 1.25rem;row-gap:1.25rem}
+  .service_well.is-plate{width:4rem;height:4rem}
+}
+
+/* 2026-09-24 · About #why: the homepage lede under a tagline row. The homepage's .intro_stack has
+   no tagline, so the gap is a combo worn only where one is present. The rung is the gap scale's
+   section-head-to-content step. */
+.intro_stack.is-tagged{display:grid;justify-items:start;row-gap:clamp(2rem,1.16vw + 1.27rem,2.75rem)}
+
+/* 2026-09-24 · About #people, THE PAIR (operator: "remove border between them ... super elegant,
+   premium, photos are small"). Two equal columns on one top line, no seam and no offset: the
+   symmetry IS the statement that the two people are equal. Each portrait FILLS its column as a
+   square — ~640px at 1680 — under the client's corner brackets, and the caption beneath is set
+   like a plate label: name and role on the left, the LinkedIn mark on the same line at the right,
+   then the bio at the body rung on a 34rem measure. Air, not rules, separates everything.
+   The crop: square from a 3:4 frame at object-position 50% 18% puts the eyes at ~30% of the square. */
+.people_list.is-zigzag{position:relative;max-width:86rem;margin-left:auto;margin-right:auto;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);align-items:start;border-top-width:0}
+.people_entry.is-zigzag{grid-template-columns:minmax(0,1fr);row-gap:0;align-items:start;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
+.people_entry.is-zigzag-end{grid-template-columns:minmax(0,1fr);row-gap:0;align-items:start;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
+.initial_plate.is-portrait{display:block;width:100%;aspect-ratio:1 / 1;overflow:visible;grid-column:1;grid-row:auto}
+.initial_plate.is-portrait::before{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;left:-1px;top:-1px;right:auto;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
+.initial_plate.is-portrait::after{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;right:-1px;bottom:-1px;left:auto;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
+.people_portrait{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0%}
+.people_text{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem;padding:2.25rem 2rem 4rem}
+.people_name{min-width:0;display:grid;justify-items:start;row-gap:0.625rem}
+.people_bio.is-measured{max-width:34rem}
+.people_ident.is-linked{width:100%;grid-template-columns:minmax(0,1fr) auto;column-gap:1.5rem;align-items:start;justify-items:start}
+
+
+/* 2026-09-24 · About #network: the host of the network field (pages/interior.js §3b). Same box as
+   .compute-field; a second class because it is a second drawing, not a variant of the lattice. */
+.network-field{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;overflow:hidden}
+
+/* 2026-09-24 (operator): every CTA box carries the client's corner brackets — top-left and
+   bottom-right, 2px orange, offset -1px onto the hairline — the same device as the About portraits.
+   On the shared class, so every page's shell/cta gets them. */
+.close_stack.is-box{position:relative}
+.close_stack.is-box::before{content:"";position:absolute;width:1.25rem;height:1.25rem;pointer-events:none;left:-1px;top:-1px;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
+.close_stack.is-box::after{content:"";position:absolute;width:1.25rem;height:1.25rem;pointer-events:none;right:-1px;bottom:-1px;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
+
+/* 2026-09-24 (operator, About #people): the large top, the SMALL rung at the bottom. */
+.padding-section-large.is-short-bottom{padding-bottom:clamp(6rem,6.98vw + 1.675rem,var(--section-s,9rem))}
+
+/* 2026-09-24 · Afissio Law #separation, redesigned from About #people: the EQUAL PAIR. One 86rem
+   frame, centred as About's pair is; two equal tracks; each panel is a square plate under the
+   client's corner brackets with a live field inside (compute-field is-full / draft-field), then the
+   name and sentence at About's text padding. The panel's old fill, edge and padding are zeroed by
+   the combo: the plate is the object now, and air separates the two firms. */
+.divide_frame{max-width:86rem;margin-left:auto;margin-right:auto}
+.divide_pair.is-plates{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);row-gap:0;align-items:start}
+.divide_panel.is-plate{row-gap:0;background-color:transparent;border-width:0;padding:0}
+.initial_plate.is-field{display:block;width:100%;aspect-ratio:1 / 1;overflow:visible}
+.initial_plate.is-field::before{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;left:-1px;top:-1px;right:auto;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
+.initial_plate.is-field::after{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;right:-1px;bottom:-1px;left:auto;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
+.draft-field{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;overflow:hidden}
+.divide_text{min-width:0;display:grid;justify-items:start;row-gap:1rem;padding:clamp(2.5rem,2.91vw + 0.84rem,3.75rem) clamp(3.75rem,5.23vw + 0.5rem,6rem) 0}
+@media (max-width:767px){
+  .divide_pair.is-plates{grid-template-columns:minmax(0,1fr);row-gap:3.5rem}
+  .divide_text{padding:2rem 1.75rem 0}
+}
+
+
+/* 2026-09-24 (operator, About #people): the small rung at the top, half of it at the bottom. */
+.padding-section-small.is-tight-bottom{padding-bottom:clamp(3rem,3.49vw + 0.84rem,4.5rem)}
+
+/* 2026-09-24 · About #people, RESPONSIVE LADDER (operator: "super responsive for tablet, landscape,
+   mobile and smaller desktops"). Only the site's six breakpoints.
+     ≥1280  the pair, text at the full tripled padding (the approved desktop).
+     992–1279  the pair, the padding stepped down so the text column keeps a reading width.
+     480–991   ONE COLUMN OF ROWS — each person a row, square portrait left (5fr), text right (7fr):
+               a tablet or a landscape phone never gets a 700px face or a 200px text column.
+     ≤479      stacked: the portrait full width, the text beneath. */
+@media (min-width:1280px){
+  .people_text{padding:clamp(2.5rem,2.91vw + 0.84rem,3.75rem) clamp(3.75rem,5.23vw + 0.5rem,6rem) clamp(5.25rem,6.98vw + 0.9rem,8.25rem)}
+}
+@media (max-width:991px){
+  .people_list.is-zigzag{grid-template-columns:minmax(0,1fr);row-gap:clamp(3rem,4vw + 1rem,4rem);max-width:100%}
+  .people_entry.is-zigzag{grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:0;align-items:start}
+  .people_entry.is-zigzag-end{grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:0;align-items:start}
+  .people_text{padding:0 0 0 clamp(1.5rem,3.2vw,2.5rem)}
+}
+@media (max-width:479px){
+  .people_entry.is-zigzag{grid-template-columns:minmax(0,1fr)}
+  .people_entry.is-zigzag-end{grid-template-columns:minmax(0,1fr)}
+  .people_text{padding:1.75rem 0 0}
+  .people_list.is-zigzag{row-gap:3.5rem}
+}
