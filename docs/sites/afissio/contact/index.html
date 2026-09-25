@@ -148,8 +148,7 @@
      form's heading, which is why the form sits beside it. No button row: the form's own submit
      is the page's action (BUILD-BRIEF §4 §1). -->
 <section class="section_page-header" id="hero">
-<div class="rules_layer" aria-hidden="true"><div class="rules_inner"><div class="rules_h-bottom is-ink"></div></div></div>
-<div class="hero-wave" aria-hidden="true">
+<div class="hero-wave is-deep" aria-hidden="true">
 </div>
 <div class="padding-global is-layer">
 <div class="padding-section-medium is-hero">
@@ -183,10 +182,10 @@
 <form class="form_form" id="contact-form-a" name="contact-form-a" data-name="Contact" method="get">
 <!-- CONTRACT §2: the Notice at Collection belongs here, above the first label. Removed from the design on operator instruction 2026-09-24 until the client supplies its wording; it must return before launch. -->
 <div class="form_grid">
-<div class="form_field"><label for="a-name" class="form_label">Name</label><input type="text" class="form_input w-input" id="a-name" name="name" data-name="Name" autocomplete="name"></div>
+<div class="form_field"><label for="a-name" class="form_label">Full Name</label><input type="text" class="form_input w-input" id="a-name" name="name" data-name="Name" autocomplete="name"></div>
+<div class="form_field"><label for="a-email" class="form_label">Email</label><input type="email" class="form_input w-input" id="a-email" name="email" data-name="Email" autocomplete="email"></div>
 <div class="form_field"><label for="a-company" class="form_label">Company</label><input type="text" class="form_input w-input" id="a-company" name="company" data-name="Company" autocomplete="organization"></div>
 <div class="form_field"><label for="a-title" class="form_label">Title</label><input type="text" class="form_input w-input" id="a-title" name="title" data-name="Title" autocomplete="organization-title"></div>
-<div class="form_field"><label for="a-email" class="form_label">Email</label><input type="email" class="form_input w-input" id="a-email" name="email" data-name="Email" autocomplete="email"></div>
 <div class="form_field is-wide"><label for="a-phone" class="form_label">Phone</label><input type="tel" class="form_input w-input" id="a-phone" name="phone" data-name="Phone" autocomplete="tel"></div>
 <div class="form_field"><label for="a-transaction" class="form_label">Anticipated transaction</label><select class="form_select w-select" id="a-transaction" name="anticipated-transaction" data-name="Anticipated transaction"><option value="">Select</option><option value="Financing">Financing</option><option value="Acquisition">Acquisition</option><option value="Strategic partnership">Strategic partnership</option><option value="Recapitalization">Recapitalization</option><option value="Institutional investment">Institutional investment</option><option value="Other">Other</option></select><div class="form_caret" aria-hidden="true"></div></div>
 <div class="form_field"><label for="a-timeline" class="form_label">Expected timeline</label><select class="form_select w-select" id="a-timeline" name="expected-timeline" data-name="Expected timeline"><option value="">Select</option><option value="Less than 6 months">Less than 6 months</option><option value="6–12 months">6–12 months</option><option value="12–24 months">12–24 months</option><option value="24–36 months">24–36 months</option><option value="Exploratory">Exploratory</option></select><div class="form_caret" aria-hidden="true"></div></div>

@@ -351,7 +351,7 @@
 .schedule_index.is-plain::after{display:none}
 /* is-boxed - the "Best suited for" note in the house card (#080808 on one #242424 hairline, square), as the
    Areas of Review scope box and Our Approach's panels wear it (operator 2026-09-24). #8E8E8E on #080808 = 6.11:1. */
-.spectrum_note.is-boxed{position:relative;width:100%;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(1.5rem,1.4vw + 0.9rem,2rem) clamp(1.75rem,1.86vw + 0.95rem,2.5rem);margin-top:1.75rem}
+.spectrum_note.is-boxed{position:relative;width:100%;max-width:40rem;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(1.5rem,1.4vw + 0.9rem,2rem) clamp(1.75rem,1.86vw + 0.95rem,2.5rem);margin-top:1.75rem}
 /* the house panel's diagonal brackets, top-left and bottom-right: decorative, content:"" (CLAUDE.md 4c). */
 .spectrum_note.is-boxed::before{content:"";position:absolute;top:-1px;left:-1px;width:12px;height:12px;border-top:1px solid var(--orange,#FF6600);border-left:1px solid var(--orange,#FF6600)}
 .spectrum_note.is-boxed::after{content:"";position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-right:1px solid var(--orange,#FF6600);border-bottom:1px solid var(--orange,#FF6600)}
@@ -370,6 +370,8 @@
 .scope_list.is-rail{margin-top:2.5rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:2rem;row-gap:1.125rem;width:100%;max-width:none;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(1.5rem,1.4vw + 0.7rem,2rem) clamp(1.5rem,1.86vw + 0.45rem,2.25rem)}
 .scope_item.is-tick{display:flex;align-items:center;column-gap:0.75rem;padding-top:0;padding-bottom:0;border-bottom-width:0}
 .scope_item.is-tick::before{content:"";display:block;flex-shrink:0;width:4px;height:4px;background-color:var(--orange,#FF6600)}
+/* 2026-09-25 (operator): the long label closes the list and takes two tracks. */
+.scope_item.is-wide{grid-column:span 2}
 /* the header field's centred mode is geometry only (interior.js section 2); the layer keeps the base's
    -30vh, so no rule is needed and none is authored. */
 
@@ -545,7 +547,7 @@
    The well carries its own computing lattice (compute-field is-plate, interior.js §3) with a clear zone for the drawing. */
 .register_plate{direction:ltr;position:relative;overflow:hidden;min-width:0;aspect-ratio:10 / 9;display:grid;place-items:center;padding:clamp(3rem,4.65vw + 0.2rem,5rem);background-color:var(--ink-hero,#000000)}
 .register_art{position:relative;z-index:1;display:block;height:4.5rem;width:auto}
-.register_body{direction:ltr;min-width:0;display:grid;align-content:center;justify-items:start;row-gap:1rem;padding:clamp(2rem,5.81vw - 2.6rem,5rem)}
+.register_body{direction:ltr;min-width:0;display:grid;align-content:center;justify-items:start;row-gap:1rem;padding:clamp(3rem,8.14vw - 3.07rem,8.5rem)}
 .register_node{position:absolute;top:50%;left:50%;z-index:2;width:0.5625rem;height:0.5625rem;background-color:var(--ink-hero,#000000);border:1px solid var(--orange,#FF6600);transform:translate(-50%,-50%) rotate(45deg)}
 
 /* --- 2B · THE SECTOR FOLIO. Two combos and not one new base class. `is-stack` is the six-up
@@ -602,7 +604,7 @@
 @media (max-width:479px){
   /* PORTRAIT PHONE. The body's padding steps down once, as every other panel on the site does, so
      a 288px container still has a readable column inside it. */
-  .register_body{padding:1.25rem}
+  .register_body{padding:2rem 1.75rem}
   .register_plate{aspect-ratio:3 / 2;padding:1.5rem}
   .register_art{height:3.5rem}
 }
@@ -1208,6 +1210,7 @@
   .schedule_index{width:3rem;height:3rem}
   .schedule_index-num{font-size:1rem}
   .scope_list.is-rail{grid-template-columns:minmax(0,1fr);row-gap:0.875rem;padding:1.25rem}
+  .scope_item.is-wide{grid-column:auto}
 }
 
 /* ============================================================================
@@ -1221,7 +1224,7 @@
 /* is-wide: the note at the lead's own 48rem measure instead of the 32rem aside (operator 2026-09-24). */
 .band_note-block.is-wide{max-width:48rem}
 .service_list.is-trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(1rem,1.4vw + 0.2rem,1.5rem);row-gap:1rem;border-top-width:0;margin-top:clamp(3rem,3.49vw + 0.84rem,4.5rem)}
-.service_row.is-card{grid-template-columns:minmax(0,1fr);justify-items:center;row-gap:1.75rem;text-align:center;background-color:rgba(8,8,8,0.3);border:1px solid var(--edge-card,#242424);padding:clamp(2.25rem,2.33vw + 1.35rem,3rem) clamp(1.5rem,1.86vw + 0.45rem,2.25rem);transition:border-color 320ms cubic-bezier(0.22,1,0.36,1)}
+.service_row.is-card{grid-template-columns:minmax(0,1fr);justify-items:center;row-gap:1.75rem;text-align:center;background-color:rgba(8,8,8,0.15);border:1px solid var(--edge-card,#242424);padding:clamp(2.25rem,2.33vw + 1.35rem,3rem) clamp(1.5rem,1.86vw + 0.45rem,2.25rem);transition:border-color 320ms cubic-bezier(0.22,1,0.36,1)}
 .service_row.is-card:hover{border-color:var(--rule-plate,#454545)}
 .service_well.is-plate{width:4.5rem;height:4.5rem;background-color:var(--ink-hero,#000000);border:1px solid var(--edge-card,#242424);padding-top:0;padding-bottom:0}
 .service_body.is-center{justify-items:center;max-width:none;row-gap:1rem}
@@ -1256,14 +1259,14 @@
 /* 1279 is not a deployable tier (4b), so the 992-1279 values are the BASE here and the wider clamps
    return at min-width:1280. */
 .service_list.is-trio{column-gap:1rem}
-.service_row.is-card{padding:2.25rem 1.5rem}
+.service_row.is-card{padding:3rem 2rem}
 @media (min-width:1280px){
   .service_list.is-trio{column-gap:clamp(1rem,1.4vw + 0.2rem,1.5rem)}
-  .service_row.is-card{padding:clamp(2.25rem,2.33vw + 1.35rem,3rem) clamp(1.5rem,1.86vw + 0.45rem,2.25rem)}
+  .service_row.is-card{padding:clamp(3rem,3.49vw + 1.34rem,4.5rem) clamp(2rem,2.33vw + 0.9rem,3rem)}
 }
 @media (max-width:991px){
   .spectrum_note.is-boxed{padding:1.5rem 1.75rem}
-  .service_row.is-card{padding:2.5rem 2rem}
+  .service_row.is-card{padding:3rem 2.5rem}
 }
 @media (max-width:767px){
   .spectrum_note.is-boxed{padding:1.375rem 1.5rem;margin-top:1.5rem}
@@ -1271,7 +1274,7 @@
 }
 @media (max-width:479px){
   .spectrum_note.is-boxed{padding:1.25rem}
-  .service_row.is-card{padding:2rem 1.25rem;row-gap:1.25rem}
+  .service_row.is-card{padding:2.5rem 1.75rem;row-gap:1.25rem}
   .service_well.is-plate{width:4rem;height:4rem}
 }
 
@@ -1287,17 +1290,24 @@
    like a plate label: name and role on the left, the LinkedIn mark on the same line at the right,
    then the bio at the body rung on a 34rem measure. Air, not rules, separates everything.
    The crop: square from a 3:4 frame at object-position 50% 18% puts the eyes at ~30% of the square. */
-.people_list.is-zigzag{position:relative;max-width:86rem;margin-left:auto;margin-right:auto;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);align-items:start;border-top-width:0}
-.people_entry.is-zigzag{grid-template-columns:minmax(0,1fr);row-gap:0;align-items:start;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
-.people_entry.is-zigzag-end{grid-template-columns:minmax(0,1fr);row-gap:0;align-items:start;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
-.initial_plate.is-portrait{display:block;width:100%;aspect-ratio:1 / 1;overflow:visible;grid-column:1;grid-row:auto}
+/* 2026-09-25 (client: "smaller photos · Jerry first · zigzag"). THE STAIR. One column of two rows,
+   each row narrower than the frame and pushed to opposite sides, so the pair reads as a descent:
+   Jerry top-left, Heidi bottom-right. The portrait is a MARK now (~22rem at 1680, never above), and
+   each text block sits on a hairline with a short orange tab at its start — the bracket's stroke,
+   unfolded. Jerry's text settles on the portrait's bottom edge, Heidi's hangs from its top edge,
+   so the text zigzags against the photos as the rows zigzag against the frame. */
+.people_list.is-zigzag{position:relative;max-width:80rem;margin-left:auto;margin-right:auto;grid-template-columns:minmax(0,1fr);row-gap:clamp(6rem,8.14vw + 1.1rem,11rem);border-top-width:0}
+.people_entry.is-zigzag{width:100%;max-width:64rem;justify-self:start;grid-template-columns:clamp(14rem,9.3vw + 7.4rem,22rem) minmax(0,1fr);column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);row-gap:0;align-items:end;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
+.people_entry.is-zigzag-end{width:100%;max-width:64rem;justify-self:end;grid-template-columns:clamp(14rem,9.3vw + 7.4rem,22rem) minmax(0,1fr);column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);row-gap:0;align-items:start;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
+.initial_plate.is-portrait{display:block;width:100%;aspect-ratio:1 / 1;overflow:visible;grid-column:auto;grid-row:auto}
 .initial_plate.is-portrait::before{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;left:-1px;top:-1px;right:auto;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
 .initial_plate.is-portrait::after{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;right:-1px;bottom:-1px;left:auto;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
 .people_portrait{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0%}
-.people_text{min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem;padding:2.25rem 2rem 4rem}
+.people_text{position:relative;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem;padding:1.75rem 0 0;border-top:1px solid var(--edge-card,#242424)}
+.people_text::before{content:"";position:absolute;left:0;top:-1px;width:2.5rem;height:2px;background-color:var(--orange,#FF6600);pointer-events:none}
 .people_name{min-width:0;display:grid;justify-items:start;row-gap:0.625rem}
 .people_bio.is-measured{max-width:34rem}
-.people_ident.is-linked{width:100%;grid-template-columns:minmax(0,1fr) auto;column-gap:1.5rem;align-items:start;justify-items:start}
+.people_ident.is-linked{width:100%;grid-template-columns:auto auto;justify-content:start;column-gap:1.25rem;align-items:start;justify-items:start}
 
 
 /* 2026-09-24 · About #network: the host of the network field (pages/interior.js §3b). Same box as
@@ -1343,21 +1353,35 @@
      480–991   ONE COLUMN OF ROWS — each person a row, square portrait left (5fr), text right (7fr):
                a tablet or a landscape phone never gets a 700px face or a 200px text column.
      ≤479      stacked: the portrait full width, the text beneath. */
-@media (min-width:1280px){
-  .people_text{padding:clamp(2.5rem,2.91vw + 0.84rem,3.75rem) clamp(3.75rem,5.23vw + 0.5rem,6rem) clamp(5.25rem,6.98vw + 0.9rem,8.25rem)}
-}
 @media (max-width:991px){
-  .people_list.is-zigzag{grid-template-columns:minmax(0,1fr);row-gap:clamp(3rem,4vw + 1rem,4rem);max-width:100%}
-  .people_entry.is-zigzag{grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:0;align-items:start}
-  .people_entry.is-zigzag-end{grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:0;align-items:start}
-  .people_text{padding:0 0 0 clamp(1.5rem,3.2vw,2.5rem)}
+  .people_list.is-zigzag{row-gap:clamp(5rem,6vw + 1.5rem,6.5rem);max-width:100%}
+  .people_entry.is-zigzag{max-width:100%;grid-template-columns:clamp(10rem,18vw + 2rem,14rem) minmax(0,1fr);column-gap:clamp(1.5rem,3.2vw,2.5rem)}
+  .people_entry.is-zigzag-end{max-width:100%;grid-template-columns:clamp(10rem,18vw + 2rem,14rem) minmax(0,1fr);column-gap:clamp(1.5rem,3.2vw,2.5rem)}
 }
 @media (max-width:479px){
-  .people_entry.is-zigzag{grid-template-columns:minmax(0,1fr)}
-  .people_entry.is-zigzag-end{grid-template-columns:minmax(0,1fr)}
-  .people_text{padding:1.75rem 0 0}
-  .people_list.is-zigzag{row-gap:3.5rem}
+  .people_entry.is-zigzag{grid-template-columns:minmax(0,1fr);row-gap:1.75rem}
+  .people_entry.is-zigzag-end{grid-template-columns:minmax(0,1fr);row-gap:1.75rem}
+  .initial_plate.is-portrait{width:11rem}
+  .people_list.is-zigzag{row-gap:4.5rem}
 }
 
 /* 2026-09-24 (operator direct edit, About #people): the bio at 16px — is-fine's Light weight at one step up. Both bios wear it, so the two people stay identical. */
 .text-size-regular.is-bio{font-weight:300;font-size:1rem}
+
+/* 2026-09-25 (operator, Insights article): the series cards sit directly under the post, inside #body, on one hairline. */
+.article_more{display:grid;margin-top:clamp(4rem,4.65vw + 1.2rem,6rem);padding-top:clamp(3rem,3.49vw + 0.84rem,4.5rem);border-top:1px solid var(--edge-card,#242424)}
+
+/* 2026-09-25 (operator, Contact): the header field runs on UNDER the transparent footer, as on the 404 — no rule at the seam, and a deeper tail so the warmth crosses into the footer before it dissolves. The page wrapper clips, so the tail never adds scroll below the footer. */
+.hero-wave.is-deep{bottom:-55vh}
+.page-wrapper{overflow:clip}
+/* 2026-09-25 (verifier, Contact/404): the ledger drew its hairlines as a grey background showing through 1px gaps between opaque black cells, so a header field running under the footer was cut by a black box. The lines move onto the cells as borders and every cell is transparent — identical on a black page, and the field now shows through. */
+.footer_ledger{column-gap:0;background-color:transparent}
+.footer_cell{background-color:transparent}
+.footer_cell.is-nav{border-left:1px solid var(--rule-plate,#454545)}
+.footer_cell.is-entity{border-left:1px solid var(--rule-plate,#454545)}
+@media (max-width:991px){
+  .footer_cell.is-nav{border-left-width:0}
+}
+@media (max-width:479px){
+  .footer_cell.is-entity{border-left-width:0}
+}
