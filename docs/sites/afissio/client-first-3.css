@@ -1054,7 +1054,7 @@
 .author_avatar{position:absolute;top:0;left:0;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 8%}
 .author_identity{display:grid;row-gap:0.25rem;min-width:0}
 .author_name{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.125rem;font-weight:700;line-height:1.3;letter-spacing:-0.01em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0}
-.author_role{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.45;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
+.author_role{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;text-transform:uppercase;letter-spacing:0.14em;line-height:1.45;color:var(--orange,#FF6600);margin-top:0.25rem;margin-bottom:0}
 /* is-card: the same author, closing the article — boxed as the contents is, the plate and the name a rung larger. */
 .author_component.is-card{position:relative;margin-top:4rem;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(1.75rem,2.33vw + 0.35rem,2.5rem)}
 /* his corner brackets, as on .quote_panel and the article blockquote: decorative pseudo-elements, content:"" (CLAUDE.md §4c). */
@@ -1063,7 +1063,7 @@
 .author_person.is-card{grid-template-columns:5.5rem minmax(0,1fr) auto;column-gap:1.5rem}
 .author_portrait.is-large{width:5.5rem;height:5.5rem}
 .author_name.is-large{font-size:1.5rem;line-height:1.25;letter-spacing:-0.015em}
-.author_role.is-large{font-size:1rem;line-height:1.5}
+.author_role.is-large{font-size:0.875rem;line-height:1.5}
 .author_link.is-large{width:2.75rem;height:2.75rem;background-size:1.0625rem 1.0625rem}
 /* 1280: THE ARTICLE IS CENTRED ON THE SCREEN (operator 2026-09-24). Three tracks, the column in the
    middle one, the rail in the left track on the container's edge; only the contents sticks. At 1280
@@ -1358,3 +1358,6 @@
   .people_text{padding:1.75rem 0 0}
   .people_list.is-zigzag{row-gap:3.5rem}
 }
+
+/* 2026-09-24 (operator direct edit, About #people): the bio at 16px — is-fine's Light weight at one step up. Both bios wear it, so the two people stay identical. */
+.text-size-regular.is-bio{font-weight:300;font-size:1rem}

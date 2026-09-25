@@ -278,14 +278,6 @@ function __mount(hostEl){
 }
 var __hosts=[].slice.call(document.querySelectorAll('.hero-wave'));
 if(!__hosts.length)return;
-/* 2026-09-24 (404): when the header is the LAST section before the footer, nothing follows it for the
-   field's 30vh tail to dissolve across, so the layer is extended inline to run on under the footer
-   (runtime geometry, §4f) — the field then fades out behind the footer instead of stopping at it. */
-function __reach(hostEl){var sec=hostEl.closest&&hostEl.closest('section');if(!sec)return;var mn=sec.parentElement;
-  if(!mn||mn.tagName!=='MAIN'||mn.lastElementChild!==sec)return;var f=mn.nextElementSibling;
-  while(f&&f.tagName!=='FOOTER'&&f.tagName!=='SECTION')f=f.nextElementSibling;if(!f||f.tagName!=='FOOTER')return;
-  hostEl.style.bottom=(-Math.round(f.getBoundingClientRect().height))+'px';}
-__hosts.forEach(__reach);window.addEventListener('resize',function(){__hosts.forEach(__reach)});
 __hosts.forEach(function(hostEl){__field(__mount(hostEl))});
 function __field(cv){
 var ctx=cv.getContext('2d');if(!ctx)return;
