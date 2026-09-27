@@ -702,76 +702,9 @@
 .passage_first{min-width:0;max-width:48rem}
 .passage_second{min-width:0;max-width:46rem;grid-column:2;grid-row:3;margin-top:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
 
-/* --- §3 `#separation` · the page's ONE COMMITTED MOMENT. Transparent for the same reason §2 is.
-   Its advantage is measurable twice: padding-section-large (18rem at 1680) against #office's
-   padding-section-small (9rem) is EXACTLY 2x the surrounding whitespace, and 3A's panels are the
-   only place on the page where the surface ladder steps at all. --- */
-.section_divide{position:relative;background-color:transparent}
-.divide_head{max-width:44rem;margin-bottom:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
-
-/* --- 3A · THE DIVIDED RECORD — his own device, taken whole and advanced. His page 06 sets two
-   bordered panels side by side with a perforated divider standing in the gap; that arrangement is
-   the one that cannot be misread, so it is the one that is taken.
-   TWO SEPARATE BORDERS AND A GENUINE GAP, NOT ONE BAND. The divided-band mechanism this sheet
-   already carries twice (brief_series, spectrum_series: one border round the set, one hairline
-   between cells, no gap) is exactly what §4 §3 rules out here — it reads as ONE BLOCK, and one
-   block is a merged entity block. The habit move is the banned move.
-   EQUAL, AND EQUAL IS MEASURED, FOUR WAYS: two minmax(0,1fr) tracks, so the panels are the same
-   width at every viewport; ONE .divide_panel rule, so they are the same surface, border, padding
-   and internal rungs; the grid's default stretch, so they are the same height whatever the two
-   sentences do; and one row, so they share one top. The two panels are IDENTICAL LEAF FOR LEAF.
-   THE SEAM IS A GRID CHILD WITH BOTH LINES PINNED, and that is not belt-and-braces. With only its
-   row pinned it would be an item "locked to row 1" and CSS grid would place it in the first
-   AVAILABLE column of that row — column 1, i.e. in front of the first panel, because the panels
-   are auto-placed and nothing has claimed column 1 yet at that point in the algorithm. Pinned to
-   column 2 it is placed first, and the two panels then auto-flow into columns 1 and 3.
-   A 0-WIDTH BOX WITH A LEFT BORDER, not a 1px box with a background: the `auto` track then sizes
-   to exactly the 1px the border occupies, and `dashed` is a core Webflow border style, so the
-   perforation ships as a style object rather than as hand work at deploy.
-   THE ATTORNEY SLOT IS THE PAIR'S FOURTH CHILD, at grid-column:3 / grid-row:2, so its left edge
-   IS the Afissio Law LLC panel's left edge at every width. It is OUTSIDE both panels on purpose:
-   giving the right panel a fourth leaf the left one cannot have would spend the equality this
-   section exists for, so attribution comes from alignment — which is exact and measurable —
-   rather than from containment, which would cost it. --- */
-.divide_pair{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);column-gap:clamp(1.5rem,2.91vw - 1.38rem,3rem)}
-.divide_panel{display:grid;justify-items:start;align-content:start;row-gap:1.25rem;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:clamp(2rem,4.65vw - 0.89rem,4rem)}
-/* the attorney-client sentence: a contract obligation, so it renders at the BODY rung — the same
-   rung as the sentences inside the panels — whole, adjacent to the pair, and above the section's
-   own seam. Never a caption, never a footnote, never behind a toggle. 46rem is the site's proven
-   body measure (73ch), which sets the 92-character sentence on two lines rather than stretching
-   it to a 90-character line just to keep it unbroken. Worn by BOTH options. */
-.divide_note{max-width:46rem;margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem)}
-
-/* --- 3B · THE OPEN DIVIDE, and there are no cards in it: §4 §3 asks that at least one answer not
-   be a pair of boxes. No panel, no fill, no border around either firm — two equal type columns on
-   the page's own black, OPENED and CLOSED by one shared hairline each and separated by ONE SOLID
-   VERTICAL RULE drawn through the page. The boundary is a line, not an edge, so nothing contains
-   either entity and nothing can contain one of them better than the other.
-   THE VERTICAL RULE IS A CELL BORDER, which is the FOOTER's own construction — its four cells are
-   divided exactly this way — and is therefore not one of the full-height RAILS the line system
-   retired in R11. It divides two cells and crosses no text.
-   MIRROR-SYMMETRIC PADDING, AND THE TRANSPARENT BORDER IS WHY THE TWO MEASURES ARE EXACTLY EQUAL
-   RATHER THAN ALMOST. The left column pays the gap on its right and the right column pays the
-   same gap on its left; without compensation the right column would also lose the divider's 1px
-   and the two text boxes would differ by one pixel. The base rule therefore gives EVERY column a
-   1px transparent right border, and `is-second` trades it for a 1px coloured left one — so both
-   boxes lose exactly 1px + one gap, whichever side of the rule they are on. Measured equal at
-   every width.
-   TYPE-ROLE INVERTED against 3A: the name stays at H3 and the sentence rises to the lead rung, so
-   what a reader takes away is the two SENTENCES rather than the two names. Both rungs are the
-   spine's; none is invented. --- */
-/* the attorney slot INSIDE the Afissio Law column — 0.75rem on top of the column's own 1.25rem
-   row gap, so it sits 2rem under that entity's sentence and reads as an identification line
-   rather than as a continuation of it. Body rung, sized as the name and title will be. */
-.divide_ident{max-width:40rem;margin-top:0.75rem}
-
-/* --- §4 `#office` · ZERO new base classes: R21's office_* is worn whole with THIS entity's
-   strings, which is what its own sheet header said it was for. ONE combo, and it is a gap rather
-   than a style: .close_foot carries no top margin because on pages/areas-of-review.html it is its
-   section's only child, whereas here it follows the address strip. The base rule is worn by that
-   page and is frozen, so the gap is added on a combo and takes the system's existing
-   head-to-content clamp rather than a new number. --- */
-.close_foot.is-spaced{margin-top:clamp(2.5rem,3.49vw + 0.34rem,4rem)}
+/* 2026-09-26: R25's divide_* rules (section_divide · divide_head · divide_pair · divide_panel · divide_note ·
+   divide_ident) and close_foot.is-spaced were deleted with the page they served. divide_* is redefined, for
+   the rebuilt page, at the end of this sheet. */
 
 /* --- the deployable tiers. Anything already on a clamp is left alone: a clamp IS the responsive
    rule, and restating it at a breakpoint is how two sources of truth start. --- */
@@ -793,13 +726,7 @@
   .passage_head{max-width:100%}
   .passage_shift{grid-template-columns:minmax(0,1fr)}
   .passage_second{grid-column:1;grid-row:auto;margin-top:clamp(2rem,2.33vw + 1.1rem,2.75rem)}
-  .divide_head{max-width:100%}
-  .divide_pair{grid-template-columns:minmax(0,1fr);row-gap:0}
 }
-@media (max-width:479px){
-  /* PORTRAIT PHONE. The panel's padding steps down once, as every other panel on the site does,
-     so a 288px container still has a readable column inside it. */
-  .divide_panel{padding:1.5rem}
 }
 
 /* ============================================================================
@@ -1027,6 +954,17 @@
 .article-head_title{max-width:56rem;margin-top:2rem}
 .article-head_lead{max-width:56rem;margin-top:1.5rem}
 .article-head_meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;column-gap:0.875rem;row-gap:0.5rem;margin-top:2rem}
+/* 2026-09-27 (operator: "align left" on the legal pages). The stack sits on the reading column's left edge below 1280
+   and on the rail's left edge (the container's) from 1280, so the title always shares an edge with what follows it. */
+.article-head_center.is-left{justify-items:start;text-align:left;width:100%;max-width:42rem;margin-left:auto;margin-right:auto}
+.article-head_meta.is-left{justify-content:flex-start}
+/* the cookie register (/legal/cookies): an Embed between two Rich Text elements, so its parts carry classes.
+   Hairline rows, no fills, no radius; it scrolls sideways inside the column on phones rather than crushing. */
+.article_table-wrap{min-width:0;overflow-x:auto;margin-top:0.5rem;margin-bottom:2.5rem;border-top:1px solid var(--edge-card,#242424);border-bottom:1px solid var(--edge-card,#242424);scrollbar-width:thin;scrollbar-color:#454545 transparent}
+.article_table{width:100%;min-width:36rem;border-collapse:collapse;font-family:"Pluto Sans",system-ui,sans-serif}
+.article_table-head{padding:1rem 1rem 0.875rem 0;text-align:left;vertical-align:bottom;font-size:0.8125rem;font-weight:400;line-height:1.4;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted-ink,#8E8E8E);border-bottom:1px solid #454545}
+.article_table-cell{padding:1rem 1rem 1rem 0;text-align:left;vertical-align:top;font-size:0.9375rem;font-weight:400;line-height:1.5;color:var(--text-reversed-soft,#C9C9C9);border-bottom:1px solid var(--edge-card,#242424)}
+.article_table-cell:first-child{color:var(--text-reversed,#EDEDED)}
 .article-head_fact{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.4;letter-spacing:0.01em;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
 /* the cover spans the container, so its two edges are the two rails' outer edges below it. */
 .article-head_cover{justify-self:stretch;margin-top:clamp(3rem,2.33vw + 1.6rem,4rem);background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);overflow:hidden}
@@ -1036,8 +974,20 @@
 .article-layout_rail{display:grid;align-content:start;row-gap:2.5rem;min-width:0;width:100%;max-width:42rem;justify-self:center}
 .article-layout_body{min-width:0;width:100%;max-width:42rem;justify-self:center}
 /* the two rail boxes share the house card: #080808 on one #242424 hairline, square. */
-.toc_component{min-width:0;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:2rem}
-.toc_list{display:grid;row-gap:0.25rem;margin-top:1.25rem}
+/* 2026-09-26 (operator: "Contents ... open and collapse ... super effective"). BELOW 1280 the box is a
+   reading bar: label, the section being read, n / N, a caret, a 2px orange progress rule on its foot.
+   The static layout here is the no-script state (the list stands open under the head); interior.js §7
+   makes the bar sticky under the navbar and folds the list into an overlay - state set inline (§4f). */
+.toc_component{position:relative;min-width:0;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);padding:0;transition:border-color 280ms cubic-bezier(0.16,1,0.3,1)}
+.toc_head{display:flex;align-items:center;column-gap:1rem;min-width:0;min-height:3.5rem;padding:0.875rem 1.25rem}
+.toc_head:focus-visible{outline:2px solid var(--orange,#FF6600);outline-offset:-2px}
+.toc_state{display:none;flex-grow:1;min-width:0;align-items:baseline;justify-content:space-between;column-gap:0.75rem;padding-left:1rem;border-left:1px solid var(--edge-card,#242424)}
+.toc_current{min-width:0;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.4;color:var(--text-reversed,#EDEDED);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0;margin-bottom:0}
+.toc_count{flex-shrink:0;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.8125rem;font-weight:400;line-height:1.4;letter-spacing:0.02em;font-variant-numeric:tabular-nums;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0}
+/* the caret: two 1.5px hairlines, the navbar dropdown's construction; turns -135deg when open. */
+.toc_caret{display:none;flex-shrink:0;width:0.5rem;height:0.5rem;margin-top:-0.25rem;margin-left:0.25rem;margin-right:0.25rem;border-right:1.5px solid var(--text-reversed,#EDEDED);border-bottom:1.5px solid var(--text-reversed,#EDEDED);transform:rotate(45deg);transition:transform 360ms cubic-bezier(0.16,1,0.3,1),margin-top 360ms cubic-bezier(0.16,1,0.3,1)}
+.toc_progress{display:none;position:absolute;left:-1px;right:-1px;bottom:-1px;z-index:2;height:2px;background-color:var(--orange,#FF6600);transform-origin:0% 50%;transform:scaleX(0)}
+.toc_list{display:grid;align-content:start;row-gap:0.25rem;margin-top:0;padding:0.25rem 1.25rem 1rem}
 .toc_link{display:grid;grid-template-columns:4px minmax(0,1fr);column-gap:0.875rem;align-items:start;padding-top:0.5rem;padding-bottom:0.5rem;color:var(--text-muted-ink,#8E8E8E);text-decoration:none;transition:color 280ms cubic-bezier(0.16,1,0.3,1)}
 .toc_link:hover{color:var(--text-reversed,#EDEDED)}
 /* the list marker: a 4px orange square, decorative, seated on the first line (14px x 1.5 = 21px line). */
@@ -1046,6 +996,8 @@
 .toc_text{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.5;color:inherit;margin-top:0;margin-bottom:0;text-wrap:pretty}
 /* the author: label and profile link on one line, then the plate beside the name. */
 .author_component{min-width:0}
+/* the rail author sits out below 1440: under 1280 the rail is the reading bar, and the closing card carries him. */
+.author_component.is-rail{display:none}
 /* the mark is the link's own background image, so :hover can swap it to the orange cut — one class per
    rule, no descendant selector. The link is named by its aria-label. */
 .author_link{display:block;flex-shrink:0;width:2.25rem;height:2.25rem;background-color:var(--ink-hero,#000000);background-image:url("brand/icons/social-linkedin.svg");background-position:50% 50%;background-size:0.9375rem 0.9375rem;background-repeat:no-repeat;border:1px solid var(--edge-card,#242424);transition:border-color 260ms cubic-bezier(0.22,1,0.36,1),background-color 260ms cubic-bezier(0.22,1,0.36,1)}
@@ -1073,11 +1025,14 @@
    out (the article's closing card carries the author) and returns at 1440. Below 1280 the rail stacks
    above the centred column. */
 @media (min-width:1280px){
+  .article-head_center.is-left{max-width:none;margin-left:0}
   .article-layout_grid{grid-template-columns:minmax(0,1fr) minmax(0,42rem) minmax(0,1fr);align-items:start;column-gap:2rem;row-gap:0}
   .article-layout_rail{grid-column-start:1;grid-column-end:2;grid-row-start:1;grid-row-end:2;align-self:stretch;max-width:22rem;justify-self:start}
   .article-layout_body{grid-column-start:2;grid-column-end:3;grid-row-start:1;grid-row-end:2}
   .toc_component{position:sticky;top:8rem;padding:1.5rem}
-  .author_component.is-rail{display:none}
+  .toc_head{min-height:0;padding:0}
+  /* small desktops: a long document's list scrolls inside the rail instead of running off the screen. */
+  .toc_list{max-height:calc(100vh - 14rem);overflow-y:auto;overscroll-behavior:contain;margin-top:1.25rem;padding:0 0.5rem 0 0;scrollbar-width:thin;scrollbar-color:#454545 transparent}
 }
 @media (min-width:1440px){
   .toc_component{padding:1.75rem}
@@ -1103,7 +1058,9 @@
   .author_component.is-card{margin-top:3rem}
 }
 @media (max-width:479px){
-  .toc_component{padding:1.5rem}
+  .toc_head{column-gap:0.75rem;padding-left:1rem;padding-right:1rem}
+  .toc_state{padding-left:0.75rem}
+  .toc_list{padding-left:1rem;padding-right:1rem}
   .author_component.is-card{padding:1.5rem}
   .author_person{grid-template-columns:3.5rem minmax(0,1fr) auto}
   .author_portrait{width:3.5rem;height:3.5rem}
@@ -1297,16 +1254,15 @@
    unfolded. Jerry's text settles on the portrait's bottom edge, Heidi's hangs from its top edge,
    so the text zigzags against the photos as the rows zigzag against the frame. */
 .people_list.is-zigzag{position:relative;max-width:80rem;margin-left:auto;margin-right:auto;grid-template-columns:minmax(0,1fr);row-gap:clamp(6rem,8.14vw + 1.1rem,11rem);border-top-width:0}
-.people_entry.is-zigzag{width:100%;max-width:64rem;justify-self:start;grid-template-columns:clamp(14rem,9.3vw + 7.4rem,22rem) minmax(0,1fr);column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);row-gap:0;align-items:end;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
+.people_entry.is-zigzag{width:100%;max-width:64rem;justify-self:start;grid-template-columns:clamp(14rem,9.3vw + 7.4rem,22rem) minmax(0,1fr);column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);row-gap:0;align-items:start;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
 .people_entry.is-zigzag-end{width:100%;max-width:64rem;justify-self:end;grid-template-columns:clamp(14rem,9.3vw + 7.4rem,22rem) minmax(0,1fr);column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);row-gap:0;align-items:start;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0}
 .initial_plate.is-portrait{display:block;width:100%;aspect-ratio:1 / 1;overflow:visible;grid-column:auto;grid-row:auto}
 .initial_plate.is-portrait::before{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;left:-1px;top:-1px;right:auto;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
 .initial_plate.is-portrait::after{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;right:-1px;bottom:-1px;left:auto;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
 .people_portrait{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0%}
-.people_text{position:relative;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem;padding:1.75rem 0 0;border-top:1px solid var(--edge-card,#242424)}
-.people_text::before{content:"";position:absolute;left:0;top:-1px;width:2.5rem;height:2px;background-color:var(--orange,#FF6600);pointer-events:none}
+.people_text{position:relative;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem;padding:0}
 .people_name{min-width:0;display:grid;justify-items:start;row-gap:0.625rem}
-.people_bio.is-measured{max-width:34rem}
+.people_bio.is-measured{max-width:none;width:100%}
 .people_ident.is-linked{width:100%;grid-template-columns:auto auto;justify-content:start;column-gap:1.25rem;align-items:start;justify-items:start}
 
 
@@ -1322,29 +1278,8 @@
 .close_stack.is-box::after{content:"";position:absolute;width:1.25rem;height:1.25rem;pointer-events:none;right:-1px;bottom:-1px;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
 
 /* 2026-09-24 (operator, About #people): the large top, the SMALL rung at the bottom. */
-.padding-section-large.is-short-bottom{padding-bottom:clamp(6rem,6.98vw + 1.675rem,var(--section-s,9rem))}
-
-/* 2026-09-24 · Afissio Law #separation, redesigned from About #people: the EQUAL PAIR. One 86rem
-   frame, centred as About's pair is; two equal tracks; each panel is a square plate under the
-   client's corner brackets with a live field inside (compute-field is-full / draft-field), then the
-   name and sentence at About's text padding. The panel's old fill, edge and padding are zeroed by
-   the combo: the plate is the object now, and air separates the two firms. */
-.divide_frame{max-width:86rem;margin-left:auto;margin-right:auto}
-.divide_pair.is-plates{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2.5rem,4.65vw - 0.1rem,5.5rem);row-gap:0;align-items:start}
-.divide_panel.is-plate{row-gap:0;background-color:transparent;border-width:0;padding:0}
-.initial_plate.is-field{display:block;width:100%;aspect-ratio:1 / 1;overflow:visible}
-.initial_plate.is-field::before{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;left:-1px;top:-1px;right:auto;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
-.initial_plate.is-field::after{content:"";position:absolute;width:1.25rem;height:1.25rem;background-color:transparent;box-shadow:none;z-index:1;right:-1px;bottom:-1px;left:auto;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
-.draft-field{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;overflow:hidden}
-.divide_text{min-width:0;display:grid;justify-items:start;row-gap:1rem;padding:clamp(2.5rem,2.91vw + 0.84rem,3.75rem) clamp(3.75rem,5.23vw + 0.5rem,6rem) 0}
-@media (max-width:767px){
-  .divide_pair.is-plates{grid-template-columns:minmax(0,1fr);row-gap:3.5rem}
-  .divide_text{padding:2rem 1.75rem 0}
-}
-
 
 /* 2026-09-24 (operator, About #people): the small rung at the top, half of it at the bottom. */
-.padding-section-small.is-tight-bottom{padding-bottom:clamp(3rem,3.49vw + 0.84rem,4.5rem)}
 
 /* 2026-09-24 · About #people, RESPONSIVE LADDER (operator: "super responsive for tablet, landscape,
    mobile and smaller desktops"). Only the site's six breakpoints.
@@ -1371,7 +1306,7 @@
 /* 2026-09-25 (operator, Insights article): the series cards sit directly under the post, inside #body, on one hairline. */
 .article_more{display:grid;margin-top:clamp(4rem,4.65vw + 1.2rem,6rem);padding-top:clamp(3rem,3.49vw + 0.84rem,4.5rem);border-top:1px solid var(--edge-card,#242424)}
 
-/* 2026-09-25 (operator, Contact): the header field runs on UNDER the transparent footer, as on the 404 — no rule at the seam, and a deeper tail so the warmth crosses into the footer before it dissolves. The page wrapper clips, so the tail never adds scroll below the footer. */
+/* 2026-09-25 (operator, Contact): the header field runs on UNDER the transparent footer, as on the 404 — the seam rule back on both pages since 2026-09-27 (operator: every footer carries its top line), and a deeper tail so the warmth crosses into the footer before it dissolves. The page wrapper clips, so the tail never adds scroll below the footer. */
 .hero-wave.is-deep{bottom:-55vh}
 .page-wrapper{overflow:clip}
 /* 2026-09-25 (verifier, Contact/404): the ledger drew its hairlines as a grey background showing through 1px gaps between opaque black cells, so a header field running under the footer was cut by a black box. The lines move onto the cells as borders and every cell is transparent — identical on a black page, and the field now shows through. */
@@ -1384,4 +1319,208 @@
 }
 @media (max-width:479px){
   .footer_cell.is-entity{border-left-width:0}
+}
+
+/* ============================================================================
+   2026-09-26 · AFISSIO LAW, REBUILT AS AN INTRODUCTION (operator: "we are introducing a company and its
+   services ... more creative, a more professional look and feel, use less borders, redesign the page from
+   scratch"). The firm, its five areas of legal work, where that work enters the process, the separation,
+   questions, the office. LINES: the section seams (the binding line system) and ONE line that carries
+   meaning - the handover track, orange from the step where Afissio Law is engaged. Every other separation
+   is a surface step or air: no ruled rows, no boxed notice, no corner brackets, no index plates.
+   Families named for the DEVICE, never for this page:
+     practice_*   a 3-column grid of house boxes (icon, title, work); the head and CTA in the first cell (rewritten 2026-09-27)
+     procedure_*  one line through N steps, grey -> gradient -> orange from where legal work enters;
+                  drawn in by interior.js §9 (rewritten 2026-09-27)
+     divide_*     a comparison table: one house box, each firm one column of its own dark grey, the
+                  attorney-client sentence the row that spans both (rewritten 2026-09-27)
+   2026-09-27: the operator asked for "a more compact but more corporate" register and "a comparison table
+   look and feel", so §3 and §5 are ruled again - hairlines only, never boxes.
+     close_split / close_main / close_aside / close_office / close_copy-block - a two-track close: the
+                  action beside one entity's office
+   Deleted with the 2026-09-25 page: particulars_* · fork_* · procedure_marker plates · divide_schedule,
+   divide_row, divide_key, divide_cell and divide_note.is-notice.
+   ============================================================================ */
+/* §2 THE TURN, on band_grid. The body column is wider, its two ledes sit on the role-to-role rung, and it
+   drops by the tagline's height so the first lede starts level with the H2. The non-legal sentence is
+   muted and the legal one bright: the turn is carried by tone, not by a rule. #8E8E8E on #000 6.3:1 ·
+   #EDEDED on #000 17.9:1. */
+.band_body-col.is-wide{max-width:52rem;display:grid;row-gap:1.5rem;padding-top:2.5rem}
+.intro_lede.is-muted{color:var(--text-muted-ink,#8E8E8E)}
+.intro_lede.is-reversed{color:var(--text-reversed,#EDEDED)}
+/* §3 practice_* · THE GRID (2026-09-27, operator, of the ruled register: "terrible execution with tons of horizontal
+   lines. instead, use grid layout boxes"). Still the page's committed moment - its only full-bleed surface (#080808) -
+   now a 3-column grid: the FIRST cell is the head (tagline, H2, intro), unboxed, and the five areas are boxes on the
+   black ground with the card edge, title and work stacked at the top. The page's one "N boxes in a grid" moment
+   (law 3). Hover lifts the edge, as the method cards do. #EDEDED on #000 17.9:1 · #C9C9C9 13.3:1. */
+/* 2026-09-27 (operator: "you used a different bg color in here. why? FIX IT"): the band is gone - the section sits on the
+   page's own black like every other, and its boxes wear THE HOUSE BOX (style guide: --surface-card #080808 on one --edge-card #242424
+   hairline, square; hover --surface-card-hover #0E0E0E + --rule-ink #3A3A3A), as every card on the site does. */
+.section_practice{position:relative;background-color:transparent}
+/* 2026-09-27 (operator: "increase the padding of the boxes also the gaps ... by considering screen size. make it super
+   responsive"). Padding, gap, inner gap and height are all FLUID on the viewport, each with a floor and a ceiling:
+   gap 16 -> 32px, padding 32 -> 64px (2026-09-27: "less padding"). NOT SQUARE: "boxes must be squared" meant square
+   CORNERS, which the house box already has; reading it as a 1:1 aspect-ratio was the error (operator: "SQUARED 1X1
+   LOOK AND FEEL. I DID NOT WANT THAT"), so the ratio is gone - boxes take their content height and the grid gives
+   each row one height. Icon (the project's own 52px, 1.5px-stroke drawings, on the Solutions plate), title and work stack at the top; the
+   client's orange corner brackets sit top-left and bottom-right (decorative pseudos, content:"", §4c). Columns: 2
+   up to 1279 (head across the top), 3 from 1280 (head + CTA in the first cell), 1 at <=767. */
+/* 2026-09-27 RESPONSIVE PASS (operator: "super responsive for tablet, landscape, mobile and small desktop"). Five boxes
+   never leave an orphan: 992-1279 a 6-track grid, head across, 3 + 2 (the last two .is-wide / .is-last span 3);
+   >=1280 3 columns, head in the first cell; 768-991 2 columns, the fifth (.is-last) full width; <=767 one column,
+   the icon beside the text (landscape phones stop showing long empty boxes); <=479 stacked again. */
+.practice_list{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(1rem,0.4rem + 1.5vw,2rem)}
+/* 2026-09-27 (operator: "don't separate items, align top. move the paragraph below the heading"): one stack at the top
+   of its cell - tagline, H2, intro - on the 1.5rem head rung, no space-between. */
+.practice_head{min-width:0;grid-column:1 / -1;padding-bottom:clamp(1rem,0.2rem + 1.6vw,2rem)}
+.practice_title{display:grid;justify-items:start;row-gap:1.5rem}
+.practice_intro{max-width:36rem;margin-top:1.5rem}
+/* 2026-09-27 (operator: "move the paragraph below the heading. align top"): H3 and text stack at the top of the box. */
+.practice_item{min-width:0;display:grid;align-content:start;row-gap:1rem;position:relative;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424);grid-column:span 2;padding:clamp(2rem,1rem + 2.4vw,4rem);transition:border-color 420ms cubic-bezier(0.22,1,0.36,1),background-color 420ms cubic-bezier(0.22,1,0.36,1)}
+.practice_item.is-wide{grid-column:span 3}
+.practice_item.is-last{grid-column:span 3}
+.practice_item:hover{border-color:var(--rule-ink,#3A3A3A);background-color:var(--surface-card-hover,#0E0E0E)}
+.practice_item::before{content:"";position:absolute;top:-1px;left:-1px;width:16px;height:16px;border-top:2px solid var(--orange,#FF6600);border-left:2px solid var(--orange,#FF6600)}
+.practice_item::after{content:"";position:absolute;right:-1px;bottom:-1px;width:16px;height:16px;border-right:2px solid var(--orange,#FF6600);border-bottom:2px solid var(--orange,#FF6600)}
+/* 2026-09-27 (operator: "keep the design consistency with other icons in the boxes"): the drawing sits in the SAME plate
+   the Solutions data-room cards use - service_well is-plate (4.5rem black well, one #242424 edge) + service_art (3rem).
+   practice_media only spaces it from the title. */
+.practice_media{margin-bottom:clamp(0.5rem,0.2rem + 1vw,1.25rem)}
+.practice_text{max-width:24rem;font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.0625rem;font-weight:400;line-height:1.6;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
+/* §4 procedure_* · THE HANDOVER, ONE LINE (2026-09-27, operator: "no need a separate line, it creates the wrong feeling.
+   merge them. also the transition with the grey and orange must be smoother, use gradient"). ONE track through the four
+   steps: grey (#8E8E8E) while Afissio and then the company act, a grey-to-orange GRADIENT across the span from the
+   decision (the diamond) to the engagement, and orange (#FF6600) to the arrow at the end - the colour itself says where
+   legal work enters. Each segment is a dim base with a FILL child; CSS rests every fill at full length, so with no
+   script the line is complete; interior.js §9 draws it in and runs one token whose colour follows the line (state
+   inline, §4f). COST, stated: CLAUDE.md §3.5 avoids gradients; this one is client-instructed, a 1px line and nothing
+   else, and ships as a Webflow background gradient (literal hexes). Vertical at <=991, same parts.
+   Non-text with meaning: #8E8E8E 6.4:1 and #FF6600 7.2:1 on #000 (WCAG 1.4.11). */
+.section_procedure{position:relative;background-color:transparent}
+.procedure_head{display:grid;justify-items:start;row-gap:1.5rem;max-width:none;margin-bottom:clamp(3.5rem,3.49vw + 1.6rem,5rem)}
+.procedure_list{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.procedure_step{position:relative;min-width:0;display:grid;align-content:start;row-gap:2rem}
+.procedure_marker{position:relative;height:0.8125rem}
+.procedure_rail{position:absolute;left:0;right:0;top:0.375rem;height:1px;background-color:#1C1C1C}
+.procedure_fill{position:absolute;top:0;left:0;width:100%;height:100%;background-color:var(--text-muted-ink,#8E8E8E);transform-origin:0 0}
+.procedure_fill.is-accent{background-color:var(--orange,#FF6600)}
+.procedure_fill.is-blend{background-image:linear-gradient(90deg,#8E8E8E 0%,#FF6600 100%)}
+.procedure_node{position:absolute;left:0;top:0;z-index:1;box-sizing:border-box;width:0.8125rem;height:0.8125rem;border:1px solid var(--text-muted-ink,#8E8E8E);background-color:var(--ink-hero,#000000)}
+.procedure_node::before{content:"";position:absolute;left:0.1875rem;top:0.1875rem;width:0.3125rem;height:0.3125rem;background-color:var(--text-muted-ink,#8E8E8E)}
+.procedure_node.is-fork{transform:rotate(45deg)}
+.procedure_node.is-accent{border-color:var(--orange,#FF6600)}
+.procedure_node.is-accent::before{background-color:var(--orange,#FF6600)}
+.procedure_arrow{position:absolute;right:0.125rem;top:0.1875rem;box-sizing:border-box;width:0.4375rem;height:0.4375rem;border-top:1px solid var(--text-muted-ink,#8E8E8E);border-right:1px solid var(--text-muted-ink,#8E8E8E);transform:rotate(45deg)}
+.procedure_arrow.is-accent{border-top-color:var(--orange,#FF6600);border-right-color:var(--orange,#FF6600)}
+.procedure_body{min-width:0;display:grid;justify-items:start;align-content:start;row-gap:0.75rem;padding-right:1.25rem}
+.procedure_text{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.0625rem;font-weight:300;line-height:1.65;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;max-width:24rem;text-wrap:pretty}
+/* §5 divide_* · THE COMPARISON TABLE, EDITORIAL (2026-09-27, operator: "not happy with the font size, coloring, gaps and
+   border lines ... more stylish, modern, compact ... VERY VERY STYLISH AND MODERN"). ONE house box, zero internal lines:
+   the structure is carried by SURFACE alone - the label column and the foot on the table's #080808, Afissio's column
+   #121212, Afissio Law LLC's #1C1C1C, the two tints touching, so each firm reads as one continuous tinted strip and the
+   step between them is the separation. Its own compact type set, one role per class, no borrowed page rungs: kicker 12
+   caps / firm 24 Bold orange / summary 15 / key 12 caps / value 16 / statement 18. The one yes/no row carries a mark
+   (decorative ::before, content:"", §4c): an orange filled square for "provides", a hollow grey one for "does not".
+   Rhythm: head 40 top / 24 bottom, rows 16 apart, 32 under the last row, foot 28. ARIA table roles (§4h).
+   #EDEDED on #121212 16.0:1, on #1C1C1C 14.5:1, on #080808 17.1:1 · #C9C9C9 11.3 / 10.3 · #8E8E8E 5.5 / 5.0 / 6.1 ·
+   #FF6600 6.4:1 / 5.8:1 (display size). */
+.section_divide{position:relative;background-color:transparent}
+.divide_head{display:grid;justify-items:start;row-gap:1.5rem;max-width:44rem;margin-bottom:clamp(2.5rem,2.33vw + 1.2rem,3.5rem)}
+.divide_table{display:grid;background-color:var(--surface-card,#080808);border:1px solid var(--edge-card,#242424)}
+.divide_row{display:grid;grid-template-columns:minmax(9rem,2.4fr) minmax(0,4.8fr) minmax(0,4.8fr)}
+.divide_corner{min-width:0}
+.divide_entity{min-width:0;display:grid;align-content:start;justify-items:start;background-color:#121212;padding-top:clamp(1.75rem,1rem + 1.6vw,2.5rem);padding-bottom:1.5rem;padding-left:clamp(1.25rem,0.75rem + 1.2vw,2.25rem);padding-right:clamp(1.25rem,0.75rem + 1.2vw,2.25rem)}
+.divide_entity:last-child{background-color:#1C1C1C}
+.divide_kicker{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.75rem;font-weight:400;line-height:1.4;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted-ink,#8E8E8E);margin-top:0;margin-bottom:0.625rem}
+.divide_firm{font-family:"Pluto Sans",system-ui,sans-serif;font-size:clamp(1.25rem,1.1rem + 0.4vw,1.5rem);font-weight:700;line-height:1.2;letter-spacing:-0.02em;color:var(--orange,#FF6600);margin-top:0;margin-bottom:0.75rem}
+.divide_summary{max-width:26rem;font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.9375rem;font-weight:400;line-height:1.55;color:var(--text-reversed-soft,#C9C9C9);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.divide_label{min-width:0;padding-top:1rem;padding-bottom:1rem;padding-left:clamp(1.25rem,0.75rem + 1.2vw,2.25rem);padding-right:1rem}
+.divide_label.is-end{padding-bottom:2rem}
+.divide_label.is-foot{padding-top:1.75rem;padding-bottom:1.75rem}
+.divide_key{font-family:"Pluto Sans",system-ui,sans-serif;font-size:0.75rem;font-weight:400;line-height:1.5;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted-ink,#8E8E8E);margin-top:0.1875rem;margin-bottom:0}
+.divide_cell{min-width:0;display:flex;align-items:flex-start;column-gap:0.75rem;background-color:#121212;padding-top:1rem;padding-bottom:1rem;padding-left:clamp(1.25rem,0.75rem + 1.2vw,2.25rem);padding-right:clamp(1.25rem,0.75rem + 1.2vw,2.25rem)}
+.divide_cell:last-child{background-color:#1C1C1C}
+.divide_cell.is-end{padding-bottom:2rem}
+.divide_cell.is-span{grid-column:2 / 4;background-color:transparent;padding-top:1.75rem;padding-bottom:1.75rem}
+.divide_cell.is-yes::before{content:"";flex-shrink:0;width:0.5rem;height:0.5rem;margin-top:0.5rem;background-color:var(--orange,#FF6600)}
+.divide_cell.is-no::before{content:"";flex-shrink:0;box-sizing:border-box;width:0.5rem;height:0.5rem;margin-top:0.5rem;border:1px solid var(--text-muted-ink,#8E8E8E)}
+.divide_value{font-family:"Pluto Sans",system-ui,sans-serif;font-size:1rem;font-weight:400;line-height:1.55;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:pretty}
+.divide_statement{max-width:44rem;font-family:"Pluto Sans",system-ui,sans-serif;font-size:1.125rem;font-weight:400;line-height:1.5;letter-spacing:-0.005em;color:var(--text-reversed,#EDEDED);margin-top:0;margin-bottom:0;text-wrap:pretty}
+/* §7 close_split · THE ACTION BESIDE THE OFFICE. Left: the H2, the line and the page's second CTA. Right:
+   Afissio Law LLC's own address (never combined with Afissio's) and the notice. Tops aligned; no box. */
+.close_split{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);column-gap:clamp(2.5rem,5.81vw - 1.1rem,5rem);row-gap:4rem;align-items:start}
+.close_main{min-width:0;max-width:44rem}
+.close_copy-block{max-width:36rem;margin-top:1.5rem}
+.close_aside{min-width:0;max-width:30rem}
+.close_office{display:grid;justify-items:start;row-gap:1.25rem}
+@media (min-width:1280px){
+  .practice_list{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .practice_item{grid-column:auto}
+  .practice_item.is-wide{grid-column:auto}
+  .practice_item.is-last{grid-column:auto}
+  .procedure_body{padding-right:clamp(1.5rem,2.33vw + 0.3rem,2.5rem)}
+  .practice_head{grid-column:auto;padding-top:0;padding-right:clamp(0.5rem,3vw - 2.4rem,2rem);padding-bottom:0}
+  .practice_intro{max-width:26rem}
+}
+@media (max-width:991px){
+  .practice_list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .practice_item{grid-column:auto}
+  .practice_item.is-wide{grid-column:auto}
+  .practice_item.is-last{grid-column:1 / -1}
+  .practice_intro{max-width:40rem}
+  .band_body-col.is-wide{padding-top:0}
+  .procedure_head{max-width:100%}
+  .procedure_list{grid-template-columns:minmax(0,1fr);max-width:40rem}
+  .procedure_step{grid-template-columns:0.8125rem minmax(0,1fr);column-gap:1.5rem;row-gap:0}
+  .procedure_marker{height:auto}
+  .procedure_rail{left:0.375rem;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .procedure_fill.is-blend{background-image:linear-gradient(180deg,#8E8E8E 0%,#FF6600 100%)}
+  .procedure_arrow{right:auto;left:0.1875rem;top:auto;bottom:0.125rem;transform:rotate(135deg)}
+  .procedure_body{padding-right:0;padding-bottom:3rem;margin-top:-0.1875rem}
+  .close_split{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:767px){
+  .practice_list{grid-template-columns:minmax(0,1fr);gap:0.75rem}
+  .practice_head{padding-bottom:1.25rem}
+  .practice_item{grid-template-columns:4.5rem minmax(0,1fr);column-gap:1.5rem;row-gap:0.5rem;padding:1.75rem 1.75rem 1.75rem 1.5rem}
+  .practice_item.is-last{grid-column:auto}
+  .practice_media{grid-row:1 / 3;margin-bottom:0}
+  .practice_text{max-width:none}
+  .procedure_body{padding-bottom:2.5rem}
+  .close_split{row-gap:3rem}
+}
+@media (max-width:479px){
+  .procedure_step{column-gap:1rem}
+  .practice_item{grid-template-columns:minmax(0,1fr);row-gap:0.875rem;padding:1.75rem 1.5rem}
+  .practice_media{grid-row:auto;margin-bottom:0.25rem}
+  .practice_text{font-size:1rem}
+  .procedure_text{font-size:1rem}
+}
+/* §5 divide_* tiers. <=991 the label column narrows. <=767 each row becomes a label strip across the table, then the
+   two firm cells side by side, so the two tinted columns still run the table's height. */
+@media (max-width:991px){
+  .divide_head{max-width:100%}
+  .divide_row{grid-template-columns:minmax(7.5rem,2fr) minmax(0,4fr) minmax(0,4fr)}
+}
+@media (max-width:767px){
+  .divide_row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .divide_corner{display:none}
+  .divide_label{grid-column:1 / 3;padding-top:1.25rem;padding-bottom:0.625rem;padding-left:1.25rem}
+  .divide_label.is-end{padding-bottom:0.625rem}
+  .divide_label.is-foot{padding-top:1.5rem;padding-bottom:0.5rem}
+  .divide_cell{padding:0.875rem 1.25rem 1.25rem}
+  .divide_cell.is-end{padding-bottom:1.5rem}
+  .divide_cell.is-span{grid-column:1 / 3;padding:0 1.25rem 1.5rem}
+  .divide_entity{padding:1.5rem 1.25rem 1.25rem}
+}
+@media (max-width:479px){
+  .divide_label{padding-left:1rem}
+  .divide_cell{padding-left:1rem;padding-right:1rem}
+  .divide_cell.is-span{padding-left:1rem;padding-right:1rem}
+  .divide_entity{padding-left:1rem;padding-right:1rem}
+  .divide_value{font-size:0.9375rem}
+  .divide_firm{font-size:1.125rem}
+  .divide_kicker{font-size:0.6875rem;letter-spacing:0.1em}
+  .divide_summary{font-size:0.875rem}
+  .divide_statement{font-size:1rem}
 }

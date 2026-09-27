@@ -130,7 +130,13 @@ var SEL=['.sequence_aside','.sequence_step',
     page's behaviour. None of the eight matches an element on any of the eight pages built before
     this one, so all eight settle exactly as they did. */
  '.passage_head','.passage_lead','.passage_sub','.passage_first','.passage_second',
- '.divide_pair','.divide_open','.divide_note',
+ /* 2026-09-27: the separation is a comparison table now, and the table is the HOST, so both firms and the
+    attorney-client row still arrive in the same frame. */
+ '.divide_table',
+ /* 2026-09-26 Afissio Law, rebuilt as an introduction: the services head and its five rows in reading order
+    (the list filling in), the four handover steps in order, the separation head, and the office close.
+    '.divide_pair' above stays the HOST, so both firms still arrive in the same frame. */
+ '.practice_head','.practice_item','.procedure_step','.divide_head','.close_split',
  /* R26-CLOSE (half A): pages/about.html. '.people_entry' (3A) and '.people_leaf' (3B) are the two
     people themselves, so they stage in the deck's order 130ms apart — two colleagues arriving one
     after the other is reading order, not a boundary narrating itself, which is why About lists the
@@ -666,8 +672,6 @@ var HOLE_CX=0.32,HOLE_CY=0.50;
 if(__lhost.classList&&__lhost.classList.contains('is-centered'))HOLE_CX=0.5;
 /* `compute-field is-plate` (Industries register wells): a small centred clear zone that holds the drawing. */
 if(__lhost.classList&&__lhost.classList.contains('is-plate')){HOLE_CX=0.5;HOLE_IN=0.14;HOLE_OUT=0.46;FLOOR=0.1;PEAK=0.95}
-/* `compute-field is-full` (Afissio Law #separation, 2026-09-24): no clear zone — the lattice IS the plate's drawing. */
-if(__lhost.classList&&__lhost.classList.contains('is-full')){HOLE_IN=-1;HOLE_OUT=-0.5;FLOOR=0.06;PEAK=0.85}
 /* ALPHA IS QUANTISED INTO 14 BUCKETS and each bucket is filled in one pass. Building a
    fillStyle string per dot meant ~2900 string allocations a frame, which is the whole cost of a
    lattice this size; 14 strings a frame is not. Invisible at 1/255 steps. */
@@ -899,86 +903,6 @@ setInterval(function(){
   if(raf&&(n-lastF)<900)return;var r=host.getBoundingClientRect();
   if(r.bottom<-60||r.top>(window.innerHeight||0)+60)return;
   raf=0;start();if(!t0)t0=n-tOff;paint(n-t0);
-},900);
-start();
-})()});
-})();
-
-/* ============================================================================
-   3c · THE DRAFTING FIELD (Afissio Law #separation, 2026-09-24). The partner of the Afissio plate's
-   lattice: where Afissio's square COMPUTES (review, analysis), Afissio Law's square DRAFTS — ruled
-   lines written one after another, a caret at the tip of the line being set, a 4px clause marker in
-   the margin at each heading, the finished lines settling to the dim orange. When the sheet is full
-   it holds, fades, and a new sheet begins. The document tile's own vocabulary (ruled lines, the
-   short closing line of a paragraph) at plate scale, in the same one hue ramp #B34B00 -> #FF6600.
-   HOW IT SHIPS: a canvas created here, styled inline. Reduced motion paints one finished sheet.
-   Nothing paints off screen or in a hidden tab; a watchdog restarts a paused loop.
-   ============================================================================ */
-(function(){
-if(window.__afissioDraftFieldV1)return;window.__afissioDraftFieldV1=1;
-[].slice.call(document.querySelectorAll('.draft-field')).forEach(function(host){(function(){
-var cv=document.createElement('canvas');
-cv.style.position='absolute';cv.style.top='0';cv.style.left='0';cv.style.width='100%';cv.style.height='100%';cv.style.display='block';
-host.appendChild(cv);
-var ctx=cv.getContext('2d');if(!ctx)return;
-var W=1,H=1,L=[],T=0,MX=0,seed=7,cyc=0,HOLD=1900,FADE=1200,SPEED=0.9;
-function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646}
-function col(u,al){return 'rgba('+Math.round(179+76*u)+','+Math.round(75+27*u)+',0,'+(al<0?0:al>1?1:al).toFixed(3)+')'}
-function size(){var r=host.getBoundingClientRect(),dpr=Math.min(1.5,window.devicePixelRatio||1);
-  W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
-  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
-function layout(){
-  L=[];MX=Math.round(W*0.14);var w=W-2*MX,pitch=Math.max(8,Math.min(16,Math.round(H/30))),y=Math.round(H*0.14),bottom=H*0.86,t=300;
-  while(y<bottom){
-    L.push({x:MX,y:y,len:w*(0.24+rnd()*0.2),head:true});y+=Math.round(pitch*1.7);
-    var n=2+((rnd()*4)|0);
-    for(var i=0;i<n&&y<bottom;i++){L.push({x:MX,y:y,len:w*(i<n-1?0.88+rnd()*0.12:0.3+rnd()*0.45),head:false});y+=pitch}
-    y+=Math.round(pitch*1.2);
-  }
-  for(var k=0;k<L.length;k++){var ln=L[k];t+=ln.head?320:80;ln.t0=t;ln.dur=ln.len/SPEED;t+=ln.dur}
-  T=t;
-}
-function paint(tc){
-  var bx=host.getBoundingClientRect(),dp=Math.min(1.5,window.devicePixelRatio||1);
-  if(cv.width!==Math.round(bx.width*dp)||cv.height!==Math.round(bx.height*dp)){size();layout()}
-  ctx.clearRect(0,0,W,H);
-  var fade=tc>T+HOLD?Math.max(0,1-(tc-T-HOLD)/FADE):1;if(fade<=0)return;
-  for(var k=0;k<L.length;k++){var ln=L[k];if(tc<ln.t0)break;
-    var p=Math.min(1,(tc-ln.t0)/ln.dur),th=ln.head?2:1,yy=Math.round(ln.y);
-    if(ln.head){ctx.fillStyle=col(1,0.95*fade);ctx.fillRect(Math.round(MX*0.5)-2,yy-1,4,4)}
-    if(p<1){
-      var x1=ln.x+ln.len*p;
-      ctx.fillStyle=col(1,0.95*fade);ctx.fillRect(ln.x,yy,ln.len*p,th);
-      ctx.fillRect(Math.round(x1)+2,yy-5,2,11);
-    }else{
-      var since=tc-(ln.t0+ln.dur),g=since<800?1-since/800:0;
-      ctx.fillStyle=ln.head?col(0.45+0.55*g,(0.7+0.25*g)*fade):col(0.1+0.8*g,(0.36+0.5*g)*fade);
-      ctx.fillRect(ln.x,yy,ln.len,th);
-    }
-  }
-}
-size();layout();
-if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-  paint(T);window.addEventListener('resize',function(){size();layout();paint(T)});return;
-}
-var raf=0,t0=0,tOff=0,lastF=0;
-function frame(now){
-  lastF=now;if(!t0)t0=now-tOff;
-  if(document.visibilityState==='hidden'){tOff=now-t0;t0=0;raf=0;return}
-  var r=host.getBoundingClientRect(),vh=window.innerHeight||0,tc=now-t0-cyc;
-  if(tc>T+HOLD+FADE){cyc=now-t0;layout();tc=0}
-  if(r.bottom>-60&&r.top<vh+60){try{paint(tc)}catch(err){if(!window.__afissioDraftErr){window.__afissioDraftErr=1;console.error('drafting field paint failed',err)}}}
-  raf=requestAnimationFrame(frame);
-}
-function start(){if(!raf){t0=0;raf=requestAnimationFrame(frame)}}
-window.addEventListener('resize',function(){size();layout()});
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
-window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0});
-setInterval(function(){
-  if(document.visibilityState!=='visible')return;var n=performance.now();
-  if(raf&&(n-lastF)<900)return;var r=host.getBoundingClientRect();
-  if(r.bottom<-60||r.top>(window.innerHeight||0)+60)return;
-  raf=0;start();if(!t0)t0=n-tOff;paint(n-t0-cyc);
 },900);
 start();
 })()});
@@ -1299,26 +1223,33 @@ start();
 })();
 
 /* ============================================================================
-   7 · THE CONTENTS RAIL (2026-09-24, operator: "put a table of contents area to the left").
-   The body is a CMS Rich Text element, so its <h2>s carry no id and a contents list cannot be
-   authored per article. The Designer holds ONE .toc_link as the template; this pass reads the
-   body's <h2>s, gives each an id, and clones the template once per heading, so every article gets
-   its own list with no field to fill. In this preview the static list already matches the
-   specimen and the rebuild produces the same five rows.
-   STATE, NEVER CONTENT: the list renders without the script; the pass adds the anchors and marks
-   the heading being read, colour only, set INLINE (CLAUDE.md §4f — a runtime-only combo is pruned
-   by Webflow). Reduced motion: the jump is instant. Nothing rests at opacity 0. No-op on any page
-   without .toc_list.
+   7 · THE CONTENTS (2026-09-24; reading bar 2026-09-26, operator: "open and collapse ... super effective").
+   The body is a CMS Rich Text element, so its <h2>s carry no id: this pass reads them, gives each an id
+   and clones the ONE .toc_link template per heading. From 1280 the list is the sticky left rail; it
+   scrolls inside itself on short screens and keeps the heading being read in view.
+   BELOW 1280 the box becomes a READING BAR: sticky under the navbar (following it as it hides and
+   returns), showing the section being read and n / N, with a 2px orange progress rule on its foot.
+   The head is the toggle (role=button, Enter/Space); the list opens as an overlay capped to the screen
+   and closes on a pick, Escape, or a tap outside. Picking jumps with the bar's height allowed for.
+   STATE, NEVER CONTENT: with no script the list stands open in the flow. All state is INLINE (§4f).
+   Reduced motion: no height animation, instant jumps. Nothing rests at opacity 0.
    ============================================================================ */
 (function(){
 if(window.__afissioContentsV1)return;window.__afissioContentsV1=1;
 var list=document.querySelector('.toc_list');if(!list)return;
 var nav=list.closest?list.closest('.toc_component'):null;
-var body=document.querySelector('.article_richtext');
-var heads=body?[].slice.call(body.querySelectorAll('h2')):[];
+var body=document.querySelector('.article_column')||document.querySelector('.article_richtext');
+var heads=[].slice.call(document.querySelectorAll('.article_richtext h2'));
 if(!heads.length){if(nav)nav.style.display='none';return}
 var tpl=list.querySelector('.toc_link');if(!tpl)return;
 var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function q(c){return nav?nav.querySelector(c):null}
+var rail=nav&&nav.closest?nav.closest('.article-layout_rail'):null;
+var head=q('.toc_head'),state=q('.toc_state'),curEl=q('.toc_current'),countEl=q('.toc_count'),caret=q('.toc_caret'),prog=q('.toc_progress');
+var shell=document.querySelector('.navbar_shell');
+var mq=window.matchMedia?window.matchMedia('(max-width:1279px)'):null;
+var canBar=!!(rail&&head&&state&&caret);
+var compact=false,open=false,closeT=0;
 var used={};
 function slug(t){
   var s=(t||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'section',k=s,n=2;
@@ -1326,23 +1257,93 @@ function slug(t){
   used[k]=1;return k;
 }
 var links=[],frag=document.createDocumentFragment();
-heads.forEach(function(h,i){
+heads.forEach(function(h){
   if(!h.id)h.id=slug(h.textContent);
-  h.style.scrollMarginTop='7rem';
   var a=tpl.cloneNode(true),txt=a.querySelector('.toc_text');
-  a.setAttribute('href','#'+h.id);a.removeAttribute('aria-current');
+  a.setAttribute('href','#'+h.id);a.removeAttribute('aria-current');a.style.color='';
   if(txt)txt.textContent=h.textContent;
-  a.addEventListener('click',function(e){
-    e.preventDefault();
-    var y=h.getBoundingClientRect().top+(window.pageYOffset||0)-112;
-    window.scrollTo({top:Math.max(0,y),behavior:reduce?'auto':'smooth'});
-    if(history.replaceState)history.replaceState(null,'','#'+h.id);
-  });
+  a.addEventListener('click',function(e){e.preventDefault();go(h)});
   links.push(a);frag.appendChild(a);
 });
 while(list.firstChild)list.removeChild(list.firstChild);
 list.appendChild(frag);
-var cur=-2,tick=false;
+var N=heads.length;
+function pageY(){return window.pageYOffset||0}
+function navH(){return shell?shell.offsetHeight:0}
+function navBottom(){if(!shell)return 0;var b=shell.getBoundingClientRect().bottom;return b>0?b:0}
+function margins(){
+  var m=compact?(navH()+(nav?nav.offsetHeight:0)+16)+'px':'7rem';
+  heads.forEach(function(h){h.style.scrollMarginTop=m});
+}
+function go(h){
+  var top=h.getBoundingClientRect().top,y;
+  if(compact){
+    /* scrolling down hides the navbar, so the bar rides at the top; scrolling up brings the navbar back. */
+    var off=nav.offsetHeight+16+(top<0?navH():0);
+    y=top+pageY()-off;setOpen(false);
+  }else y=top+pageY()-112;
+  window.scrollTo({top:Math.max(0,y),behavior:reduce?'auto':'smooth'});
+  if(history.replaceState)history.replaceState(null,'','#'+h.id);
+}
+/* ---- open / close (compact only) ---- */
+var EASE='cubic-bezier(0.16,1,0.3,1)',DUR=380;
+function capH(){return Math.max(180,(window.innerHeight||600)-nav.getBoundingClientRect().bottom-16)}
+function centreActive(){
+  var a=links[cur>=0?cur:0];if(!a)return;
+  list.scrollTop=Math.max(0,a.offsetTop-list.clientHeight/2+a.offsetHeight/2);
+}
+function setOpen(v){
+  if(!compact||v===open)return;open=v;clearTimeout(closeT);
+  head.setAttribute('aria-expanded',v?'true':'false');
+  caret.style.transform=v?'rotate(-135deg)':'';caret.style.marginTop=v?'0.25rem':'';
+  nav.style.borderColor=v?'#454545':'';
+  var max=capH();list.style.maxHeight=max+'px';
+  if(v){
+    list.style.transition='none';list.style.visibility='visible';list.style.height='0px';
+    var h=Math.min(list.scrollHeight+2,max);centreActive();
+    void list.offsetHeight;
+    list.style.transition=reduce?'none':'height '+DUR+'ms '+EASE;list.style.height=h+'px';
+  }else{
+    list.style.transition='none';list.style.height=list.offsetHeight+'px';void list.offsetHeight;
+    list.style.transition=reduce?'none':'height '+(DUR-80)+'ms '+EASE;list.style.height='0px';
+    closeT=setTimeout(function(){if(!open)list.style.visibility='hidden'},reduce?0:DUR-80);
+  }
+}
+function toggle(){setOpen(!open)}
+if(canBar){
+  head.addEventListener('click',function(){if(compact)toggle()});
+  head.addEventListener('keydown',function(e){
+    if(!compact)return;
+    if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){e.preventDefault();toggle()}
+    else if(e.key==='ArrowDown'&&!open){e.preventDefault();setOpen(true);var a=links[cur>=0?cur:0];if(a)a.focus()}
+  });
+  document.addEventListener('keydown',function(e){if(open&&(e.key==='Escape'||e.key==='Esc')){setOpen(false);head.focus()}});
+  document.addEventListener('click',function(e){if(open&&nav&&!nav.contains(e.target))setOpen(false)});
+}
+var LIST_KEYS=['position','top','left','right','zIndex','boxSizing','backgroundColor','border','overflowY','overscrollBehavior','height','maxHeight','visibility','transition'];
+function enter(){
+  compact=true;open=false;
+  rail.style.position='sticky';rail.style.zIndex='20';
+  head.setAttribute('role','button');head.setAttribute('tabindex','0');head.setAttribute('aria-expanded','false');
+  head.setAttribute('aria-label','Contents - show all '+N+' sections');head.style.cursor='pointer';
+  state.style.display='flex';caret.style.display='block';if(prog)prog.style.display='block';
+  var s=list.style;s.position='absolute';s.top='100%';s.left='-1px';s.right='-1px';s.zIndex='1';s.boxSizing='border-box';
+  s.backgroundColor='#080808';s.border='1px solid #454545';s.overflowY='auto';s.overscrollBehavior='contain';
+  s.height='0px';s.visibility='hidden';s.transition='none';
+  margins();frame();
+}
+function leave(){
+  compact=false;open=false;clearTimeout(closeT);
+  rail.style.position='';rail.style.zIndex='';rail.style.top='';
+  ['role','tabindex','aria-expanded','aria-label'].forEach(function(k){head.removeAttribute(k)});head.style.cursor='';
+  state.style.display='';caret.style.display='';caret.style.transform='';caret.style.marginTop='';nav.style.borderColor='';
+  if(prog){prog.style.display='';prog.style.transform=''}
+  LIST_KEYS.forEach(function(k){list.style[k]=''});
+  margins();frame();
+}
+function mode(){if(!canBar){margins();return}var want=mq?mq.matches:false;if(want&&!compact)enter();else if(!want&&compact)leave();else margins()}
+/* ---- the heading being read ---- */
+var cur=-2;
 function paint(i){
   if(i===cur)return;cur=i;
   links.forEach(function(a,k){
@@ -1350,18 +1351,38 @@ function paint(i){
     a.style.color=on?'#EDEDED':'';
     if(on)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');
   });
+  var shown=i>=0?i:(body.getBoundingClientRect().top<0?N-1:0);
+  if(curEl)curEl.textContent=heads[shown].textContent;
+  if(countEl)countEl.textContent=(shown+1)+' / '+N;
+  /* desktop: keep the active row inside the rail's own scroll */
+  if(!compact&&i>=0&&list.scrollHeight>list.clientHeight+1){
+    var a=links[i],t=a.offsetTop,bt=t+a.offsetHeight;
+    if(t<list.scrollTop)list.scrollTop=t-8;else if(bt>list.scrollTop+list.clientHeight)list.scrollTop=bt-list.clientHeight+8;
+  }
 }
-function pass(){
-  tick=false;
+function frame(){
   var line=(window.innerHeight||0)*0.3,i=-1;
-  for(var k=0;k<heads.length;k++){if(heads[k].getBoundingClientRect().top-line<=0)i=k;else break}
-  if(body.getBoundingClientRect().bottom<line)i=-1;
+  if(compact){rail.style.top=navBottom()+'px';line=Math.max(line,nav.getBoundingClientRect().bottom+24)}
+  for(var k=0;k<N;k++){if(heads[k].getBoundingClientRect().top-line<=0)i=k;else break}
+  var r=body.getBoundingClientRect();
+  if(r.bottom<line)i=-1;
   paint(i);
+  if(compact&&prog){
+    var start=nav.getBoundingClientRect().bottom,span=r.height-((window.innerHeight||0)-start);
+    var p=span>0?(start-r.top)/span:1;p=p<0?0:p>1?1:p;
+    prog.style.transform='scaleX('+p.toFixed(4)+')';
+  }
 }
-function onScroll(){if(tick)return;tick=true;requestAnimationFrame(pass)}
-window.addEventListener('scroll',onScroll,{passive:true});
-window.addEventListener('resize',onScroll);
-pass();
+/* the navbar hides and returns over ~1.4s, so the bar follows it frame by frame for a moment after each scroll. */
+var until=0,running=false;
+function loop(){frame();if(Date.now()<until)requestAnimationFrame(loop);else running=false}
+function kick(){until=Date.now()+1700;if(!running){running=true;requestAnimationFrame(loop)}frame()}
+window.addEventListener('scroll',kick,{passive:true});
+window.addEventListener('resize',function(){mode();if(open)list.style.maxHeight=capH()+'px';kick()});
+if(mq){if(mq.addEventListener)mq.addEventListener('change',mode);else if(mq.addListener)mq.addListener(mode)}
+window.addEventListener('beforeprint',function(){if(compact)leave()});
+window.addEventListener('afterprint',mode);
+mode();frame();
 })();
 
 /* ============================================================================
@@ -1383,4 +1404,121 @@ document.addEventListener('click',function(e){
   window.scrollTo({top:Math.max(0,y),behavior:reduce?'auto':'smooth'});
   if(history.replaceState)history.replaceState(null,'','#'+id);
 });
+})();
+
+/* ============================================================================
+   9 · #process - THE HANDOVER, DRAWN (2026-09-27; one line since the operator's "merge them ... use gradient").
+   It ADDS to a line that is already whole: CSS rests every .procedure_fill at full length, so with no script, or
+   with reduced motion, the line simply stands. When the list first comes up the screen its fills are primed to
+   zero and drawn on ONE clock from the first node to the arrow, and a token rides the leading edge; its colour
+   follows the line - light through the grey, blending to orange across the gradient span, orange to the end.
+   Each node pings (an outline that opens and fades) as the line reaches it. Afterwards, while the section is on
+   screen, the token runs again every few seconds over the finished line; a pointer on a step pings its node.
+   Geometry is read from the rendered parts at the start of every run, so the same code draws the horizontal line
+   and the vertical one (<=991). State is inline (§4f); the token is created and removed here.
+   Failsafes, as §1: rect polling with an interval floor, and a hidden frame, a resize mid-run or a stalled clock
+   completes the line at once; print always gets it whole. Nothing rests at opacity 0.
+   ============================================================================ */
+(function(){
+if(window.__afissioHandoverV2)return;window.__afissioHandoverV2=1;
+var list=document.querySelector('.procedure_list');if(!list)return;
+if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+var steps=[].slice.call(list.querySelectorAll('.procedure_step'));
+var rails=[].slice.call(list.querySelectorAll('.procedure_rail'));
+var nodes=[].slice.call(list.querySelectorAll('.procedure_node'));
+var arrows=[].slice.call(list.querySelectorAll('.procedure_arrow'));
+if(!rails.length)return;
+function fillOf(el){return el.querySelector('.procedure_fill')}
+var fills=rails.map(fillOf).filter(Boolean);
+var state='idle',running=false,runId=0,raf=0,nextLoop=0,toks=[];
+var LOOP=6500,DIM='#262626';
+function rect(el){var r=el.getBoundingClientRect(),o=list.getBoundingClientRect();return{x:r.left-o.left,y:r.top-o.top,w:r.width,h:r.height}}
+function model(){
+  var r0=rect(rails[0]),H=r0.w>=r0.h;
+  function s(b){return H?b.x:b.y}function l(b){return H?b.w:b.h}
+  var o=s(r0),segs=[],blend=null,accent=null;
+  rails.forEach(function(el){var b=rect(el),f=fillOf(el);if(!f)return;var g={el:f,s:s(b)-o,l:Math.max(1,l(b)),ax:H?'X':'Y'};segs.push(g);
+    if(!blend&&f.classList.contains('is-blend'))blend=g;if(!accent&&f.classList.contains('is-accent'))accent=g});
+  var lb=rect(rails[rails.length-1]),L=s(lb)+l(lb)-o;
+  var ns=nodes.map(function(n){var b=rect(n);return{el:n,acc:n.classList.contains('is-accent'),d:(H?b.x+b.w/2:b.y+b.h/2)-o}});
+  function p(d){return H?{x:o+d,y:r0.y+r0.h/2}:{x:r0.x+r0.w/2,y:o+d}}
+  return{segs:segs,L:L,blend:blend,accent:accent,nodes:ns,p:p};
+}
+function mix(t){var a=[237,237,237],b=[255,102,0];return 'rgb('+a.map(function(v,i){return Math.round(v+(b[i]-v)*t)}).join(',')+')'}
+function tone(M,d){
+  if(M.blend){var t=(d-M.blend.s)/M.blend.l;return t<0?0:t>1?1:t}
+  if(M.accent)return d>=M.accent.s?1:0;return 0;
+}
+function token(){
+  var t=document.createElement('div');t.setAttribute('aria-hidden','true');
+  var s=t.style;s.position='absolute';s.left='0';s.top='0';s.zIndex='2';s.width='5px';s.height='5px';s.marginLeft='-2.5px';s.marginTop='-2.5px';
+  s.pointerEvents='none';s.transition='opacity 420ms linear';
+  list.appendChild(t);toks.push(t);return t;
+}
+function put(t,q){t.style.transform='translate('+q.x.toFixed(1)+'px,'+q.y.toFixed(1)+'px)'}
+function retire(t){if(!t||t.__gone)return;t.__gone=1;t.style.opacity='0';setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t)},460)}
+function clearToks(){toks.forEach(function(t){if(t.parentNode)t.parentNode.removeChild(t)});toks=[]}
+function ping(n,acc){
+  if(!n)return;var s=n.style,c=acc?'255,102,0':'237,237,237';
+  clearTimeout(n.__ping);
+  s.transition='none';s.outline='1px solid rgba('+c+',0.9)';s.outlineOffset='0px';
+  void n.offsetWidth;
+  s.transition='outline-offset 1100ms cubic-bezier(0.16,1,0.3,1),outline-color 1100ms cubic-bezier(0.33,0,0.2,1)';
+  s.outlineOffset='0.75rem';s.outlineColor='rgba('+c+',0)';
+  n.__ping=setTimeout(function(){s.transition='';s.outline='';s.outlineOffset='';s.outlineColor=''},1180);
+}
+function prime(){
+  var M=model();
+  M.segs.forEach(function(g){g.el.style.transform='scale'+g.ax+'(0)'});
+  arrows.forEach(function(a){a.style.transition='border-color 600ms cubic-bezier(0.33,0,0.2,1)';a.style.borderColor=DIM});
+}
+function finish(){
+  runId++;running=false;cancelAnimationFrame(raf);clearToks();
+  fills.forEach(function(f){f.style.transform=''});
+  arrows.forEach(function(a){a.style.transition='';a.style.borderColor=''});
+  state='drawn';nextLoop=Date.now()+LOOP;
+}
+function ease(p){return 0.5-0.5*Math.cos(Math.PI*p)}
+function run(draw){
+  if(running)return;
+  var M=model();if(!(M.L>0)){finish();return}
+  running=true;var id=++runId;
+  var T=draw?Math.max(2200,Math.min(3800,M.L*2.6)):Math.max(2000,Math.min(3400,M.L*2.3));
+  var t0=0,a=token(),pinged=[],lit=false;
+  put(a,M.p(0));a.style.backgroundColor=mix(0);
+  var guard=setTimeout(function(){if(running&&id===runId)finish()},T+1600);
+  function frame(now){
+    if(id!==runId)return;
+    if(!t0)t0=now;
+    var p=Math.min(1,(now-t0)/T),d=ease(p)*M.L;
+    if(draw)M.segs.forEach(function(g){var f=(d-g.s)/g.l;f=f<0?0:f>1?1:f;g.el.style.transform='scale'+g.ax+'('+f.toFixed(4)+')'});
+    put(a,M.p(d));a.style.backgroundColor=mix(tone(M,d));
+    M.nodes.forEach(function(n,k){if(!pinged[k]&&d>=n.d-1){pinged[k]=1;ping(n.el,n.acc)}});
+    if(draw&&!lit&&d>=M.L-6){lit=true;arrows.forEach(function(x){x.style.borderColor=''})}
+    if(p<1){raf=requestAnimationFrame(frame);return}
+    clearTimeout(guard);retire(a);
+    running=false;state='drawn';nextLoop=Date.now()+LOOP;
+    if(draw){fills.forEach(function(f){f.style.transform=''});arrows.forEach(function(x){x.style.transition='';x.style.borderColor=''})}
+  }
+  raf=requestAnimationFrame(frame);
+}
+function vh(){return window.innerHeight||document.documentElement.clientHeight||0}
+function tick(){
+  if(document.visibilityState==='hidden'){if(state!=='drawn'||running)finish();return}
+  if(running)return;
+  var r=list.getBoundingClientRect(),h=vh();
+  if(state==='primed'){if(r.top<h*0.72&&r.bottom>h*0.12)run(true);return}
+  if(state==='drawn'&&Date.now()>=nextLoop&&r.top<h*0.8&&r.bottom>h*0.2)run(false);
+}
+var r0=list.getBoundingClientRect();
+if(document.visibilityState==='hidden'||r0.bottom<=0){state='drawn';nextLoop=Date.now()+2500}
+else{prime();state='primed'}
+var pend=false;
+window.addEventListener('scroll',function(){if(pend)return;pend=true;requestAnimationFrame(function(){pend=false;tick()})},{passive:true});
+window.addEventListener('resize',function(){if(running)finish()});
+document.addEventListener('visibilitychange',tick);
+window.addEventListener('beforeprint',finish);
+setInterval(tick,400);
+steps.forEach(function(s){var n=s.querySelector('.procedure_node');if(n)s.addEventListener('mouseenter',function(){if(!running)ping(n,n.classList.contains('is-accent'))})});
+tick();
 })();
