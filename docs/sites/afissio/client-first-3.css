@@ -1597,3 +1597,14 @@
 @media (max-width:767px){
   .page-header_grid.is-intake{margin-top:2.5rem}
 }
+
+/* 2026-09-28 (operator: "the focus mode of the input fields are too much. soft orange, less weight,
+   smoother"). Was a 1px #FF6600 border PLUS a 2px #FF6600 outline 2px out - two orange rings. Now one
+   1px ring in the brand's dim orange #B34B00 (3.3:1 against the field - still a visible focus state,
+   above the 3:1 non-text floor), no outline, and a 520ms ease-out on border, fill and ring. */
+.form_input{transition:border-color 520ms cubic-bezier(0.22,1,0.36,1),background-color 520ms cubic-bezier(0.22,1,0.36,1),box-shadow 520ms cubic-bezier(0.22,1,0.36,1)}
+.form_select{transition:border-color 520ms cubic-bezier(0.22,1,0.36,1),background-color 520ms cubic-bezier(0.22,1,0.36,1),box-shadow 520ms cubic-bezier(0.22,1,0.36,1)}
+.form_input:focus{border-color:var(--orange-dim,#B34B00);background-color:rgba(255,255,255,0.08)}
+.form_select:focus{border-color:var(--orange-dim,#B34B00);background-color:rgba(255,255,255,0.08)}
+.form_input:focus-visible{outline:0;border-color:var(--orange-dim,#B34B00)}
+.form_select:focus-visible{outline:0;border-color:var(--orange-dim,#B34B00)}
