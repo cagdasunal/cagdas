@@ -1584,3 +1584,16 @@
   .divide_kicker{font-size:0.75rem;letter-spacing:0.08em}
 }
 .contact_value{overflow-wrap:anywhere}
+
+/* 2026-09-28 (operator, Contact: "why this section has that much less gap with the top navigation").
+   Every other header is one screen tall and CENTRES its content, so the air under the nav is whatever
+   the centring leaves (~180-260px). Contact's header holds the form, is taller than the screen, and the
+   centring does nothing - so it sat at the bare hero padding, 65px under the nav. The intake grid adds
+   the missing air itself: ~165px under the nav on desktop, stepping down with the other rungs. */
+.page-header_grid.is-intake{margin-top:clamp(4rem,6.98vw - 1.9rem,8rem)}
+@media (max-width:991px){
+  .page-header_grid.is-intake{margin-top:3.5rem}
+}
+@media (max-width:767px){
+  .page-header_grid.is-intake{margin-top:2.5rem}
+}
