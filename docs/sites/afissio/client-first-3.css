@@ -1524,3 +1524,18 @@
   .divide_summary{font-size:0.875rem}
   .divide_statement{font-size:1rem}
 }
+
+/* 2026-09-28 (operator, About #network): the band carries no vertical padding — its field and stack set the height. Two-class combo, so it outranks every breakpoint rung of the base. */
+.padding-section-large.is-flush{padding-top:0;padding-bottom:0}
+
+
+
+/* 2026-09-28 (operator: "simply create 2 column grid layout for here"). About #network is a plain
+   two-track grid: the text stack left, the network in its own square cell right. The field lives in
+   the cell, so the canvas is exactly the column. ≤767 one track, the square under the text. */
+.network_grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(2rem,4.65vw - 0.6rem,5rem);align-items:center}
+.network_media{position:relative;width:100%;aspect-ratio:1 / 1}
+@media (max-width:991px){
+  .network_grid{grid-template-columns:minmax(0,1fr);row-gap:clamp(2rem,3vw + 0.5rem,3rem)}
+  .network_media{max-width:36rem}
+}

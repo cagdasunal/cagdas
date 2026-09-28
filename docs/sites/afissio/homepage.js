@@ -470,9 +470,15 @@ s.style.background='linear-gradient('+(v?180:90)+'deg, transparent 0%, #FF6600 5
 if(getComputedStyle(p).position==='static')p.style.position='relative';
 p.style.overflow='hidden';p.appendChild(s);return s}
 var hs=H.map(function(p){var v=(' '+p.className+' ').indexOf(' register_spine ')>-1;return{p:p,v:v,ss:[seg(p,v),seg(p,v)],ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero'))}});
+/* PERF-V2 (2026-09-28): lengths are MEASURED ON RESIZE, never in the frame. Reading offsetWidth after
+   writing the previous rule's transform forced a style flush per rule, per frame, on every page -
+   the jank the hero field was blamed for. The frame now only writes. */
+function measure(){hs.forEach(function(o){o.len=o.v?o.p.offsetHeight:o.p.offsetWidth})}
+measure();window.addEventListener('resize',measure);window.addEventListener('load',measure);
+if(window.ResizeObserver){var __ro=new ResizeObserver(measure);hs.forEach(function(o){__ro.observe(o.p)})}
 var cur=window.scrollY||0;
 function frame(now){var tgt=window.scrollY||0;cur+=(tgt-cur)*0.05;var t=(now||0)*0.0105;
-hs.forEach(function(o){var len=o.v?o.p.offsetHeight:o.p.offsetWidth,sl=256,span=len+sl;if(span<=sl)return;
+hs.forEach(function(o){var len=o.len||0,sl=256,span=len+sl;if(span<=sl)return;
 var d=cur*0.1+(o.auto?t*1.5:t);
 o.ss.forEach(function(s,i){var x=((d+(o.ph+i/o.ss.length)*span)%span+span)%span-sl;s.style.transform=(o.v?'translateY(':'translateX(')+x+'px)'})});
 requestAnimationFrame(frame)}

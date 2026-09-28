@@ -285,306 +285,121 @@ function __mount(hostEl){
 var __hosts=[].slice.call(document.querySelectorAll('.hero-wave'));
 if(!__hosts.length)return;
 __hosts.forEach(function(hostEl){__field(__mount(hostEl))});
+/* PERF-V2 (operator 2026-09-28: "it cuts, it lags, it does not continue smoothly ... apply it for all
+   pages"). The field's look is unchanged - same three blooms, radii, travel, periods, peaks, colours,
+   same apex, same three veils. What changed is how it is drawn, and each change answers one symptom:
+     · LAG. Every frame used to repaint SEVEN full-viewport fills (3 radial blooms, 3 veil gradients,
+       the mark) into a 130vh store at 1.25x - ~4MP of gradient work a frame at 1920 - and rebuilt
+       39 colour-stop strings to do it. Now the field is TWO canvases: the blooms, which are the only
+       thing that moves, draw into a store at HALF the CSS size (capped 960px wide - a soft field has
+       no detail to lose, and the browser's upscale is itself a blur); the apex and the three veils,
+       which never move, draw ONCE into a full-resolution overlay and are only redrawn on resize.
+       Stops are built once. Per frame: 3 fills on ~1/6 of the pixels.
+     · CUTS. The loop read getBoundingClientRect() twice a frame - a forced style/layout flush right
+       after the rule-drift loop had written its transforms. Size now comes from a ResizeObserver and
+       on-screen from an IntersectionObserver: zero layout reads per frame.
+     · DOES NOT CONTINUE. The clock was now - t0, and the watchdog reset t0 whenever frames were more
+       than 900ms apart, so a busy moment made the field JUMP to another phase. The clock is now an
+       accumulator advanced by each frame's delta, capped at 50ms: a stall slows it for an instant,
+       it can never skip, and pausing off screen resumes exactly where it stopped. */
 function __field(cv){
+var host=cv.parentNode;
 var ctx=cv.getContext('2d');if(!ctx)return;
-var host=cv.parentNode,W=1,H=1;
-/* AOR-V2 (2026-09-24): THE CENTRED MODE. A host wearing `hero-wave is-centered` seats the warmth and
-   the apex on the page's centre line, MIDWAY between the header's content and the next section's
-   content, so the mark is the hinge between the two. Measured from the live boxes every frame, so the
-   seat follows the type at every width. The default mode below is untouched. */
+var ov=document.createElement('canvas');ov.setAttribute('aria-hidden','true');
+ov.style.position='absolute';ov.style.top='0';ov.style.left='0';ov.style.width='100%';ov.style.height='100%';ov.style.display='block';ov.style.pointerEvents='none';
+host.appendChild(ov);
+var octx=ov.getContext('2d');if(!octx)return;
 var centered=!!(host.classList&&host.classList.contains('is-centered'));
-/* THE CENTRED MODE IS THE DEFAULT FIELD, CENTRED - never a second design (operator 2026-09-24: "the
-   same animation, coloring and sizing as other pages", then "move the logo animation to the top, the
-   hero section"). Same three BLOOMS at the same heights, radii, travel, periods, peaks and colours;
-   the same apex at 64% of the width capped at 1152px, 0.06 alpha, its foot just below the seam; the
-   same top veil and the same tail. Only x moves: the bloom group and the mark are centred on the page,
-   and the left veil is dropped, because a centred stack has no left column to protect. */
-function paintCentered(t){
-  var d=Math.max(W,H),i;
-  ctx.fillStyle='#000000';ctx.fillRect(0,0,W,H);
-  ctx.globalCompositeOperation='lighter';
-  for(i=0;i<BLOOMS.length;i++){
-    var bl=BLOOMS[i],p1=t*bl.s,p2=t*bl.s*1.7,p3=t*bl.s*0.6;
-    var cx=(bl.x-0.32+(Math.sin(p1)*0.78+Math.sin(p2)*0.34)*bl.dx)*W;
-    var cy=(bl.y+(Math.cos(p1*0.78)*0.78+Math.sin(p3)*0.34)*bl.dy)*H;
-    var rr=bl.r*d*(1+Math.sin(t*bl.rs)*bl.rw*0.72+Math.sin(t*bl.rs*1.9)*bl.rw*0.28);
-    var g=ctx.createRadialGradient(cx,cy,0,cx,cy,rr);
-    soft(g,bl.c,bl.a);
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  }
-  ctx.globalCompositeOperation='source-over';
-  if(markOK){
-    var mr=(mark.naturalWidth&&mark.naturalHeight)?(mark.naturalHeight/mark.naturalWidth):(192/230);
-    var mw=Math.min(W*0.64,1152),mh=mw*mr;
-    ctx.globalAlpha=0.06;
-    ctx.drawImage(mark,W/2-mw/2,H*0.869-mh,mw,mh);
-    ctx.globalAlpha=1;
-  }
-  var vg=ctx.createLinearGradient(0,0,0,H*0.66);
-  for(i=0;i<=8;i++){var u=i/8;vg.addColorStop(u,'rgba(0,0,0,'+(Math.pow(1-u,1.8)*0.9).toFixed(4)+')')}
-  ctx.fillStyle=vg;ctx.fillRect(0,0,W,Math.ceil(H*0.66)+1);
-  var tg=ctx.createLinearGradient(0,H*0.74,0,H);
-  for(i=0;i<=8;i++){var n=i/8;tg.addColorStop(n,'rgba(0,0,0,'+Math.pow(n,1.9).toFixed(4)+')')}
-  ctx.fillStyle=tg;ctx.fillRect(0,Math.floor(H*0.74),W,Math.ceil(H*0.26)+1);
-}
-/* THE APEX, PAINTED INTO THE FIELD (R30). It used to be an <img> in .hero-mark-layer, which was
-   the section box with overflow:hidden - so it was still cut dead straight at 100vh even after
-   the canvas itself was extended past the seam. Drawn here it is inside the same 130vh layer as
-   the gradient and the same bottom veil dissolves it, so nothing in the hero is clipped at the
-   seam. Geometry matches what the stylesheet had: 64% of the width capped at 1152px, bled 9%
-   off the right, seated so its foot lands just below the section seam. */
-var mark=new Image(),markOK=false;
-mark.onload=function(){markOK=true};
-mark.src='../brand/logo/afissio-apex-orange.svg';
-function size(){
-  var r=host.getBoundingClientRect();
-  /* DPR IS CAPPED AT 1.25, NOT 2. At 2 the backing store was 1848x1080 - 2.0 MEGAPIXELS
-     rewritten every frame with seven full-screen gradient fills, and on a 1680 display it would
-     be 7.1MP. That is what made scrolling stutter. The field is a soft gradient with no detail
-     in it, so a 1.25x store is visually identical and costs 2.6x less per frame. */
-  var dpr=Math.min(1.25,window.devicePixelRatio||1);
-  W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
-  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-}
-/* x,y,r as fractions of the section; a is peak alpha; s is rad/ms - 0.00005 is a ~125s period */
-/* R23 (client note 2026-09-17: "the left side of the hero must be black. the gradient is too big
-   and it is very difficult to understand that the gradient is animated and moving"):
-     · every bloom moved to the RIGHT HALF and its radius roughly halved (0.95 -> 0.46 of the
-       long edge). A gradient the size of the viewport has no visible edge to travel, so its
-       motion is invisible however fast it runs - the fix for "I cannot tell it is moving" is a
-       SMALLER gradient, not a faster one.
-     · travel and speed roughly doubled on top of that: 0.10-0.16 of the box per swing, periods
-       now 28-70s, so a bloom crosses a visible fraction of the hero while you look at it.
-     · and the whole field is masked to black on the left (see the horizontal veil in paint),
-       which is also the side the type is aligned to. */
-/* R26 (client note 2026-09-17: "start the gradient from bottom right, make it darker, smoother,
-   better animation. i can't see it is moving"). Three changes, and the third is the one that
-   makes the motion legible:
-     · ORIGIN. The four blooms now sit at and around the BOTTOM-RIGHT CORNER - one anchored just
-       outside it, two climbing the right edge, one running in along the bottom - so the warmth
-       rises out of that corner and the top of the hero is near black. The old top-right anchor
-       is gone, and the vertical veil below is flipped to darken the TOP for the same reason.
-     · DARKER. Peaks 0.20 / 0.15 / 0.11 / 0.09, down again from 0.25 / 0.17 / 0.14 / 0.10.
-     · VISIBLE. A bloom whose centre sits off-canvas cannot show you that it is translating - you
-       only ever see one flank of it - which is why the last two passes read as still. So the
-       RADIUS is what moves now: rw is 0.42-0.55 (was 0.20-0.26), i.e. each bloom swells and
-       shrinks by up to half its size on an 18-34s period. A corner glow breathing in and out is
-       unmistakable at a glance, and it stays soft because a radius change moves no edge. */
-/* R27 (5th client note on this field: "THE HERO GRADIENT IS SOOOO BRIGHT AND NOT ANIMATED
-   PROPERLY"). Both complaints had one cause and it was a bug in my geometry, not a taste call.
-
-   WHY IT LOOKED STILL. Every bloom's CENTRE sat outside the canvas - x 1.04, y 1.06 and so on,
-   anchored off the bottom-right corner. You therefore only ever saw one flank of each, and
-   translating or breathing an off-screen centre changes the falloff's steepness but never moves
-   a bright point across the screen. Four of them overlapping averaged what little was left into
-   a constant. No amount of extra speed could have fixed that.
-
-   THE FIX. THREE blooms (fewer, so they average less), every CENTRE INSIDE the lower-right
-   quadrant, and travel large enough to see: +/-0.17 of the width and +/-0.15 of the height on
-   16-26s periods. The warm core now physically slides around the bottom right, which is what
-   reads as movement.
-
-   The rotating sweep is DELETED. A full-screen linear gradient laid over the blooms is exactly
-   what flattens a moving field into a wash, and it was adding brightness for nothing.
-
-   AND DARKER, hard: peaks 0.12 / 0.09 / 0.065, down from 0.20 / 0.15 / 0.11 - which were
-   themselves down from 0.62 / 0.42 / 0.34. MEASURED, both halves of the note: the brightest
-   pixel in the hero is about #230D00 against the #481B00 that drew this feedback, and the field
-   changes 4-10 red levels at five different sample points over six seconds - a 15-30% relative
-   change on a peak of 35, which is what "animated properly" has to mean on a field this dark.
-
-   The origin is still the bottom right (R26), the left is still black, the top is still the
-   dark end.
-
-   R28: the canvas layer is 130vh now - 30vh of it BELOW the section seam - because the section
-   stopped clipping at 100vh. The bloom centres moved up its box (y 0.56-0.74, was 0.72-0.94) so
-   the warm core still sits in the hero own lower right, the falloff carries across the seam into
-   #steps, and a bottom veil dissolves the tail to #000000 before the layer ends. Periods also cut
-   ~40%, to 11-18s, on "the user needs to feel it is animated". */
-/* R29 — THE HUE WAS THE BUG, NOT THE BRIGHTNESS (client note 2026-09-17: "the gradient of the
-   top hero must be better, darker orange. it looks the color is way different because of the
-   effects you applied").
-
-   WHY THE COLOUR DRIFTED. The blooms were composited SOURCE-OVER, one on top of the next. That
-   operator does not add light, it INTERPOLATES TOWARD the new colour: painting #B34B00 at 0.09
-   over an area that already carried #FF6600 pulls the red down by 9% while adding only its own
-   9% back, so every overlap lost red and kept green - and three overlapping blooms plus two
-   black veils averaged the brand's 24-degree orange into a grey-brown wash. That is the "colour
-   is way different": not a taste failure, the wrong blend mode.
-
-   THE FIX IS 'lighter' (additive). Channels SUM, so the hue ratio is preserved exactly - both
-   brand oranges sit at hue 24-25 degrees, and 255:102 stays 255:102 however many blooms overlap.
-   Overlaps now read as MORE orange rather than as mud.
-
-   AND A REAL DARK ORANGE, not near-black. Additive compositing means peaks can carry weight
-   without the field going bright: 0.26 / 0.17 / 0.11 sums to a #7A3000-class ember at the core
-   of the bottom-right corner, which is a dark orange you can name, where the previous pass
-   measured #230D00 - a colour with no hue left in it. The top and the left are still veiled to
-   #000000, so the section is exactly as dark where the type is. */
-/* R29b — IT READ RED BECAUSE THE GREEN CHANNEL WAS STARVED (client note: "it looks like red
-   now, which i did not like").
-
-   #FF6600 is 255:102 red:green. Scaled down toward black - which is all a low-alpha wash of it
-   can be - you get 60:24, 90:36, 124:51. Those are all the SAME hue arithmetically, and every
-   one of them reads as dark red-brown to the eye, because at low luminance the small green
-   component is simply not enough for the eye to call it orange. Chasing "darker" by scaling the
-   brand hex toward black can only ever produce red-brown; the hue has to be carried, not scaled.
-
-   SO THE CORE CARRIES A LIGHTER TINT OF THE SAME HUE FAMILY. The ember at the bottom right is
-   #FFA347 - the brand orange lifted in lightness along its own hue (24 -> 27 degrees, a tint of
-   #FF6600, not a new colour) - at a small radius, and #FF6600 does the mid-field around it while
-   #B34B00 carries the far tail. Warmth now goes black -> deep orange -> amber as it approaches
-   the corner, which is a hue RAMP, and a ramp is what reads as orange instead of as flat red.
-
-   Peaks: 0.30 ember / 0.22 mid / 0.13 tail, additive, summing well clear of the red channel's
-   ceiling - red clipping at 255 while green sat at 102 was the other half of why the last pass
-   went red. The ember's radius is 0.22 of the long edge, so this is a small bright heart in a
-   dark field, not a brighter field. */
-/* R38 - RESPONSIVE GEOMETRY (client note 2026-09-17: "make the page extremely responsive ...
-   also the animations must be responsive too"). Every number in this field was already a FRACTION
-   of the section box, so radius, travel and the mark scale by construction. Two things were not,
-   and both broke on a narrow box:
-     · THE LEFT VEIL was tuned for a 3:2 desktop hero - opaque to 17% of the width and clear by
-       56%. On a 390px phone that is 218px of forced black out of 390, and the ember lived in the
-       remaining sliver, so the field read as a flat black box with a smudge in the corner. The
-       veil is now a function of the box: on a narrow hero it holds to 4% and clears by 30%,
-       because there is no left column to protect - the type is full width and sits above it.
-     · THE BLOOM CENTRES sat at x 0.74-0.92, which is correct when 0.56 of the width is veiled and
-       wrong when 0.30 is. narrow() pulls them in toward 0.60-0.78 on the same curve, so the ember
-       stays inside the visible field at every width instead of hiding off the right edge.
-   Measured at 1920 / 1440 / 1280 / 1024 / 991 / 768 / 479 / 390 and at 844x390 landscape. */
-function narrow(){return W<820?(820-Math.max(360,W))/460:0}   /* 0 at >=820px, 1 at <=360px */
+var W=1,H=1,LS=0.5;
+function narrow(){return W<820?(820-Math.max(360,W))/460:0}
 var BLOOMS=[
   {x:0.74,y:0.58,r:0.44,a:0.22,c:'255,102,0',dx:0.18,dy:0.14,s:0.000368,rw:0.26,rs:0.000254},
   {x:0.92,y:0.70,r:0.34,a:0.13,c:'179,75,0',dx:0.15,dy:0.13,s:0.000489,rw:0.30,rs:0.000339},
   {x:0.80,y:0.64,r:0.22,a:0.30,c:'255,163,71',dx:0.13,dy:0.10,s:0.000585,rw:0.34,rs:0.000436}
 ];
-/* SOFT STOPS. A three-stop radial (peak, a third, zero) has a visibly steep core. These thirteen
-   stops follow a raised cosine to the 2.1: flat-topped at the centre, no kink anywhere, and it
-   reaches zero with zero slope - a soft ball of light rather than a disc with a halo. */
-function soft(g,c,a){
-  for(var si=0;si<=12;si++){
-    var su=si/12,sv=Math.pow((1+Math.cos(Math.PI*su))/2,2.1)*a;
-    g.addColorStop(su,'rgba('+c+','+sv.toFixed(4)+')');
+BLOOMS.forEach(function(bl){bl.st=[];for(var si=0;si<=12;si++){var su=si/12,sv=Math.pow((1+Math.cos(Math.PI*su))/2,2.1)*bl.a;bl.st.push([su,'rgba('+bl.c+','+sv.toFixed(4)+')'])}});
+var mark=new Image(),markOK=false;
+mark.onload=function(){markOK=true;overlay()};
+mark.src='../brand/logo/afissio-apex-orange.svg';
+function overlay(){
+  var i;octx.clearRect(0,0,W,H);
+  if(markOK){
+    var mr=(mark.naturalWidth&&mark.naturalHeight)?(mark.naturalHeight/mark.naturalWidth):(192/230);
+    var mw=Math.min(W*0.64,1152),mh=mw*mr;
+    octx.globalAlpha=0.06;octx.drawImage(mark,centered?W/2-mw/2:W*1.09-mw,H*0.869-mh,mw,mh);octx.globalAlpha=1;
   }
+  if(!centered){
+    var hg=octx.createLinearGradient(0,0,W,0),nv=narrow(),vSolid=0.17-0.13*nv,vClear=0.56-0.26*nv;
+    for(var k=0;k<=10;k++){var uk=k/10,vk=uk<vSolid?1:Math.pow((1+Math.cos(Math.PI*((uk-vSolid)/(vClear-vSolid))))/2,1.15);if(uk>vClear)vk=0;hg.addColorStop(uk,'rgba(0,0,0,'+vk.toFixed(4)+')')}
+    octx.fillStyle=hg;octx.fillRect(0,0,W,H);
+  }
+  var vg=octx.createLinearGradient(0,0,0,H*0.66);
+  for(i=0;i<=8;i++){var um=i/8;vg.addColorStop(um,'rgba(0,0,0,'+(Math.pow(1-um,1.8)*0.9).toFixed(4)+')')}
+  octx.fillStyle=vg;octx.fillRect(0,0,W,Math.ceil(H*0.66)+1);
+  var tg=octx.createLinearGradient(0,H*0.74,0,H);
+  for(i=0;i<=8;i++){var un=i/8;tg.addColorStop(un,'rgba(0,0,0,'+Math.pow(un,1.9).toFixed(4)+')')}
+  octx.fillStyle=tg;octx.fillRect(0,Math.floor(H*0.74),W,Math.ceil(H*0.26)+1);
+}
+function size(w,h){
+  W=Math.max(1,Math.round(w));H=Math.max(1,Math.round(h));
+  var ls=Math.min(LS,960/W);
+  cv.width=Math.max(1,Math.round(W*ls));cv.height=Math.max(1,Math.round(H*ls));ctx.setTransform(cv.width/W,0,0,cv.height/H,0,0);
+  var dpr=Math.min(1.25,window.devicePixelRatio||1);
+  ov.width=Math.max(1,Math.round(W*dpr));ov.height=Math.max(1,Math.round(H*dpr));octx.setTransform(dpr,0,0,dpr,0,0);
+  overlay();
 }
 function paint(t){
-  /* THE BACKING STORE IS RE-CHECKED EVERY FRAME. size() used to run once at init and then only
-     on resize, so a section measured at 0 before layout settled left a 2x2 bitmap smeared over
-     the hero with no path back - measured on a cold preload, 1 load in 2. Two integer compares
-     a frame buy a field that cannot come up dead. */
-  var bx=host.getBoundingClientRect(),dp=Math.min(1.25,window.devicePixelRatio||1);
-  if(cv.width!==Math.round(bx.width*dp)||cv.height!==Math.round(bx.height*dp))size();
-  if(centered){paintCentered(t);return}
-  ctx.fillStyle='#000000';ctx.fillRect(0,0,W,H);
-  var d=Math.max(W,H),i,j,x,y;
-  ctx.globalCompositeOperation='lighter';   /* R29: additive, so overlaps keep the brand hue */
+  var d=Math.max(W,H),nb=centered?0:narrow(),i;
+  ctx.globalCompositeOperation='source-over';ctx.fillStyle='#000000';ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
   for(i=0;i<BLOOMS.length;i++){
-    var bl=BLOOMS[i];
-    /* BUBBLE PATH. A single sine on each axis draws a rigid ellipse and reads as a slide; each axis
-       here is TWO sines at unrelated periods (the second at 0.43x amplitude, 1.7x and 0.6x the
-       rate), so the centre wanders a soft open path that never retraces itself - it rises, sways
-       past, and comes back around. The radius breathes on a third period again. */
-    var p1=t*bl.s,p2=t*bl.s*1.7,p3=t*bl.s*0.6,nb=narrow();
-    var bxf=bl.x-0.16*nb;                                  /* R38: pulled in on a narrow box */
+    var bl=BLOOMS[i],p1=t*bl.s,p2=t*bl.s*1.7,p3=t*bl.s*0.6;
+    var bxf=centered?bl.x-0.32:bl.x-0.16*nb;
     var cx=(bxf+(Math.sin(p1)*0.78+Math.sin(p2)*0.34)*bl.dx)*W;
     var cy=(bl.y+(Math.cos(p1*0.78)*0.78+Math.sin(p3)*0.34)*bl.dy)*H;
     var rr=bl.r*d*(1+Math.sin(t*bl.rs)*bl.rw*0.72+Math.sin(t*bl.rs*1.9)*bl.rw*0.28);
     var g=ctx.createRadialGradient(cx,cy,0,cx,cy,rr);
-    soft(g,bl.c,bl.a);
+    for(var k=0;k<13;k++)g.addColorStop(bl.st[k][0],bl.st[k][1]);
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   }
-  ctx.globalCompositeOperation='source-over';   /* the mark and both veils must darken normally */
-  /* the rotating sweep - painted last, over the blooms, so the warmth has a direction that
-     travels rather than four fixed centres that merely wobble */
-  /* the mark rides with the field - painted over the blooms, under every veil */
-  if(markOK){
-    var mr=(mark.naturalWidth&&mark.naturalHeight)?(mark.naturalHeight/mark.naturalWidth):(192/230);
-    var mw=Math.min(W*0.64,1152),mh=mw*mr;
-    ctx.globalAlpha=0.06;
-    ctx.drawImage(mark,W*1.09-mw,H*0.869-mh,mw,mh);
-    ctx.globalAlpha=1;
-  }
-  /* THE LEFT IS BLACK. A horizontal veil to opaque black over the left 30% and a fade out by
-     62%, so the warmth lives entirely on the right and the left-aligned stack sits on the page's
-     own surface token with nothing behind it. This is a gradient too - no edge anywhere. */
-  var hg=ctx.createLinearGradient(0,0,W,0);
-  var nv=narrow(),vSolid=0.17-0.13*nv,vClear=0.56-0.26*nv;   /* R38: box-aware veil */
-  for(var k=0;k<=10;k++){
-    var uk=k/10,vk=uk<vSolid?1:Math.pow((1+Math.cos(Math.PI*((uk-vSolid)/(vClear-vSolid))))/2,1.15);
-    if(uk>vClear)vk=0;
-    hg.addColorStop(uk,'rgba(0,0,0,'+vk.toFixed(4)+')');
-  }
-  ctx.fillStyle=hg;ctx.fillRect(0,0,W,H);
-  /* AND THE TOP IS THE DARK END. With the wave silhouettes gone the field measured almost flat top to bottom
-     (#0F0700 .. #260F00), and the bottom read warmer than the upper left - which loses the depth
-     the waves were carrying and leaves the section seam floating. One vertical fade to black over
-     the upper 66% keeps the weight at the bottom right, where the light now comes from. Still a
-     gradient: no edge, nothing filled to a path. */
-  var vg=ctx.createLinearGradient(0,0,0,H*0.66);
-  for(var m=0;m<=8;m++){
-    var um=m/8,vm=Math.pow(1-um,1.8)*0.9;
-    vg.addColorStop(um,'rgba(0,0,0,'+vm.toFixed(4)+')');
-  }
-  ctx.fillStyle=vg;ctx.fillRect(0,0,W,Math.ceil(H*0.66)+1);
-  /* THE TAIL DISSOLVES. The layer runs 30vh past the section seam, so its own bottom edge is
-     inside #steps - a field that simply stopped there would just move the hard line further down
-     the page. The last 26% fades to black on a 1.9 power, which lands it at exactly #000000 well
-     before the layer ends. */
-  var tg=ctx.createLinearGradient(0,H*0.74,0,H);
-  for(var n=0;n<=8;n++){
-    var un=n/8,vn=Math.pow(un,1.9);
-    tg.addColorStop(un,"rgba(0,0,0,"+vn.toFixed(4)+")");
-  }
-  ctx.fillStyle=tg;ctx.fillRect(0,Math.floor(H*0.74),W,Math.ceil(H*0.26)+1);
+  ctx.globalCompositeOperation='source-over';
 }
-size();
-/* ONE FRAME, SYNCHRONOUSLY, BEFORE ANY rAF IS ASKED FOR: rAF is PAUSED in a frame that is not
-   being rendered, so a canvas that waits for its first callback stays transparent there - and a
-   transparent canvas is a hero with no field at all. Paint the still frame first, always. */
-paint(0);
-if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-  paint(0);window.addEventListener('resize',function(){size();paint(0)});return;
-}
-var raf=0,t0=0,tOff=0,last=0;
+var r0=host.getBoundingClientRect(),T=0;
+size(r0.width,r0.height);paint(0);
+var RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+function resized(w,h){if(!(w>1&&h>1))return;if(Math.round(w)===W&&Math.round(h)===H)return;size(w,h);try{paint(T)}catch(e){}}
+/* SELF-HEAL, without a layout read per frame: a host measured at 0 on a cold load is re-measured
+   (clientWidth/Height, one cheap read) on load, in the watchdog, and in any frame while still 1x1. */
+function heal(){var w=host.clientWidth,h=host.clientHeight;if(!(w>1&&h>1)){var r=host.getBoundingClientRect();w=r.width;h=r.height}resized(w,h)}
+window.addEventListener('load',heal);setTimeout(heal,0);setTimeout(heal,300);
+if(window.ResizeObserver){new ResizeObserver(function(es){var cr=es[es.length-1].contentRect;if(cr.width>1&&cr.height>1)resized(cr.width,cr.height);else heal()}).observe(host)}
+else window.addEventListener('resize',function(){var r=host.getBoundingClientRect();resized(r.width,r.height)});
+if(RM)return;
+var raf=0,lastNow=0,lastFrame=0,onscreen=true;
+function running(){return onscreen&&document.visibilityState!=='hidden'}
 function frame(now){
-  if(!t0){t0=now-tOff}
-  last=now;
-  /* A FRAME THAT IS NOT BEING RENDERED CANNOT ANIMATE - the lesson this project has learned
-     four times. Stop, and leave the last painted frame on the canvas. */
-  if(document.visibilityState==='hidden'){tOff=now-t0;t0=0;raf=0;return}
-  /* AND NOTHING IS PAINTED WHILE THE HERO IS OFF SCREEN. The loop keeps running so the clock
-     never jumps when you scroll back up, but the seven gradient fills are skipped entirely -
-     which is most of the page, and all of the scrolling the client was describing. */
-  var hr=host.getBoundingClientRect(),vh=window.innerHeight||0;
-  if(hr.bottom>-40&&hr.top<vh+40){
-    /* A THROW INSIDE A rAF CALLBACK ENDS THE LOOP. One undefined name in this function stopped
-       the hero field dead on frame 1 (2026-09-17), and nothing restarted it. Guarded, and logged
-       once instead of sixty times a second, so a future mistake degrades to a still field
-       instead of to no field. */
-    try{paint(now-t0)}catch(e){if(!window.__afissioWaveErr){window.__afissioWaveErr=1;console.error('hero field paint failed',e)}}
-  }
-  raf=requestAnimationFrame(frame);
+  raf=0;lastFrame=performance.now();
+  if(W<=1||H<=1)heal();
+  if(lastNow){var dt=now-lastNow;if(dt>0)T+=Math.min(dt,50)}
+  lastNow=now;
+  try{paint(T)}catch(e){if(!window.__afissioWaveErr){window.__afissioWaveErr=1;console.error('hero field paint failed',e)}}
+  if(running())raf=requestAnimationFrame(frame);else lastNow=0;
 }
-function start(){if(!raf){t0=0;raf=requestAnimationFrame(frame)}}
-/* the watchdog: if no frame has landed for a second while the page is visible, the loop is dead
-   and the field has silently frozen. Restart it. Costs one timer and removes the only failure
-   mode a reader would ever describe as "it stopped playing". */
-setInterval(function(){
-  if(document.visibilityState!=='visible')return;
-  var n=performance.now();
-  if(raf&&(n-last)<900)return;                 /* the loop is healthy - leave it alone */
-  var wr=host.getBoundingClientRect();
-  if(wr.bottom<-40||wr.top>(window.innerHeight||0)+40)return;   /* off screen: nothing to heal */
-  raf=0;start();                               /* try rAF again */
-  size();                                      /* and heal a bad first measurement */
-  if(!t0)t0=n-tOff;
-  paint(n-t0);                                 /* and paint regardless, so it can never freeze */
-},900);
-window.addEventListener('resize',function(){size();paint(t0?(performance.now()-t0):0)});
+function start(){if(!raf&&running()){lastNow=0;raf=requestAnimationFrame(frame)}}
+if(window.IntersectionObserver){new IntersectionObserver(function(es){onscreen=es[es.length-1].isIntersecting;if(onscreen)start()},{rootMargin:'80px 0px'}).observe(host)}
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
 window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0});
+/* the watchdog heals a loop that died, and paints where rAF is paused in a frame that is not being
+   rendered - but it never touches the clock beyond one capped step, so it cannot cause a jump. */
+setInterval(function(){
+  if(document.visibilityState==='hidden')return;
+  heal();
+  if(!running())return;
+  var n=performance.now();if(n-lastFrame<1200)return;
+  if(raf){cancelAnimationFrame(raf);raf=0}
+  T+=50;try{paint(T)}catch(e){}
+  lastFrame=n;start();
+},1000);
 start();
 }
 })();
@@ -785,107 +600,132 @@ start();
 })();
 
 /* ============================================================================
-   3b · THE NETWORK FIELD — v2 (operator 2026-09-24: "very weak ... the dots are not connected ... in
-   the network everyone is connected"). The idea is now the drawing: ONE CONNECTED GRAPH.
-     · NODES on a jittered grid across the whole band; five of them are HUBS (a 4px square inside a
-       square hairline plate — the site's plate device at node scale).
-     · EDGES: a minimum spanning tree over every node (so the graph is provably connected — there is
-       no island) plus each node's two nearest neighbours (so it reads as a mesh, not a tree). Every
-       edge is always drawn.
-     · THE WAVE: every ~2.4s a hub fires. The signal runs out along the edges at a constant speed
-       (shortest-path arrival times, computed once per wave), lighting each hairline as it travels
-       and flashing each node as it arrives, until it has reached EVERY node — one call reaching the
-       whole network, which is the section's sentence. Waves from different hubs overlap.
-     · The nodes breathe a few px about their anchors, so the mesh is never a still diagram.
-   Same vocabulary as the #judgment lattice: square dots, 1px hairlines, one hue ramped
-   #B34B00 -> #FF6600, the elliptical clear zone behind the type. No glow, no blur, no second hue.
-   HOW IT SHIPS: a canvas created here, styled inline. Reduced motion paints the graph still. Nothing
-   paints off screen or in a hidden tab; a watchdog restarts a paused loop. Nothing rests at opacity 0.
+   3b · THE NETWORK FIELD — v3 (operator 2026-09-27: "so cluttered ... less lines, less dots, but
+   more obvious, more stylish, more advanced ... the user must really feel it moving"). v2 meshed the
+   whole band (~90 nodes, ~200 always-on hairlines, a wave through all of them every 2.4s), so no
+   single thing in it could be seen. v3 is ONE OBJECT beside the type: a constellation of 22 nodes
+   round one hub, built in 3D and turning in depth.
+     · NODES: min-separation samples in an ellipsoid (deterministic). Depth is drawn — near nodes are
+       5px, full orange, and resolve into hairline plates; far ones are 2px and dim.
+     · EDGES, fixed in 3D so the structure turns as one: a spanning tree (no island) plus short
+       second-neighbour links, ~30 hairlines; five dotted SPOKES join the hub to its inner nodes.
+     · MOTION: one revolution per 32s, plus scroll (the page turns it, eased) and the pointer (it
+       tilts toward the cursor). THE CALL: every 1.5s the hub sends a signal down a spoke and on for
+       1–3 hops, a bright square head lighting each hairline; each node it reaches rings (a square
+       outline expanding and fading), the last one — the expert engaged — rings larger.
+     · Behind the type everything falls to ~15%, measured from the text itself.
+   Same vocabulary: square dots, 1px hairlines, one hue ramped #B34B00 -> #FF6600. No glow, no blur.
+   HOW IT SHIPS: a canvas created here, styled inline. Reduced motion paints one still frame.
+   Nothing paints off screen or in a hidden tab; a watchdog restarts a paused loop.
    ============================================================================ */
 (function(){
-if(window.__afissioNetworkFieldV2)return;window.__afissioNetworkFieldV2=1;
+if(window.__afissioNetworkFieldV3)return;window.__afissioNetworkFieldV3=1;
+var RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 [].slice.call(document.querySelectorAll('.network-field')).forEach(function(host){(function(){
-var cv=document.createElement('canvas');
+var sec=host.parentNode||host,stack=(host.parentNode&&host.parentNode.classList.contains('network_media'))?null:sec.querySelector('.band_stack');
+var cv=document.createElement('canvas');cv.setAttribute('aria-hidden','true');
 cv.style.position='absolute';cv.style.top='0';cv.style.left='0';cv.style.width='100%';cv.style.height='100%';cv.style.display='block';
 host.appendChild(cv);
 var ctx=cv.getContext('2d');if(!ctx)return;
-var W=1,H=1,N=[],E=[],ADJ=[],HUBS=[],WAVES=[],SPEED=0.42,HOLE_IN=0.22,HOLE_OUT=0.6,HCX=0.3,HCY=0.5,nextFire=0,hubTurn=0;
+var TAU=Math.PI*2,W=1,H=1,CX=0,CY=0,R=1,TXT=null,FLOOR=0.14,P=[],E=[],ADJ=[],SP=[],CALLS=[],nextCall=300,spTurn=0,seed=1,
+    HUB={x:0,y:0,z:0,sx:0,sy:0,d:0.5,m:1},angS=0,angSt=0,px=0,pxT=0,py=0,pyT=0,lastT=0;
 function rnd(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
-function hole(x,y){var hx=W*HCX,hy=H*HCY;
-  var ex=(x-hx)/Math.max(1,Math.max(hx,W-hx)),ey=(y-hy)/Math.max(1,Math.max(hy,H-hy));
-  var u=(Math.sqrt(ex*ex+ey*ey)-HOLE_IN)/(HOLE_OUT-HOLE_IN);u=u<0?0:u>1?1:u;return u*u*(3-2*u)}
+function sm(e0,e1,x){var t=(x-e0)/(e1-e0);t=t<0?0:t>1?1:t;return t*t*(3-2*t)}
 function col(u,al){return 'rgba('+Math.round(179+76*u)+','+Math.round(75+27*u)+',0,'+(al<0?0:al>1?1:al).toFixed(3)+')'}
-function build(){
-  var r=host.getBoundingClientRect(),dpr=Math.min(1.5,window.devicePixelRatio||1);
-  W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
-  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
-  var d=Math.sqrt(W*W+H*H),cell=Math.max(70,Math.min(130,d/15)),i,k,seed=0;
-  N=[];E=[];WAVES=[];
-  for(var gy=cell*0.5;gy<H;gy+=cell)for(var gx=cell*0.5;gx<W;gx+=cell){seed++;
-    var x=gx+(rnd(seed)-0.5)*cell*0.8,y=gy+(rnd(seed+400)-0.5)*cell*0.8,h=hole(x,y);
-    if(h<0.08&&rnd(seed+900)>0.25)continue;
-    N.push({ax:x,ay:y,p:rnd(seed+77)*6.283,s:0.00035+rnd(seed+55)*0.00035,x:x,y:y,h:h,flash:0,hub:false});}
-  var n=N.length;if(n<2)return;
-  var key={};function add(a,b){if(a===b)return;var kk=a<b?a+'_'+b:b+'_'+a;if(key[kk])return;key[kk]=1;E.push([a,b])}
-  /* Prim: the spanning tree that guarantees one connected network */
+function d3(p,q){var dx=p.x-q.x,dy=p.y-q.y,dz=p.z-q.z;return Math.sqrt(dx*dx+dy*dy+dz*dz)}
+function nd(i){return i<0?HUB:P[i]}
+function ease(x){return x<0.5?2*x*x:1-Math.pow(-2*x+2,2)/2}
+(function(){var s=0;while(P.length<22&&s<9000){s++;var x=rnd(s)*2-1,y=rnd(s+5e3)*2-1,z=rnd(s+1e4)*2-1,r2=x*x+y*y+z*z;
+  if(r2>1||r2<0.14)continue;var c={x:x,y:y*0.8,z:z},ok=true;for(var k=0;k<P.length;k++){if(d3(P[k],c)<0.44){ok=false;break}}
+  if(ok){c.ph=rnd(s+2e4)*TAU;c.sx=0;c.sy=0;c.d=0;c.m=1;c.f=0;P.push(c)}}
+  var n=P.length,i,k,key={};if(n<2)return;
+  function add(p,q){var kk=p<q?p+'_'+q:q+'_'+p;if(p===q||key[kk])return;key[kk]=1;E.push([p,q])}
   var inT=[],best=[],from=[];for(i=0;i<n;i++){inT.push(false);best.push(Infinity);from.push(-1)}best[0]=0;
   for(var it=0;it<n;it++){var m=-1;for(i=0;i<n;i++)if(!inT[i]&&(m<0||best[i]<best[m]))m=i;inT[m]=true;if(from[m]>=0)add(m,from[m]);
-    for(i=0;i<n;i++)if(!inT[i]){var dx=N[i].ax-N[m].ax,dy=N[i].ay-N[m].ay,dd=dx*dx+dy*dy;if(dd<best[i]){best[i]=dd;from[i]=m}}}
-  /* plus two nearest neighbours each: a mesh, not a tree */
-  for(i=0;i<n;i++){var ds=[];for(k=0;k<n;k++)if(k!==i){var ddx=N[i].ax-N[k].ax,ddy=N[i].ay-N[k].ay;ds.push([ddx*ddx+ddy*ddy,k])}
-    ds.sort(function(p,q){return p[0]-q[0]});add(i,ds[0][1]);if(ds[1])add(i,ds[1][1]);}
-  ADJ=[];for(i=0;i<n;i++)ADJ.push([]);
-  E.forEach(function(e,ix){var a=N[e[0]],b=N[e[1]],len=Math.sqrt((a.ax-b.ax)*(a.ax-b.ax)+(a.ay-b.ay)*(a.ay-b.ay));e[2]=len;ADJ[e[0]].push([e[1],len]);ADJ[e[1]].push([e[0],len])});
-  /* hubs: the five best-connected nodes outside the clear zone, spread apart */
-  var order=N.map(function(q,ix){return ix}).filter(function(ix){return N[ix].h>0.6}).sort(function(p,q){return ADJ[q].length-ADJ[p].length});
-  HUBS=[];order.forEach(function(ix){if(HUBS.length>=5)return;for(var z=0;z<HUBS.length;z++){var hb=N[HUBS[z]];if(Math.abs(hb.ax-N[ix].ax)+Math.abs(hb.ay-N[ix].ay)<cell*3)return}HUBS.push(ix)});
-  HUBS.forEach(function(ix){N[ix].hub=true});
-  nextFire=0;
+    for(i=0;i<n;i++)if(!inT[i]){var dd=d3(P[i],P[m]);if(dd<best[i]){best[i]=dd;from[i]=m}}}
+  for(i=0;i<n;i++){var ds=[];for(k=0;k<n;k++)if(k!==i)ds.push([d3(P[i],P[k]),k]);ds.sort(function(p,q){return p[0]-q[0]});
+    if(ds[1]&&ds[1][0]<0.72)add(i,ds[1][1])}
+  for(i=0;i<n;i++)ADJ.push([]);E.forEach(function(e){ADJ[e[0]].push(e[1]);ADJ[e[1]].push(e[0])});
+  SP=P.map(function(p,ix){return [p.x*p.x+p.y*p.y+p.z*p.z,ix]}).sort(function(p,q){return p[0]-q[0]}).slice(0,5).map(function(p){return p[1]});
+})();
+if(!P.length)return;
+function layout(){
+  var r=host.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);
+  W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+  TXT=null;
+  if(stack){var l=1e9,t=1e9,rr=-1e9,bb=-1e9,c=0;
+    [].slice.call(stack.querySelectorAll('h2,p,img')).forEach(function(el){var q;
+      if(el.tagName==='IMG')q=el.getBoundingClientRect();else{var rg=document.createRange();rg.selectNodeContents(el);q=rg.getBoundingClientRect()}
+      if(!q||(!q.width&&!q.height))return;c++;l=Math.min(l,q.left);t=Math.min(t,q.top);rr=Math.max(rr,q.right);bb=Math.max(bb,q.bottom)});
+    if(c)TXT={l:l-r.left-24,t:t-r.top-24,r:rr-r.left+24,b:bb-r.top+24}}
+  var free=TXT?W-TXT.r:0;
+  /* 2026-09-28 (operator: "much bigger and responsive"): the network fills its half — radius from the free
+     width and the band height, no px cap. Below the stack (≤991, the band grows a field area under the text) it
+     centres in that area; only if there is neither room is it a dim field behind the text. */
+  var below=TXT?H-TXT.b:0;
+  if(TXT&&free>W*0.28){CX=TXT.r+free*0.5;CY=H*0.5;R=Math.min(free*0.46,H*0.5);FLOOR=0.14}
+  else if(TXT&&below>H*0.3){CX=W*0.5;CY=TXT.b+below*0.5;R=Math.min(W*0.44,below*0.5);FLOOR=0.14}
+  else if(!stack){CX=W*0.5;CY=H*0.5;R=Math.min(W,H)*0.46;FLOOR=1}
+  else{CX=W*0.8;CY=H*0.5;R=Math.min(W*0.44,H*0.34);FLOOR=0.2}
 }
-function fire(t){
-  if(!HUBS.length)return;var src=HUBS[hubTurn++%HUBS.length],n=N.length,dist=[],done=[],i;
-  for(i=0;i<n;i++){dist.push(Infinity);done.push(false)}dist[src]=0;
-  for(var it=0;it<n;it++){var m=-1;for(i=0;i<n;i++)if(!done[i]&&(m<0||dist[i]<dist[m]))m=i;if(m<0||dist[m]===Infinity)break;done[m]=true;
-    ADJ[m].forEach(function(p){if(dist[m]+p[1]<dist[p[0]])dist[p[0]]=dist[m]+p[1]})}
-  var max=0;for(i=0;i<n;i++)if(dist[i]<Infinity&&dist[i]>max)max=dist[i];
-  WAVES.push({t0:t,d:dist,end:max/SPEED+1400});
+function mask(x,y){if(!TXT)return 1;var dx=Math.max(TXT.l-x,0,x-TXT.r),dy=Math.max(TXT.t-y,0,y-TXT.b);return FLOOR+(1-FLOOR)*sm(0,90,Math.sqrt(dx*dx+dy*dy))}
+function project(t){
+  var a=t*TAU/32000+angS+px,b=-0.36+0.1*Math.sin(t/7000)+py,ca=Math.cos(a),sa=Math.sin(a),cb=Math.cos(b),sb=Math.sin(b),D=4.2,w=0.03;
+  for(var i=0;i<P.length;i++){var p=P[i];
+    var x=p.x+Math.sin(t*0.0006+p.ph)*w,y=p.y+Math.cos(t*0.0005+p.ph*1.3)*w,z=p.z+Math.sin(t*0.0004+p.ph*0.7)*w;
+    var x1=x*ca+z*sa,z1=-x*sa+z*ca,y2=y*cb-z1*sb,z2=y*sb+z1*cb,s=D/(D+z2);
+    p.sx=CX+x1*s*R;p.sy=CY+y2*s*R;p.d=Math.max(0,Math.min(1,(z2+1)/2));p.m=mask(p.sx,p.sy);p.f=0}
+  HUB.sx=CX;HUB.sy=CY;HUB.m=mask(CX,CY);
 }
+function newCall(t){if(!SP.length)return;var path=[-1,SP[(spTurn++*2)%SP.length]],hops=1+Math.floor(rnd(seed++*3.1)*3),cur=path[1];
+  for(var h=0;h<hops;h++){var nb=ADJ[cur].filter(function(k){return path.indexOf(k)<0});if(!nb.length)break;cur=nb[Math.floor(rnd(seed++*7.7)*nb.length)];path.push(cur)}
+  var segs=[],tt=0;for(var j=0;j<path.length-1;j++){var du=440+560*d3(nd(path[j]),nd(path[j+1]));segs.push({a:path[j],b:path[j+1],s:tt,e:tt+du,last:j===path.length-2});tt+=du+80}
+  CALLS.push({t0:t,segs:segs,end:tt+1800});
+}
+function line(x0,y0,x1,y1){ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke()}
+function ring(x,y,p,s0,s1,m){var s=s0+(s1-s0)*(1-Math.pow(1-p,3)),al=Math.pow(1-p,1.6)*0.85*m;if(al<=0.005)return;
+  ctx.lineWidth=1;ctx.strokeStyle=col(1,al);ctx.strokeRect(Math.round(x)-s/2+0.5,Math.round(y)-s/2+0.5,s,s)}
 function paint(t){
-  var bx=host.getBoundingClientRect(),dp=Math.min(1.5,window.devicePixelRatio||1);
-  if(cv.width!==Math.round(bx.width*dp)||cv.height!==Math.round(bx.height*dp))build();
-  ctx.clearRect(0,0,W,H);if(!N.length)return;
-  var i,w,e,a,b;
-  for(i=0;i<N.length;i++){a=N[i];a.x=a.ax+Math.cos(t*a.s+a.p)*6;a.y=a.ay+Math.sin(t*a.s*1.3+a.p)*5;a.h=hole(a.x,a.y);a.flash=0}
-  for(w=WAVES.length-1;w>=0;w--)if(t-WAVES[w].t0>WAVES[w].end)WAVES.splice(w,1);
-  if(t>=nextFire){fire(t);nextFire=t+2400}
-  /* node flash from every live wave */
-  WAVES.forEach(function(wv){var el=t-wv.t0;for(var q=0;q<N.length;q++){var at=wv.d[q]/SPEED,g=el-at;if(g>=0&&g<1000){var f=1-g/1000;if(f>N[q].flash)N[q].flash=f}}});
-  /* edges: every edge, always; then the travelling light on top */
+  var bx=host.getBoundingClientRect();if(Math.round(bx.width)!==W||Math.round(bx.height)!==H)layout();
+  var dt=lastT?Math.min(100,Math.max(0,t-lastT)):16,k=1-Math.exp(-dt/260);lastT=t;
+  angS+=(angSt-angS)*k;px+=(pxT-px)*k;py+=(pyT-py)*k;
+  project(t);ctx.clearRect(0,0,W,H);
+  for(var i=CALLS.length-1;i>=0;i--)if(t-CALLS[i].t0>CALLS[i].end)CALLS.splice(i,1);
+  if(!RM&&t>=nextCall){newCall(t);nextCall=t+1500}
+  CALLS.forEach(function(c){var el=t-c.t0;c.segs.forEach(function(s){var g=el-s.e,dur=s.last?1600:1000;if(g>=0&&g<dur){var f=1-g/dur;if(f>P[s.b].f)P[s.b].f=f}})});
   ctx.lineWidth=1;
-  for(i=0;i<E.length;i++){e=E[i];a=N[e[0]];b=N[e[1]];var hh=Math.min(a.h,b.h)*0.85+0.15*Math.max(a.h,b.h);
-    ctx.strokeStyle=col(0,0.26*hh);ctx.beginPath();ctx.moveTo(a.x+0.5,a.y+0.5);ctx.lineTo(b.x+0.5,b.y+0.5);ctx.stroke();}
-  ctx.lineWidth=1.5;
-  WAVES.forEach(function(wv){var el=t-wv.t0;
-    for(var q=0;q<E.length;q++){var ed=E[q],ia=ed[0],ib=ed[1];var ta=wv.d[ia]/SPEED,tb=wv.d[ib]/SPEED;if(tb<ta){var sw=ia;ia=ib;ib=sw;sw=ta;ta=tb;tb=sw}
-      if(el<ta||tb===Infinity)continue;var A=N[ia],Bn=N[ib],span=Math.max(1,tb-ta);
-      var head=Math.min(1,(el-ta)/span),fade=el>tb?1-(el-tb)/900:1;if(fade<=0)continue;
-      var tail=Math.max(0,head-0.55);
-      var x0=A.x+(Bn.x-A.x)*tail,y0=A.y+(Bn.y-A.y)*tail,x1=A.x+(Bn.x-A.x)*head,y1=A.y+(Bn.y-A.y)*head;
-      var hh2=Math.max(0.12,Math.min(A.h,Bn.h));
-      ctx.strokeStyle=col(0.55,0.35*fade*hh2);ctx.beginPath();ctx.moveTo(A.x+0.5,A.y+0.5);ctx.lineTo(x1+0.5,y1+0.5);ctx.stroke();
-      if(head<1){ctx.strokeStyle=col(1,0.95*hh2);ctx.beginPath();ctx.moveTo(x0+0.5,y0+0.5);ctx.lineTo(x1+0.5,y1+0.5);ctx.stroke();
-        ctx.fillStyle=col(1,hh2);ctx.fillRect(x1-1,y1-1,3,3);}
-    }});
-  /* nodes */
-  for(i=0;i<N.length;i++){a=N[i];var hv=Math.max(a.h,0.1),f=a.flash;
-    if(a.hub){ctx.strokeStyle=col(0.3+0.7*f,(0.45+0.5*f)*hv);ctx.lineWidth=1;ctx.strokeRect(Math.round(a.x)-6.5,Math.round(a.y)-6.5,14,14);
-      ctx.fillStyle=col(0.7+0.3*f,(0.85)*hv);ctx.fillRect(Math.round(a.x)-1.5,Math.round(a.y)-1.5,4,4);}
-    else{var sz=f>0.05?3:2;ctx.fillStyle=col(0.2+0.8*f,(0.5+0.5*f)*a.h);ctx.fillRect(Math.round(a.x)-(sz-2)/2,Math.round(a.y)-(sz-2)/2,sz,sz);}}
+  E.slice().sort(function(p,q){return (P[q[0]].d+P[q[1]].d)-(P[p[0]].d+P[p[1]].d)}).forEach(function(e){var A=P[e[0]],B=P[e[1]],dA=(A.d+B.d)/2,
+      mm=(A.m+B.m+2*mask((A.sx+B.sx)/2,(A.sy+B.sy)/2))/4;
+    ctx.strokeStyle=col(0.3+0.5*(1-dA),(0.68-0.48*dA)*mm);line(A.sx,A.sy,B.sx,B.sy)});
+  ctx.setLineDash([2,4]);
+  SP.forEach(function(ix){var B=P[ix];ctx.strokeStyle=col(0.6,(0.6-0.35*B.d)*(HUB.m+B.m)/2);line(HUB.sx,HUB.sy,B.sx,B.sy)});
+  ctx.setLineDash([]);
+  var heads=[];
+  CALLS.forEach(function(c){var el=t-c.t0;c.segs.forEach(function(s){if(el<s.s)return;var A=nd(s.a),B=nd(s.b),mm=(A.m+B.m)/2;
+    if(el>=s.e){var fd=1-(el-s.e)/1500;if(fd<=0)return;ctx.lineWidth=1.25;ctx.strokeStyle=col(0.85,0.8*fd*mm);line(A.sx,A.sy,B.sx,B.sy);return}
+    var p=ease((el-s.s)/(s.e-s.s)),q=Math.max(0,p-0.22),hx=A.sx+(B.sx-A.sx)*p,hy=A.sy+(B.sy-A.sy)*p;
+    ctx.lineWidth=1.25;ctx.strokeStyle=col(0.8,0.55*mm);line(A.sx,A.sy,hx,hy);
+    ctx.lineWidth=1.75;ctx.strokeStyle=col(1,mm);line(A.sx+(B.sx-A.sx)*q,A.sy+(B.sy-A.sy)*q,hx,hy);
+    heads.push([hx,hy,mm])})});
+  P.map(function(p,ix){return ix}).sort(function(p,q){return P[q].d-P[p].d}).forEach(function(ix){var p=P[ix],nr=1-p.d,f=p.f,
+      sz=Math.round(2+4*nr+2*f),x=Math.round(p.sx),y=Math.round(p.sy),pa=sm(0.4,0.12,p.d);
+    ctx.fillStyle=col(Math.max(0.35+0.65*nr,f),Math.max(0.4+0.6*nr,f)*p.m);ctx.fillRect(x-Math.floor(sz/2),y-Math.floor(sz/2),sz,sz);
+    if(pa>0.01){ctx.lineWidth=1;ctx.strokeStyle=col(0.7,0.75*pa*p.m);ctx.strokeRect(x-5.5,y-5.5,11,11)}});
+  var hx0=Math.round(HUB.sx),hy0=Math.round(HUB.sy);
+  ctx.lineWidth=1;ctx.strokeStyle=col(1,0.9*HUB.m);ctx.strokeRect(hx0-8.5,hy0-8.5,17,17);ctx.fillStyle=col(1,HUB.m);ctx.fillRect(hx0-3,hy0-3,6,6);
+  CALLS.forEach(function(c){var el=t-c.t0;if(el<1000)ring(HUB.sx,HUB.sy,el/1000,17,46,HUB.m);
+    c.segs.forEach(function(s){var g=el-s.e,dur=s.last?1600:1000;if(g>=0&&g<dur){var B=P[s.b];ring(B.sx,B.sy,g/dur,6,s.last?44:26,B.m)}})});
+  heads.forEach(function(h){ctx.fillStyle=col(1,h[2]);ctx.fillRect(Math.round(h[0])-2,Math.round(h[1])-2,4,4)});
 }
-build();
-if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-  nextFire=Infinity;paint(0);window.addEventListener('resize',function(){build();nextFire=Infinity;paint(0)});return;
-}
+function onScroll(){var r=sec.getBoundingClientRect();angSt=-(r.top+r.height/2-(window.innerHeight||0)/2)*0.0013}
+layout();onScroll();angS=angSt;
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){layout();if(RM)paint(0)});
+setTimeout(function(){layout();if(RM)paint(0)},1500);
+if(RM){paint(0);window.addEventListener('resize',function(){layout();paint(0)});return}
+window.addEventListener('scroll',onScroll,{passive:true});
+sec.addEventListener('pointermove',function(ev){var r=sec.getBoundingClientRect();pxT=((ev.clientX-r.left)/Math.max(1,r.width)-0.5)*0.6;pyT=((ev.clientY-r.top)/Math.max(1,r.height)-0.5)*0.35});
+sec.addEventListener('pointerleave',function(){pxT=0;pyT=0});
 var raf=0,t0=0,tOff=0,lastF=0;
 function frame(now){
   lastF=now;if(!t0)t0=now-tOff;
@@ -895,58 +735,17 @@ function frame(now){
   raf=requestAnimationFrame(frame);
 }
 function start(){if(!raf){t0=0;raf=requestAnimationFrame(frame)}}
-window.addEventListener('resize',function(){build()});
+window.addEventListener('resize',function(){layout();onScroll()});
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
 window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0});
 setInterval(function(){
   if(document.visibilityState!=='visible')return;var n=performance.now();
   if(raf&&(n-lastF)<900)return;var r=host.getBoundingClientRect();
   if(r.bottom<-60||r.top>(window.innerHeight||0)+60)return;
-  raf=0;start();if(!t0)t0=n-tOff;paint(n-t0);
+  raf=0;start();if(!t0)t0=n-tOff;onScroll();paint(n-t0);
 },900);
 start();
 })()});
-})();
-
-/* ============================================================================
-   3d · THE PORTRAIT EDGE (About #people, operator 2026-09-24: "animate the border with orange
-   lines"). Two orange light-runs travel the portrait's hairline, starting at the two corner
-   brackets and chasing each other round, each a short bright head with a fading tail — the rule
-   sweeps' light, bent round a plate. It draws ON the 1px edge only, never over the face. Both
-   portraits share one clock, so the two people stay identical.
-   HOW IT SHIPS: a canvas created here inside the plate, styled inline. Reduced motion: nothing is
-   added (the brackets and the hairline stand). Nothing paints off screen or in a hidden tab.
-   ============================================================================ */
-(function(){
-if(window.__afissioPortraitEdgeV1)return;window.__afissioPortraitEdgeV1=1;
-if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-var plates=[].slice.call(document.querySelectorAll('.initial_plate.is-portrait'));if(!plates.length)return;
-var PERIOD=18000,PEAK=0.42,items=[];
-plates.forEach(function(pl){
-  var cv=document.createElement('canvas');cv.setAttribute('aria-hidden','true');
-  cv.style.position='absolute';cv.style.left='-2px';cv.style.top='-2px';cv.style.width='calc(100% + 4px)';cv.style.height='calc(100% + 4px)';
-  cv.style.pointerEvents='none';cv.style.zIndex='2';cv.style.display='block';
-  pl.appendChild(cv);items.push({pl:pl,cv:cv,ctx:cv.getContext('2d'),w:0,h:0});
-});
-function fit(it){var r=it.pl.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),W=Math.round(r.width)+4,H=Math.round(r.height)+4;
-  if(it.cv.width!==Math.round(W*dpr)||it.cv.height!==Math.round(H*dpr)){it.cv.width=Math.round(W*dpr);it.cv.height=Math.round(H*dpr);it.ctx.setTransform(dpr,0,0,dpr,0,0)}it.w=W;it.h=H}
-function pt(it,d){var w=it.w-4,h=it.h-4,L=2*(w+h);d=((d%L)+L)%L;var o=2.5;
-  if(d<w)return [o+d,o];d-=w;if(d<h)return [o+w,o+d];d-=h;if(d<w)return [o+w-d,o+h];d-=w;return [o,o+h-d]}
-function draw(it,t){var ctx=it.ctx;if(!ctx)return;fit(it);ctx.clearRect(0,0,it.w,it.h);
-  var w=it.w-4,h=it.h-4,L=2*(w+h),len=L*0.2,N=48,u=(t%PERIOD)/PERIOD;ctx.lineWidth=1.5;ctx.lineCap='butt';
-  for(var r=0;r<2;r++){var head=u*L+r*L/2;
-    for(var k=0;k<N;k++){var d0=head-len+k*len/N,d1=d0+len/N+0.6,a=Math.pow((k+1)/N,1.7);
-      var p0=pt(it,d0),p1=pt(it,d1);ctx.strokeStyle='rgba(255,102,0,'+(a*PEAK).toFixed(3)+')';
-      ctx.beginPath();ctx.moveTo(p0[0],p0[1]);ctx.lineTo(p1[0],p1[1]);ctx.stroke();}}}
-var raf=0,lastF=0;
-function frame(now){lastF=now;if(document.visibilityState==='hidden'){raf=0;return}
-  var vh=window.innerHeight||0;items.forEach(function(it){var r=it.pl.getBoundingClientRect();if(r.bottom>-40&&r.top<vh+40){try{draw(it,now)}catch(e){}}});
-  raf=requestAnimationFrame(frame)}
-function start(){if(!raf)raf=requestAnimationFrame(frame)}
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')start()});
-window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);raf=0;items.forEach(function(it){it.ctx&&it.ctx.clearRect(0,0,it.w,it.h)})});
-setInterval(function(){if(document.visibilityState!=='visible')return;var n=performance.now();if(raf&&(n-lastF)<900)return;raf=0;start();items.forEach(function(it){draw(it,n)})},900);
-start();
 })();
 
 /* ============================================================================
