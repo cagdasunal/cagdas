@@ -326,7 +326,11 @@ function overlay(){
   if(markOK){
     var mr=(mark.naturalWidth&&mark.naturalHeight)?(mark.naturalHeight/mark.naturalWidth):(192/230);
     var mw=Math.min(W*0.64,1152),mh=mw*mr;
-    octx.globalAlpha=0.06;octx.drawImage(mark,centered?W/2-mw/2:W*1.09-mw,H*0.869-mh,mw,mh);octx.globalAlpha=1;
+    /* 2026-09-28 (operator, Contact): the mark is placed against the height a 100vh header's field has
+       (130vh), not the host's own - Contact's header holds the form and runs ~1750px, which sank the
+       mark to the bottom. Same spot on every page now. overlay() reruns on every host resize. */
+    var mH=Math.min(H,(window.innerHeight||H)*1.3);
+    octx.globalAlpha=0.06;octx.drawImage(mark,centered?W/2-mw/2:W*1.09-mw,mH*0.869-mh,mw,mh);octx.globalAlpha=1;
   }
   if(!centered){
     var hg=octx.createLinearGradient(0,0,W,0),nv=narrow(),vSolid=0.17-0.13*nv,vClear=0.56-0.26*nv;
@@ -566,12 +570,13 @@ paint(0);
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
   window.addEventListener('resize',function(){size();paint(0)});return;
 }
+/* PERF-V2: on-screen comes from the shared observer, not a per-frame rect read. */
+var __v=window.__afVis?window.__afVis(host,60):{on:true};
 var raf=0,t0=0,tOff=0;
 function frame(now){
   if(!t0)t0=now-tOff;
   if(document.visibilityState==='hidden'){tOff=now-t0;t0=0;raf=0;return}
-  var r=host.getBoundingClientRect(),vh=window.innerHeight||0;
-  if(r.bottom>-60&&r.top<vh+60){
+  if(__v.on){
     try{paint(now-t0)}catch(e){if(!window.__afissioLatticeErr){window.__afissioLatticeErr=1;console.error('compute lattice paint failed',e)}}
   }
   raf=requestAnimationFrame(frame);
@@ -726,12 +731,13 @@ if(RM){paint(0);window.addEventListener('resize',function(){layout();paint(0)});
 window.addEventListener('scroll',onScroll,{passive:true});
 sec.addEventListener('pointermove',function(ev){var r=sec.getBoundingClientRect();pxT=((ev.clientX-r.left)/Math.max(1,r.width)-0.5)*0.6;pyT=((ev.clientY-r.top)/Math.max(1,r.height)-0.5)*0.35});
 sec.addEventListener('pointerleave',function(){pxT=0;pyT=0});
+/* PERF-V2: on-screen comes from the shared observer, not a per-frame rect read. */
+var __v=window.__afVis?window.__afVis(host,60):{on:true};
 var raf=0,t0=0,tOff=0,lastF=0;
 function frame(now){
   lastF=now;if(!t0)t0=now-tOff;
   if(document.visibilityState==='hidden'){tOff=now-t0;t0=0;raf=0;return}
-  var r=host.getBoundingClientRect(),vh=window.innerHeight||0;
-  if(r.bottom>-60&&r.top<vh+60){try{paint(now-t0)}catch(err){if(!window.__afissioNetErr){window.__afissioNetErr=1;console.error('network field paint failed',err)}}}
+  if(__v.on){try{paint(now-t0)}catch(err){if(!window.__afissioNetErr){window.__afissioNetErr=1;console.error('network field paint failed',err)}}}
   raf=requestAnimationFrame(frame);
 }
 function start(){if(!raf){t0=0;raf=requestAnimationFrame(frame)}}
@@ -1004,12 +1010,12 @@ var host=glyph.closest?glyph.closest('.quote_panel')||glyph:glyph;
 if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 var PERIOD=5600,LIFT=3,A=[255,102,0],B=[255,163,71];
 function rest(){glyph.style.color='';glyph.style.transform=''}
+var __v=window.__afVis?window.__afVis(host,40):{on:true};   /* PERF-V2 */
 var raf=0,t0=0;
 function frame(now){
   if(!t0)t0=now;
   if(document.visibilityState==='hidden'){rest();raf=0;return}
-  var r=host.getBoundingClientRect(),vh=window.innerHeight||0;
-  if(r.bottom<-40||r.top>vh+40){raf=requestAnimationFrame(frame);return}
+  if(!__v.on){raf=requestAnimationFrame(frame);return}
   var e=(1-Math.cos(((now-t0)/PERIOD)*Math.PI*2))/2;   /* 0 -> 1 -> 0, zero velocity at both ends */
   glyph.style.color='rgb('+Math.round(A[0]+(B[0]-A[0])*e)+','+Math.round(A[1]+(B[1]-A[1])*e)+','+Math.round(A[2]+(B[2]-A[2])*e)+')';
   glyph.style.transform='translateY('+(-LIFT*e).toFixed(2)+'px)';
@@ -1159,15 +1165,19 @@ function paint(i){
     if(t<list.scrollTop)list.scrollTop=t-8;else if(bt>list.scrollTop+list.clientHeight)list.scrollTop=bt-list.clientHeight+8;
   }
 }
+/* PERF-V2 (2026-09-28): every rect is READ first, then everything is written. The old order wrote
+   rail.style.top and then read the nav and each heading, which forced a full layout on every
+   scroll frame of every article and legal page. */
 function frame(){
-  var line=(window.innerHeight||0)*0.3,i=-1;
-  if(compact){rail.style.top=navBottom()+'px';line=Math.max(line,nav.getBoundingClientRect().bottom+24)}
+  var line=(window.innerHeight||0)*0.3,i=-1,nb=0,navB=0;
+  if(compact){nb=navBottom();navB=nav.getBoundingClientRect().bottom;line=Math.max(line,navB+24)}
   for(var k=0;k<N;k++){if(heads[k].getBoundingClientRect().top-line<=0)i=k;else break}
   var r=body.getBoundingClientRect();
   if(r.bottom<line)i=-1;
+  if(compact)rail.style.top=nb+'px';
   paint(i);
   if(compact&&prog){
-    var start=nav.getBoundingClientRect().bottom,span=r.height-((window.innerHeight||0)-start);
+    var start=navB,span=r.height-((window.innerHeight||0)-start);
     var p=span>0?(start-r.top)/span:1;p=p<0?0:p>1?1:p;
     prog.style.transform='scaleX('+p.toFixed(4)+')';
   }

@@ -1539,3 +1539,48 @@
   .network_grid{grid-template-columns:minmax(0,1fr);row-gap:clamp(2rem,3vw + 0.5rem,3rem)}
   .network_media{max-width:36rem}
 }
+
+/* 2026-09-28 (operator, About #separation: "compact, not full width"): the table is capped and left-aligned under its head. */
+.divide_table{max-width:64rem}
+
+/* 2026-09-28 (operator, Insights article hero): Afissio Law's closing glow, moved TOP-RIGHT and kept
+   OFF the fixed navigation — the field starts 6rem down (the nav is 92px) and fades in over its first
+   12%, so the bar sits on plain black. The two blooms are the base's, mirrored (6% → 94%, 22% → 78%). */
+.close-field.is-top{top:6rem;background-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0.5) 6%,rgba(0,0,0,0) 12%),linear-gradient(to bottom,rgba(0,0,0,0) 55%,rgba(0,0,0,0.30) 72%,rgba(0,0,0,0.70) 88%,rgba(0,0,0,0.96) 100%),radial-gradient(ellipse 46% 40% at 78% 26%,rgba(255,102,0,0.050) 0%,rgba(255,102,0,0.038) 22%,rgba(179,75,0,0.022) 44%,rgba(179,75,0,0.010) 64%,rgba(179,75,0,0.003) 82%,rgba(179,75,0,0) 100%),radial-gradient(ellipse 80% 64% at 94% 10%,rgba(255,102,0,0.085) 0%,rgba(255,102,0,0.066) 16%,rgba(255,102,0,0.044) 32%,rgba(179,75,0,0.026) 48%,rgba(179,75,0,0.013) 64%,rgba(179,75,0,0.005) 80%,rgba(179,75,0,0) 100%)}
+@media (max-width:991px){
+  .close-field.is-top{top:5rem}
+}
+
+/* 2026-09-28 (operator, Insights article body): the same glow, centred on the right edge at mid-height.
+   Soft top and bottom fades so it never meets the seams; blooms mirrored and sized to a tall body. */
+.close-field.is-mid{top:0;background-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,0) 14%,rgba(0,0,0,0) 86%,rgba(0,0,0,1) 100%),radial-gradient(ellipse 40% 26% at 82% 50%,rgba(255,102,0,0.050) 0%,rgba(255,102,0,0.038) 22%,rgba(179,75,0,0.022) 44%,rgba(179,75,0,0.010) 64%,rgba(179,75,0,0.003) 82%,rgba(179,75,0,0) 100%),radial-gradient(ellipse 70% 40% at 100% 50%,rgba(255,102,0,0.085) 0%,rgba(255,102,0,0.066) 16%,rgba(255,102,0,0.044) 32%,rgba(179,75,0,0.026) 48%,rgba(179,75,0,0.013) 64%,rgba(179,75,0,0.005) 80%,rgba(179,75,0,0) 100%)}
+@media (max-width:991px){
+  .close-field.is-mid{top:0}
+}
+
+/* 2026-09-28 (operator: the dropdown's top edge must fit the nav's bottom rule, all pages). The panel
+   used to open at the nav's bottom edge, so its orange 1px edge sat a subpixel UNDER the nav's 1px rule
+   (measured 91.8 vs 91.0) and read as a second, doubled line. It now opens 1px higher: the edge lies
+   exactly on the rule, same weight, and lights the rule rather than sitting beneath it. Desktop only (the ≤991 reset restores 0) —
+   ≤991 the panel is the stacked menu and has no edge. */
+.navbar_dropdown-list{margin-top:calc(clamp(1rem,1.5vw,1.5rem) - 1px)}
+@media (max-width:991px){
+  .navbar_dropdown-list{margin-top:0}
+}
+
+/* 2026-09-28 · RESPONSIVE AUDIT (11 widths 1440 → 360, every page incl. legal). Fixes, one per finding:
+   · footer entity links measured 142×25 on phones - padded to a 45px tap target, the padding
+     cancelled by an equal negative margin so the footer's layout does not move;
+   · Afissio Law's comparison keys overflowed their 101px label column at 768-820 - tighter tracking ≤991;
+   · the comparison kicker fell to 11px ≤479 - held at the 12px floor;
+   · a long contact value (the email) overflowed its column at 480 - it may break anywhere. */
+@media (max-width:767px){
+  .footer_entity-link{padding-top:0.625rem;padding-bottom:0.625rem;margin-top:-0.625rem;margin-bottom:-0.625rem}
+}
+@media (max-width:991px){
+  .divide_key{letter-spacing:0.06em}
+}
+@media (max-width:479px){
+  .divide_kicker{font-size:0.75rem;letter-spacing:0.08em}
+}
+.contact_value{overflow-wrap:anywhere}

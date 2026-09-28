@@ -37,6 +37,13 @@
    width. Rows shed below 992 (five) and 768 (four). R13: the named cases are `.doc-slot`, so the
    "never trim a case" test reads that class instead of the rule-less `is-slot` it used to read.
    ============================================================================ */
+/* PERF-V2 (2026-09-28) · ONE VISIBILITY REGISTRY for every looping animation on the site. An
+   IntersectionObserver keeps {on} current for an element, so no loop has to call
+   getBoundingClientRect() in its frame to find out whether it is on screen - that read, placed after
+   the rule drift had written its transforms, forced a style recalculation per loop per frame, on
+   every page, and was the main source of scroll jank. Interior.js uses the same helper. */
+window.__afVis=window.__afVis||function(el,margin){var o={on:true};if(!el||!('IntersectionObserver' in window))return o;
+  new IntersectionObserver(function(es){o.on=es[es.length-1].isIntersecting},{rootMargin:(margin||80)+'px 0px'}).observe(el);return o};
 (function(){
 if(window.__afissioFieldFitV1)return;window.__afissioFieldFitV1=1;
 var grid=document.querySelector('.doc-field_grid');if(!grid)return;
@@ -153,7 +160,9 @@ function start(g){
   var settled=60+tiles.length*13+600;
   var p=HELD;
   function live(){return slots.filter(function(s){return !!s.offsetParent})}
+  var gv=window.__afVis(g,0);
   function beat(){
+    if(!gv.on)return;   /* PERF-V2: no filing flies while the case is off screen */
     var v=live();if(v.length<4)return;
     var sq=SEQ.filter(function(i){return i<v.length});
     dim(v[sq[(p-HELD)%sq.length]]);
@@ -356,18 +365,21 @@ arts.forEach(function(art){
   ink.parentNode.appendChild(pass);
   art.__pass=pass;
 });
+arts.forEach(function(art){art.__vis=window.__afVis(art.parentNode||art,80)});
+/* PERF-V2: skipped while off screen; every rect is READ before anything is written. */
 function frame(now){
   var t=now||0;
   var p=(1-Math.cos((t/PERIOD)*Math.PI*2))/2;                 /* 0..1..0, eased at both ends */
   var c=-OVER+p*(100+2*OVER);                                   /* band centre, % of width */
   var m='linear-gradient(90deg, rgba(0,0,0,0) '+(c-BAND/2).toFixed(2)+'%, rgba(0,0,0,1) '+c.toFixed(2)+'%, rgba(0,0,0,0) '+(c+BAND/2).toFixed(2)+'%)';
-  arts.forEach(function(art){
+  var vh=window.innerHeight||1;
+  var rs=arts.map(function(art){return (art.__vis.on&&art.parentNode)?art.parentNode.getBoundingClientRect():null});
+  arts.forEach(function(art,i){
+    var r=rs[i];if(!r)return;
     var pass=art.__pass;
     if(pass){pass.style.webkitMaskImage=m;pass.style.maskImage=m}
-    var s=art.parentNode;
-    if(s){var r=s.getBoundingClientRect(),vh=window.innerHeight||1;
-      var q=Math.max(0,Math.min(1,(vh-r.top)/(vh+r.height)))-0.5;
-      art.style.transform='translateY(-50%) translate3d(0,'+(q*DRIFT).toFixed(2)+'px,0)'}
+    var q=Math.max(0,Math.min(1,(vh-r.top)/(vh+r.height)))-0.5;
+    art.style.transform='translateY(-50%) translate3d(0,'+(q*DRIFT).toFixed(2)+'px,0)';
   });
   requestAnimationFrame(frame)}
 requestAnimationFrame(frame);
@@ -469,16 +481,21 @@ s.style.height=v?'16rem':'1px';s.style.width=v?'1px':'16rem';s.style.top='0';s.s
 s.style.background='linear-gradient('+(v?180:90)+'deg, transparent 0%, #FF6600 50%, transparent 100%)';
 if(getComputedStyle(p).position==='static')p.style.position='relative';
 p.style.overflow='hidden';p.appendChild(s);return s}
-var hs=H.map(function(p){var v=(' '+p.className+' ').indexOf(' register_spine ')>-1;return{p:p,v:v,ss:[seg(p,v),seg(p,v)],ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero'))}});
+var hs=H.map(function(p){var v=(' '+p.className+' ').indexOf(' register_spine ')>-1;return{p:p,v:v,ss:[seg(p,v),seg(p,v)],ph:Math.random(),auto:!!(p.closest('.navbar_component')||p.closest('.section_hero')||p.closest('.footer_component'))}});
+/* 2026-09-28 (operator: "not sure the border animation works in the footer"): it ran, at 10px/s - and at
+   the foot of the page there is no scroll left to push it, so it read as still. The footer rule now
+   runs at the self-driven speed the nav and home hero rules use. */
 /* PERF-V2 (2026-09-28): lengths are MEASURED ON RESIZE, never in the frame. Reading offsetWidth after
    writing the previous rule's transform forced a style flush per rule, per frame, on every page -
    the jank the hero field was blamed for. The frame now only writes. */
 function measure(){hs.forEach(function(o){o.len=o.v?o.p.offsetHeight:o.p.offsetWidth})}
 measure();window.addEventListener('resize',measure);window.addEventListener('load',measure);
 if(window.ResizeObserver){var __ro=new ResizeObserver(measure);hs.forEach(function(o){__ro.observe(o.p)})}
+/* PERF-V2: only rules on screen are written - a page has ~12 rules and ~2 are ever in view. */
+hs.forEach(function(o){o.vis=window.__afVis(o.p,40)});
 var cur=window.scrollY||0;
 function frame(now){var tgt=window.scrollY||0;cur+=(tgt-cur)*0.05;var t=(now||0)*0.0105;
-hs.forEach(function(o){var len=o.len||0,sl=256,span=len+sl;if(span<=sl)return;
+hs.forEach(function(o){if(!o.vis.on)return;var len=o.len||0,sl=256,span=len+sl;if(span<=sl)return;
 var d=cur*0.1+(o.auto?t*1.5:t);
 o.ss.forEach(function(s,i){var x=((d+(o.ph+i/o.ss.length)*span)%span+span)%span-sl;s.style.transform=(o.v?'translateY(':'translateX(')+x+'px)'})});
 requestAnimationFrame(frame)}
